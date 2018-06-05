@@ -1,0 +1,39 @@
+db.define_table('taxon',
+                Field('taxonID', type = 'integer'),
+                Field('tax_scientificName'),
+                Field('tax_kingdom'),
+                Field('tax_phylum'),
+                Field('tax_class'),
+                Field('tax_order'),
+                Field('tax_superfamily'),
+                Field('tax_family'),
+                Field('tax_genus'),
+                Field('tax_subgenus'),
+                Field('tax_specificEpithet'),
+                Field('tax_infraspecificEpithet'),
+                Field('tax_species'),
+                primarykey=['taxonID'],
+                lazy_tables = True,
+                format='%(tax_species)s')
+
+'''db.executesql('CREATE INDEX IF NOT EXISTS myidx ON taxon (taxonID);')
+db.executesql('CREATE INDEX IF NOT EXISTS myidx ON taxon (tax_scientificName);')
+db.executesql('CREATE INDEX IF NOT EXISTS myidx ON taxon (tax_kingdom);')
+db.executesql('CREATE INDEX IF NOT EXISTS myidx ON taxon (tax_phylum);')
+db.executesql('CREATE INDEX IF NOT EXISTS myidx ON taxon (tax_class);')
+db.executesql('CREATE INDEX IF NOT EXISTS myidx ON taxon (tax_order);')
+db.executesql('CREATE INDEX IF NOT EXISTS myidx ON taxon (tax_superfamily);')
+db.executesql('CREATE INDEX IF NOT EXISTS myidx ON taxon (tax_family);')
+db.executesql('CREATE INDEX IF NOT EXISTS myidx ON taxon (tax_genus);')
+db.executesql('CREATE INDEX IF NOT EXISTS myidx ON taxon (tax_subgenus);')
+db.executesql('CREATE INDEX IF NOT EXISTS myidx ON taxon (tax_specificEpithet);')
+db.executesql('CREATE INDEX IF NOT EXISTS myidx ON taxon (tax_infraspecificEpithet);')
+db.executesql('CREATE INDEX IF NOT EXISTS myidx ON taxon (tax_species);')'''
+
+
+
+#if db(db.taxon.taxonID>0).count() == 0:
+ #   db.taxon.truncate()
+
+#if db(db.taxon_genus.genus_id>0).count() == 0:
+ #   db.taxon_genus.truncate()

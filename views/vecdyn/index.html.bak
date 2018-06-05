@@ -1,0 +1,60 @@
+{{extend 'layout.html'}}
+ 
+<form enctype="multipart/form-data" action="{{URL()}}" method="post">
+    <select name='category_name' 
+        onchange="jQuery('#maker_name').empty();
+        ajax('maker', ['category_name'], 'maker_name');">
+        {{for category in categories:}}
+            <option value="{{=category.id}}" 
+                {{=" selected='selected'" if str(category.id)==request.vars.category_name else ""}}>
+            {{=category.Name}}
+            </option>
+        {{pass}}
+    </select>
+ 
+    <select id='maker_name' name='maker_name' >
+        {{for maker in makers:}}
+            <option value="{{=maker.id}}" 
+                {{=XML(" selected='selected'") if str(maker.id)==request.vars.maker_name else ""}}>
+            {{=maker.Name}}</option>
+        {{pass}}
+    </select>
+    <input type="submit" value='Submit'>  
+</form>
+ 
+<hr>
+ 
+<div id="left_price">
+ 
+    <div id="effective_price">
+        {{for themaker in themakers:}}
+            <p>{{=themaker.Note}}</p>
+        {{pass}}
+    </div>
+ 
+ 
+    <table class="pricetable">
+        <tr>
+            <th class="priceleft">Part Number</th>
+            <th class="priceright">List ($)</th>
+            <th class="priceright">Special ($)</th>
+        </tr>
+    </table>
+ 
+    <div id="table_price">
+        <table  class="pricetable">
+            {{for list in lists:}}
+            <tr>
+                <td class="priceleft">{{=list.Part_Number}}</td>
+                <td class="priceright">{{=list.List_Price}}</td>
+                <td class="priceright">{{=list.Special_Price}}</td>
+            </tr>
+            {{pass}}
+        </table>
+    </div>
+ 
+</div>
+ 
+<div id="right_price">
+ 
+</div>

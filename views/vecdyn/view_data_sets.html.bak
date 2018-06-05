@@ -1,0 +1,4 @@
+{{extend 'layout.html'}}
+<h1>View data sets</h1>
+{{=A('Add new dataset',_href=URL('submit_study_data', args=reg2.id),_class="btn btn-primary")}}
+{{=form}}

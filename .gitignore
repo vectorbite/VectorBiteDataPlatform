@@ -1,0 +1,9 @@
+*.pyc 
+cache/ 
+databases/
+errors/ 
+sessions/  
+uploads/
+private/
+.hg/
+.idea/

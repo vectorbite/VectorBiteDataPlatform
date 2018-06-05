@@ -1,0 +1,54 @@
+{{extend 'layout.html'}}
+
+
+<head>
+
+    <style>
+h3 {
+    text-shadow: 1px 1px 1px whitesmoke;
+}
+p {
+text-shadow: 0.5px 0.5px 0.5px whitesmoke;
+}
+
+</style>
+
+  </head>
+
+
+
+        <body>
+<div style="background: linear-gradient(240deg, lightgrey, beige)" class="jumbotron">
+
+ <div>
+
+    <h3>
+        How to search for population dynamics data
+     </h3>
+     <br>
+
+<p><b>To perform a simple search:</b></p>
+<ol>
+  <li> Enter the terms you want to search for in the search box (e.g. taxon name, country in the 'keywords').</li>
+    <li>Hit the 'search' button.</li>
+    <li>If there are any matches in the database, you will see a list of datasets.</li>
+        <li>You can download a data set by clicking on the corresponding 'dataset' link or download multiple data sets using the checkboxes and 'submit' button . </li>
+</ol>
+
+    </div>
+<p><b>To perform a detailed search:</b>
+
+<div>
+    <ol>
+</p>
+  <li>  Use the drop-down boxes to select a category (e.g. taxon name, country)</li>
+    <li>Define the operators and hit new search (text is case sensitive)</li>
+      <li> Hit search on the top field</li>
+    <li> Now follow steps 2 to 4 from 'perform a simple search' </li>
+        </ol>
+   <br>
+
+    <b>{{=A('Examples in R:', _href='download/database_docs.file.a52cffd067752141.4578616d706c65732e7a6970.zip?_signature=7794120e5ac075cc4f7be68c0c2fe1ad00802058')}}</b> Help on how to produce a time series in R (R project folder and do files)<br>
+
+
+    </body>

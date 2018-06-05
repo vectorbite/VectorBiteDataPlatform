@@ -1,0 +1,3 @@
+{{extend 'layout.html'}}
+{{=A('Edit collection',_href=URL('edit_my_collection', args=reg.id ),_class="btn btn-primary")}}
+{{=form}}

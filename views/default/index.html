@@ -1,0 +1,117 @@
+{{extend 'layout.html'}}
+
+<head>
+
+    <style>
+h1 {
+    text-shadow: 1px 1px 1px black;
+}
+
+p.outset {border-style: groove;}
+
+p {
+text-shadow: 1px 1px 1px black;
+}
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 1em 0;
+    padding: 0;
+}
+
+       img {
+           size: auto;
+    opacity: .20;
+            width: 100%;
+    height: 10%;
+            margin-left: auto;
+    margin-right: auto;
+            margin-bottom: auto;
+           margin-top: auto;
+
+    filter: alpha(opacity=50); /* For IE8 and earlier */
+}
+
+        /* Container holding the image and the text */
+.container {
+    position: relative;
+    text-align: center;
+    color: white;
+}
+
+/* Bottom left text */
+.bottom-left {
+    position: absolute;
+    bottom: 8px;
+    left: 16px;
+}
+
+/* Top left text */
+.top-left {
+    position: absolute;
+    top: 8px;
+    left: 16px;
+}
+
+/* Top right text */
+.top-right {
+    position: absolute;
+    top: 8px;
+    right: 16px;
+}
+
+/* Bottom right text */
+.bottom-right {
+    position: absolute;
+    bottom: 8px;
+    right: 16px;
+}
+
+/* Centered text */
+.centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+</style>
+
+    <!-- Required meta tags always come first -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+  </head>
+
+  <body>
+    <div class="container">
+        <img src='{{=URL('static/images','VB_logo_black.svg')}}'/>
+
+  <div class="top-left">
+      <h1>Welcome! </h1>
+              <div>Welcome to the new Ecoinformatics Data Platform. Please register with us and take a look around!
+        You can currently download and submit population dynamics data, all templates are available from our github site. For further information please visit our github page</div>
+<hr/>
+<div></div>
+
+</div>
+
+
+
+  </div>
+      <div class="bottom-left"></div>
+  <div class="top-right"></div>
+  <div class="bottom-right"></div>
+  <div class="centered"></div>
+</div>
+
+<body/>
+
+
+
+
+
+

@@ -1,0 +1,11 @@
+{{extend 'layout.html'}}
+<div class="btn-group">
+    {{=A('Finish',_href=URL('default','index'),_class="btn btn-primary")}}
+{{=A('Add New Collection ',_href=URL('user_collection_registration'),_class="btn btn-primary")}}
+  </div>
+              <div style="background: linear-gradient(240deg, lightgrey, whitesmoke)" class="jumbotron">
+
+<br>
+{{=BEAUTIFY(form)}}
+    </div>
+
