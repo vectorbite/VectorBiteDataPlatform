@@ -3,6 +3,7 @@ title: "VecDyn Documentation"
 author: "Matthew J Watts"
 date: "22 May 2018"
 output: html_document
+toc: true
 ---
 
 #Documentation: Global **Vec**tor Population **Dyn**amics Database (VecDyn)
@@ -11,10 +12,9 @@ output: html_document
 - [Introduction](#introduction)    
     - [What is VecDyn?](#what-is-vecdyn)  
     - [Project structure and location of files](#project-structure-and-location-of-files)  
-    - [Getting access](#getting-access)  
-    - [The VecDyn template](#the-vecdyn-template)  
+    - [VecDyn template](#vecdyn-template)  
     - [Obtaining data from VecDyn](#obtaining-data-from-vecdyn)  
-    - [Adding new data](#adding-new-data)  
+    - [Submitting data](#submitting-data)  
 - [Data sources](#data-sources)  
     - [Overall workflow](#overall-workflow)  
       - [Before digitizing data](#before-digitizing-data)  
@@ -39,10 +39,14 @@ This document provides guidelines for managing the VecDyn database and web app, 
 
 VecDyn is a global database for spatially- and temporally- explicit population presence-absence abundance, density and dynamics data.
 
+### Obtaining data from VecDyn
 
-### The VecDyn template
+To get access to Vecdyn's open data, all you need to do is sign up via the Vectorbite data platform webapp.
 
-Data Series Information
+
+### VecDyn Data Collection templates
+
+Data Collection Information
 ------------------------
 *The following information should be supplied separately when a data set is submitted*
 
@@ -53,10 +57,8 @@ title | String | Required|Short title identifying the data series| E.g. “Mosqu
 collection_authority | String | Required | Name of lead collection author or collection authority |E.g. family name, given names; OR ‘Iowa State’
 DOI|String|Optional|Digital Object Identifier (DOI)|If the dataset was already published elsewhere, use the original DOI
 publication_date|ISO 8601 date format (YYYY-MM-DD)|Required|Publication date|In case the data set was already published elsewhere, use the date of first publication.
-description|text|Required|Description of dataset|A short description of the study  e.g. ‘Long term, fixed trapped, municipal surveillance of west Nile vector population in Colorado from 2000-2010”|
-
+description|text|Required|Description of dataset|A short description of the study  e.g. ‘Long term, fixed trapped, municipal surveillance of west Nile vector population in Colorado from 2000-2010”
 web_address|String|Optional|web link to dataset|
-
 contact_name|String|Required|Author|contact name|Name, person, authority, etc. that may be contacted with inquiries about the data (may differ from the contact details of the submitter – these details will be stored on the VectorBite DB)
 contact_affiliation|String|Required|Author/contact affiliation|
 email|String|Optional|Contact email|
@@ -104,24 +106,24 @@ sample_end_date|ISO 8601 time format (hh:mm:ss)| Required|Collection date |  The
 sample_end_time|ISO 8601 time format (hh:mm:ss)| Optional|Time of the sample  collection |  The time the sample was collected. time example: 15:53:00|
 value| float| Required| The numerical amount or result from the sample collection| The population data from study
 sample_info|text| Optional| Additional sample information| Should be used when more information is required to understand the experiment, for example experimental variables, sub-locations, etc.Could report general info regarding sample location. Some users may report wind speeds Examples: “Forest” vs “Field”, “Winter”vs “Summer”, “Inside” vs “Outside”, “200 meters above sea level”
- sample_name|text|Optional|A human readable sample name| May exist solely for the benefit of the depositor in organizing their data, use their own internal naming conventions etc.Naming convention is not restricted, but any encoded metadata should be revealed in the other data fields. For example, you may name a sample named ‘Aphid1_StickyTrap_Jan4,’ but you will still have “Sticky Trap” listed in a Collection Method field, and “Jan 4, 2017” in the date field.| 
+sample_lat_DD|Double (float)|Required|Latitude of sample area as a decimal degree|General location of the sample Ranges[-90,+90] for latitude (north-south measurement)| 
+sample_long_DD | Double (float) |Required|Longitude of sample area as a decimal degree| Ranges [-180,180] for longitude (east-west measurement)
+sample_name|text|Optional|A human readable sample name| May exist solely for the benefit of the depositor in organizing their data, use their own internal naming conventions etc.Naming convention is not restricted, but any encoded metadata should be revealed in the other data fields. For example, you may name a sample named ‘Aphid1_StickyTrap_Jan4,’ but you will still have “Sticky Trap” listed in a Collection Method field, and “Jan 4, 2017” in the date field.| 
 
-# Adding new data
+# Submitting data
 
 Instructions
 ------------
 *How to submit data, minimal requirements and procedures*
 
-In order to submit data to the VecDyn database (*temporary procedures*)  
-1. Fill in the template, making sure all the requirements are met (*see template description*).  
-2. Go to https://vectorbyte.org and sign up / log in to access appropriate pages.  
-3. Navigate to 'submit data' via the 'submissions' button.   
-4. Fill in 'Data Series Information' fields (*under 'Data set category' select 'VecDyn Data Submission'*).  
-5. Attach your completed 'VecDyn_template.csv' and hit submit.  
+To submit data to the VecDyn database follow the subsequent guidelines  
+1. Download the latest template [VecDyn Template](VecDyn/Template&Scripts/VecDyn_template.csv)
+2. Fill in the template, making sure all the requirements are met. See [VecDyn template](#vecdyn-template).  
+3. Go to https://vectorbyte.org and sign up / log in to access appropriate pages.  
+4. Navigate to 'submit data' via the 'submissions' button.   
+5. Fill in 'Data Series Information' fields (*under 'Data set category' select 'VecDyn Data Submission'*).  
+6. Attach your completed 'VecDyn_template.csv' and hit submit.  
 We'll contact you once your data has been incorporated into the database.
-
-
-
 
 -   The database template file, its field descriptions, and a minimal example file are located in the `Template` directory. Notice that all files are in plain text '.csv' format, and not in Excel format or similar. This facilitates text parsing by scripts, prevents data loss/corruption, and allows for detailed comparisons of changes via version control systems.
 

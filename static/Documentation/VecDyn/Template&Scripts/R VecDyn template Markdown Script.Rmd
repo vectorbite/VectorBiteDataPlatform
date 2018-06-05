@@ -7,38 +7,41 @@ output: html_document
 
 ```{r}
 Data_Series_Information_template <-data.frame(title=character(), 
-                 collection_auth=character(), 
+                 collection_authority=character(), 
                  DOI=character(),
-                 pub_date=as.Date(character()),
-                 description=character(),
+                 publication_date = as.Date(character()),
+                 description = character(),
+                 URL = character(),
                  contact_name=character(),
-                 auth_affiliation=character(),
-                 auth_email=character(),
+                 contact_affiliation=character(),
+                 contact_email=character(),
                  ORCID=character(),
                  keywords=character(),
                  stringsAsFactors=FALSE)
 write.csv(Data_Series_Information_template, file = "Data_Series_Information_template.csv", row.names = FALSE)
 ```
-                 
+                
 
 ```{r}
 
 VecDyn_template <-data.frame(title = character(),
                              taxon = character(),
-                             sample_start_date = as.Date(character()),
+                             sample_start_date = character(),
                              sample_start_time = character(),
-                             sample_end_date = as.Date(character()),
+                             sample_end_date =  character(),
                              sample_end_time = character(),
-                             value = numeric(),
+                             value = character(),
                              sample_location_info = character(),
+                             sample_lat_DD = character(),
+                             sample_long_DD = character(),
                              sample_info = character(),
                              sample_name = character(),
                              sample_sex = character(),
                              location_description = character(),
-                             location_environment =character(),
-                             study_lat_DD = double(),
-                             study_long_DD = double(),
-                             spatial_accuracy = numeric(),
+                             location_environment = character(),
+                             study_lat_DD = character(),
+                             study_long_DD = character(),
+                             spatial_accuracy = character(),
                              location_extent = character(),
                              geo_datum = character(),
                              species_id_method = character(),
@@ -50,8 +53,6 @@ VecDyn_template <-data.frame(title = character(),
                              study_collection_area = character(),
                              value_transform = character(),
                              stringsAsFactors=FALSE)
-#write.csv(VecDyn_template, file = "VecDyn_template.csv", row.names = FALSE)
+write.csv(VecDyn_template, file = "VecDyn_template.csv", row.names = FALSE)
                              
-```
-
-
+```              
