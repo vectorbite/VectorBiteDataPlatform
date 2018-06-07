@@ -146,7 +146,7 @@ def _get_data_csv(ids):
               (db.taxon.taxonID == db.study_data.taxon_id) &
               (db.gaul_admin_layers.ADM_CODE == db.study_data.location_ID) &
               (db.collection_info.id == db.study_data.collection_info_id) &
-              (db.sample_data.study_data_id == db.study_data.id))).select(
+              (db.sample_data.study_data_id == db.study_data.id)),ignore_common_filters=True).select(
                     db.study_data.title, db.gaul_admin_layers.ADM0_NAME, db.gaul_admin_layers.ADM1_NAME,db.gaul_admin_layers.ADM2_NAME,
                     db.gaul_admin_layers.centroid_latitude, db.gaul_admin_layers.centroid_longitude,
                     db.study_data.location_description,db.study_data.location_environment,
