@@ -159,6 +159,7 @@ def view_sample_data():
         session.flash = 'Sample data'
     form2 = FORM(INPUT(_type='submit',_value='Add sample data',_class="btn btn-primary"))
     if form2.process().accepted:
+        session.id = study_data_id
         redirect(URL('upload_sample_data', vars={'id': session.id}))
     o = form.element(_type='submit', _value='%s' % T('Submit'))
     if not form.create_form and not form.update_form and not form.view_form:
