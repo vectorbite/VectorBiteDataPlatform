@@ -60,7 +60,7 @@ vecdyn_manatee_county_mosquito  <-data.frame(title = character(),
                              
 ```
 
-###Import the Manatee County Mosquito Data Sets (2012-2016) from URL, when importing datasets, make sure you set 'stringsAsFactors=FALSE' to ensure R doesnt apply any formatting to the dataframe. 
+###Import the Manatee County Mosquito Data Sets (2012-2016) from the following URLs, when importing datasets, make sure you set 'stringsAsFactors=FALSE' to ensure R doesnt apply any unwanted formatting to the dataframe. 
 
 ```{r}
 Manatee_County_Mosquito_2012 <- read.csv(url("https://zenodo.org/record/1217702/files/VectorBase-2012-Manatee_County_Mosquito_Control_District_Florida_USA.csv?download=1"), stringsAsFactors=FALSE)
@@ -73,7 +73,8 @@ Manatee_County_Mosquito_2015 <- read.csv(url("https://zenodo.org/record/1217709/
 
 Manatee_County_Mosquito_2016 <- read.csv(url("https://zenodo.org/record/1217711/files/VectorBase-2016-Manatee_County_Mosquito_Control_District_Florida_USA.csv?download=1"), stringsAsFactors=FALSE)
 ```
-###Bind all the datasets together using 
+
+###Bind all the datasets together using  the rbind function
 ```{r}
 
 Manatee_County_Mosquito <- rbind(Manatee_County_Mosquito_2012,Manatee_County_Mosquito_2013,Manatee_County_Mosquito_2014,Manatee_County_Mosquito_2015,Manatee_County_Mosquito_2016)
@@ -81,7 +82,7 @@ Manatee_County_Mosquito <- rbind(Manatee_County_Mosquito_2012,Manatee_County_Mos
 
 ```
 
-###Check the dataframe to see if it all worked and reveal column names
+###Check the dataframe to see if everything went to plan
 
 ```{r}
 head(Manatee_County_Mosquito)
@@ -96,7 +97,7 @@ rm(Manatee_County_Mosquito_2012,Manatee_County_Mosquito_2013,Manatee_County_Mosq
 ```
 
 
-###Next we need to extract values from each variable and name each list according to its matching column name in vecdyn_manatee_county_mosquito data set (vecdyn template)
+###Next we need to extract values from each column and name each list according to its matching column name in vecdyn manatee_county mosquito data set (vecdyn template)
 
 ```{r}
 
@@ -151,7 +152,7 @@ vecdyn_manatee_county_mosquito <-
 
 ```
 
-###We next need to create specific data sets for VecDyn, in this case by species ' aedes aegypti'
+###We next need to create specific data sets for VecDyn, in this case we will create a data set for species ' aedes aegypti'. We will also give the data set a title and provide details on the measurement unit
 
 ```{r}
 
@@ -161,7 +162,7 @@ vecdyn_manatee_county_mosquito_Aedes_aegypti <-
   dplyr::mutate(title = 'Manatee County Monitoring Aedes aegypti') %>%
   dplyr::mutate(measurement_unit = 'individuals') ##it is always good to keep track of the measurement unit
 
-View(vecdyn_manatee_county_mosquito_Aedes_aegypti)
+
 ```
 
 ### Test the data set by producing a time series plot in ggplot. Note that this particular data set contains lots of sampling stations within manatee_county
@@ -183,7 +184,7 @@ vecdyn_manatee_county_mosquito_Aedes_aegypti %>%
 ###Finally write the data set to CSV, set all missing value to blank ""
 
 ```{r}
-write_csv(vecdyn_manatee_county_mosquito_Aedes_aegypti,"vecdyn_manatee_county_Aedes_aegypti.csv", na = "")
+write_csv(vecdyn_manatee_county_mosquito_Aedes_aegypti,"vecdyn_manatee_county_aedes_aegypti.csv", na = "")
 ```
 
 ###Lets also make a data set for Anopheles quadrimaculatus
@@ -219,5 +220,5 @@ vecdyn_manatee_county_mosquito_A.quadrimaculatus %>%
 ###Finally write the data set to CSV, set all missing value to blank
 
 ```{r}
-write_csv(vecdyn_manatee_county_mosquito_A.quadrimaculatus,"vecdyn_manatee_county_A.quadrimaculatus.csv", na = "")
+write_csv(vecdyn_manatee_county_mosquito_A.quadrimaculatus,"vecdyn_manatee_county_a.quadrimaculatus.csv", na = "")
 ```
