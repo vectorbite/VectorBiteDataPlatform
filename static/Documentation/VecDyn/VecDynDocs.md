@@ -7,7 +7,7 @@ Documentation
 Welcome to VectorBiTE’s VecDyn database guidelines. This document
 provides details and instructions on accessing and submitting data. You
 can also access data collection templates and examples which will help
-you to prepare data for submission.
+you with preparing data for submission.
 
 ## What is VecDyn?
 
@@ -17,17 +17,23 @@ accept and distribute data for both animal and plant disease vectors.
 
 ## Obtaining data from VecDyn
 
-To get access to Vecdyn’s open data, all you need to do is sign up via
-the [VectorBiTE Data Platform Web App](http://vectorbyte.org). Querying
-data is simple, on the top of the page click on ‘Get data’, then
-‘VecDyn’ buttons to open up the population data search facility. You
-can currently search for data by species or geographical location.
-Please note that the search facility is case sensitve. To download data,
-just click inside a selection box beside a data set title, then click on
-the ‘Download Selected’ button. All data is downloaded in text/csv
-format. Note that the current search facility is temporary and we’ll
-soon be implementing a range of new features to help you search and
-visualise data.
+To get access to VecDyn’s open data, all you need to do is:
+
+1.  Sign up via the [VectorBiTE Data Platform Web
+    App](http://vectorbyte.org) and log in.
+
+2.  To query data, on the index page, click on the ‘Get data’ button and
+    then ‘VecDyn’ button to open up the population data search facility.
+
+3.  To query data, either enter a species or geographical location.
+    Please note that the search facility is case sensitive.
+
+4.  To download data, just click on the selection box beside a data set
+    title, then click on the ‘Download Selected’ button.
+
+*All data is downloaded in text/csv format.* *Note that the current
+search facility is temporary and we’ll soon be implementing a range of
+new features to help you search and visualise data.*
 
 ## Submitting data
 
@@ -44,7 +50,7 @@ guidelines*
     [R Markdown
     recipe](https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Examples/ManateeCountyMosquitoMonitoring/ManateeCountryMosquitoMonitoring.Rmd)
     here. This guide takes you through the steps of converting an
-    existing data set into a VecDyn dataset using the vecdyn template.
+    existing data set into a VecDyn dataset using the VecDyn template.
     Notice that all files are in plain text e.g. ‘.csv’ format, and not
     in Excel format or similar. This facilitates text parsing by
     scripts, prevents data loss/corruption, and allows for detailed
@@ -69,6 +75,73 @@ guidelines*
 5.  We’ll contact you regarding the outcome of your submission once
     we’ve had a look at it.
 
+## Adding data to the database (*Curators only*)
+
+For testing purposes (*temporary*) first download the [example data
+set](https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Examples/ManateeCountyMosquitoMonitoring/vecdyn_manatee_county_aedes_aegypti.csv)
+to try out the process.
+
+Log on and go to the web app and go to [my
+collections](https://vectorbiteonlineplatform.pythonanywhere.com/VectorBiteDataPlatform/vecdyn/my_collections).
+
+Click on **‘Add New
+Collection’**
+
+<img src="https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Images/DataUploadStep1.png" width="75%" style="display: block; margin: auto;" />
+
+The first table captures general information about the data provider and
+the data series. A data series may provide centralised information about
+one or many related
+datasets.
+
+<img src="https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Images/DataUploadStep2.png" width="75%" style="display: block; margin: auto;" />
+
+Once the collection information has been registered, you now be able to
+submit data sets to that collection. Click o ‘Add new data set to
+collection’
+
+<img src="https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Images/DataUploadStep3.png" width="75%" style="display: block; margin: auto;" />
+
+Next select a taxon, it is best to search using the first box first.
+When you have found the taxon you are after. Hit the ‘select’ button on
+the aligning
+row.
+
+<img src="https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Images/DataUploadStep4.png" width="75%" style="display: block; margin: auto;" />
+
+Next select a geographical location, this either needs to be country or
+an Adm1 (e.g. State) or adm2 (county) administrative subdivision. Again,
+Hit the ‘select’ button on the aligning ror of your
+choice.
+
+<img src="https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Images/DataUploadStep5.png" width="75%" style="display: block; margin: auto;" />
+
+Next submit all the study data (metadata) and click on submit once you
+have completed the
+page.
+
+<img src="https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Images/DataUploadStep6.png" width="75%" style="display: block; margin: auto;" />
+
+Next you need to upload the complete csv. This will only upload fields
+related to the time series (sample
+data)
+
+<img src="https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Images/DataUploadStep7.png" width="75%" style="display: block; margin: auto;" />
+
+Once completed, you’ll be taken the final page where you can see all the
+sample data relating to the study data. From here you can verify all the
+information is correct. If it click on ‘finish’ to be take back the
+collections
+page.
+
+<img src="https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Images/DataUploadStep9.png" width="75%" style="display: block; margin: auto;" />
+
+However, if these is a problem you can delete or edit each entry. To
+delete all the entries hit ‘select’ all and scroll down to the bottom of
+the page and click ‘delete
+selected’  
+<img src="https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Images/DataUploadStep8.png" width="75%" style="display: block; margin: auto;" />
+
 # Data Collection Specifications
 
 The following section describes all the fields in the VecDyn data base
@@ -77,7 +150,7 @@ section will also guide through completing the data collection template.
 Note that some fields are required and others are optional, although,
 ideally all fields should be completed.
 
-## Basic Data Series Information
+## Collection Information Table (i.e.basic data series information)
 
 The first table captures general information about the data provider and
 the data series. A data series may provide centralised information about
@@ -108,13 +181,13 @@ these fields should be repeated for each time series row/observation. In
 effect, the metadata helps to describe the time series
 data.
 
-## Metadata *(part of the VecDyn data collection template)*
+## Study Data Table (i.e. metadata, *part of the VecDyn data collection template))*
 
 | Field Name               | Required | Details                                                                                                            | Additional Notes                                                                                                                                                                                                  |
 | ------------------------ | -------- | ------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | data\_set\_name          | yes      | Short title identifying the data set                                                                               | The title should be related to the data series title and the study organism e.g. “Tiger Mosquito Surveillance in Iowa”                                                                                            |
 | taxon\_name              | yes      | Classification of sample collected                                                                                 | Use the Catalogue of Life 2017 check-list to obtain the taxon name, only use names which are classed as ‘accepted’. See <http://www.catalogueoflife.org/annual-checklist/2017/>                                   |
-| country                  | yes      | Country where study was conducted                                                                                  | Use the United Nations’s “Standard Country” names. See here <https://unstats.un.org/unsd/methodology/m49/>                                                                                                        |
+| country                  | yes      | Country where study was conducted                                                                                  | Use the United Nation’s “Standard Country” names. See here <https://unstats.un.org/unsd/methodology/m49/>                                                                                                         |
 | location\_description    | yes      | Description of study location                                                                                      | E.g.. town, county, state                                                                                                                                                                                         |
 | location\_environment    | optional | General description about the location                                                                             | Where possible, please use the Environment Ontology search feature to characterize the location’s environment (see <http://www.environmentontology.org/Browse-EnvO>)                                              |
 | study\_lat\_DD           | optional | Latitude of study area as a decimal degree                                                                         | General location of the study Ranges\[-90,+90\] for latitude (north-south measurement)                                                                                                                            |
@@ -124,7 +197,7 @@ data.
 | geo\_datum               | optional | Geodetic datum                                                                                                     | E.g.. WGS 84                                                                                                                                                                                                      |
 | species\_id\_method      | Optional | Species Identification Method                                                                                      | A description of the methods species identification.                                                                                                                                                              |
 | study\_design            | Optional | Study design methodology                                                                                           | Indicate if observational study i.e.prospective , retrospective, or experimental etc                                                                                                                              |
-| sampling\_strategy       | Optional | Indicate the strategy used to select the sample                                                                    | E.g. simple random sampling, stratified, convenience sampling, cluster, sampling, census etc                                                                                                                      |
+| sampling\_strategy       | Optional | Indicate the strategy used to select the sample                                                                    | E.g. simple random sampling, stratified, convenience sampling, cluster, sampling, census etc.                                                                                                                     |
 | sampling\_method         | Optional | Sampling apparatus e.g..trap type, observation method)                                                             | E.g. “CDC light trap w/ CO2”, “Prokopack backpack aspirator”, “Quadrat count”                                                                                                                                     |
 | sampling\_protocol       | Optional | How entities were sampled                                                                                          | E.g. ‘Count’, ‘Count (millions)’, ‘Harvest’, ‘Index of abundance’, ‘Index of territories’, ‘Leaf area’, ‘Mean Count’, ‘Not Specified’, ‘Percent cover’ and ‘Sample’.                                              |
 | measurement\_unit        | Optional | Unit of measurement                                                                                                | The entity observed. Entries could include, ‘individuals’, ‘adults’, ‘cells’, ‘egg masses’, and ‘pelts’                                                                                                           |
@@ -138,7 +211,7 @@ that any additional information about a sub sample can be added here too
 e.g. point location of sample sites or sex of a
 species.
 
-## Time Series Data *(part of the VecDyn data collection template)*
+## Sample Data Table (i.e. time series data, *part of the VecDyn data collection template*))
 
 | Field Name          | Required | Details                                                   | Additional Notes                                                                                                                                                                                                                                                                                                                                                                                                          |
 | ------------------- | -------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -160,8 +233,23 @@ species.
 To standardise taxonomy, VecDyn includes the [The Catalogue of Life
 database](http://www.catalogueoflife.org), which is the most
 comprehensive and authoritative global index of species currently
-available. Taxonomic data will be standarsied by curators upon the
+available. Taxonomic data will be standardised by curators upon the
 addition of a dataset to the VecDyn database.
+
+| Field Name           | Name in DB                |
+| -------------------- | ------------------------- |
+| taxonID              | taxonID                   |
+| kingdom              | tax\_kingdom              |
+| phylum               | tax\_phylum               |
+| class                | tax\_class                |
+| order                | tax\_order                |
+| superfamily          | tax\_superfamily          |
+| family               | tax\_family               |
+| genus                | tax\_genus                |
+| subgenus             | tax\_subgenus             |
+| specificEpithet      | tax\_specificEpithet      |
+| infraspecificEpithet | tax\_infraspecificEpithet |
+| species              | tax\_species              |
 
 ## Standardizing Geo Referencing
 
@@ -173,16 +261,31 @@ systematises global administrative regions with a unified coding system
 at country, first (e.g. departments) and second administrative levels
 (e.g. districts). Each Administrative unit is assigned a unique ID and
 is connected to a spatial polygon. Therefore data submitted to the
-VecDyn database can berepresented spatially, as long as a minimal set of
-information is provided by the submitter e.g. country, county, region,
+VecDyn database can be represented spatially, as long as a minimal set
+of information is provided by the submitter e.g. country, county,
+region,
 state.
+
+| Field Name in db    | Description                                                          |
+| ------------------- | -------------------------------------------------------------------- |
+| ADM\_CODE           | unique code assigned to each administrative unit / shape file        |
+| ADM0\_NAME          | country name                                                         |
+| ADM1\_NAME          | first administrative subdivision e.g. Florida                        |
+| ADM2\_NAME          | first administrative subdivision e.g. Manatee County                 |
+| centroid\_latitude  | latitude of centroid representing centre of administrative unit      |
+| centroid\_longitude | longitude centroid taking representing centre of administrative unit |
 
 ## Standardizing Environmental Descriptions
 
-Environemtnal descriptors can be standardized using
+Environmental descriptors can be standardized using
 [ENVO](http://environmentontology.org/Browse-EnvO). ENVO is an ontology
 which represents knowledge about environments,environmental processes,
-ecosystems, habitats, and related entities.
+ecosystems, habitats, and related
+entities.
+
+## VecDyn Data Base structure (backend)
+
+<img src="https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Images/vecdyn_er_diagram.png" width="75%" style="display: block; margin: auto;" />
 
 # Templates, Examples & Tutorials
 
