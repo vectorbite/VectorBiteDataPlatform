@@ -1,21 +1,48 @@
-Global **Vec**tor Population **Dyn**amics Database (VecDyn)
-Documentation
-================
+-   [Introduction](#introduction)
+    -   [What is VecDyn?](#what-is-vecdyn)
+    -   [Obtaining data from VecDyn](#obtaining-data-from-vecdyn)
+    -   [Submitting data](#submitting-data)
+    -   [Adding data to the database (*Curators
+        only*)](#adding-data-to-the-database-curators-only)
+-   [Data Collection Specifications](#data-collection-specifications)
+    -   [Collection Information Table (i.e.basic data series
+        information)](#collection-information-table-i.e.basic-data-series-information)
+    -   [Study Data Table (i.e. metadata, *part of the VecDyn data
+        collection
+        template))*](#study-data-table-i.e.metadata-part-of-the-vecdyn-data-collection-template)
+    -   [Sample Data Table (i.e. time series data, *part of the VecDyn
+        data collection
+        template*))](#sample-data-table-i.e.time-series-data-part-of-the-vecdyn-data-collection-template)
+-   [Data Standardization](#data-standardization)
+    -   [Standardizing Taxonomy](#standardizing-taxonomy)
+    -   [Standardizing Geo Referencing](#standardizing-geo-referencing)
+    -   [Standardizing Environmental
+        Descriptions](#standardizing-environmental-descriptions)
+    -   [VecDyn Data Base structure
+        (backend)](#vecdyn-data-base-structure-backend)
+-   [Templates, Examples & Tutorials](#templates-examples-tutorials)
+-   [Issues, troubleshooting &
+    suggestions](#issues-troubleshooting-suggestions)
+    -   [Known isses](#known-isses)
+-   [Miscellaneous](#miscellaneous)
 
-# Introduction
+Introduction
+============
 
 Welcome to VectorBiTE’s VecDyn database guidelines. This document
 provides details and instructions on accessing and submitting data. You
 can also access data collection templates and examples which will help
 you with preparing data for submission.
 
-## What is VecDyn?
+What is VecDyn?
+---------------
 
 VecDyn is a global database for spatially- and temporally- explicit
 population presence-absence abundance, density and dynamics data. We
 accept and distribute data for both animal and plant disease vectors.
 
-## Obtaining data from VecDyn
+Obtaining data from VecDyn
+--------------------------
 
 To get access to VecDyn’s open data, all you need to do is:
 
@@ -35,7 +62,8 @@ To get access to VecDyn’s open data, all you need to do is:
 search facility is temporary and we’ll soon be implementing a range of
 new features to help you search and visualise data.*
 
-## Submitting data
+Submitting data
+---------------
 
 *To submit data to the VecDyn database, follow the subsequent
 guidelines*
@@ -75,7 +103,8 @@ guidelines*
 5.  We’ll contact you regarding the outcome of your submission once
     we’ve had a look at it.
 
-## Adding data to the database (*Curators only*)
+Adding data to the database (*Curators only*)
+---------------------------------------------
 
 For testing purposes (*temporary*) first download the [example data
 set](https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Examples/ManateeCountyMosquitoMonitoring/vecdyn_manatee_county_aedes_aegypti.csv)
@@ -84,15 +113,13 @@ to try out the process.
 Log on and go to the web app and go to [my
 collections](https://vectorbiteonlineplatform.pythonanywhere.com/VectorBiteDataPlatform/vecdyn/my_collections).
 
-Click on **‘Add New
-Collection’**
+Click on **‘Add New Collection’**
 
 <img src="https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Images/DataUploadStep1.png" width="75%" style="display: block; margin: auto;" />
 
 The first table captures general information about the data provider and
 the data series. A data series may provide centralised information about
-one or many related
-datasets.
+one or many related datasets.
 
 <img src="https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Images/DataUploadStep2.png" width="75%" style="display: block; margin: auto;" />
 
@@ -104,45 +131,40 @@ collection’
 
 Next select a taxon, it is best to search using the first box first.
 When you have found the taxon you are after. Hit the ‘select’ button on
-the aligning
-row.
+the aligning row.
 
 <img src="https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Images/DataUploadStep4.png" width="75%" style="display: block; margin: auto;" />
 
 Next select a geographical location, this either needs to be country or
 an Adm1 (e.g. State) or adm2 (county) administrative subdivision. Again,
-Hit the ‘select’ button on the aligning ror of your
-choice.
+Hit the ‘select’ button on the aligning ror of your choice.
 
 <img src="https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Images/DataUploadStep5.png" width="75%" style="display: block; margin: auto;" />
 
 Next submit all the study data (metadata) and click on submit once you
-have completed the
-page.
+have completed the page.
 
 <img src="https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Images/DataUploadStep6.png" width="75%" style="display: block; margin: auto;" />
 
 Next you need to upload the complete csv. This will only upload fields
-related to the time series (sample
-data)
+related to the time series (sample data)
 
 <img src="https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Images/DataUploadStep7.png" width="75%" style="display: block; margin: auto;" />
 
 Once completed, you’ll be taken the final page where you can see all the
 sample data relating to the study data. From here you can verify all the
 information is correct. If it click on ‘finish’ to be take back the
-collections
-page.
+collections page.
 
 <img src="https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Images/DataUploadStep9.png" width="75%" style="display: block; margin: auto;" />
 
 However, if these is a problem you can delete or edit each entry. To
 delete all the entries hit ‘select’ all and scroll down to the bottom of
-the page and click ‘delete
-selected’  
+the page and click ‘delete selected’  
 <img src="https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Images/DataUploadStep8.png" width="75%" style="display: block; margin: auto;" />
 
-# Data Collection Specifications
+Data Collection Specifications
+==============================
 
 The following section describes all the fields in the VecDyn data base
 and provides details on the rational behind their requirement. This
@@ -150,27 +172,98 @@ section will also guide through completing the data collection template.
 Note that some fields are required and others are optional, although,
 ideally all fields should be completed.
 
-## Collection Information Table (i.e.basic data series information)
+Collection Information Table (i.e.basic data series information)
+----------------------------------------------------------------
 
 The first table captures general information about the data provider and
 the data series. A data series may provide centralised information about
 one or many related datasets. The following information should be
-supplied separately when a data set is
-submitted.
+supplied separately when a data set is submitted.
 
-| Field Name            | Required | Details                                                                            | Additional Notes                                                                                                  |
-| --------------------- | -------- | ---------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| title                 | Yes      | Short title identifying the data series                                            | E.g. “Mosquito Surveillance in Iowa”                                                                              |
-| collection\_authority | Yes      | Name of collection authority                                                       | E.g. family name, given names; OR ‘Iowa State                                                                     |
-| DOI                   | Optional | Digital Object Identifier (DOI)                                                    | If the data set was already published                                                                             |
-| publication\_date     | Yes      | ISO 8601 date format (YYYY-MM-DD)                                                  | In case the data set was already published elsewhere, use the date of first publication.                          |
-| description           | Yes      | A short description of the study / data set                                        | E.g. ‘Long term, fixed trapped, municipal surveillance of west Nile vector population in Colorado from 2000-2010” |
-| URL                   | Yes      | web link to data set                                                               |                                                                                                                   |
-| contact\_name         | Yes      | Name, person, authority, etc…. that may be contacted with inquiries about the data |                                                                                                                   |
-| contact\_affiliation  | Optional | Author/contact affiliation                                                         |                                                                                                                   |
-| email                 | Optional | Contact email                                                                      |                                                                                                                   |
-| ORCID                 | Optional | ORCID code                                                                         | A digital identifier which provides                                                                               |
-| keywords              | Optional | Keywords for web searches                                                          |                                                                                                                   |
+<table>
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 7%" />
+<col style="width: 45%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field Name</th>
+<th>Required</th>
+<th>Details</th>
+<th>Additional Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>title</td>
+<td>Yes</td>
+<td>Short title identifying the data series</td>
+<td>E.g. “Mosquito Surveillance in Iowa”</td>
+</tr>
+<tr class="even">
+<td>collection_authority</td>
+<td>Yes</td>
+<td>Name of collection authority</td>
+<td>E.g. family name, given names; OR ‘Iowa State</td>
+</tr>
+<tr class="odd">
+<td>DOI</td>
+<td>Optional</td>
+<td>Digital Object Identifier (DOI)</td>
+<td>If the data set was already published</td>
+</tr>
+<tr class="even">
+<td>publication_date</td>
+<td>Yes</td>
+<td>ISO 8601 date format (YYYY-MM-DD)</td>
+<td>In case the data set was already published elsewhere, use the date of first publication.</td>
+</tr>
+<tr class="odd">
+<td>description</td>
+<td>Yes</td>
+<td>A short description of the study / data set</td>
+<td>E.g. ‘Long term, fixed trapped, municipal surveillance of west Nile vector population in Colorado from 2000-2010”</td>
+</tr>
+<tr class="even">
+<td>URL</td>
+<td>Yes</td>
+<td>web link to data set</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>contact_name</td>
+<td>Yes</td>
+<td>Name, person, authority, etc…. that may be contacted with inquiries about the data</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>contact_affiliation</td>
+<td>Optional</td>
+<td>Author/contact affiliation</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>email</td>
+<td>Optional</td>
+<td>Contact email</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>ORCID</td>
+<td>Optional</td>
+<td>ORCID code</td>
+<td>A digital identifier which provides</td>
+</tr>
+<tr class="odd">
+<td>keywords</td>
+<td>Optional</td>
+<td>Keywords for web searches</td>
+<td></td>
+</tr>
+</tbody>
+</table>
 
 The next table captures metadata for a study. A study should be regarded
 as a set of data for one single species, at a given location over a
@@ -178,57 +271,231 @@ specific time period. The metadata should be used to capture information
 like the general location of a study and particular methods or equipment
 used to collect data on the study organism. Note that data entered into
 these fields should be repeated for each time series row/observation. In
-effect, the metadata helps to describe the time series
-data.
+effect, the metadata helps to describe the time series data.
 
-## Study Data Table (i.e. metadata, *part of the VecDyn data collection template))*
+Study Data Table (i.e. metadata, *part of the VecDyn data collection template))*
+--------------------------------------------------------------------------------
 
-| Field Name               | Required | Details                                                                                                            | Additional Notes                                                                                                                                                                                                  |
-| ------------------------ | -------- | ------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| data\_set\_name          | yes      | Short title identifying the data set                                                                               | The title should be related to the data series title and the study organism e.g. “Tiger Mosquito Surveillance in Iowa”                                                                                            |
-| taxon\_name              | yes      | Classification of sample collected                                                                                 | Use the Catalogue of Life 2017 check-list to obtain the taxon name, only use names which are classed as ‘accepted’. See <http://www.catalogueoflife.org/annual-checklist/2017/>                                   |
-| country                  | yes      | Country where study was conducted                                                                                  | Use the United Nation’s “Standard Country” names. See here <https://unstats.un.org/unsd/methodology/m49/>                                                                                                         |
-| location\_description    | yes      | Description of study location                                                                                      | E.g.. town, county, state                                                                                                                                                                                         |
-| location\_environment    | optional | General description about the location                                                                             | Where possible, please use the Environment Ontology search feature to characterize the location’s environment (see <http://www.environmentontology.org/Browse-EnvO>)                                              |
-| study\_lat\_DD           | optional | Latitude of study area as a decimal degree                                                                         | General location of the study Ranges\[-90,+90\] for latitude (north-south measurement)                                                                                                                            |
-| study\_long\_DD          | optional | Longitude of study area as a decimal degree                                                                        | Ranges \[-180,180\] for longitude (east-west measurement)                                                                                                                                                         |
-| spatial\_accuracy        | optional | Spatial accuracy of the given coordinates                                                                          | Value between 0 - 6 indicating the accuracy of the location given. 0 = Unknown, 1 = \>100 km radius, 2 = 10 - \<100km, 3 = 1 - \<9km, 4 = 0.1 - 1km, 5 = 10 - 100m, 6 = accurate survey (incl. GPS) \<= 10m       |
-| location\_extent         | optional | Indicating the size of the study site.                                                                             | A value between 1 - 4. Where available absolute size is recorded in the Area field. 1 = Region \>10 km radius, 2 = Local Area 1-10 km radius, 3 = Extended Site 0.1-1 km radius, 4 = Precise Site \<0.1 km radius |
-| geo\_datum               | optional | Geodetic datum                                                                                                     | E.g.. WGS 84                                                                                                                                                                                                      |
-| species\_id\_method      | Optional | Species Identification Method                                                                                      | A description of the methods species identification.                                                                                                                                                              |
-| study\_design            | Optional | Study design methodology                                                                                           | Indicate if observational study i.e.prospective , retrospective, or experimental etc                                                                                                                              |
-| sampling\_strategy       | Optional | Indicate the strategy used to select the sample                                                                    | E.g. simple random sampling, stratified, convenience sampling, cluster, sampling, census etc.                                                                                                                     |
-| sampling\_method         | Optional | Sampling apparatus e.g..trap type, observation method)                                                             | E.g. “CDC light trap w/ CO2”, “Prokopack backpack aspirator”, “Quadrat count”                                                                                                                                     |
-| sampling\_protocol       | Optional | How entities were sampled                                                                                          | E.g. ‘Count’, ‘Count (millions)’, ‘Harvest’, ‘Index of abundance’, ‘Index of territories’, ‘Leaf area’, ‘Mean Count’, ‘Not Specified’, ‘Percent cover’ and ‘Sample’.                                              |
-| measurement\_unit        | Optional | Unit of measurement                                                                                                | The entity observed. Entries could include, ‘individuals’, ‘adults’, ‘cells’, ‘egg masses’, and ‘pelts’                                                                                                           |
-| sample\_collection\_area | Optional | The spatial extent (area or volume) of the sample                                                                  | If relevant (E.g.., when collection method is transect or quadrat), in units of area or volume, the spatial coverage of the sampling unit e.g. “100 m^2”, “1 liter”, “1 ha”, “10m^3”                              |
-| value\_transform         | Optional | Note if the original values have been transformed – list details of the reference value of any data transformation | E.g..Base Year, Log, None, Not Specified, Proportion, Unknown, x 1000 lbs                                                                                                                                         |
+<table>
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 7%" />
+<col style="width: 47%" />
+<col style="width: 26%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field Name</th>
+<th>Required</th>
+<th>Details</th>
+<th>Additional Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>data_set_name</td>
+<td>yes</td>
+<td>Short title identifying the data set</td>
+<td>The title should be related to the data series title and the study organism e.g. “Tiger Mosquito Surveillance in Iowa”</td>
+</tr>
+<tr class="even">
+<td>taxon_name</td>
+<td>yes</td>
+<td>Classification of sample collected</td>
+<td>Use the Catalogue of Life 2017 check-list to obtain the taxon name, only use names which are classed as ‘accepted’. See <a href="http://www.catalogueoflife.org/annual-checklist/2017/" class="uri">http://www.catalogueoflife.org/annual-checklist/2017/</a></td>
+</tr>
+<tr class="odd">
+<td>country</td>
+<td>yes</td>
+<td>Country where study was conducted</td>
+<td>Use the United Nation’s “Standard Country” names. See here <a href="https://unstats.un.org/unsd/methodology/m49/" class="uri">https://unstats.un.org/unsd/methodology/m49/</a></td>
+</tr>
+<tr class="even">
+<td>location_description</td>
+<td>yes</td>
+<td>Description of study location</td>
+<td>E.g.. town, county, state</td>
+</tr>
+<tr class="odd">
+<td>location_environment</td>
+<td>optional</td>
+<td>General description about the location</td>
+<td>Where possible, please use the Environment Ontology search feature to characterize the location’s environment (see <a href="http://www.environmentontology.org/Browse-EnvO" class="uri">http://www.environmentontology.org/Browse-EnvO</a>)</td>
+</tr>
+<tr class="even">
+<td>study_lat_DD</td>
+<td>optional</td>
+<td>Latitude of study area as a decimal degree</td>
+<td>General location of the study Ranges[-90,+90] for latitude (north-south measurement)</td>
+</tr>
+<tr class="odd">
+<td>study_long_DD</td>
+<td>optional</td>
+<td>Longitude of study area as a decimal degree</td>
+<td>Ranges [-180,180] for longitude (east-west measurement)</td>
+</tr>
+<tr class="even">
+<td>spatial_accuracy</td>
+<td>optional</td>
+<td>Spatial accuracy of the given coordinates</td>
+<td>Value between 0 - 6 indicating the accuracy of the location given. 0 = Unknown, 1 = &gt;100 km radius, 2 = 10 - &lt;100km, 3 = 1 - &lt;9km, 4 = 0.1 - 1km, 5 = 10 - 100m, 6 = accurate survey (incl. GPS) &lt;= 10m</td>
+</tr>
+<tr class="odd">
+<td>location_extent</td>
+<td>optional</td>
+<td>Indicating the size of the study site.</td>
+<td>A value between 1 - 4. Where available absolute size is recorded in the Area field. 1 = Region &gt;10 km radius, 2 = Local Area 1-10 km radius, 3 = Extended Site 0.1-1 km radius, 4 = Precise Site &lt;0.1 km radius</td>
+</tr>
+<tr class="even">
+<td>geo_datum</td>
+<td>optional</td>
+<td>Geodetic datum</td>
+<td>E.g.. WGS 84</td>
+</tr>
+<tr class="odd">
+<td>species_id_method</td>
+<td>Optional</td>
+<td>Species Identification Method</td>
+<td>A description of the methods species identification.</td>
+</tr>
+<tr class="even">
+<td>study_design</td>
+<td>Optional</td>
+<td>Study design methodology</td>
+<td>Indicate if observational study i.e.prospective , retrospective, or experimental etc</td>
+</tr>
+<tr class="odd">
+<td>sampling_strategy</td>
+<td>Optional</td>
+<td>Indicate the strategy used to select the sample</td>
+<td>E.g. simple random sampling, stratified, convenience sampling, cluster, sampling, census etc.</td>
+</tr>
+<tr class="even">
+<td>sampling_method</td>
+<td>Optional</td>
+<td>Sampling apparatus e.g..trap type, observation method)</td>
+<td>E.g. “CDC light trap w/ CO2”, “Prokopack backpack aspirator”, “Quadrat count”</td>
+</tr>
+<tr class="odd">
+<td>sampling_protocol</td>
+<td>Optional</td>
+<td>How entities were sampled</td>
+<td>E.g. ‘Count’, ‘Count (millions)’, ‘Harvest’, ‘Index of abundance’, ‘Index of territories’, ‘Leaf area’, ‘Mean Count’, ‘Not Specified’, ‘Percent cover’ and ‘Sample’.</td>
+</tr>
+<tr class="even">
+<td>measurement_unit</td>
+<td>Optional</td>
+<td>Unit of measurement</td>
+<td>The entity observed. Entries could include, ‘individuals’, ‘adults’, ‘cells’, ‘egg masses’, and ‘pelts’</td>
+</tr>
+<tr class="odd">
+<td>sample_collection_area</td>
+<td>Optional</td>
+<td>The spatial extent (area or volume) of the sample</td>
+<td>If relevant (E.g.., when collection method is transect or quadrat), in units of area or volume, the spatial coverage of the sampling unit e.g. “100 m^2”, “1 liter”, “1 ha”, “10m^3”</td>
+</tr>
+<tr class="even">
+<td>value_transform</td>
+<td>Optional</td>
+<td>Note if the original values have been transformed – list details of the reference value of any data transformation</td>
+<td>E.g..Base Year, Log, None, Not Specified, Proportion, Unknown, x 1000 lbs</td>
+</tr>
+</tbody>
+</table>
 
 In the following table, the next set of variables captures the
 information required to produce a time-Series dataset. Each row should
 represent a separate observation, at a particular point in time. Note
 that any additional information about a sub sample can be added here too
-e.g. point location of sample sites or sex of a
-species.
+e.g. point location of sample sites or sex of a species.
 
-## Sample Data Table (i.e. time series data, *part of the VecDyn data collection template*))
+Sample Data Table (i.e. time series data, *part of the VecDyn data collection template*))
+-----------------------------------------------------------------------------------------
 
-| Field Name          | Required | Details                                                   | Additional Notes                                                                                                                                                                                                                                                                                                                                                                                                          |
-| ------------------- | -------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| sample\_start\_date | Optional | Start date: ISO 8601 date format (YYYY-MM-DD)             | Only required when the collector wants to sample populations within specific time frames e.g. between when a trap was set and when the sample was collected                                                                                                                                                                                                                                                               |
-| sample\_start\_time | Optional | Start time: ISO 8601 time format (hh:mm:ss)               | Only required when the collector wants to sample populations within specific time frames e.g. time example: 15:53:00                                                                                                                                                                                                                                                                                                      |
-| sample\_end\_date   | Yes      | Collection date:ISO 8601 time format (hh:mm:ss)           | The date the sample was collected. If collection occurs monthly use the first day of each month i.e. 2001-01-01, 2001-02-01. Date example: 2008-09-15                                                                                                                                                                                                                                                                     |
-| sample\_end\_time   | Optional | Time of the sample collection:                            | ISO 8601 time format (hh:mm:ss)                                                                                                                                                                                                                                                                                                                                                                                           |
-| value               | Yes      | The numerical amount or result from the sample collection | The population data from study                                                                                                                                                                                                                                                                                                                                                                                            |
-| sample\_info        | Optional | Additional sample information                             | Should be used when more information is required to understand the experiment, for example experimental variables, sub-locations, etc.Could report general info regarding sample location. Some users may report wind speeds Examples: “Forest” vs “Field”, “Winter”vs “Summer”, “Inside” vs “Outside”, “200 meters above sea level”                                                                                      |
-| sample\_lat\_DD     | Optional | Latitude of sample area as a decimal degree               | Specific location of the sample Ranges \[-90,+90\] for latitude (north-south measurement)                                                                                                                                                                                                                                                                                                                                 |
-| sample\_long\_DD    | Optional | Longitude of sample area as a decimal degree              | Ranges \[-180,180\] for longitude (east-west measurement)                                                                                                                                                                                                                                                                                                                                                                 |
-| sample\_name        | Optional | A human readable sample name                              | May exist solely for the benefit of the depositor in organizing their data, use their own internal naming conventions etc.Naming convention is not restricted, but any encoded metadata should be revealed in the other data fields. For example, you may name a sample named ‘Aphid1\_StickyTrap\_Jan4,’ but you will still have “Sticky Trap” listed in a Collection Method field, and “Jan 4, 2017” in the date field. |
-| sample\_sex         | Optional | Information on the sex of the organism sampled            |                                                                                                                                                                                                                                                                                                                                                                                                                           |
+<table>
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 7%" />
+<col style="width: 47%" />
+<col style="width: 26%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field Name</th>
+<th>Required</th>
+<th>Details</th>
+<th>Additional Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>sample_start_date</td>
+<td>Optional</td>
+<td>Start date: ISO 8601 date format (YYYY-MM-DD)</td>
+<td>Only required when the collector wants to sample populations within specific time frames e.g. between when a trap was set and when the sample was collected</td>
+</tr>
+<tr class="even">
+<td>sample_start_time</td>
+<td>Optional</td>
+<td>Start time: ISO 8601 time format (hh:mm:ss)</td>
+<td>Only required when the collector wants to sample populations within specific time frames e.g. time example: 15:53:00</td>
+</tr>
+<tr class="odd">
+<td>sample_end_date</td>
+<td>Yes</td>
+<td>Collection date:ISO 8601 time format (hh:mm:ss)</td>
+<td>The date the sample was collected. If collection occurs monthly use the first day of each month i.e. 2001-01-01, 2001-02-01. Date example: 2008-09-15</td>
+</tr>
+<tr class="even">
+<td>sample_end_time</td>
+<td>Optional</td>
+<td>Time of the sample collection:</td>
+<td>ISO 8601 time format (hh:mm:ss)</td>
+</tr>
+<tr class="odd">
+<td>value</td>
+<td>Yes</td>
+<td>The numerical amount or result from the sample collection</td>
+<td>The population data from study</td>
+</tr>
+<tr class="even">
+<td>sample_info</td>
+<td>Optional</td>
+<td>Additional sample information</td>
+<td>Should be used when more information is required to understand the experiment, for example experimental variables, sub-locations, etc.Could report general info regarding sample location. Some users may report wind speeds Examples: “Forest” vs “Field”, “Winter”vs “Summer”, “Inside” vs “Outside”, “200 meters above sea level”</td>
+</tr>
+<tr class="odd">
+<td>sample_lat_DD</td>
+<td>Optional</td>
+<td>Latitude of sample area as a decimal degree</td>
+<td>Specific location of the sample Ranges [-90,+90] for latitude (north-south measurement)</td>
+</tr>
+<tr class="even">
+<td>sample_long_DD</td>
+<td>Optional</td>
+<td>Longitude of sample area as a decimal degree</td>
+<td>Ranges [-180,180] for longitude (east-west measurement)</td>
+</tr>
+<tr class="odd">
+<td>sample_name</td>
+<td>Optional</td>
+<td>A human readable sample name</td>
+<td>May exist solely for the benefit of the depositor in organizing their data, use their own internal naming conventions etc.Naming convention is not restricted, but any encoded metadata should be revealed in the other data fields. For example, you may name a sample named ‘Aphid1_StickyTrap_Jan4,’ but you will still have “Sticky Trap” listed in a Collection Method field, and “Jan 4, 2017” in the date field.</td>
+</tr>
+<tr class="even">
+<td>sample_sex</td>
+<td>Optional</td>
+<td>Information on the sex of the organism sampled</td>
+<td></td>
+</tr>
+</tbody>
+</table>
 
-# Data Standardization
+Data Standardization
+====================
 
-## Standardizing Taxonomy
+Standardizing Taxonomy
+----------------------
 
 To standardise taxonomy, VecDyn includes the [The Catalogue of Life
 database](http://www.catalogueoflife.org), which is the most
@@ -236,22 +503,67 @@ comprehensive and authoritative global index of species currently
 available. Taxonomic data will be standardised by curators upon the
 addition of a dataset to the VecDyn database.
 
-| Field Name           | Name in DB                |
-| -------------------- | ------------------------- |
-| taxonID              | taxonID                   |
-| kingdom              | tax\_kingdom              |
-| phylum               | tax\_phylum               |
-| class                | tax\_class                |
-| order                | tax\_order                |
-| superfamily          | tax\_superfamily          |
-| family               | tax\_family               |
-| genus                | tax\_genus                |
-| subgenus             | tax\_subgenus             |
-| specificEpithet      | tax\_specificEpithet      |
-| infraspecificEpithet | tax\_infraspecificEpithet |
-| species              | tax\_species              |
+<table>
+<thead>
+<tr class="header">
+<th>Field Name</th>
+<th>Name in DB</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>taxonID</td>
+<td>taxonID</td>
+</tr>
+<tr class="even">
+<td>kingdom</td>
+<td>tax_kingdom</td>
+</tr>
+<tr class="odd">
+<td>phylum</td>
+<td>tax_phylum</td>
+</tr>
+<tr class="even">
+<td>class</td>
+<td>tax_class</td>
+</tr>
+<tr class="odd">
+<td>order</td>
+<td>tax_order</td>
+</tr>
+<tr class="even">
+<td>superfamily</td>
+<td>tax_superfamily</td>
+</tr>
+<tr class="odd">
+<td>family</td>
+<td>tax_family</td>
+</tr>
+<tr class="even">
+<td>genus</td>
+<td>tax_genus</td>
+</tr>
+<tr class="odd">
+<td>subgenus</td>
+<td>tax_subgenus</td>
+</tr>
+<tr class="even">
+<td>specificEpithet</td>
+<td>tax_specificEpithet</td>
+</tr>
+<tr class="odd">
+<td>infraspecificEpithet</td>
+<td>tax_infraspecificEpithet</td>
+</tr>
+<tr class="even">
+<td>species</td>
+<td>tax_species</td>
+</tr>
+</tbody>
+</table>
 
-## Standardizing Geo Referencing
+Standardizing Geo Referencing
+-----------------------------
 
 In order to standardise geographic information, the [the Global
 Administrative Unit Layers (GAUL) 2014
@@ -263,31 +575,62 @@ at country, first (e.g. departments) and second administrative levels
 is connected to a spatial polygon. Therefore data submitted to the
 VecDyn database can be represented spatially, as long as a minimal set
 of information is provided by the submitter e.g. country, county,
-region,
-state.
+region, state.
 
-| Field Name in db    | Description                                                          |
-| ------------------- | -------------------------------------------------------------------- |
-| ADM\_CODE           | unique code assigned to each administrative unit / shape file        |
-| ADM0\_NAME          | country name                                                         |
-| ADM1\_NAME          | first administrative subdivision e.g. Florida                        |
-| ADM2\_NAME          | first administrative subdivision e.g. Manatee County                 |
-| centroid\_latitude  | latitude of centroid representing centre of administrative unit      |
-| centroid\_longitude | longitude centroid taking representing centre of administrative unit |
+<table>
+<colgroup>
+<col style="width: 59%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field Name in db</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ADM_CODE</td>
+<td>unique code assigned to each administrative unit / shape file</td>
+</tr>
+<tr class="even">
+<td>ADM0_NAME</td>
+<td>country name</td>
+</tr>
+<tr class="odd">
+<td>ADM1_NAME</td>
+<td>first administrative subdivision e.g. Florida</td>
+</tr>
+<tr class="even">
+<td>ADM2_NAME</td>
+<td>first administrative subdivision e.g. Manatee County</td>
+</tr>
+<tr class="odd">
+<td>centroid_latitude</td>
+<td>latitude of centroid representing centre of administrative unit</td>
+</tr>
+<tr class="even">
+<td>centroid_longitude</td>
+<td>longitude centroid taking representing centre of administrative unit</td>
+</tr>
+</tbody>
+</table>
 
-## Standardizing Environmental Descriptions
+Standardizing Environmental Descriptions
+----------------------------------------
 
 Environmental descriptors can be standardized using
 [ENVO](http://environmentontology.org/Browse-EnvO). ENVO is an ontology
 which represents knowledge about environments,environmental processes,
-ecosystems, habitats, and related
-entities.
+ecosystems, habitats, and related entities.
 
-## VecDyn Data Base structure (backend)
+VecDyn Data Base structure (backend)
+------------------------------------
 
 <img src="https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Images/vecdyn_er_diagram.png" width="75%" style="display: block; margin: auto;" />
 
-# Templates, Examples & Tutorials
+Templates, Examples & Tutorials
+===============================
 
 [VecDyn
 Template](https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Template%26Scripts/VecDyn_template.csv).
@@ -302,7 +645,8 @@ set](https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/
 format and produce a time
 series](https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Examples/ManateeCountyMosquitoMonitoring/ManateeCountryMosquitoMonitoring.Rmd)
 
-# Issues, troubleshooting & suggestions
+Issues, troubleshooting & suggestions
+=====================================
 
 Any suggestions or todos with regards to the database (e.g. new columns,
 schema modifications etc.) can be logged as [Issues on
@@ -310,29 +654,89 @@ GitHub](https://github.com/vectorbite/VectorBiteDataPlatform/issues).
 Issues allow for discussions among multiple users, file attachments,
 colour-coded labels etc.
 
-## Known isses
+Known isses
+-----------
 
 The FAO’s GUAL data set has been restructured for VecDyn. A new column
 was created which represents an individual ID for each admin unit. This
 creates a few minor issues, since some region codes are not unique and
 therefore, an additional ‘b’ has been added to the end of
-each’ADM\_CODE’ which has been used in VecDyn as a ‘Primary
-key’
+each’ADM\_CODE’ which has been used in VecDyn as a ‘Primary key’
 
-| ADM\_CODE  | ADM2\_NAME                        | ADM1\_NAME   | ADM0\_NAME                  |
-| ---------- | --------------------------------- | ------------ | --------------------------- |
-| 48472      | Administrative unit not available | Rukwa        | United Republic of Tanzania |
-| 48472**b** | Administrative unit not available | Mwanza       | United Republic of Tanzania |
-| 22917      | Ifelodun                          | Kwara        | Nigeria                     |
-| 23036      | Surulere                          | Oyo          | Nigeria                     |
-| 22917**b** | Ifelodun                          | Osun         | Nigeria                     |
-| 23036b     | Surulere                          | Lagos        | Nigeria                     |
-| 22602      | Osisioma Ngwa                     | Abia         | Nigeria                     |
-| 22602**b** | Ukwa West                         | Abia Nigeria |
-| 15426      | Gnral. Antonio Elizalde           | Guayas       | Ecuador                     |
-| 15426**b** | Milagro                           | Guayas       | Ecuador                     |
+<table>
+<thead>
+<tr class="header">
+<th>ADM_CODE</th>
+<th>ADM2_NAME</th>
+<th>ADM1_NAME</th>
+<th>ADM0_NAME</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>48472</td>
+<td>Administrative unit not available</td>
+<td>Rukwa</td>
+<td>United Republic of Tanzania</td>
+</tr>
+<tr class="even">
+<td>48472<strong>b</strong></td>
+<td>Administrative unit not available</td>
+<td>Mwanza</td>
+<td>United Republic of Tanzania</td>
+</tr>
+<tr class="odd">
+<td>22917</td>
+<td>Ifelodun</td>
+<td>Kwara</td>
+<td>Nigeria</td>
+</tr>
+<tr class="even">
+<td>23036</td>
+<td>Surulere</td>
+<td>Oyo</td>
+<td>Nigeria</td>
+</tr>
+<tr class="odd">
+<td>22917<strong>b</strong></td>
+<td>Ifelodun</td>
+<td>Osun</td>
+<td>Nigeria</td>
+</tr>
+<tr class="even">
+<td>23036b</td>
+<td>Surulere</td>
+<td>Lagos</td>
+<td>Nigeria</td>
+</tr>
+<tr class="odd">
+<td>22602</td>
+<td>Osisioma Ngwa</td>
+<td>Abia</td>
+<td>Nigeria</td>
+</tr>
+<tr class="even">
+<td>22602<strong>b</strong></td>
+<td>Ukwa West</td>
+<td>Abia Nigeria</td>
+</tr>
+<tr class="odd">
+<td>15426</td>
+<td>Gnral. Antonio Elizalde</td>
+<td>Guayas</td>
+<td>Ecuador</td>
+</tr>
+<tr class="even">
+<td>15426<strong>b</strong></td>
+<td>Milagro</td>
+<td>Guayas</td>
+<td>Ecuador</td>
+</tr>
+</tbody>
+</table>
 
-# Miscellaneous
+Miscellaneous
+=============
 
 The `GPDD` directory also contains the documentation of the [**G**lobal
 **P**opulation **D**ynamics
