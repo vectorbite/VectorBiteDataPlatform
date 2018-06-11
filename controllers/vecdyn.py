@@ -30,6 +30,10 @@ def my_collections():
 
 def view_data_sets():
     collection_info_id = request.get_vars.id
+    db.study_data.taxon.writable = False
+    db.study_data.taxon_id.writable = False
+    db.study_data.collection_info_id.writable = False
+    db.study_data.location_ID.writable = False
     [setattr(f, 'readable', False)
      for f in db.study_data
      if f.name not in ('db.study_data.title,db.study_data.taxon,'

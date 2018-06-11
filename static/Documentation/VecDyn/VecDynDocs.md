@@ -2,7 +2,7 @@
     -   [What is VecDyn?](#what-is-vecdyn)
     -   [Obtaining data from VecDyn](#obtaining-data-from-vecdyn)
     -   [Submitting data](#submitting-data)
-    -   [Adding data to the database (*Curators
+    -   [Adding data to the database (*curators
         only*)](#adding-data-to-the-database-curators-only)
 -   [Data Collection Specifications](#data-collection-specifications)
     -   [Collection Information Table (i.e.basic data series
@@ -23,8 +23,11 @@
 -   [Templates, Examples & Tutorials](#templates-examples-tutorials)
 -   [Issues, troubleshooting &
     suggestions](#issues-troubleshooting-suggestions)
-    -   [Known isses](#known-isses)
+    -   [Known issues](#known-issues)
 -   [Miscellaneous](#miscellaneous)
+
+Global **Vec**tor Population **Dyn**amics Database (VecDyn)
+Documentation
 
 Introduction
 ============
@@ -32,7 +35,7 @@ Introduction
 Welcome to VectorBiTE’s VecDyn database guidelines. This document
 provides details and instructions on accessing and submitting data. You
 can also access data collection templates and examples which will help
-you with preparing data for submission.
+you to prepare data for submission.
 
 What is VecDyn?
 ---------------
@@ -49,8 +52,9 @@ To get access to VecDyn’s open data, all you need to do is:
 1.  Sign up via the [VectorBiTE Data Platform Web
     App](http://vectorbyte.org) and log in.
 
-2.  To query data, on the index page, click on the ‘Get data’ button and
-    then ‘VecDyn’ button to open up the population data search facility.
+2.  To query data, go to the index/home page, click on the ‘Get data’
+    button and then ‘VecDyn’ button to open up the population data
+    search facility.
 
 3.  To query data, either enter a species or geographical location.
     Please note that the search facility is case sensitive.
@@ -58,9 +62,11 @@ To get access to VecDyn’s open data, all you need to do is:
 4.  To download data, just click on the selection box beside a data set
     title, then click on the ‘Download Selected’ button.
 
-*All data is downloaded in text/csv format.* *Note that the current
-search facility is temporary and we’ll soon be implementing a range of
-new features to help you search and visualise data.*
+*All data is downloaded in text/csv format.*
+
+*Note that the current search facility is temporary and we’ll soon be
+implementing a range of new features to help you search and visualise
+data.*
 
 Submitting data
 ---------------
@@ -78,11 +84,11 @@ guidelines*
     [R Markdown
     recipe](https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Examples/ManateeCountyMosquitoMonitoring/ManateeCountryMosquitoMonitoring.Rmd)
     here. This guide takes you through the steps of converting an
-    existing data set into a VecDyn dataset using the VecDyn template.
-    Notice that all files are in plain text e.g. ‘.csv’ format, and not
-    in Excel format or similar. This facilitates text parsing by
-    scripts, prevents data loss/corruption, and allows for detailed
-    comparisons of changes via version control systems.
+    existing data set into a VecDyn formatted dataset. Notice that all
+    files are in plain text e.g. ‘.csv’ format, and not in Excel format
+    or similar. This facilitates text parsing by scripts, prevents data
+    loss/corruption, and allows for detailed comparisons of changes via
+    version control systems.
 
 2.  You can refer to the [VecDyn Data Collection
     Specifications](#vecdyn-data-collection-specifications) to guide you
@@ -91,7 +97,8 @@ guidelines*
 3.  All data submissions are curated through Zenodo, an open access and
     open data platform. [Follow this
     link](https://zenodo.org/deposit/new?c=vecdyn) to get access to our
-    submission page.
+    submission page. You’ll need log on to Zenodo to access this page,
+    if you do not have one you’ll need to set one up.
 
 4.  To submit your dataset, upload the completed VecDyn Template on
     Zenodo. Under ‘Upload type’ select ‘data set’ and fill in all the
@@ -103,15 +110,16 @@ guidelines*
 5.  We’ll contact you regarding the outcome of your submission once
     we’ve had a look at it.
 
-Adding data to the database (*Curators only*)
+Adding data to the database (*curators only*)
 ---------------------------------------------
 
 For testing purposes (*temporary*) first download the [example data
 set](https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Examples/ManateeCountyMosquitoMonitoring/vecdyn_manatee_county_aedes_aegypti.csv)
 to try out the process.
 
-Log on and go to the web app and go to [my
-collections](https://vectorbiteonlineplatform.pythonanywhere.com/VectorBiteDataPlatform/vecdyn/my_collections).
+Log on and go to the and go to the[VectorBiTE web
+app](http://www.vectorbyte.org) and go to ‘My collections’. Note this
+will only work if you have been granted access rights.
 
 Click on **‘Add New Collection’**
 
@@ -124,7 +132,7 @@ one or many related datasets.
 <img src="https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Images/DataUploadStep2.png" width="75%" style="display: block; margin: auto;" />
 
 Once the collection information has been registered, you now be able to
-submit data sets to that collection. Click o ‘Add new data set to
+submit data sets to that collection. Click on ‘Add new data set to
 collection’
 
 <img src="https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Images/DataUploadStep3.png" width="75%" style="display: block; margin: auto;" />
@@ -136,8 +144,8 @@ the aligning row.
 <img src="https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Images/DataUploadStep4.png" width="75%" style="display: block; margin: auto;" />
 
 Next select a geographical location, this either needs to be country or
-an Adm1 (e.g. State) or adm2 (county) administrative subdivision. Again,
-Hit the ‘select’ button on the aligning ror of your choice.
+an ADM1 (e.g. State) or ADM2 (county) administrative subdivision. Again,
+hit the ‘select’ button on the row of your choice.
 
 <img src="https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Images/DataUploadStep5.png" width="75%" style="display: block; margin: auto;" />
 
@@ -158,10 +166,13 @@ collections page.
 
 <img src="https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Images/DataUploadStep9.png" width="75%" style="display: block; margin: auto;" />
 
-However, if these is a problem you can delete or edit each entry. To
+However, if these is r problem you can delete or edit each entry. To
 delete all the entries hit ‘select’ all and scroll down to the bottom of
 the page and click ‘delete selected’  
 <img src="https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Images/DataUploadStep8.png" width="75%" style="display: block; margin: auto;" />
+
+Note that you can also edit every part of your data after it has been
+submitted except for taxon names and place names.
 
 Data Collection Specifications
 ==============================
@@ -654,14 +665,14 @@ GitHub](https://github.com/vectorbite/VectorBiteDataPlatform/issues).
 Issues allow for discussions among multiple users, file attachments,
 colour-coded labels etc.
 
-Known isses
------------
+Known issues
+------------
 
 The FAO’s GUAL data set has been restructured for VecDyn. A new column
 was created which represents an individual ID for each admin unit. This
 creates a few minor issues, since some region codes are not unique and
-therefore, an additional ‘b’ has been added to the end of
-each’ADM\_CODE’ which has been used in VecDyn as a ‘Primary key’
+therefore, an additional ‘b’ has been added to the end of each
+ADM\_CODE’ which has been used in VecDyn as a ‘Primary key’
 
 <table>
 <thead>

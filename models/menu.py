@@ -12,8 +12,8 @@ if auth.is_logged_in():
         ('Submit Data', False, None,[
             ('Submit Data Set', False, URL('default', 'submit_data'))]),
          (T('Further Info'), False, None,[
-                ('Contact Us', False, URL('default', 'contact_us')),
-             (T('About Us'), False, URL('default', 'about_us'))]),
+                ('Contact Us', False, URL('default', 'contact_us'))]),
+             #(T('About Us'), False, URL('default', 'about_us'))]),
 
 ]
 
