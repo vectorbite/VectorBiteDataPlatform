@@ -1,51 +1,29 @@
 -   [Introduction](#introduction)
-    -   [What is VecDyn?](#what-is-vecdyn)
-    -   [Obtaining data from VecDyn](#obtaining-data-from-vecdyn)
-    -   [Submitting data](#submitting-data)
-    -   [Adding data to the database (*curators
-        only*)](#adding-data-to-the-database-curators-only)
 -   [Data Collection Specifications](#data-collection-specifications)
-    -   [Collection Information Table (i.e.basic data series
-        information)](#collection-information-table-i.e.basic-data-series-information)
-    -   [Study Data Table (i.e. metadata, *part of the VecDyn data
-        collection
-        template))*](#study-data-table-i.e.metadata-part-of-the-vecdyn-data-collection-template)
-    -   [Sample Data Table (i.e. time series data, *part of the VecDyn
-        data collection
-        template*))](#sample-data-table-i.e.time-series-data-part-of-the-vecdyn-data-collection-template)
 -   [Data Standardization](#data-standardization)
-    -   [Standardizing Taxonomy](#standardizing-taxonomy)
-    -   [Standardizing Geo Referencing](#standardizing-geo-referencing)
-    -   [Standardizing Environmental
-        Descriptions](#standardizing-environmental-descriptions)
-    -   [VecDyn Data Base structure
-        (backend)](#vecdyn-data-base-structure-backend)
 -   [Templates, Examples & Tutorials](#templates-examples-tutorials)
 -   [Issues, troubleshooting &
     suggestions](#issues-troubleshooting-suggestions)
-    -   [Known issues](#known-issues)
 -   [Miscellaneous](#miscellaneous)
 
-Global **Vec**tor Population **Dyn**amics Database (VecDyn)
+\#Global **Vec**tor Population **Dyn**amics Database (VecDyn)
 Documentation
 
 Introduction
-============
+------------
 
 Welcome to VectorBiTE’s VecDyn database guidelines. This document
 provides details and instructions on accessing and submitting data. You
 can also access data collection templates and examples which will help
 you to prepare data for submission.
 
-What is VecDyn?
----------------
+### What is VecDyn?
 
 VecDyn is a global database for spatially- and temporally- explicit
 population presence-absence abundance, density and dynamics data. We
 accept and distribute data for both animal and plant disease vectors.
 
-Obtaining data from VecDyn
---------------------------
+### Obtaining data from VecDyn
 
 To get access to VecDyn’s open data, all you need to do is:
 
@@ -68,8 +46,7 @@ To get access to VecDyn’s open data, all you need to do is:
 implementing a range of new features to help you search and visualise
 data.*
 
-Submitting data
----------------
+### Submitting data
 
 *To submit data to the VecDyn database, follow the subsequent
 guidelines*
@@ -110,8 +87,7 @@ guidelines*
 5.  We’ll contact you regarding the outcome of your submission once
     we’ve had a look at it.
 
-Adding data to the database (*curators only*)
----------------------------------------------
+### Adding data to the database (*curators only*)
 
 For testing purposes (*temporary*) first download the [example data
 set](https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Examples/ManateeCountyMosquitoMonitoring/vecdyn_manatee_county_aedes_aegypti.csv)
@@ -175,7 +151,7 @@ Note that you can also edit every part of your data after it has been
 submitted except for taxon names and place names.
 
 Data Collection Specifications
-==============================
+------------------------------
 
 The following section describes all the fields in the VecDyn data base
 and provides details on the rational behind their requirement. This
@@ -183,8 +159,7 @@ section will also guide through completing the data collection template.
 Note that some fields are required and others are optional, although,
 ideally all fields should be completed.
 
-Collection Information Table (i.e.basic data series information)
-----------------------------------------------------------------
+### Collection Information Table (i.e.basic data series information)
 
 The first table captures general information about the data provider and
 the data series. A data series may provide centralised information about
@@ -193,10 +168,10 @@ supplied separately when a data set is submitted.
 
 <table>
 <colgroup>
-<col style="width: 16%" />
+<col style="width: 17%" />
 <col style="width: 7%" />
-<col style="width: 45%" />
-<col style="width: 30%" />
+<col style="width: 48%" />
+<col style="width: 26%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -284,8 +259,7 @@ used to collect data on the study organism. Note that data entered into
 these fields should be repeated for each time series row/observation. In
 effect, the metadata helps to describe the time series data.
 
-Study Data Table (i.e. metadata, *part of the VecDyn data collection template))*
---------------------------------------------------------------------------------
+### Study Data Table (i.e. metadata, *part of the VecDyn data collection template))*
 
 <table>
 <colgroup>
@@ -420,8 +394,7 @@ represent a separate observation, at a particular point in time. Note
 that any additional information about a sub sample can be added here too
 e.g. point location of sample sites or sex of a species.
 
-Sample Data Table (i.e. time series data, *part of the VecDyn data collection template*))
------------------------------------------------------------------------------------------
+### Sample Data Table (i.e. time series data, *part of the VecDyn data collection template*))
 
 <table>
 <colgroup>
@@ -503,10 +476,9 @@ Sample Data Table (i.e. time series data, *part of the VecDyn data collection t
 </table>
 
 Data Standardization
-====================
+--------------------
 
-Standardizing Taxonomy
-----------------------
+### Standardizing Taxonomy
 
 To standardise taxonomy, VecDyn includes the [The Catalogue of Life
 database](http://www.catalogueoflife.org), which is the most
@@ -573,8 +545,7 @@ addition of a dataset to the VecDyn database.
 </tbody>
 </table>
 
-Standardizing Geo Referencing
------------------------------
+### Standardizing Geo Referencing
 
 In order to standardise geographic information, the [the Global
 Administrative Unit Layers (GAUL) 2014
@@ -627,21 +598,19 @@ region, state.
 </tbody>
 </table>
 
-Standardizing Environmental Descriptions
-----------------------------------------
+### Standardizing Environmental Descriptions
 
 Environmental descriptors can be standardized using
 [ENVO](http://environmentontology.org/Browse-EnvO). ENVO is an ontology
 which represents knowledge about environments,environmental processes,
 ecosystems, habitats, and related entities.
 
-VecDyn Data Base structure (backend)
-------------------------------------
+### VecDyn Data Base structure (backend)
 
 <img src="https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Images/vecdyn_er_diagram.png" width="75%" style="display: block; margin: auto;" />
 
 Templates, Examples & Tutorials
-===============================
+-------------------------------
 
 [VecDyn
 Template](https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Template%26Scripts/VecDyn_template.csv).
@@ -657,7 +626,7 @@ format and produce a time
 series](https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Examples/ManateeCountyMosquitoMonitoring/ManateeCountryMosquitoMonitoring.Rmd)
 
 Issues, troubleshooting & suggestions
-=====================================
+-------------------------------------
 
 Any suggestions or todos with regards to the database (e.g. new columns,
 schema modifications etc.) can be logged as [Issues on
@@ -665,8 +634,7 @@ GitHub](https://github.com/vectorbite/VectorBiteDataPlatform/issues).
 Issues allow for discussions among multiple users, file attachments,
 colour-coded labels etc.
 
-Known issues
-------------
+### Known issues
 
 The FAO’s GUAL data set has been restructured for VecDyn. A new column
 was created which represents an individual ID for each admin unit. This
@@ -747,7 +715,7 @@ ADM\_CODE’ which has been used in VecDyn as a ‘Primary key’
 </table>
 
 Miscellaneous
-=============
+-------------
 
 The `GPDD` directory also contains the documentation of the [**G**lobal
 **P**opulation **D**ynamics
