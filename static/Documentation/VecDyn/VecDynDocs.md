@@ -1,13 +1,16 @@
--   [Introduction](#introduction)
--   [Data Collection Specifications](#data-collection-specifications)
--   [Data Standardization](#data-standardization)
--   [Templates, Examples & Tutorials](#templates-examples-tutorials)
--   [Issues, troubleshooting &
-    suggestions](#issues-troubleshooting-suggestions)
--   [Miscellaneous](#miscellaneous)
+-   [Global **Vec**tor Population **Dyn**amics Database (VecDyn)
+    Documentation](#global-vector-population-dynamics-database-vecdyn-documentation)
+    -   [Introduction](#introduction)
+    -   [Data Collection
+        Specifications](#data-collection-specifications)
+    -   [Data Standardization](#data-standardization)
+    -   [Templates, Examples & Tutorials](#templates-examples-tutorials)
+    -   [Issues, troubleshooting &
+        suggestions](#issues-troubleshooting-suggestions)
+    -   [Miscellaneous](#miscellaneous)
 
-\#Global **Vec**tor Population **Dyn**amics Database (VecDyn)
-Documentation
+Global **Vec**tor Population **Dyn**amics Database (VecDyn) Documentation
+=========================================================================
 
 Introduction
 ------------
