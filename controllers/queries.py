@@ -148,7 +148,7 @@ def _get_data_csv(ids):
               (db.collection_info.id == db.study_data.collection_info_id) &
               (db.sample_data.study_data_id == db.study_data.id)),ignore_common_filters=True).select(
                     db.study_data.title, db.gaul_admin_layers.ADM0_NAME, db.gaul_admin_layers.ADM1_NAME,db.gaul_admin_layers.ADM2_NAME,
-                    db.gaul_admin_layers.centroid_latitude, db.gaul_admin_layers.centroid_longitude,
+                    db.gaul_admin_layers.centroid_latitude, db.gaul_admin_layers.centroid_longitude, db.gaul_admin_layers.ADM_CODE,
                     db.study_data.location_description,db.study_data.location_environment,
                     db.study_data.study_lat_DD, db.study_data.study_long_DD, db.study_data.geo_datum,
                     db.study_data.spatial_accuracy,db.study_data.location_extent,db.study_data.species_id_method,
@@ -163,6 +163,7 @@ def _get_data_csv(ids):
                     db.collection_info.collection_authority,db.collection_info.DOI,db.collection_info.publication_date,
                     db.collection_info.description,db.collection_info.contact_name,db.collection_info.contact_email)
     return rows.as_csv()
+
 
 
 def vec_dyn_download():
