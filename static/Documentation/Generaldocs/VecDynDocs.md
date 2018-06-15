@@ -1,7 +1,8 @@
-\#Global **Vec**tor Population **Dyn**amics Database (VecDyn) Submission
-Documentation
+Global **Vec**tor Population **Dyn**amics Database (VecDyn) Submission Documentation
+====================================================================================
 
-\#\#Requirements for Data sets not in VecDyn Format
+Requirements for Data sets not in VecDyn Format
+-----------------------------------------------
 
 If you are submitting a dataset in its current format, Please make sure
 all the following fields are contained in your dataset.
