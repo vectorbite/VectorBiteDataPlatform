@@ -222,6 +222,12 @@ def contact_us():
     return dict(form=form)
 
 
+def messages():
+    form = SQLFORM.grid(db.contact)
+    return locals()
+
+
+
 ##VecDyn functions
 
 

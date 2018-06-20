@@ -1,16 +1,30 @@
 {{extend 'layout.html'}}
 
 
+
 <div style="background: linear-gradient(240deg, lightgrey, beige)" class="jumbotron">
        <h2>
        Data Submissions
 
       </h2>
 <br>
-    <li>{{=A('VecDyn data collection templates, submission instructions and procedures can be found here', _href='https://github.com/vectorbite/VectorBiteDataPlatform/blob/master/static/Documentation/VecDyn/VecDynDocs.md')}}</li>
-    <li> To submit data, please fill in the form below. Note that the all files need to be submitted in CSV format.</li>
+    Dear Vectorbiters <br>
+    We need your help! <br>
+    We'd like to get hold of your data so we can take a closer look at what you are collecting, this will help us further develop our databases.
+       You can either submit an existing, or better still try to transpose your existing dataset to one of our templates. For the latter, we'd also like you to provide feedback on how this process went. Just enter details into the 'description' field below.
+    <li>To download our current data set templates 'right click' and select ‘save.as’ on the appropriate link below. </li>
+       <li>You can also view the field descriptions for each template by following the link beside them </li>
+        <li> {{=A('VecDyn population data collection template', _href='https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Template%26Scripts/VecDyn_template.csv')}};
+    {{=A('VecDyn template description', _href='https://github.com/vectorbite/VectorBiteDataPlatform/blob/master/static/Documentation/Generaldocs/VecDynUserDocs.md')}}
+    </li>
+            <li> {{=A('VecTraits Template', _href='https://raw.githubusercontent.com/ImperialCollegeLondon/BioTraits/master/static/Documentation/Doc_Old/OldTemplate/NewTemplate.csv?token=AWHZxkbFOBCu79spKkXC-ZG3qjXr0Rp_ks5bLBChwA%3D%3D')}};
+     {{=A('VecDyn template description',_href='https://github.com/ImperialCollegeLondon/BioTraits/blob/master/static/Documentation/BiotraitsFieldsDescription.csv')}}</li>
+    <li> To submit a data set, please fill in the form below and upload your dataset. Note that the all files need to be submitted in CSV format.</li>
+     <br>
+<p>
+    * = required
+    </p>
 
-    <br>
     {{=form}}
     </div>
 

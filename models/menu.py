@@ -18,20 +18,24 @@ if auth.is_logged_in():
 ]
 
 
-if auth.has_membership('VectorbiteAdmin'):
+#if auth.has_membership('VectorbiteAdmin'):
+#    response.menu.append((T('Manage Data Sets'), False, None,[
+#                ('VecDyn data collections', False, URL('vecdyn', 'my_collections'))]))
+
+if auth.is_logged_in():
     response.menu.append((T('Manage Data Sets'), False, None,[
                 ('VecDyn data collections', False, URL('vecdyn', 'my_collections'))]))
 
 
 
-
 if auth.has_membership('VectorbiteManagers'):
     response.menu.append((T('Managment'), False, None,[
-                ('Manage Collections', False, URL('vecdyn', 'manage_collections')),
-                ('Register New Data Collection', False, URL('vecdyn', 'user_collection_registration')),
-                ('Task Manager', False, URL('default', 'tasks')),
-                ('Manage db files & docs', False, URL('default','manage_db_documents')),
-                ('Manage index page updates', False, URL('default','manage_index_page_updates'))]))
+                #('Manage Collections', False, URL('vecdyn', 'manage_collections')),
+                #('Register New Data Collection', False, URL('vecdyn', 'user_collection_registration')),
+                ('Messages', False, URL('default', 'messages')),
+                ('Task Manager', False, URL('default', 'tasks'))]))
+                #('Manage db files & docs', False, URL('default','manage_db_documents')),
+                #('Manage index page updates', False, URL('default','manage_index_page_updates'))]))
 
 
 ##### will add an ecological informatics working group area - i.e. links to git hub etc,  - community group
