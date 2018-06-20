@@ -15,7 +15,7 @@ Global **Vec**tor Population **Dyn**amics Database (VecDyn): User Data Submissio
 =======================================================================================
 
 Welcome to VectorBiTE’s VecDyn database submission guidelines. This
-document provides details and instructions on accessing and submitting
+document provides details and instructions on submitting
 data. You can also access data collection templates and examples that
 will help you to prepare data for submission.
 
