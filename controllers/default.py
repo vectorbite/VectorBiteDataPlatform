@@ -14,24 +14,25 @@ me = auth.user_id
 
 #@auth.requires_membership('VectorbiteManagers')
 def tasks():
-    db.task.created_on.readable = True
-    db.task.created_by.readable = True
-    db.task.title.represent = lambda title,row:\
-        A(title,_href=URL('view_task',args=row.id))
+    db.task.created_on.readable = False
+    db.task.created_by.readable = False
+    #db.task.title.represent = lambda title,row:\
+    #    A(title,_href=URL('view_task',args=row.id))
     #query = (db.task.assigned_to==me)|(db.task.created_by==me)    # replaced with query below
     query = (db.task)
-    grid = SQLFORM.grid(query, orderby=~db.task.modified_on,
-                        create=False,details=False,editable=False,
-                        deletable=lambda row: (row.created_by==me),
-                        fields=[
+    grid = SQLFORM.grid(query)#\
+        #, orderby=~db.task.modified_on,
+         #               create=False,details=False,editable=False,
+          #              deletable=lambda row: (row.created_by==me),
+           #             fields=[
             #db.task.status,
-            db.task.title,
-            db.task.task_type,
-            db.task.created_on,
+           # db.task.title,
+           # db.task.task_type,
+            #db.task.created_on,
             #db.task.deadline,
-            db.task.created_by,
+            #db.task.created_by,
             #db.task.assigned_to,
-            ])
+            #])
     return locals()
 
 

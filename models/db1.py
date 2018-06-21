@@ -27,24 +27,44 @@ db.define_table('data_source_tracker',
 TASK_TYPE = ('VecDyn data submission', 'VecTraits data submission', 'Investigate issue/fix bug', 'Enquiry', 'Other')
 
 db.define_table('task',
-                Field('title', requires=IS_NOT_EMPTY()),
-                Field('task_type', requires=IS_IN_SET(TASK_TYPE)),
-                Field('collection_authority', comment='Name of collection authority'),
+                Field('title', requires=IS_NOT_EMPTY(), comment='*'),
+                Field('task_type', requires=IS_IN_SET(TASK_TYPE), comment='*Select data submission type i.e. VecDyn or VecTraits'),
+                Field('collection_author', comment='*Name of collection author'),
                 Field('digital_object_identifier', type='string', comment='DOI'),
-                Field('publication_date', type='date'),
-                Field('description', type='text', required=True, comment='Brief description of data series'),
-                Field('contact_name', type='string'),
-                Field('email', requires=IS_EMAIL()),
-                Field('ORCID', type='string',
-                      comment='A digital identifier which provides researchers with a unique ID, see www.orcid.org'),
-                Field('keywords', type='string',
-                      comment='Keywords for web searches, seperate each keyword with a comma'),
-                Field('file', 'upload', required=False),
+                Field('publication_date', type='date', required=False),
+                Field('description', type='text', required=True, comment='*Brief description of data set'),
+                Field('contact_name', type='string', required=True, comment='*'),
+                Field('email', requires=IS_EMAIL(), comment='*'),
+                Field('file', 'upload', required=False, comment='*'),
                 # Field('assigned_to','reference auth_user'), #### needs to be set to something like Field('assigned_to', requires=IS_IN_DB(db.auth_membership.group_id==3))),
                 # Field('status',requires=IS_IN_SET(STATUSES)),
                 # default=STATUSES[0]),
                 # Field('deadline','date',default=request.now+week),
                 auth.signature)
+
+
+
+
+
+#db.define_table('task',
+ #               Field('title', requires=IS_NOT_EMPTY()),
+  #              Field('task_type', requires=IS_IN_SET(TASK_TYPE)),
+   #             Field('collection_authority', comment='Name of collection authority'),
+    #            Field('digital_object_identifier', type='string', comment='DOI'),
+     #           Field('publication_date', type='date'),
+      #          Field('description', type='text', required=True, comment='Brief description of data series'),
+       #         Field('contact_name', type='string'),
+        #        Field('email', requires=IS_EMAIL()),
+         #       Field('ORCID', type='string',
+          #            comment='A digital identifier which provides researchers with a unique ID, see www.orcid.org'),
+           #     Field('keywords', type='string',
+             #         comment='Keywords for web searches, seperate each keyword with a comma'),
+           #     Field('file', 'upload', required=False),
+                # Field('assigned_to','reference auth_user'), #### needs to be set to something like Field('assigned_to', requires=IS_IN_DB(db.auth_membership.group_id==3))),
+                # Field('status',requires=IS_IN_SET(STATUSES)),
+                # default=STATUSES[0]),
+                # Field('deadline','date',default=request.now+week),
+            #    auth.signature)
 
 db.task.file.requires=IS_UPLOAD_FILENAME(extension='csv')
 #else db.task.file.requires=IS_NULL
