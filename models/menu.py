@@ -29,7 +29,7 @@ if auth.is_logged_in():
 
 
 if auth.has_membership('VectorbiteManagers'):
-    response.menu.append((T('Managment'), False, None,[
+    response.menu.append((T('Management'), False, None,[
                 #('Manage Collections', False, URL('vecdyn', 'manage_collections')),
                 #('Register New Data Collection', False, URL('vecdyn', 'user_collection_registration')),
                 ('Messages', False, URL('default', 'messages')),
