@@ -24,7 +24,7 @@ if auth.is_logged_in():
 
 if auth.is_logged_in():
     response.menu.append((T('Manage Data Sets'), False, None,[
-                ('VecDyn data collections', False, URL('vecdyn', 'my_collections'))]))
+                ('Manage VecDyn data sets', False, URL('vecdyn', 'my_collections'))]))
 
 
 

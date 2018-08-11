@@ -1,0 +1,11 @@
+{{extend 'layout.html'}}
+        <div class="btn-group">
+            {{=A('Back to my collections',_href=URL('my_collections'),_class="btn btn-primary")}}
+{{=form2}}
+
+
+  </div>
+           <div style="background: linear-gradient(240deg, lightgrey, whitesmoke)" class="jumbotron">
+<h3>Data sets</h3>
+{{=BEAUTIFY(form)}}
+    </div>
