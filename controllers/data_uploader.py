@@ -1,44 +1,32 @@
 
-
 import csv
 
-'''
-def importer2() :
-    #form = SQLFORM.factory(Field('csvfile','upload',uploadfield=False))
-    #form = SQLFORM.factory(Field('csvfile','upload',uploadfield=False))
-    form = SQLFORM(db.csvfile)
-    if form.process().accepted:
-            a = request.vars.csv.file
-            readCSV = csv.reader(a, delimiter=',')
-            next(readCSV, None)
-            for row in readCSV:
-                person = dict(zip(('name', 'age', 'country'), row[:3]))
-                record = db.person(**person) # Check for a match.
-                person_id = record.id if record else db.person.insert(**person)
-                thing = dict(zip(('thing_name', 'value', 'location'), row[3:6]))
-                db.thing.insert(person_id=person_id, **thing)
-    return dict(form=form)
+'''Validator, need to suss out classes and objects to build a validator, on upload data sets is validated, if any field\
+fails validation then this is added to a report which informs user where failures have occured. if data has no erros then data set is saved\
+for upload via a scheduler\
+
+Look at safe tracker
 '''
 
-
-'''def importer3():
-    #form = SQLFORM.factory(Field('csvfile','upload',uploadfield=False))
-    form = SQLFORM.factory(Field('csvfile','upload',uploadfield=False))
-    #form = SQLFORM(db.csvfile)
-    if form.process().accepted:
-            a = request.vars.csvfile.file
-            readCSV = csv.reader(a, delimiter=',')
-            next(readCSV, None)
-            for row in readCSV:
-                study = dict(zip(('title', 'taxon', 'location_description', 'location_environment'), row[:4]))
-                record = db.study_data(**study) # Check for a match.
-                study_data_id = record.id if record else db.study_data.insert(**study)
-                samples = dict(zip(('sample_start_date',\
-                'sample_end_date','value'), row[4:6]))
-                db.sample_data.insert(study_data_id=study_data_id, **samples)
-    return dict(form=form)'''
-
-#data_set_id=data_set_id,
+'''   def _validate_fields(self, fields, defattr='default'):
+        response = Row()
+        response.id, response.errors, new_fields = None, Row(), Row()
+        for field in self:
+            # we validate even if not passed in case it is required
+            error = default = None
+            if not field.required and not field.compute:
+                default = getattr(field, defattr)
+                if callable(default):
+                    default = default()
+            if not field.compute:
+                value = fields.get(field.name, default)
+                value, error = field.validate(value)
+            if error:
+                response.errors[field.name] = "%s" % error
+            elif field.name in fields:
+                # only write if the field was passed and no error
+                new_fields[field.name] = value
+        return response, new_fields'''
 
 
 def importer():
@@ -51,6 +39,7 @@ def importer():
             readCSV = csv.reader(a, delimiter=',')
             next(readCSV, None)
             for row in readCSV:
+                #dict(zip creates a dictionary from two lists i.e. from the field names and the row from the csv)
                 study = dict(zip(('title', 'taxon', 'location_description', 'location_environment', 'study_lat_DD',
                 'study_long_DD', 'geo_datum', \
                 'spatial_accuracy', 'location_extent', 'species_id_method', 'study_design', 'sampling_strategy', 'sampling_method', \
@@ -61,10 +50,11 @@ def importer():
                 'sample_end_date','sample_end_time','value','sample_sex','sample_info','sample_location_info','sample_lat_DD','sample_long_DD',\
                 'sample_name'), row[17:28]))
                 sample_data = db.sample_data.insert(study_data_id=study_data_id,**samples)
-            response.flash = 'Thank you, your data has been submitted'
-        except Exception, e:
+            #redirect(URL("vecdyn", "view_data_sets", vars={'data_set_id': data_set_id}))
+        except:
             response.flash = 'Errors, no data submitted. Please ensure the data set meets all the validation requirements, hit cancel to go back to data collections page'#response.flash = 'Thank you, your data has been submitted'
+        else:
+            session.flash = 'Thank you, your data has been submitted. Now standardise  taxonomic information'
+            redirect(URL("vecdyn", "standardise_data_sets", vars={'data_set_id': data_set_id}))
     return dict(form=form)
-
-
 

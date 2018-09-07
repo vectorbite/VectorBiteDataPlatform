@@ -28,12 +28,12 @@ if auth.is_logged_in():
 
 
 
-if auth.has_membership('VectorbiteManagers'):
-    response.menu.append((T('Management'), False, None,[
+#if auth.has_membership('VectorbiteManagers'):
+ #   response.menu.append((T('Management'), False, None,[
                 #('Manage Collections', False, URL('vecdyn', 'manage_collections')),
                 #('Register New Data Collection', False, URL('vecdyn', 'user_collection_registration')),
-                ('Messages', False, URL('default', 'messages')),
-                ('Task Manager', False, URL('default', 'tasks'))]))
+  #              ('Messages', False, URL('default', 'messages')),
+   #             ('Task Manager', False, URL('default', 'tasks'))]))
                 #('Manage db files & docs', False, URL('default','manage_db_documents')),
                 #('Manage index page updates', False, URL('default','manage_index_page_updates'))]))
 

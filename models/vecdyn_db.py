@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
+
+
+
 db.define_table('csvfile',
                     Field('csv', 'upload', default='path/'))
-
 
 
 db.define_table('person',
@@ -20,21 +22,32 @@ db.define_table('thing',
 
 ###add ondelete='CASCADE' to these tables, so
 
+
+DATARIGHTS = ('Open', 'Embargo', 'Closed')
+
+
 db.define_table('data_set',
                 Field('title', unique=True, type='string', required=True, comment ='Short title identifying the data collection'),
                 Field('collection_authority', comment='Name of collection authority'),
                 Field('DOI', type='string', comment = 'Digital Object Identifier'),
                 #Field('publication_date', type='date'),
                 Field('description', type='text',  required=True, comment='Brief description of data series'),
-                Field('URL', requires=IS_URL(), comment = 'web link to dataset'),
+                Field('url', requires=IS_EMPTY_OR(IS_URL()), comment = 'web link to dataset'),
                 Field('contact_name', type='string'),
                 Field('contact_affiliation', type='string'),
                 Field('contact_email', requires=IS_EMAIL()),
                 Field('ORCID', type='string', comment = 'A digital identifier which provides researchers with a unique ID, see www.orcid.org'),
-                Field('is_public', 'boolean'),
+                Field('data_rights', requires=IS_IN_SET(DATARIGHTS), default=DATARIGHTS[2]),
                 #Field('keywords', type='string', comment='Keywords for web searches, seperate each keyword with a comma'),
                 auth.signature,
                 common_filter = lambda query: db.data_set.created_by == auth.user.id)
+
+def show_data_rights(data_rights,row=None):
+    return SPAN(data_rights,_class=data_rights)
+
+db.data_set.data_rights.represent = show_data_rights
+
+
 
 #if db(db.data_set.id>0).count() == 0:
  #   db.data_set.truncate()
@@ -59,15 +72,14 @@ db.define_table('study_data',
                 Field('measurement_unit', type = 'string', required=True, comment='Unit of measurement'),
                 Field('study_collection_area', type = 'string', comment='The spatial extent (area or volume) of the sample'),
                 Field('value_transform', type = 'string', comment='Note if the original values have been transformed'),
-                Field('is_active', 'boolean'),
                 Field('taxon_st'),
                 Field('taxon_st_id'),
                 Field('location_st'),
                 Field('location_st_id'),
                 Field('data_set_id'))
 
-if db(db.study_data.id>0).count() == 0:
-    db.study_data.truncate()
+#if db(db.study_data.id>0).count() == 0:
+ #   db.study_data.truncate()
 
 db.define_table('sample_data',
                 Field('study_data_id', 'reference study_data'), #length=1, default=""),
@@ -84,6 +96,6 @@ db.define_table('sample_data',
                 Field('sample_name', type = 'string', comment ='A human readable sample name'))
 
 
-if db(db.sample_data.id>0).count() == 0:
-    db.sample_data.truncate()
+#if db(db.sample_data.id>0).count() == 0:
+ #   db.sample_data.truncate()
 
