@@ -1,15 +1,12 @@
 {{extend 'layout.html'}}
 
-
-          <li>{{=first_row.location_st}}</li>
-
-
-
         <div class="btn-group">
             {{=A('Back to my collections',_href=URL('my_collections'),_class="btn btn-primary")}}
+            {{=A('Skip',_href=URL('view_data',vars={'data_set_id':data_set_id}),_class="btn btn-primary")}}
+
 
   </div>
            <div style="background: linear-gradient(240deg, lightgrey, whitesmoke)" class="jumbotron">
-<h3>Data sets</h3>
+               <h5>You currently have {{=count}} entries that need to be standardised</h5>
 {{=BEAUTIFY(form)}}
     </div>

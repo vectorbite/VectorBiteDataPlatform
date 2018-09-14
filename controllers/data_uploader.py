@@ -32,7 +32,8 @@ Look at safe tracker
 def importer():
     response.flash = 'Now upload a time series data set, make sure this is in csv format'
     data_set_id = request.get_vars.id
-    form = SQLFORM.factory(Field('csvfile','upload',uploadfield=False, requires = IS_UPLOAD_FILENAME(extension='csv')))
+    #form = SQLFORM.factory(Field('csvfile','upload',uploadfield=False, requires = IS_UPLOAD_FILENAME(extension='csv')))
+    form = SQLFORM(db.data_set_upload, comments = False)
     if form.validate():
         try:
             a = request.vars.csvfile.file
@@ -55,6 +56,18 @@ def importer():
             response.flash = 'Errors, no data submitted. Please ensure the data set meets all the validation requirements, hit cancel to go back to data collections page'#response.flash = 'Thank you, your data has been submitted'
         else:
             session.flash = 'Thank you, your data has been submitted. Now standardise  taxonomic information'
-            redirect(URL("vecdyn", "standardise_data_sets", vars={'data_set_id': data_set_id}))
+            redirect(URL("data_uploader", "taxon_checker", vars={'data_set_id': data_set_id}))
     return dict(form=form)
+
+
+#####The next controller checks to see if taxon and geographic names are already in a standardized format, if so then it will add them to the dataset standardizing it
+def taxon_checker():
+    data_set_id = request.get_vars.data_set_id
+    rows = db(db.study_data.data_set_id == data_set_id).select()
+    for row in rows:
+        tax_match = db(db.taxon.tax_species == row.taxon).select()
+        for match in tax_match:
+            row.update_record(taxon_st=match.tax_species, taxon_st_id=match.taxonID)
+    redirect(URL("vecdyn", "standardise_taxon", vars={'data_set_id': data_set_id}))
+    return locals()
 

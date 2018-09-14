@@ -33,6 +33,7 @@ if not request.env.web2py_runtime_gae:
     db = DAL(configuration.get('db.uri'),
              pool_size=configuration.get('db.pool_size'),
              migrate_enabled=configuration.get('db.migrate'),
+             lazy_tables=True,
              check_reserved=['sqlite'])
 else:
     # ---------------------------------------------------------------------

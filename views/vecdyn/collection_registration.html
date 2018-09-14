@@ -1,3 +1,12 @@
 {{extend 'layout.html'}}
-<h1>Register a collection here</h1>
-{{=form}}
+
+<div class="btn-group">
+         {{=A('Cancel',_href=URL('my_collections'),_class="btn btn-primary")}}
+  </div>
+              <div style="background: linear-gradient(240deg, lightgrey, whitesmoke)" class="jumbotron">
+
+<br>
+    <br>
+{{=BEAUTIFY(form)}}
+    </div>
+

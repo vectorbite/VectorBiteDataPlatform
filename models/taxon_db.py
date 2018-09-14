@@ -1,6 +1,6 @@
 
 db.define_table('taxon',
-                Field('taxonID', type = 'integer'),
+                Field('taxonID'),
                 Field('tax_scientificName'),
                 Field('tax_kingdom'),
                 Field('tax_phylum'),
@@ -13,7 +13,7 @@ db.define_table('taxon',
                 Field('tax_specificEpithet'),
                 Field('tax_infraspecificEpithet'),
                 Field('tax_species'),
-                lazy_tables = True,
+                #lazy_tables = True,
                 primarykey=['taxonID'],
                 format='%(tax_species)s')
 

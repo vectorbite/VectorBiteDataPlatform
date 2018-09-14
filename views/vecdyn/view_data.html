@@ -1,0 +1,16 @@
+{{extend 'layout.html'}}
+        <div class="btn-group">
+            {{=A('Back to my collections',_href=URL('my_collections'),_class="btn btn-primary")}}
+            {{=A('Add data',_href=URL("data_uploader", "importer", vars={'data_set_id': data_set_id}),_class="btn btn-primary")}}
+            {{if count >=1 | count2 >=1:}}
+            {{=A('Standardise taxa & geo info',_href=URL('standardise_taxon',vars={'data_set_id':data_set_id}),_class="btn btn-warning")}}
+            {{else:}}
+            {{pass}}
+
+
+  </div>
+           <div style="background: linear-gradient(240deg, lightgrey, whitesmoke)" class="jumbotron">
+
+               <h5> {{=message}} </h5>
+{{=BEAUTIFY(form)}}
+    </div>

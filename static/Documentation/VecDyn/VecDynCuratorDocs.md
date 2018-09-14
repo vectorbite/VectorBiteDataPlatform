@@ -26,7 +26,7 @@
         -   [Known issues](#known-issues)
     -   [Miscellaneous](#miscellaneous)
 
-Global **Vec**tor Population **Dyn**amics Database (VecDyn) Curation Documentation
+
 ==================================================================================
 
 Welcome to VectorBiTE’s VecDyn database curation guidelines. This
