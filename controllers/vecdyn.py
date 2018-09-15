@@ -92,56 +92,88 @@ def edit_data_rights():
 
 
 def view_data():
+    #####user message code
     data_set_id = request.get_vars.data_set_id
-    count = db((db.study_data.data_set_id == data_set_id) & (db.study_data.taxon_st == None)).count()
-    a = db((db.study_data.data_set_id == data_set_id) & (db.study_data.location_st == None)).select(
+    count = db((db.study_data.data_set_id == data_set_id) & (db.study_data.taxonID == None)).count()
+    a = db((db.study_data.data_set_id == data_set_id) & (db.study_data.ADM_CODE == None)).select(
         groupby=db.study_data.location_description)
     count2 = len(a)
+    count2 = int(count2)
+    count = int(count)
     message = ()
-    if count >=1 & count2 >=1: message="you have to standardise"
-    elif count >=1 & count2 <1: message="Hello from MyApp"
-    elif count <1 & count2 >=1: message="Hello from MyApp"
-    else: message = "All taxonomic and geographic data has been standardised for this data set!"
-    [setattr(f, 'readable', False)
-     for f in db.study_data
-     if f.name not in ('db.study_data.taxon_st, db.study_data.location_st, db.study_data.location_description')]
-    links = [lambda row: A('View time series data',_class="btn btn-primary",_href=URL("vecdyn", "view_sample_data", vars={'id':row.id})),
-                           lambda row: A('View/edit meta data',
-                                         _href=URL("vecdyn", "edit_collection", vars={'id':row.id}),
-                                         _class="btn btn-primary")]
-    form = SQLFORM.grid(((db.study_data.data_set_id == data_set_id) & (db.study_data.taxon_st != None) & (db.study_data.location_st != None)),
-                        #left=db.study_data.on(db.study_data.location_st == db.gaul_admin_layers.ADM_CODE),
-                        ignore_common_filters=True, links=links, maxtextlength=200,
-                        fields=[
-                            # db.data_set.data_rights,
-                            db.study_data.taxon_st,
-                            db.study_data.location_description,
-                        ],
-                        headers={'db.study_data.taxon_st': 'Taxon Name',
-                                 'db.study_data.location_description': 'Location Description'},
-
-                        searchable=False, deletable=False, editable=False,
-                            details=False, create=False,csv=False)
-
-    if db(db.study_data.data_set_id).count() == 0:
-        session.flash = "You have not yet submitted any study data to this collection, click on 'Add time series data to add a data set' !"
-    elif db(db.study_data.data_set_id).count() == 0 & (db.study_data.taxon_st == None): #| (db.study_data.taxon_st == None):
-        session.flash = 'You have not yet submitted any study data to this collection!'
-    #elif db(db.study_data.data_set_id).count() != 0:
-     #   response.flash = 'You have not yet submitted any study data to this collection!'
+    if (count >=1) & (count2 >=1):
+        message="You have %s taxonomic entries and %s geographic entries to standardise, click on the standardise button above and follow the insructions" % (count, count2)
+    elif (count >=1) & (count2 <1):
+        message="You have %s taxonomic entries to standardise, click on the standardise button above and follow the insructions" % count
+    elif (count <1) & (count2 >=1):
+        message="You have %s geographic entries to standardise" % count2
+    elif (count <1) & (count2 <1):
+        message = "All taxonomic and geographic data has been standardised for this data set!"
+    query = db(db.study_data.data_set_id == data_set_id).count()
+    if query == 0:
+            session.flash = "You have not yet submitted any study data to this collection, click on 'Add time series data to add a data set' !"
+    elif (count >= 1) | (count2 >= 1):
+            session.flash = 'You still need to standardise entries before they become available in data tables!'
     else:
-        response.flash = 'This is a list of all the standardised  time series data linked to this data set!'
+            response.flash = 'This is a list of all the standardised  time series data linked to this data set!'
+    ####code for grid
+    links = [lambda row: A('View time series data',_class="btn btn-primary",_href=URL("vecdyn", "view_sample_data", vars={'id':row.study_data.id})),
+                           lambda row: A('View/edit meta data',
+                                         _href=URL("vecdyn", "edit_meta_data", vars={'study_data_id':row.study_data.id,
+                                                                                     'data_set_id':data_set_id}),
+                                         _class="btn btn-primary")]
+    query = ((db.study_data.data_set_id == data_set_id) & (db.study_data.ADM_CODE == db.gaul_admin_layers.ADM_CODE) & (
+                db.taxon.taxonID == db.study_data.taxonID))
+    form = SQLFORM.grid(query, field_id=db.study_data.id,
+                        fields=[db.taxon.tax_species,
+                                db.gaul_admin_layers.ADM2_NAME,
+                                db.gaul_admin_layers.ADM1_NAME,
+                                db.gaul_admin_layers.ADM0_NAME,
+                                db.study_data.study_design,
+                                db.study_data.sampling_method,
+                                db.study_data.measurement_unit,
+                                db.study_data.value_transform],
+                        headers={'taxon.tax_species': 'Taxon',
+                                 'gaul_admin_layers.ADM2_NAME': 'District',
+                                 'gaul_admin_layers.ADM1_NAME': 'Province',
+                                 'gaul_admin_layers.ADM0_NAME': 'Country',
+                                 'study_data.study_design': 'Study Design',
+                                 'study_data.sampling_method': 'Sampling Method',
+                                 'study_data.measurement_unit': 'Measurement Unit',
+                                 'study_data.value_transform': 'Value Transformation'},
+                        links=links,
+                        maxtextlength=200,
+                        searchable=False, deletable=False,
+                        editable=False, details=False, create=False, csv=False)
     return locals()
+
+
+def edit_meta_data():
+    data_set_id = request.get_vars.data_set_id
+    study_data_id = request.get_vars.study_data_id
+    db.study_data.taxonID.writable = False
+    db.study_data.ADM_CODE.writable = False
+    db.study_data.data_set_id.writable = False
+    db.study_data.taxonID.readable = False
+    db.study_data.ADM_CODE.readable = False
+    db.study_data.data_set_id.readable = False
+    form = SQLFORM(db.study_data,data_set_id, showid=False)
+    if form.process().accepted:
+        session.flash = 'Thanks you have successfully submitted your changes'
+        redirect(URL('view_data'))
+    return locals()
+
+
 
 ##write a function if name is in db do something, if not standardise data
 def standardise_taxon():
     session.flash = 'You have uploaded taxonomic data that is not recognised in our database, you need to standardise this manually. Click on the link next to each taxon name to search for equivalent taxon names.  !'
     data_set_id = request.get_vars.data_set_id
     study_data_id = request.get_vars.id
-    rows = db(db.study_data.data_set_id == data_set_id).select(orderby=db.study_data.taxon_st)
-    count = db((db.study_data.data_set_id == data_set_id) & (db.study_data.taxon_st == None)).count()
+    rows = db(db.study_data.data_set_id == data_set_id).select(orderby=db.study_data.taxonID)
+    count = db((db.study_data.data_set_id == data_set_id) & (db.study_data.taxonID == None)).count()
     first_row = rows.first()
-    if first_row.taxon_st == None:
+    if first_row.taxonID == None:
         pass
     else:
         session.flash = 'Now standardise geo data'
@@ -152,10 +184,10 @@ def standardise_taxon():
     [setattr(f, 'readable', False)
      for f in db.study_data
      if f.name not in ('study_data.taxon')]
-    form = SQLFORM.grid((db.study_data.data_set_id == data_set_id) & (db.study_data.taxon_st == None),
+    form = SQLFORM.grid((db.study_data.data_set_id == data_set_id) & (db.study_data.taxonID == None),
                         ignore_common_filters=True, links=links, maxtextlength=200, searchable=False,
                         headers={'study_data.taxon': 'Original Taxon Name',
-                                 'study_data.taxon_st': 'Replacement'},
+                                 'study_data.taxonID': 'Replacement'},
                         deletable=False, editable=False,
                         details=False, create=False, csv=False
                         )
@@ -188,17 +220,13 @@ def taxon_confirm():
     tax_species = request.get_vars.tax_species
     taxon = request.get_vars.taxon
     taxonID = request.get_vars.taxonID
-    taxon_st = tax_species
-    taxon_st_id = taxonID
     form = FORM(INPUT(_type='submit', _value='Confirm', _class="btn btn-primary"))
     if form.process().accepted:
         redirect(URL("vecdyn", "taxon_insert", vars={'data_set_id': data_set_id,
                                                      'study_data_id': study_data_id,
                                                      'tax_species': tax_species,
                                                      'taxonID': taxonID,
-                                                     'taxon_st': taxon_st,
                                                      'taxon': taxon,
-                                                     'taxon_st_id ': taxon_st_id,
                                                      'data_set_id': data_set_id}))
     return locals()
 
@@ -209,12 +237,10 @@ def taxon_insert():
     study_data_id = request.get_vars.study_data_id
     tax_species = request.get_vars.tax_species
     taxonID = request.get_vars.taxonID
-    taxon_st = tax_species
-    taxon_st_id = taxonID
     rows = db(db.study_data.data_set_id == data_set_id).select()
     for row in rows:
         if taxon == row.taxon:
-            row.update_record(taxon_st=taxon_st, taxon_st_id=taxon_st_id)
+            row.update_record(taxonID=taxonID)
         else: continue
     redirect(URL("vecdyn", "standardise_taxon", vars={'data_set_id': data_set_id}))
     return locals()
@@ -226,11 +252,11 @@ def standardise_geo_data():
     session.flash = 'Please standardise geo data. Click on the link next to each geo description name to search for equivalent geo names!'
     data_set_id = request.get_vars.data_set_id
     study_data_id = request.get_vars.id
-    rows = db(db.study_data.data_set_id == data_set_id).select(orderby=db.study_data.location_st)
-    a = db((db.study_data.data_set_id == data_set_id) & (db.study_data.location_st == None)).select(groupby=db.study_data.location_description)
+    rows = db(db.study_data.data_set_id == data_set_id).select(orderby=db.study_data.ADM_CODE)
+    a = db((db.study_data.data_set_id == data_set_id) & (db.study_data.ADM_CODE == None)).select(groupby=db.study_data.location_description)
     count = len(a)
     first_row = rows.first()
-    if first_row.location_st == None:
+    if first_row.ADM_CODE == None:
         pass
     else:
         session.flash = 'All data attached to this data set has been standardised standardise'
@@ -241,7 +267,7 @@ def standardise_geo_data():
     [setattr(f, 'readable', False)
     for f in db.study_data
     if f.name not in ('db.study_data.location_description')]
-    form = SQLFORM.grid((db.study_data.data_set_id == data_set_id) & (db.study_data.location_st == None),
+    form = SQLFORM.grid((db.study_data.data_set_id == data_set_id) & (db.study_data.ADM_CODE == None),
                         groupby=db.study_data.location_description,
                         ignore_common_filters=True, links=links, maxtextlength=200, searchable=False,
                         deletable=False, editable=False,
@@ -258,6 +284,9 @@ def location_select():
     links = [lambda row: A('Select', _class="btn btn-primary",_href=URL("vecdyn", "geo_confirm",
                                                                          vars={'ADM_CODE': row.ADM_CODE, \
                                                                                'study_data_id': study_data_id, \
+                                                                               'ADM0_NAME': row.ADM0_NAME, \
+                                                                               'ADM1_NAME': row.ADM1_NAME, \
+                                                                               'ADM2_NAME': row.ADM2_NAME, \
                                                                                'location_description': location_description, \
                                                                                'data_set_id': data_set_id}))]
     response.flash = 'Now select a geographical location which best describes the study location'
@@ -269,8 +298,10 @@ def geo_confirm():
     data_set_id = request.get_vars.data_set_id
     study_data_id = request.get_vars.study_data_id
     ADM_CODE = request.get_vars.ADM_CODE
+    ADM0_NAME = request.get_vars.ADM0_NAME
+    ADM1_NAME = request.get_vars.ADM1_NAME
+    ADM2_NAME = request.get_vars.ADM2_NAME
     location_description = request.get_vars.location_description
-    location_st = ADM_CODE
     form = FORM(INPUT(_type='submit', _value='Confirm', _class="btn btn-primary"))
     if form.process().accepted:
         redirect(URL("vecdyn", "geo_st_insert",
@@ -287,11 +318,11 @@ def geo_st_insert():
     study_data_id = request.get_vars.study_data_id
     ADM_CODE = request.get_vars.ADM_CODE
     location_description = request.get_vars.location_description
-    location_st = ADM_CODE
+    ADM_CODE = ADM_CODE
     rows = db(db.study_data.data_set_id == data_set_id).select()
     for row in rows:
         if location_description == row.location_description:
-            row.update_record(location_st=location_st)
+            row.update_record(ADM_CODE=ADM_CODE)
         #else:
         #    continue
     redirect(URL("vecdyn", "standardise_geo_data", vars={'data_set_id': data_set_id}))

@@ -1,7 +1,7 @@
 {{extend 'layout.html'}}
 
 <div class="btn-group">
-         {{=A('Cancel',_href=URL('my_collections'),_class="btn btn-primary")}}
+         {{=A('Cancel',_href=URL('view_data'),vars={'data_set_id':data_set_id},_class="btn btn-primary")}}
   </div>
               <div style="background: linear-gradient(240deg, lightgrey, whitesmoke)" class="jumbotron">
 

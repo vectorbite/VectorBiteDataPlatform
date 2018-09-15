@@ -67,7 +67,7 @@ def taxon_checker():
     for row in rows:
         tax_match = db(db.taxon.tax_species == row.taxon).select()
         for match in tax_match:
-            row.update_record(taxon_st=match.tax_species, taxon_st_id=match.taxonID)
+            row.update_record(taxonID=match.taxonID)
     redirect(URL("vecdyn", "standardise_taxon", vars={'data_set_id': data_set_id}))
     return locals()
 

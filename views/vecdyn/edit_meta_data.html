@@ -1,0 +1,13 @@
+{{extend 'layout.html'}}
+
+<div class="btn-group">
+         {{=A('Cancel',_href=URL('view_data('),_class="btn btn-primary")}}
+    {{=A('Re-standardise Taxon',_href=URL('taxon_select',vars={'data_set_id':data_set_id, 'study_data_id':study_data_id}),_class="btn btn-warning")}}
+        {{=A('Re-standardise Geo Info',_href=URL('location_select',vars={'data_set_id':data_set_id,'study_data_id':study_data_id}),_class="btn btn-warning")}}
+  </div>
+              <div style="background: linear-gradient(240deg, lightgrey, whitesmoke)" class="jumbotron">
+
+<br>
+    <br>
+{{=BEAUTIFY(form)}}
+    </div>

@@ -9,9 +9,6 @@
 db.define_table('data_set_upload',
                 Field('csvfile','upload',uploadfield=False, requires = IS_UPLOAD_FILENAME(extension='csv')))
 
-
-
-
 DATARIGHTS = ('Open', 'Embargo', 'Closed', )
 
 db.define_table('data_set',
@@ -59,10 +56,8 @@ db.define_table('study_data',
                 Field('measurement_unit', type = 'string', required=True, comment='Unit of measurement'),
                 Field('study_collection_area', type = 'string', comment='The spatial extent (area or volume) of the sample'),
                 Field('value_transform', type = 'string', comment='Note if the original values have been transformed'),
-                Field('taxon_st', default = None),
-                Field('taxon_st_id'),
-                Field('location_st'),# 'reference gaul_admin_layers'),
-                Field('location_st_id'),
+                Field('taxonID', default=None),
+                Field('ADM_CODE', default=None),
                 Field('data_set_id'))
 
 if db(db.study_data.id>0).count() == 0:

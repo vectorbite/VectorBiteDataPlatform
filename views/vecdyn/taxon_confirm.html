@@ -3,16 +3,17 @@
 
 
         <div class="btn-group">
-         {{=A('Cancel',_href=URL('my_collections'),_class="btn btn-primary")}}
+{{=A('Cancel',_href=URL('view_data',vars={'data_set_id':data_set_id}),_class="btn btn-primary")}}
   </div>
         <div style="background: linear-gradient(240deg, lightgrey, whitesmoke)" class="jumbotron">
 
 
 
 
-<h5> Are you sure you want to replace <b> {{=taxon}} </b>  with  <b> {{=taxon_st}} </b> ? </h5>
 
+<div class="alert alert-warning">Are you sure you want to replace <b> {{=taxon}} </b>  with  <b> {{=tax_species}} </b> ?</div>
 
 
         {{=BEAUTIFY(form)}}
     </div>
+
