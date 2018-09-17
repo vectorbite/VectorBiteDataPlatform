@@ -1,14 +1,21 @@
 {{extend 'layout.html'}}
 
+<div class="btn-group.btn-group-justified" role="group" aria-label="...">
 
-<div class="btn-group">
-    {{=A('Finish',_href=URL('default','index'),_class="btn btn-primary")}}
-{{=A('Register new data set',_href=URL('collection_registration'),_class="btn btn-primary")}}
-  </div>
-              <div style="background: linear-gradient(240deg, lightgrey, whitesmoke)" class="jumbotron">
+      <a class="btn btn-danger" href="{{=URL('default','index')}}">{{=T("Finish")}}</a>
+    <a class="btn btn-primary" href="{{=URL('vecdyn','collection_registration')}}">{{=T("Register New Data Set")}}</a>
+        <a class="btn btn-info" href="https://github.com/vectorbite/VectorBiteDataPlatform/blob/master/static/Documentation/VecDyn/VecDynCuratorDocs.md">{{=T('Documentation')}}</a>
+</div>
+
+
+
+     <div style="background: linear-gradient(240deg, lightgrey, whitesmoke)" class="jumbotron">
+         <div class="container left">
+
+         </div>
+
                    <div class="alert alert-warning" role="alert"> {{=A('For information on adding and managing data, go to the database curator instructions', _href='https://github.com/vectorbite/VectorBiteDataPlatform/blob/master/static/Documentation/VecDyn/VecDynCuratorDocs.md')}}
     </div>
-<br>
 {{=BEAUTIFY(form)}}
     </div>
 

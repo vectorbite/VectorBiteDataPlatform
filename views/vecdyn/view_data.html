@@ -1,11 +1,11 @@
 {{extend 'layout.html'}}
         <div class="btn-group">
-            {{=A('Data sets',_href=URL('my_collections'),_class="btn btn-primary")}}
-            {{=A('Add data',_href=URL("data_uploader", "importer", vars={'data_set_id': data_set_id}),_class="btn btn-primary")}}
+            {{=A('Data collections',_href=URL('my_collections'),_class="btn btn-primary")}}
+            {{=A('Add data',_href=URL("data_uploader", "importer", vars={'publication_info_id': publication_info_id}),_class="btn btn-primary")}}
             {{if count >=1:}}
-            {{=A('Standardise',_href=URL('standardise_taxon',vars={'data_set_id':data_set_id}),_class="btn btn-warning")}}
+            {{=A('Standardise',_href=URL('standardise_taxon',vars={'publication_info_id':publication_info_id}),_class="btn btn-warning")}}
             {{elif count2 >=1:}}
-            {{=A('Standardise',_href=URL('standardise_taxon',vars={'data_set_id':data_set_id}),_class="btn btn-warning")}}
+            {{=A('Standardise',_href=URL('standardise_taxon',vars={'publication_info_id':publication_info_id}),_class="btn btn-warning")}}
             {{else:}}
             {{pass}}
 
