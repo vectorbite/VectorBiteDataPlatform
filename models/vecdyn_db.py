@@ -26,7 +26,8 @@ db.define_table('publication_info',
                 Field('data_rights', requires=IS_IN_SET(DATARIGHTS), default=DATARIGHTS[2]),
                 Field('embargo_release_date', type ='date', requires=IS_EMPTY_OR(IS_DATE()), comment = 'Embargo release date'),
                 Field('submitted', type ='boolean',default=False),
-                auth.signature)
+                auth.signature)#,
+                #format='%(id)s')
 
 def show_data_rights(data_rights,row=None):
     return SPAN(data_rights,_class=data_rights)
@@ -57,7 +58,9 @@ db.define_table('study_meta_data',
                 Field('value_transform', type = 'string', comment='Note if the original values have been transformed'), #11
                 Field('taxonID', default=None), #12
                 Field('ADM_CODE', default=None), #13
-                Field('publication_info_id', 'reference publication_info')) #14
+                Field('publication_info_id')) #14
+
+db.study_meta_data.publication_info_id.requires = IS_IN_DB(db, db.publication_info.id)#, '%(title)s')
 
 if db(db.study_meta_data.id>0).count() == 0:
     db.study_meta_data.truncate()
@@ -66,10 +69,10 @@ if db(db.study_meta_data.id>0).count() == 0:
 
 
 db.define_table('time_series_data',
-                Field('sample_start_date'), #type = 'date', requires=IS_DATE(), comment='date of sample was set, leave blank if not applicable to the study'),
-                Field('sample_start_time'),#, type = 'time', required=False, comment='time of sample was set, leave blank if not applicable to the study'),
-                Field('sample_end_date'), #type = 'date', requires=IS_DATE(), comment='Date of sample collection'),
-                Field('sample_end_time'),# type = 'time', required=False, comment='time of sample collection'),
+                Field('sample_start_date', type = 'date', requires=IS_DATE(), comment='date of sample was set, leave blank if not applicable to the study'),
+                Field('sample_start_time', type = 'time', required=False, comment='time of sample was set, leave blank if not applicable to the study'),
+                Field('sample_end_date', type = 'date', requires=IS_DATE(), comment='Date of sample collection'),
+                Field('sample_end_time', type = 'time', required=False, comment='time of sample collection'),
                 Field('trap_duration', required=False, comment='duration of trap'),
                 Field('value'),#type = 'integer', comment='The numerical amount or result from the sample collection'),
                 Field('sample_sex', type = 'string', comment='sex of sample if applicable'),

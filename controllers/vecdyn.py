@@ -28,7 +28,7 @@ def collection_registration():
     db.publication_info.submitted.readable = False
     form = SQLFORM(db.publication_info)
     if form.process().accepted:
-        session.flash = 'Thank you, your data set has been registered, now upload the data'
+        session.flash = 'Thank you, your data set has been registered, now upload a data set'
         redirect(URL('my_collections'))
     return locals()
 #lambda row: A('Add new data set to collection',_href=URL("vecdyn", "taxon_select",vars={'id':row.id})),\
@@ -42,9 +42,9 @@ def my_collections():
     #db.publication_info.data_rights.represent = lambda data_rights, row: A(data_rights, _href=URL('edit_data_rights', args=row.id))
     links = [lambda row: A('Add/upload data',_href=URL("data_uploader", "importer",vars={'id':row.id}),_class="btn btn-primary"), \
              lambda row: A('View data', _href=URL("vecdyn", "view_data", vars={'publication_info_id': row.id}),_class="btn btn-primary"),
-             lambda row: A('Edit data rights', _href=URL("vecdyn", "edit_data_rights", vars={'publication_info_id': row.id}),
+             lambda row: A('Edit data set rights', _href=URL("vecdyn", "edit_data_rights", vars={'publication_info_id': row.id}),
                            _class="btn btn-primary"),
-             lambda row: A('View/edit collection info', _href=URL("vecdyn", "edit_collection", vars={'publication_info_id': row.id}),
+             lambda row: A('View/edit data publication info', _href=URL("vecdyn", "edit_collection", vars={'publication_info_id': row.id}),
                            _class="btn btn-primary")]
     form = SQLFORM.grid(db.publication_info, ignore_common_filters=False, links = links, searchable=False, deletable=False,\
                         editable=False, details=False, create=False,csv=False, maxtextlength=200,
@@ -60,16 +60,24 @@ def my_collections():
     if db(db.publication_info.id).count() == 0:
         response.flash = 'You have not yet registered any data sets'
     else:
-        response.flash = 'data set registrations, this grid will eventually have a colour coding system to inform user about status of a data set'
+        response.flash = 'data set registrations'
     return locals()
 
 def edit_collection():
+    db.publication_info.submitted.writable = False
+    db.publication_info.submitted.readable = False
+    db.publication_info.data_rights.writable = False
+    db.publication_info.data_rights.readable = False
+    db.publication_info.embargo_release_date.writable = False
+    db.publication_info.embargo_release_date.readable = False
     publication_info_id = request.get_vars.publication_info_id
     form = SQLFORM(db.publication_info,publication_info_id, showid=False)
     if form.process().accepted:
         session.flash = 'Thanks you have successfully submitted your changes'
         redirect(URL('my_collections'))
     return locals()
+
+
 
 
 def edit_data_rights():
@@ -95,6 +103,8 @@ def edit_data_rights():
     db.publication_info.contact_email.readable = False
     db.publication_info.ORCID.writable = False
     db.publication_info.ORCID.readable = False
+    db.publication_info.submitted.writable = False
+    db.publication_info.submitted.readable = False
     publication_info_id = request.get_vars.publication_info_id
     form = SQLFORM(db.publication_info, publication_info_id, showid=False)
     if form.process().accepted:
@@ -108,6 +118,7 @@ def edit_data_rights():
 
 
 def view_data():
+    response.flash = 'Study meta-data!'
     #####user message code
     publication_info_id = request.get_vars.publication_info_id
     count = db((db.study_meta_data.publication_info_id == publication_info_id) & (db.study_meta_data.taxonID == None)).count()
@@ -131,7 +142,7 @@ def view_data():
     elif (count >= 1) | (count2 >= 1):
             session.flash = 'You still need to standardise entries before they become available in data tables!'
     else:
-            response.flash = 'This is a list of all the standardised  time series data linked to this data set!'
+            session.flash = 'This is a list of all the standardised  time series data linked to this data set!'
     ####code for grid
     links = [lambda row: A('View time series data',_class="btn btn-primary",_href=URL("vecdyn", "view_time_series_data", vars={'id':row.study_meta_data.id})),
                            lambda row: A('View/edit meta data',

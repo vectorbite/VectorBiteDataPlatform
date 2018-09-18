@@ -30,8 +30,11 @@ def vec_dyn_query():
    # [setattr(f, 'readable', False) for f in db.StudyLocation
    #     if f.name not in ('db.StudyLocation.Country,db.StudyLocation.CountyStateProvince')]
     # MainID is not made unreadable, so that it can be accessed by the export controller
-    [setattr(f, 'readable', False) for f in db.study_data
-        if f.name not in ('db.study_data.id, db.study_data.location_description')]
+    [setattr(f, 'readable', False) for f in db.study_meta_data
+        if f.name not in ('db.study_meta_data.id, db.study_meta_data.location_description')]
+
+    [setattr(f, 'readable', False) for f in db.gaul_admin_layers
+     if f.name not in ('db.gaul_admin_layers.ADM2_NAME, db.gaul_admin_layers.ADM1_NAME, db.gaul_admin_layers.ADM0_NAME')]
 
     # Add selectability checkboxes
     select = [('Download selected',
@@ -48,32 +51,33 @@ def vec_dyn_query():
                   tsv_with_hidden_cols=False, tsv=False)
 
     # turn the MainID into a download link
-    db.study_data.id.represent = lambda value, row: A(value, _href=URL("queries","vec_dyn_download",
-                                                    vars={'ids': row.study_data.id}))
+    db.study_meta_data.represent = lambda value, row: A(value, _href=URL("queries","vec_dyn_download",
+                                                    vars={'ids': row.study_meta_data.id}))
 
     # get the grid
-    grid = SQLFORM.grid((db.taxon.taxonID == db.study_data.taxon_id)&
-                        (db.gaul_admin_layers.ADM_CODE == db.study_data.location_ID),
+    grid = SQLFORM.grid((db.taxon.taxonID == db.study_meta_data.taxonID)&
+                        (db.gaul_admin_layers.ADM_CODE == db.study_meta_data.ADM_CODE),
                         exportclasses=export,
-                        ignore_common_filters=True,
-                        field_id=db.study_data.id,
-                        fields= [db.study_data.id,
+                        field_id=db.study_meta_data.id,
+                        fields= [db.study_meta_data.id,
                                  db.taxon.tax_species, db.taxon.tax_genus,
                                  db.taxon.tax_family, db.taxon.tax_order,
                                  db.taxon.tax_class, db.taxon.tax_phylum,
-                                 db.gaul_admin_layers.ADM0_NAME, db.gaul_admin_layers.ADM1_NAME,
-                                 db.study_data.location_description],
-                        headers={'taxon.tax_species' : 'Taxon Name',
+                                 db.gaul_admin_layers.ADM2_NAME,
+                                 db.gaul_admin_layers.ADM1_NAME,
+                                 db.gaul_admin_layers.ADM0_NAME],
+
+                        headers={'taxon.tax_species' : 'Taxon',
                                  'taxon.tax_genus' : 'Genus',
                                  'taxon.tax_family' : 'Family',
                                  'taxon.tax_order' : 'Order',
                                  'taxon.tax_class' : 'Class',
                                  'taxon.tax_phylum' : 'Phylum',
-                                 'gaul_admin_layers.ADM0_NAME' : 'Country',
-                                 'gaul_admin_layers.ADM1_NAME' : 'Region',
                                  'gaul_admin_layers.ADM2_NAME': 'County',
-                                 'study_data.id' : 'Dataset ID' },
-                        maxtextlength=100,
+                                 'gaul_admin_layers.ADM1_NAME' : 'Region',
+                                 'gaul_admin_layers.ADM0_NAME': 'Country',
+                                 'study_meta_data.id' : 'Dataset ID' },
+                        maxtextlength=200,
                         selectable=select,
                         deletable=False, editable=False, details=False, create=False)
 
@@ -105,11 +109,11 @@ def vec_dyn_query():
     if exp_menu is not None:
 
         exp_menu = grid.element('.w2p_export_menu')
-        exp_all = A("Download all", _class="btn btn-default",
+        exp_all = A("Download all", _class="btn btn-primary",
                     _href=exp_menu[1].attributes['_href'],
                     _style='padding:6px 12px;line-height:20px')
         fake_exp_sel = INPUT(_value='Download selected', _type='submit',
-                            _class="btn btn-default", _id='fake_exp_sel',
+                            _class="btn btn-primary", _id='fake_exp_sel',
                             _style='padding:6px 12px;line-height:20px')
 
         # add the buttons after the end of the web2py console form
@@ -142,26 +146,61 @@ def _get_data_csv(ids):
     and the Exporter class, so define here once and call from each.
     """
 
-    rows = db((db.study_data.id.belongs(ids) &
-              (db.taxon.taxonID == db.study_data.taxon_id) &
-              (db.gaul_admin_layers.ADM_CODE == db.study_data.location_ID) &
-              (db.collection_info.id == db.study_data.collection_info_id) &
-              (db.sample_data.study_data_id == db.study_data.id)),ignore_common_filters=True).select(
-                    db.study_data.title, db.gaul_admin_layers.ADM0_NAME, db.gaul_admin_layers.ADM1_NAME,db.gaul_admin_layers.ADM2_NAME,
-                    db.gaul_admin_layers.centroid_latitude, db.gaul_admin_layers.centroid_longitude, db.gaul_admin_layers.ADM_CODE,
-                    db.study_data.location_description,db.study_data.location_environment,
-                    db.study_data.study_lat_DD, db.study_data.study_long_DD, db.study_data.geo_datum,
-                    db.study_data.spatial_accuracy,db.study_data.location_extent,db.study_data.species_id_method,
-                    db.study_data.study_design,db.study_data.sampling_strategy,db.study_data.sampling_method,
-                    db.study_data.sampling_protocol,db.study_data.measurement_unit,db.study_data.study_collection_area,
-                    db.study_data.value_transform,db.taxon.tax_species, db.taxon.tax_genus, db.taxon.tax_family,
-                    db.taxon.tax_order, db.taxon.tax_class, db.taxon.tax_phylum,
-                    db.study_data.location_description,db.sample_data.sample_start_date, db.sample_data.sample_start_time,
-                    db.sample_data.sample_end_date, db.sample_data.sample_end_time, db.sample_data.value,
-                    db.sample_data.sample_info, db.sample_data.sample_name,db.sample_data.sample_sex,
-                    db.sample_data.sample_lat_DD, db.sample_data.sample_long_DD, db.collection_info.title,
-                    db.collection_info.collection_authority,db.collection_info.DOI,db.collection_info.publication_date,
-                    db.collection_info.description,db.collection_info.contact_name,db.collection_info.contact_email)
+    rows = db((db.study_meta_data.id.belongs(ids)) &
+              (db.taxon.taxonID == db.study_meta_data.taxonID) &
+              (db.gaul_admin_layers.ADM_CODE == db.study_meta_data.ADM_CODE) &
+              (db.publication_info.id == db.study_meta_data.publication_info_id) &
+              (db.time_series_data.study_meta_data_id == db.study_meta_data.id)).select(
+                    db.study_meta_data.title,
+                    db.taxon.tax_species,
+                    db.taxon.tax_genus,
+                    db.taxon.tax_family,
+                    db.taxon.tax_order,
+                    db.taxon.tax_class,
+                    db.taxon.tax_phylum,
+                    db.time_series_data.sample_start_date,
+                    db.time_series_data.sample_start_time,
+                    db.time_series_data.sample_end_date,
+                    db.time_series_data.sample_end_time,
+                    db.time_series_data.trap_duration,
+                    db.time_series_data.value,
+                    db.study_meta_data.measurement_unit,
+                    db.study_meta_data.value_transform,
+                    db.time_series_data.sample_sex,
+                    db.time_series_data.sample_stage,
+                    db.time_series_data.sample_location,
+                    db.time_series_data.sample_collection_area,
+                    db.time_series_data.sample_lat_DD,
+                    db.time_series_data.sample_long_DD,
+                    db.time_series_data.sample_environment,
+                    db.time_series_data.additional_location_info,
+                    db.time_series_data.additional_sample_info,
+                    db.time_series_data.sample_name,
+                    db.study_meta_data.species_id_method,
+                    db.study_meta_data.study_design,
+                    db.study_meta_data.sampling_strategy,
+                    db.study_meta_data.sampling_method,
+                    db.study_meta_data.sampling_protocol,
+                    db.study_meta_data.measurement_unit,
+                    db.study_meta_data.value_transform,
+                    db.study_meta_data.location_description,
+                    db.gaul_admin_layers.ADM2_NAME,
+                    db.gaul_admin_layers.ADM1_NAME,
+                    db.gaul_admin_layers.ADM0_NAME,
+                    db.study_meta_data.study_collection_area,
+                    db.gaul_admin_layers.centroid_latitude,
+                    db.gaul_admin_layers.centroid_longitude,
+                    db.study_meta_data.geo_datum,
+                    db.publication_info.title,
+                    db.publication_info.description,
+                    db.publication_info.collection_authority,
+                    db.publication_info.DOI,
+                    db.publication_info.description,
+                    db.publication_info.url,
+                    db.publication_info.contact_name,
+                    db.publication_info.contact_affiliation,
+                    db.publication_info.contact_email,
+                    db.publication_info.ORCID)
     return rows.as_csv()
 
 
@@ -208,7 +247,7 @@ class ExporterAll(object):
         if self.rows:
             # expand rows to get full data and return that
             request.vars._export_filename = "yourname"
-            ids = [rw.study_data.id for rw in self.rows]
+            ids = [rw.study_meta_data.id for rw in self.rows]
 
             # currently simple check that we aren't trying to export too much
             if len(ids) > 50:

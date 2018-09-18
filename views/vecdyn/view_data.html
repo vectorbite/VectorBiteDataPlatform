@@ -1,5 +1,5 @@
 {{extend 'layout.html'}}
-        <div class="btn-group">
+<div class="btn-group.btn-group-justified" role="group" aria-label="...">
             {{=A('Data collections',_href=URL('my_collections'),_class="btn btn-primary")}}
             {{=A('Add data',_href=URL("data_uploader", "importer", vars={'publication_info_id': publication_info_id}),_class="btn btn-primary")}}
             {{if count >=1:}}
@@ -11,6 +11,9 @@
 
   </div>
            <div style="background: linear-gradient(240deg, lightgrey, whitesmoke)" class="jumbotron">
+               <h5>
+                   Data set metadata
+               </h5>
 <div class="alert alert-warning" role="alert">
 {{=message}}
 </div>

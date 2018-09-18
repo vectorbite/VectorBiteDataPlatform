@@ -33,7 +33,7 @@ def importer():
     response.flash = 'Now upload a time series data set, make sure this is in csv format'
     publication_info_id = request.get_vars.id
     #form = SQLFORM.factory(Field('csvfile','upload',uploadfield=False, requires = IS_UPLOAD_FILENAME(extension='csv')))
-    form = SQLFORM(db.data_set_upload, comments = False)
+    form = SQLFORM(db.data_set_upload, comments = False, fields = ['csvfile'],labels={'csvfile': 'Click to search and select a file:'})
     if form.validate():
         try:
             a = request.vars.csvfile.file
@@ -45,13 +45,16 @@ def importer():
                 'species_id_method', 'study_design', 'sampling_strategy', 'sampling_method', \
                 'sampling_protocol', 'measurement_unit', 'value_transform'), row[:12]))
                 record = db.study_meta_data(**study)
-                test = record.publication_info_id if record else None
-                if test == None:
-                    continue
-                elif test == publication_info_id:
-                    continue
-                #elif test != publication_info_id:
-                 #   break
+                #####the following code checks to see if a data set has already been uploaded but under a different publication instance
+                check2 = int(publication_info_id)
+                check1 = record.publication_info_id if record else None
+                if check1 == None:
+                    pass
+                elif check1 == check2:
+                    pass
+                else:
+                    return 'It seems like this dataset has already been submitted under a different name, ' \
+                           'You cannot submit the same dataset twice'
                 study_meta_data_id = record.id if record else db.study_meta_data.insert(publication_info_id=publication_info_id,**study)
                 samples = dict(zip(('sample_start_date','sample_start_time',
                                     'sample_end_date','sample_end_time','trap_duration','value','sample_sex',
