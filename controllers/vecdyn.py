@@ -40,11 +40,11 @@ def my_collections():
     for f in db.publication_info
         if f.name not in ('db.publication_info.title,db.publication_info.collection_authority, db.publication_info.data_rights')]
     #db.publication_info.data_rights.represent = lambda data_rights, row: A(data_rights, _href=URL('edit_data_rights', args=row.id))
-    links = [lambda row: A('Add/upload data',_href=URL("data_uploader", "importer",vars={'id':row.id}),_class="btn btn-primary"), \
+    links = [lambda row: A('Upload data set',_href=URL("data_uploader", "importer",vars={'id':row.id}),_class="btn btn-primary"), \
              lambda row: A('View data', _href=URL("vecdyn", "view_data", vars={'publication_info_id': row.id}),_class="btn btn-primary"),
-             lambda row: A('Edit data set rights', _href=URL("vecdyn", "edit_data_rights", vars={'publication_info_id': row.id}),
+             lambda row: A('Edit data rights', _href=URL("vecdyn", "edit_data_rights", vars={'publication_info_id': row.id}),
                            _class="btn btn-primary"),
-             lambda row: A('View/edit data publication info', _href=URL("vecdyn", "edit_collection", vars={'publication_info_id': row.id}),
+             lambda row: A('View/edit registration data', _href=URL("vecdyn", "edit_collection", vars={'publication_info_id': row.id}),
                            _class="btn btn-primary")]
     form = SQLFORM.grid(db.publication_info, ignore_common_filters=False, links = links, searchable=False, deletable=False,\
                         editable=False, details=False, create=False,csv=False, maxtextlength=200,
@@ -118,7 +118,7 @@ def edit_data_rights():
 
 
 def view_data():
-    response.flash = 'Study meta-data!'
+    #response.flash = 'Study meta-data!'
     #####user message code
     publication_info_id = request.get_vars.publication_info_id
     count = db((db.study_meta_data.publication_info_id == publication_info_id) & (db.study_meta_data.taxonID == None)).count()
@@ -138,11 +138,11 @@ def view_data():
         message = "All taxonomic and geographic data has been standardised for this data set!"
     query = db(db.study_meta_data.publication_info_id == publication_info_id).count()
     if query == 0:
-            session.flash = "You have not yet submitted any study data to this collection, click on 'Add time series data to add a data set' !"
+            response.flash = "You have not yet submitted any study data to this collection, click on 'Add time series data to add a data set' !"
     elif (count >= 1) | (count2 >= 1):
-            session.flash = 'You still need to standardise entries before they become available in data tables!'
+            response.flash = 'This is a list of all your data which has been standardised. However, you still need to standardise several before they can be made public!'
     else:
-            session.flash = 'This is a list of all the standardised  time series data linked to this data set!'
+            response.flash = 'This is a list of all the standardised  time series data linked to this data set!'
     ####code for grid
     links = [lambda row: A('View time series data',_class="btn btn-primary",_href=URL("vecdyn", "view_time_series_data", vars={'id':row.study_meta_data.id})),
                            lambda row: A('View/edit meta data',
