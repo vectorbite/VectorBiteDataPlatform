@@ -1,36 +1,11 @@
 
 import csv
 
-'''Validator, need to suss out classes and objects to build a validator, on upload data sets is validated, if any field\
-fails validation then this is added to a report which informs user where failures have occured. if data has no erros then data set is saved\
-for upload via a scheduler\
-
-Look at safe tracker
-'''
-
-'''   def _validate_fields(self, fields, defattr='default'):
-        response = Row()
-        response.id, response.errors, new_fields = None, Row(), Row()
-        for field in self:
-            # we validate even if not passed in case it is required
-            error = default = None
-            if not field.required and not field.compute:
-                default = getattr(field, defattr)
-                if callable(default):
-                    default = default()
-            if not field.compute:
-                value = fields.get(field.name, default)
-                value, error = field.validate(value)
-            if error:
-                response.errors[field.name] = "%s" % error
-            elif field.name in fields:
-                # only write if the field was passed and no error
-                new_fields[field.name] = value
-        return response, new_fields'''
-
 
 def importer():
     response.flash = 'Now upload a time series data set, make sure this is in csv format'
+    page = request.get_vars.page
+    page = page
     publication_info_id = request.get_vars.id
     #form = SQLFORM.factory(Field('csvfile','upload',uploadfield=False, requires = IS_UPLOAD_FILENAME(extension='csv')))
     form = SQLFORM(db.data_set_upload, comments = False, fields = ['csvfile'],labels={'csvfile': 'Click to search and select a file:'})

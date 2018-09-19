@@ -40,11 +40,11 @@ def my_collections():
     for f in db.publication_info
         if f.name not in ('db.publication_info.title,db.publication_info.collection_authority, db.publication_info.data_rights')]
     #db.publication_info.data_rights.represent = lambda data_rights, row: A(data_rights, _href=URL('edit_data_rights', args=row.id))
-    links = [lambda row: A('Add/upload data',_href=URL("data_uploader", "importer",vars={'id':row.id}),_class="btn btn-primary"), \
-             lambda row: A('View data', _href=URL("vecdyn", "view_data", vars={'publication_info_id': row.id}),_class="btn btn-primary"),
-             lambda row: A('Edit data set rights', _href=URL("vecdyn", "edit_data_rights", vars={'publication_info_id': row.id}),
+    links = [lambda row: A('Upload data set',_href=URL("data_uploader", "importer",vars={'id':row.id}),_class="btn btn-primary"), \
+             lambda row: A('View data set', _href=URL("vecdyn", "view_data", vars={'publication_info_id': row.id}),_class="btn btn-primary"),
+             lambda row: A('Edit rights', _href=URL("vecdyn", "edit_data_rights", vars={'publication_info_id': row.id}),
                            _class="btn btn-primary"),
-             lambda row: A('View/edit data publication info', _href=URL("vecdyn", "edit_collection", vars={'publication_info_id': row.id}),
+             lambda row: A('View/edit publication info', _href=URL("vecdyn", "edit_collection", vars={'publication_info_id': row.id}),
                            _class="btn btn-primary")]
     form = SQLFORM.grid(db.publication_info, ignore_common_filters=False, links = links, searchable=False, deletable=False,\
                         editable=False, details=False, create=False,csv=False, maxtextlength=200,
@@ -144,11 +144,10 @@ def view_data():
     else:
             session.flash = 'This is a list of all the standardised  time series data linked to this data set!'
     ####code for grid
-    links = [lambda row: A('View time series data',_class="btn btn-primary",_href=URL("vecdyn", "view_time_series_data", vars={'id':row.study_meta_data.id})),
-                           lambda row: A('View/edit meta data',
-                                         _href=URL("vecdyn", "edit_meta_data", vars={'study_meta_data_id':row.study_meta_data.id,
-                                                                                     'publication_info_id':publication_info_id}),
-                                         _class="btn btn-primary")]
+    links = [lambda row: A('View/edit meta data',_href=URL("vecdyn", "edit_meta_data", vars={'study_meta_data_id':row.study_meta_data.id,
+                                                                                     'publication_info_id':publication_info_id}),_class="btn btn-primary"),
+             lambda row: A('View time series data',_class="btn btn-primary",_href=URL("vecdyn", "view_time_series_data", vars={'id':row.study_meta_data.id})),
+                           ]
     query = ((db.study_meta_data.publication_info_id == publication_info_id) & (db.study_meta_data.ADM_CODE == db.gaul_admin_layers.ADM_CODE) & (
                 db.taxon.taxonID == db.study_meta_data.taxonID))
     form = SQLFORM.grid(query, field_id=db.study_meta_data.id,
@@ -178,13 +177,20 @@ def view_data():
 def edit_meta_data():
     publication_info_id = request.get_vars.publication_info_id
     study_meta_data_id = request.get_vars.study_meta_data_id
+    rows = db((db.study_meta_data.id == study_meta_data_id) & (db.study_meta_data.taxonID == db.taxon.taxonID)
+              & (db.study_meta_data.ADM_CODE == db.gaul_admin_layers.ADM_CODE)).select()
+    response.flash = 'Edit meta-data entry!'
+    db.study_meta_data.title.writable = False
+    db.study_meta_data.taxon.writable = False
+    db.study_meta_data.location_description.writable = False
     db.study_meta_data.taxonID.writable = False
     db.study_meta_data.ADM_CODE.writable = False
     db.study_meta_data.publication_info_id.writable = False
     db.study_meta_data.taxonID.readable = False
     db.study_meta_data.ADM_CODE.readable = False
     db.study_meta_data.publication_info_id.readable = False
-    form = SQLFORM(db.study_meta_data,publication_info_id, showid=False)
+    form = SQLFORM(db.study_meta_data,study_meta_data_id, showid=False, comments=False
+                   )
     if form.process().accepted:
         session.flash = 'Thanks you have successfully submitted your changes'
         redirect(URL('view_data'))
@@ -276,8 +282,6 @@ def taxon_insert():
     return locals()
 
 
-
-
 def standardise_geo_data():
     session.flash = 'Please standardise geo data. Click on the link next to each geo description name to search for equivalent geo names!'
     publication_info_id = request.get_vars.publication_info_id
@@ -358,7 +362,9 @@ def geo_st_insert():
             row.update_record(ADM_CODE=ADM_CODE)
         #else:
         #    continue
+    session.flash = 'Success!'
     redirect(URL("vecdyn", "standardise_geo_data", vars={'publication_info_id': publication_info_id}))
+    session.flash = 'Success!'
     return locals()
 
 
@@ -387,9 +393,9 @@ def view_time_series_data():
                                                               _onclick="jQuery('input:checkbox').not(this).prop('checked', this.checked);"
                                                               )))
     if db(db.time_series_data.id).count() == 0:
-        session.flash = 'You have not yet registered any sample data to this dataset'
+        session.flash = 'You have not added any time series data to this dataset'
     else:
-        session.flash = 'Sample data'
+        session.flash = 'Time series data'
     o = form.element(_type='submit', _value='%s' % T('Submit'))
     if not form.create_form and not form.update_form and not form.view_form:
         if o is not None:
