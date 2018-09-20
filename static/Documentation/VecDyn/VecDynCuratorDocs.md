@@ -1,4 +1,4 @@
-# Global **Vec**tor Population **Dyn**amics Database (VecDyn)
+
 -   [Global **Vec**tor Population **Dyn**amics Database (VecDyn)
     Curation
     Documentation](#global-vector-population-dynamics-database-vecdyn-curation-documentation)
@@ -28,6 +28,7 @@
 
 
 ==================================================================================
+# Global **Vec**tor Population **Dyn**amics Database (VecDyn)
 
 Welcome to VectorBiTE’s VecDyn database curation guidelines. This
 document provides details and instructions on accessing and submitting

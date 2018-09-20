@@ -1,11 +1,20 @@
 {{extend 'layout.html'}}
 
-<div class="btn-group">
-         {{=A('Cancel',_href=URL('view_data('),_class="btn btn-primary")}}
-    {{=A('Re-standardise Taxon',_href=URL('taxon_select',vars={'publication_info_id':publication_info_id, 'study_meta_data_id':study_meta_data_id}),_class="btn btn-warning")}}
-        {{=A('Re-standardise Geo Info',_href=URL('location_select',vars={'publication_info_id':publication_info_id, 'study_meta_data_id':study_meta_data_id}),_class="btn btn-warning")}}
+<div class="btn-group.btn-group-justified" role="group" aria-label="...">
+         {{=A('Cancel',_href=URL('view_data',vars={'publication_info_id':publication_info_id}),_class="btn btn-primary")}}
+
+
   </div>
               <div style="background: linear-gradient(240deg, lightgrey, whitesmoke)" class="jumbotron">
+
+ {{for row in rows:}}
+
+        <div class="alert alert-info" role="alert"> {{=A('Re-standardise Taxon',_href=URL('taxon_select',vars={'publication_info_id':publication_info_id,
+        'study_meta_data_id':study_meta_data_id, 'taxon':row.study_meta_data.taxon}),_class="btn btn-warning")}}  You used <strong>{{=row.taxon.tax_species}} </strong> to represent the originally submitted taxon name <strong>{{=row.study_meta_data.taxon}} </strong></div>
+        <div class="alert alert-info" role="alert"> {{=A('Re-standardise Geo Info',_href=URL('location_select',vars={'publication_info_id':publication_info_id,
+        'study_meta_data_id':study_meta_data_id, 'location_description':row.study_meta_data.location_description}),_class="btn btn-warning")}}  You used <strong>{{=row.gaul_admin_layers.ADM2_NAME}}, {{=row.gaul_admin_layers.ADM1_NAME}},  {{=row.gaul_admin_layers.ADM0_NAME}} </strong> to represent the originally submitted taxon name <strong>{{=row.study_meta_data.location_description}} </strong>
+</div>
+     {{pass}}
 
 <br>
     <br>
