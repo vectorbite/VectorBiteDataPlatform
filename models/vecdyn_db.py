@@ -25,7 +25,7 @@ db.define_table('publication_info',
                 #Field('keywords', type='string', comment='Keywords for web searches, seperate each keyword with a comma'),
                 Field('data_rights', requires=IS_IN_SET(DATARIGHTS), default=DATARIGHTS[2]),
                 Field('embargo_release_date', type ='date', requires=IS_EMPTY_OR(IS_DATE()), comment = 'Embargo release date'),
-                Field('submitted', type ='boolean',default=False),
+                Field('submit', type ='boolean',default=False),
                 auth.signature)#,
                 #format='%(id)s')
 
@@ -41,7 +41,10 @@ db.publication_info.data_rights.represent = show_data_rights
 db.define_table('study_meta_data',
                 Field('title'), #0
                 Field('taxon'), #1
-                Field('location_description', type = 'string', required=True,  comment='Study location description'), #2
+                Field('location_description', type = 'string', required=True,  comment='Study location description'),
+                #Field('geo_subdivision_1', type = 'string', required=True,  comment='Country'),
+                #Field('geo_subdivision_2', type = 'string', required=True,  comment='e.g state or region'),
+                #Field('geo_subdivision_3', type = 'string', required=True,  comment='e.g. county or municipality'),
                 Field('study_collection_area', type = 'string', comment='The spatial extent (area or volume) of the sample'), #3
                 #Field('location_environment', type = 'string', comment='General description about the location'),
                 #Field('study_lat_DD', type = 'string', required=True, comment='Latitude of study area as a decimal degree'),
@@ -85,7 +88,7 @@ db.define_table('time_series_data',
                 Field('additional_location_info', type = 'string', comment='Additional sample information'),
                 Field('additional_sample_info', type = 'string', comment='Additional sample information'),
                 Field('sample_name', type = 'string', comment ='A human readable sample name'),
-                Field('study_meta_data_id', 'reference study_meta_data'))
+                Field('study_meta_data_id'))
 
 
 if db(db.time_series_data.id>0).count() == 0:

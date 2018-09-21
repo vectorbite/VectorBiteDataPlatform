@@ -1,6 +1,7 @@
 {{extend 'layout.html'}}
 <div class="btn-group.btn-group-justified" role="group" aria-label="...">
-            {{=A('Data collections',_href=URL('my_collections'),_class="btn btn-primary")}}
+            <a class="btn btn-primary" href="{{=URL('default','index')}}">{{=T("Finish")}}</a>
+            {{=A('Back to data collections page',_href=URL('my_collections'),_class="btn btn-primary")}}
             {{if count >=1:}}
             {{=A('Standardise',_href=URL('standardise_taxon',vars={'publication_info_id':publication_info_id}),_class="btn btn-warning")}}
             {{elif count2 >=1:}}

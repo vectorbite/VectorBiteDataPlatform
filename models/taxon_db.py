@@ -1,4 +1,9 @@
 
+
+
+####still need to restructure data set so only one specific line i.e. order, kingdom can be selected. Also need to included specificEpithet & infraspecificEpithet in search
+
+
 db.define_table('taxon',
                 Field('taxonID'),
                 Field('tax_scientificName'),
