@@ -1,10 +1,10 @@
 {{extend 'layout.html'}}
 <div class="btn-group">
-{{=A('Back to metadata',_href=URL('view_data,vars={'publication_info_id':publication_info_id}),_class="btn btn-primary")}}
+{{=A('Back to meta data',_href=URL('view_data',vars={'publication_info_id':publication_info_id}),_class="btn btn-warning")}}
 
   </div>
 <div style="background: linear-gradient(240deg, lightgrey, whitesmoke)" class="jumbotron">
-<h3>Sample Data</h3>
+<h3>Time series data</h3>
 
 {{=BEAUTIFY(form)}}
     </div>

@@ -55,11 +55,13 @@ def vec_dyn_query():
                                                     vars={'ids': row.study_meta_data.id}))
 
     # get the grid
-    grid = SQLFORM.grid((db.taxon.taxonID == db.study_meta_data.taxonID)&
-                        (db.gaul_admin_layers.ADM_CODE == db.study_meta_data.ADM_CODE),
+    grid = SQLFORM.grid((db.taxon.taxonID == db.study_meta_data.taxonID)
+                        & (db.study_meta_data.publication_info_id == db.publication_info.id)
+                        & (db.gaul_admin_layers.ADM_CODE == db.study_meta_data.ADM_CODE),
                         exportclasses=export,
                         field_id=db.study_meta_data.id,
-                        fields= [db.study_meta_data.id,
+                        fields= [db.publication_info.title,
+                                 db.publication_info.collection_authority,
                                  db.taxon.tax_species, db.taxon.tax_genus,
                                  db.taxon.tax_family, db.taxon.tax_order,
                                  db.taxon.tax_class, db.taxon.tax_phylum,
@@ -67,7 +69,9 @@ def vec_dyn_query():
                                  db.gaul_admin_layers.ADM1_NAME,
                                  db.gaul_admin_layers.ADM0_NAME],
 
-                        headers={'taxon.tax_species' : 'Taxon',
+                        headers={'publication_info.title' : 'Title',
+                                 'publication_info.collection_authority': 'Author',
+                                 'taxon.tax_species' : 'Taxon',
                                  'taxon.tax_genus' : 'Genus',
                                  'taxon.tax_family' : 'Family',
                                  'taxon.tax_order' : 'Order',

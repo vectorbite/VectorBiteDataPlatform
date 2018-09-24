@@ -1,179 +1,167 @@
-`_****_`
--   [Global **Vec**tor Population **Dyn**amics Database (VecDyn)
-    Curation
-    Documentation](#global-vector-population-dynamics-database-vecdyn-curation-documentation)
-    -   [What is VecDyn?](#what-is-vecdyn)
-    -   [Obtaining data from VecDyn](#obtaining-data-from-vecdyn)
-    -   [Preparing data for upload](#preparing-data-for-upload)
-    -   [Data Collection
-        Specifications](#data-collection-specifications)
-        -   [VecDyn Data Base structure
-            (backend)](#vecdyn-data-base-structure-backend)
-        -   [Collection Information
-            Table](#collection-information-table)
-        -   [Study Data Table](#study-data-table)
-        -   [Sample Data Table](#sample-data-table)
-    -   [Data Standardization](#data-standardization)
-        -   [Standardizing Taxonomy](#standardizing-taxonomy)
-        -   [Standardizing Geo
-            Referencing](#standardizing-geo-referencing)
-        -   [Standardizing Environmental
-            Descriptions](#standardizing-environmental-descriptions)
-        -   [Adding data to the database](#adding-data-to-the-database)
-    -   [Templates, Examples & Tutorials](#templates-examples-tutorials)
-    -   [Issues, troubleshooting &
-        suggestions](#issues-troubleshooting-suggestions)
-        -   [Known issues](#known-issues)
-    -   [Miscellaneous](#miscellaneous)
-
-
-==================================================================================
-# Global **Vec**tor Population **Dyn**amics Database (VecDyn)
+# Global **Vec**tor Population **Dyn**amics Database (VecDyn) Curator Documentation
 
 Welcome to VectorBiTE’s VecDyn database curator guidelines. This
 document provides details and instructions on preparing and submitting
 data to the database.
 
-### What is VecDyn?
+## What is VecDyn?
 
 VecDyn is a global database for spatially and temporally explicit
 presence-absence and abundance data. We accept and distribute data for
 both animal and plant disease vectors.
 
-
 Data Collection Specifications
 ------------------------------
 
 The following section describes all the fields in the VecDyn database
-and provides details on the rational behind their requirement. This
-section will also guide through curating data sets.
-Note that some fields are required and others are optional.
+and provides details on the rational for their requirement. This section
+will also guide through curating data sets. Note that some fields are
+required and others are optional.
 
 ### VecDyn Data Base structure (backend)
 
 ![erdplus-diagram (3).png](Images/erdplus-diagram%20%283%29.png)
 
-The data base backend consists of 3 main tables and 2 sub tables for where
-taxonomic and geographic information are stored which is accessed when
-standardising information on entry into the database.
+The database backend consists of 3 main data collection tables and 2
+data tables that are used standardise taxonomic and geographic
+information.
 
+### Publication information Table
 
+The Publication information table captures information about the data
+collection provider and other publication information such as a DOI.
+This provides centralised information about one or many related
+datasets. The following information should be supplied separately when a
+data set is submitted.
 
-#### Publication information
-The first table captures general information about the data
-provider/collector and the data series. A data series may provide
-centralised information about one or many related datasets. The
-following information should be supplied separately when a data set is
-submitted.
+#### Study meta data Table
 
-#### Study meta data
-The next table captures metadata for a study. A study should be regarded
-as a set of data for one single species, at a given location over a
-specific time period. The metadata should be used to capture information
-like the general location of a study and particular methods or equipment
-used to collect data on the study organism. Note that data entered into
-these fields should be repeated for each time series row/observation. In
-effect, the metadata helps to describe the time series data.
+The study metadata table captures information about what and how data
+has been collected e.g. taxonomic information, general location of a
+study and particular methods or equipment used to collect data. Note
+that data entered into these fields should be repeated for each time
+series row/observation. In effect, the metadata helps to describe the
+time series data.
 
-#### Time series data
-The next set of variables captures in the following table captures
-information required to produce a time-Series dataset. Each row should
-represent a separate observation, at a particular point in time. Note
-that any additional information about a sample can be added here too
-e.g. point location of sample sites or sex of a species.
+#### Time series data Table
 
-#### Taxonomic Database
+The Time series data captures all the information required to produce a
+time-Series dataset. Each row should represent a separate observation,
+at a particular point in time.
 
-#### Geographic Database
+#### Taxonomic Information Table
+
+To Taxonomic Information Table is used to standardise taxonomy, this
+data table has been adapted from [The Catalogue of Life
+database](http://www.catalogueoflife.org), which is the most
+comprehensive and authoritative global index of species currently
+available. Taxonomic data will be standardised by curators upon the
+addition of a new dataset to the VecDyn database.
+
+#### Geographic Database Table
+
+The Geographic Database Table is used to standardise geographic
+information. The [the Global Administrative Unit Layers (GAUL) 2014
+databaset](http://www.fao.org/geonetwork/srv/en/metadata.show?id=12691).
+The GAUL database systematises global administrative regions with a
+unified coding system at country, first (e.g. departments) and second
+administrative levels (e.g. districts). Each Administrative unit is
+assigned a unique ID and is connected to a spatial polygon. Therefore
+data submitted to the VecDyn database can be represented spatially, as
+long as a minimal set of information is provided by the submitter e.g.
+country, county, region, state.
+
 
 ###Data Collection Specifications
 
 
-| Field Name               | Required Y/N | Data format                       | Details                                                                                                            | Additional Notes                                                                                                                                                                                                                                                                                                                                                                                                       | Db table                |
-|:-------------------------|:-------------|:----------------------------------|:-------------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:------------------------|
-| title                    | Yes          |                                   | Short title identifying the data set                                                                               | E.g. “Mosquito Surveillance in Iowa”                                                                                                                                                                                                                                                                                                                                                                                   | Publication information |
-| collection_author        | Yes          |                                   | Name of collection author                                                                                          | E.g. family name, given names; OR ‘Iowa State'                                                                                                                                                                                                                                                                                                                                                                         | Publication information |
-| dataset_DOI              | No           |                                   | Digital Object Identifier (DOI) of the the dataset                                                                 | If the data set was already published                                                                                                                                                                                                                                                                                                                                                                                  | Publication information |
-| publication_DOI          | No           |                                   | Second Digital Object Identifier (DOI) if connected to a published article                                         | If the data set was already published as an article                                                                                                                                                                                                                                                                                                                                                                    | Publication information |
-| description              | Yes          |                                   | A short description of the study / data set                                                                        | E.g. ‘Long term, fixed trapped, municipal surveillance of west Nile vector population in Colorado from 2000-2010”                                                                                                                                                                                                                                                                                                      | Publication information |
-| URL                      | No           |                                   | web link to data set                                                                                               |                                                                                                                                                                                                                                                                                                                                                                                                                        | Publication information |
-| contact_name             | Yes          |                                   | Name, person, authority, etc…. that may be contacted with inquiries about the data                                 |                                                                                                                                                                                                                                                                                                                                                                                                                        | Publication information |
-| contact_affiliation      | Yes          |                                   | Author/contact affiliation                                                                                         |                                                                                                                                                                                                                                                                                                                                                                                                                        | Publication information |
-| email                    | No           |                                   | Contact email of the person who supplied or uploaded the dataset                                                   |                                                                                                                                                                                                                                                                                                                                                                                                                        | Publication information |
-| ORCID                    | No           |                                   | ORCID code                                                                                                         | A digital identifier which provides                                                                                                                                                                                                                                                                                                                                                                                    | Publication information |
-| data_rights              | Yes          |                                   | information provided on copyright of dataset  i.e. open access, closed, embargo                                    | Open access, closed (who is access available to) or embargo (must provide embargo release date)                                                                                                                                                                                                                                                                                                                        | Publication information |
-| taxon                    | Yes          |                                   | Classification of sample collected                                                                                 |                                                                                                                                                                                                                                                                                                                                                                                                                        | study_meta_data         |
-| location_description     | Yes          |                                   | Description of study location                                                                                      | Town, county, state                                                                                                                                                                                                                                                                                                                                                                                                    | study_meta_data         |
-| study_collection_area    | Yes          |                                   | The spatial extent (area or volume) of the study                                                                   |                                                                                                                                                                                                                                                                                                                                                                                                                        | study_meta_data         |
-| geo_datum                | No           |                                   | Geodetic datum                                                                                                     | E.g.. WGS 84                                                                                                                                                                                                                                                                                                                                                                                                           | study_meta_data         |
-| species_id_method        | No           |                                   | Species identification method                                                                                      | A description of the methods species identification                                                                                                                                                                                                                                                                                                                                                                    | study_meta_data         |
-| study_design             | No           |                                   | Study design methodology                                                                                           | Indicate if observational study i.e.prospective , retrospective, or experimental etc                                                                                                                                                                                                                                                                                                                                   | study_meta_data         |
-| sampling_strategy        | No           |                                   | Sampling_strategy, indicate the strategy used to select the sample                                                 | E.g. simple random sampling, stratified, convenience sampling, cluster, sampling, census etc                                                                                                                                                                                                                                                                                                                           | study_meta_data         |
-| sampling_method          | No           |                                   | Sampling apparatus e.g..trap type, observation method                                                              | E.g. “CDC light trap w/ CO2”, “Prokopack backpack aspirator”, “Quadrat count”                                                                                                                                                                                                                                                                                                                                          | study_meta_data         |
-| sampling_protocol        | No           |                                   | How entities were sampled                                                                                          |                                                                                                                                                                                                                                                                                                                                                                                                                        | study_meta_data         |
-| measurement_unit         | Yes          |                                   | Indicate what was measured                                                                                         | ‘Count’, ‘Count (millions)’, ‘Harvest’, ‘Index of abundance’, ‘Index of territories’, ‘Leaf area’, ‘Mean Count’, ‘Not Specified’, ‘Percent cover’ and ‘Sample’                                                                                                                                                                                                                                                         | study_meta_data         |
-| value_transform          | No           |                                   | Note if the original values have been transformed – list details of the reference value of any data transformation | E.g..Base Year, Log, None, Not Specified, Proportion, Unknown, x 1000 lbs                                                                                                                                                                                                                                                                                                                                              | study_meta_data         |
-| sample_start_date        | No           | ISO 8601 date format (YYYY-MM-DD) | Date of the sample was set.                                                                                        | E.g. between when a trap was set and when the sample was collected                                                                                      E                                                                                                                                                                                                                                                              | time_series_data        |
-| sample_start_time        | No           | ISO 8601 time format (hh:mm:ss)   | Time of the sample was set                                                                                         | Only required when the collector wants to sample populations within specific time frames                                                                                                                                                                                                                                                                                                                               | time_series_data        |
-| sample_end_date          | Yes          | ISO 8601 date format (YYYY-MM-DD) | The date the sample was collected.                                                                                 | If collection occurs monthly use the first day of each month i.e. 2001-01-01, 2001-02-01                                                                                                                                                                                                                                                                                                                               | time_series_data        |
-| sample_end_time          | No           | ISO 8601 time format (hh:mm:ss)   | Time of the sample collection                                                                                      |                                                                                                                                                                                                                                                                                                                                                                                                                        | time_series_data        |
-| trap_duration            | No           |                                   | The amount of time the samle was set                                                                               |                                                                                                                                                                                                                                                                                                                                                                                                                        | time_series_data        |
-| value                    | Yes          |                                   | The numerical amount or result from the sample collection                                                          |                                                                                                                                                                                                                                                                                                                                                                                                                        | time_series_data        |
-| sample_sex               | No           |                                   | Information on the sex of the organism sampled                                                                     |                                                                                                                                                                                                                                                                                                                                                                                                                        | time_series_data        |
-| sample_stage             | No           |                                   | Information on the life stage of the organism sampled                                                              | E.g adult, egg, larva, pupa                                                                                                                                                                                                                                                                                                                                                                                            | time_series_data        |
-| sample_location          | No           |                                   |                                                                                                                    |                                                                                                                                                                                                                                                                                                                                                                                                                        | time_series_data        |
-| sample_collection_area   | No           |                                   |                                                                                                                    |                                                                                                                                                                                                                                                                                                                                                                                                                        | time_series_data        |
-| sample_lat_DD            | No           |                                   | Latitude of sample area as a decimal degree Specific location of the sample                                        | Ranges [-90,+90] for latitude (north-south measurement)                                                                                                                                                                                                                                                                                                                                                                | time_series_data        |
-| sample_long_DD           | No           |                                   | Longitude of sample area as a decimal degree                                                                       | Ranges [-180,180] for longitude (east-west measurement)                                                                                                                                                                                                                                                                                                                                                                | time_series_data        |
-| sample_environment       | No           |                                   |                                                                                                                    |                                                                                                                                                                                                                                                                                                                                                                                                                        | time_series_data        |
-| additional_location_info | No           |                                   | Additional geo information                                                                                         |                                                                                                                                                                                                                                                                                                                                                                                                                        | time_series_data        |
-| additional_sample_info   | No           |                                   | Additional sample information                                                                                      | Should be used when more information is required to understand the experiment, for example experimental variables                                                                                                                                                                                                                                                                                                      | time_series_data        |
-| sample_name              | No           |                                   | A human readable sample name                                                                                       | May exist solely for the benefit of the depositor in organizing their data, use their own internal naming conventions etc.Naming convention is not restricted, but any encoded metadata should be revealed in the other data fields. For example, you may name a sample named ‘Aphid1_StickyTrap_Jan4,’ but you will still have “Sticky Trap” listed in a Collection Method field, and “Jan 4, 2017” in the date field | time_series_data        |
+|Field Name|Required Y/N|Data format|Details                               |Additional Notes                      |Db table                 |
+|----------|------------|-----------|--------------------------------------|--------------------------------------|-------------------------|
+| title    |  Yes       |  string   | Short title identifying the data set | E.g. “Mosquito Surveillance in Iowa” | Publication information |
 
+|collection_author | Yes | string | Name of collection author              | E.g.family name, given names; OR ‘Iowa State'     | Publication information |
+|dataset_DOI | No | string | Digital Object Identifier (DOI) of the the
 
-### Preparing data for upload
+dataset | If the data set was already published | Publication
+information | | publication_DOI | No | string | Second Digital Object
+Identifier (DOI) if connected to a published article | If the data set
+was already published as an article | Publication information | |
+description | Yes | string | A short description of the study / data set
+| E.g. ‘Long term, fixed trapped, municipal surveillance of west Nile
+vector population in Colorado from 2000-2010” | Publication information
+| | URL | No | string | web link to data set | | Publication information
+| | contact_name | Yes | string | Name, person, authority, etc…. that
+may be contacted with inquiries about the data | | Publication
+information | | contact_affiliation | Yes | string | Author/contact
+affiliation | | Publication information | | email | No | string |
+Contact email of the person who supplied or uploaded the dataset | |
+Publication information | | ORCID | No | string | ORCID code | A digital
+identifier which provides | Publication information | | data_rights |
+Yes | string | information provided on copyright of dataset i.e. open
+access, closed, embargo | Open access, closed (who is access available
+to) or embargo (must provide embargo release date) | Publication
+information | | taxon | Yes | string | Classification of sample
+collected | | study_meta_data | | location_description | Yes | string |
+Description of study location | Town, county, state | study_meta_data |
+| study_collection_area | Yes | string | The spatial extent (area or
+volume) of the study | | study_meta_data | | geo_datum | No | string |
+Geodetic datum | E.g.. WGS 84 | study_meta_data | | species_id_method |
+No | string | Species identification method | A description of the
+methods species identification | study_meta_data | | study_design | No |
+string | Study design methodology | Indicate if observational study
+i.e.prospective , retrospective, or experimental etc | study_meta_data |
+| sampling_strategy | No | string | Sampling_strategy, indicate the
+strategy used to select the sample | E.g. simple random sampling,
+stratified, convenience sampling, cluster, sampling, census etc |
+study_meta_data | | sampling_method | No | string | Sampling apparatus
+e.g..trap type, observation method | E.g. “CDC light trap w/ CO2”,
+“Prokopack backpack aspirator”, “Quadrat count” | study_meta_data | |
+sampling_protocol | No | string | How entities were sampled | |
+study_meta_data | | measurement_unit | Yes | string | Indicate what was
+measured | ‘Count’, ‘Count (millions)’, ‘Harvest’, ‘Index of abundance’,
+‘Index of territories’, ‘Leaf area’, ‘Mean Count’, ‘Not Specified’,
+‘Percent cover’ and ‘Sample’ | study_meta_data | | value_transform | No
+| string | Note if the original values have been transformed – list
+details of the reference value of any data transformation | E.g..Base
+Year, Log, None, Not Specified, Proportion, Unknown, x 1000 lbs |
+study_meta_data | | sample_start_date | No | ISO 8601 date format
+(YYYY-MM-DD) | Date of the sample was set. | E.g. between when a trap
+was set and when the sample was collected E | time_series_data | |
+sample_start_time | No | ISO 8601 time format (hh:mm:ss) | Time of the
+sample was set | Only required when the collector wants to sample
+populations within specific time frames | time_series_data | |
+sample_end_date | Yes | ISO 8601 date format (YYYY-MM-DD) | The date the
+sample was collected. | If collection occurs monthly use the first day
+of each month i.e. 2001-01-01, 2001-02-01 | time_series_data | |
+sample_end_time | No | ISO 8601 time format (hh:mm:ss) | Time of the
+sample collection | | time_series_data | | trap_duration | No | numeric
+| The amount of time the samle was set | | time_series_data | | value |
+Yes | numeric | The numerical amount or result from the sample
+collection | | time_series_data | | sample_sex | No | string |
+Information on the sex of the organism sampled | | time_series_data | |
+sample_stage | No | string | Information on the life stage of the
+organism sampled | E.g adult, egg, larva, pupa | time_series_data | |
+sample_location | No | string | | | time_series_data | |
+sample_collection_area | No | numeric | | | time_series_data | |
+sample_lat_DD | No | decimal | Latitude of sample area as a decimal
+degree Specific location of the sample | Ranges [-90,+90] for latitude
+(north-south measurement) | time_series_data | | sample_long_DD | No |
+decimal | Longitude of sample area as a decimal degree | Ranges
+[-180,180] for longitude (east-west measurement) | time_series_data | |
+sample_environment | No | string | | | time_series_data | |
+additional_location_info | No | string | Additional geo information | |
+time_series_data | | additional_sample_info | No | string | Additional
+sample information | Should be used when more information is required to
+understand the experiment, for example experimental variables |
+time_series_data | | sample_name | No | string | A human readable sample
+name | May exist solely for the benefit of the depositor in organizing
+their data, use their own internal naming conventions etc.Naming
+convention is not restricted, but any encoded metadata should be
+revealed in the other data fields. For example, you may name a sample
+named ‘Aphid1_StickyTrap_Jan4,’ but you will still have “Sticky Trap”
+listed in a Collection Method field, and “Jan 4, 2017” in the date field
+| time_series_data |
 
-*To prepare a dataset for the VecDyn database, follow the subsequent
-guidelines*
-
-1.  Download the latest template by right clicking on the following
-    [link](https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Template%26Scripts/VecDyn_template.csv).and
-    selecting ‘save.as’.  
-    A completed [example data set can be found
-    here](https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Examples/ManateeCountyMosquitoMonitoring/vecdyn_manatee_county_aedes_aegypti.csv).
-    This will help you to understand how to compile data in the VecDyn
-    template format. You can also access an example [R Markdown
-    recipe](https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Examples/ManateeCountyMosquitoMonitoring/ManateeCountryMosquitoMonitoring.Rmd)
-    that provides an example of converting an existing data set into a
-    VecDyn formatted dataset.
-
-2.  You can refer to the [VecDyn Data Collection
-    Specifications](#vecdyn-data-collection-specifications) to guide you
-    through the data collection and compilation process.
-
-3.  Note that the data upload facility (*temporary*) is only set up to
-    process one dataset at a time, one data set compromises of one
-    species and one main umbrella geographical location.
-
-*Notice that all files are in plain text e.g. ‘.csv’ format, and not in
-Excel format or similar. This facilitates text parsing by scripts,
-prevents data loss/corruption, and allows for detailed comparisons of
-changes via version control systems.*
-
-
-
-
-
-Data Standardization
---------------------
-
-### Standardizing Taxonomy
-
-To standardise taxonomy, VecDyn includes the [The Catalogue of Life
-database](http://www.catalogueoflife.org), which is the most
-comprehensive and authoritative global index of species currently
-available. Taxonomic data will be standardised by curators upon the
-addition of a dataset to the VecDyn database.
 
 <table>
 <thead>
@@ -234,19 +222,7 @@ addition of a dataset to the VecDyn database.
 </tbody>
 </table>
 
-### Standardizing Geo Referencing
-
-In order to standardise geographic information, the [the Global
-Administrative Unit Layers (GAUL) 2014
-databaset](http://www.fao.org/geonetwork/srv/en/metadata.show?id=12691)
-has been incorporated into the VecDyn database. The GAUL database
-systematises global administrative regions with a unified coding system
-at country, first (e.g. departments) and second administrative levels
-(e.g. districts). Each Administrative unit is assigned a unique ID and
-is connected to a spatial polygon. Therefore data submitted to the
-VecDyn database can be represented spatially, as long as a minimal set
-of information is provided by the submitter e.g. country, county,
-region, state.
+###
 
 <table>
 <colgroup>
@@ -287,12 +263,36 @@ region, state.
 </tbody>
 </table>
 
-### Standardizing Environmental Descriptions
 
-Environmental descriptors can be standardized using
-[ENVO](http://environmentontology.org/Browse-EnvO). ENVO is an ontology
-which represents knowledge about environments,environmental processes,
-ecosystems, habitats, and related entities.
+### Preparing data for upload
+
+*To prepare a dataset for the VecDyn database, follow the subsequent
+guidelines*
+
+1.  Download the latest template by right clicking on the following
+    [link](https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Template%26Scripts/VecDyn_template.csv).and
+    selecting ‘save.as’.  
+    A completed [example data set can be found
+            here](https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Examples/ManateeCountyMosquitoMonitoring/vecdyn_manatee_county_aedes_aegypti.csv).
+    This will help you to understand how to compile data in the VecDyn
+    template format. You can also access an example [R Markdown
+            recipe](https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Examples/ManateeCountyMosquitoMonitoring/ManateeCountryMosquitoMonitoring.Rmd)
+    that provides an example of converting an existing data set into a
+    VecDyn formatted dataset.
+
+2.  You can refer to the [VecDyn Data Collection
+            Specifications](#vecdyn-data-collection-specifications) to
+    guide you through the data collection and compilation process.
+
+3.  Note that the data upload facility (*temporary*) is only set up to
+    process one dataset at a time, one data set compromises of one
+    species and one main umbrella geographical location.
+
+*Notice that all files are in plain text e.g. ‘.csv’ format, and not in
+Excel format or similar. This facilitates text parsing by scripts,
+prevents data loss/corruption, and allows for detailed comparisons of
+changes via version control systems.*
+
 
 ### Adding data to the database
 
@@ -331,7 +331,7 @@ the aligning row.
 <img src="https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Images/DataUploadStep4.png" width="75%" style="display: block; margin: auto;" />
 
 Next select a geographical location, this either needs to be country or
-an ADM1 (e.g. State) or ADM2 (county) administrative subdivision. Again,
+an ADM1 (e.g. State) or ADM2 (county) administrative subdivision. Again,
 hit the ‘select’ button on the row of your choice.
 
 <img src="https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Images/DataUploadStep5.png" width="75%" style="display: block; margin: auto;" />
@@ -354,7 +354,9 @@ if all the sample data is correct. If it is, click on ‘finish’ button.
 However, if there is a problem you can delete or edit each entry. To
 delete all the entries hit ‘select’ all and scroll down to the bottom of
 the page and click ‘delete selected’  
-<img src="https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Images/DataUploadStep8.png" width="75%" style="display: block; margin: auto;" />
+<img
+src="https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Images/DataUploadStep8.png"
+width="75%" style="display: block; margin: auto;" />
 
 Note that you can also edit every part of your data after it has been
 submitted with the exception of taxon names and place names.
@@ -378,7 +380,7 @@ series](https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/mast
 Issues, troubleshooting & suggestions
 -------------------------------------
 
-Any suggestions or todos with regards to the database (e.g. new columns,
+Any suggestions or todos with regards to the database (e.g. new columns,
 schema modifications etc.) can be logged as [Issues on
 GitHub](https://github.com/vectorbite/VectorBiteDataPlatform/issues).
 Issues allow for discussions among multiple users, file attachments,

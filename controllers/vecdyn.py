@@ -147,7 +147,7 @@ def view_data():
     ####code for grid
     links = [lambda row: A('View/edit meta data',_href=URL("vecdyn", "edit_meta_data", vars={'study_meta_data_id':row.study_meta_data.id,
                                                                                      'publication_info_id':publication_info_id}),_class="btn btn-primary"),
-             lambda row: A('View time series data',_class="btn btn-primary",_href=URL("vecdyn", "view_time_series_data", vars={'id':row.study_meta_data.id})),
+             lambda row: A('View time series data',_class="btn btn-primary",_href=URL("vecdyn", "view_time_series_data",vars={'id':row.study_meta_data.id, 'publication_info_id':publication_info_id})),
                            ]
     query = ((db.study_meta_data.publication_info_id == publication_info_id) & (db.study_meta_data.ADM_CODE == db.gaul_admin_layers.ADM_CODE) & (
                 db.taxon.taxonID == db.study_meta_data.taxonID))
@@ -385,8 +385,13 @@ def upload_time_series_data():
     return dict(form=form)
 
 
+
+
+
+
 def view_time_series_data():
     study_meta_data_id = request.get_vars.id
+    publication_info_id = request.get_vars.publication_info_id
     db.time_series_data.id.readable = False
     db.time_series_data.study_meta_data_id.readable = False
     form = SQLFORM.grid(db.time_series_data.study_meta_data_id  == study_meta_data_id, selectable = lambda ids:del_emp(ids), paginate=1000, searchable=False, deletable=False, editable=True, details=False, create=False,csv=False)
