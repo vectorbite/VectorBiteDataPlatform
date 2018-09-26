@@ -1,6 +1,8 @@
 # Global **Vec**tor Population **Dyn**amics Database (VecDyn) Curator Documentation
 
-Welcome to VectorBiTE’s VecDyn database curator guidelines. This document provides details and instructions on cleaning, preparing and submitting data to the database.
+[TOC]
+
+Welcome to VectorBiTE’s VecDyn Database curator guidelines. This document provides details and instructions on cleaning, preparing and uploading data to the database.
 
 ## What is VecDyn?
 
@@ -9,11 +11,11 @@ VecDyn is a global database for spatially and temporally explicit presence-absen
 Data Storage and Data Collection Specifications
 ------------------------------
 
-The following section describes all the fields in the VecDyn database and provides details on the rational for their requirement.  
+The following section gives an overview of the database structure and describes all the fields in the VecDyn database and provides details on the rational for their requirement.  
 
 ### VecDyn Database structure (backend)
 
-The following image shows the database schema,  which describes how the data is stored in the database.
+The following image shows the database schema which describes how the data is stored in the database.
 
 
 
@@ -23,31 +25,19 @@ The following image shows the database schema,  which describes how the data is 
 
 The database backend consists of three main data collection tables,and two data tables which have been adapted from *third*-*party* sources,  these are used to standardise taxonomic and geographic information.
 
-**Publication Information Table**
+The **Publication Information Table** table captures publication information like who compiled and submitted the dataset,  and also digital identifiers such as a DOI or ORCID . This table also stores information on data rights and provides links to the original source of the dataset. 
 
-This table captures publication information such as details on the dataset provider / author and information such as Digital Object Identifier for the dataset. This table also stores information on data rights.
+The **Study Meta Data Table** captures information which describes the time series data e.g. where a study took place, what organism was studied and how the sample was collected. The data captured in these fields should help the statistician decide on the quality of the experiment and subsequently the data e.g. how was the organism sampled and can the data be used to make generalised predictions about a wider population. Data in this table captures information that tends to be repeated in population abundance datasets, therefore storing this information once saves storage space improving the scalability of the database. 
 
-**Study Meta Data Table**
+The **Time Series Data Table** captures all the information required to produce a Time-Series. Each row should represent a separate observation, at a particular point in time and provide a value for the entity being sampled. This table also captures detailed information like the coordinates of an observation site and particular information about that at a particular site i.e. changes in the environmental or climatic conditions. 
 
-The table captures information describing where, what, how the sample has been collected e.g.  taxonomic information, general location of a study and particular methods or equipment used to collect data. Moreover, the data in these fields should help the statistician decide on the quality of the data that has been collected. For example, can the data be used to make generalised predictions about a wider population. From a technical aspect, this data table also captures information that tends to be repeated in population abundance datasets, therefore storing this information once saves storage space improving the scalability of the database. 
+The **Taxonomic Information Table**  is a database table which is used to standardise all  taxonomic information uploaded into the database. It has been adapted from [The Catalogue of Life database](http://www.catalogueoflife.org), which is the most comprehensive and authoritative global index of species currently available. This enables  front-end search (querying) facilities to use internationally recognised naming conventions thus improving the usability of the web app.   
 
-**Time Series Data Table**
-
-This table captures all the information required to produce a time-Series dataset. Each row should represent a separate observation, at a particular point in time. This table can also capture detailed information about the coordinates of an observation site, and particular information about that site i.e. environmental or climatic information. 
-
-**Taxonomic Information Table**
-
-This dataset is used to standardise all  taxonomic information coming into the database so all front-end search (querying) facilities are fixed to specific naming conventions. This dataset has been adapted from [The Catalogue of Life database](http://www.catalogueoflife.org), which is the most comprehensive and authoritative global index of species currently available.
-
-**Geographic Database Table**
-
-This dataset is used to standardise geographic information entered into the database. [The Global Administrative Unit Layers (GAUL) 2014 dataset](http://www.fao.org/geonetwork/srv/en/metadata.show?id=12691) is a spatial database that systematises global administrative regions with a unified coding system at country, first (e.g. departments) and second administrative levels (e.g. districts). Each Administrative unit is assigned a unique ID and is connected to a spatial polygon. 
+The **Geographic Database Table** is used to standardise geographic information entered into the database. [The Global Administrative Unit Layers (GAUL) 2014 dataset](http://www.fao.org/geonetwork/srv/en/metadata.show?id=12691) is a spatial database that systematises global administrative regions with a unified coding system at country, first (e.g. departments) and second administrative levels (e.g. districts). Each Administrative unit is assigned a unique ID and is connected to a spatial polygon. 
 
 ### Data Collection Template
 
  The latest [vecdyn data collection template](https://github.com/vectorbite/VectorBiteDataPlatform/blob/master/static/Documentation/VecDyn/Template%26Scripts/VecDyn_template.csv) is available here
-
-
 
 
 | Field Name               | Required Y/N | Data format                       | Details                                                      | Additional Notes                                             |        Db table         |
