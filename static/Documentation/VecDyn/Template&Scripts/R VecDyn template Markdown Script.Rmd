@@ -7,15 +7,15 @@ output: html_document
 
 ```{r}
 Data_Series_Information_template <-data.frame(title=character(), 
-                 collection_authority=character(), 
+                 collection_author=character(),
                  DOI=character(),
                  publication_date = as.Date(character()),
                  description = character(),
                  URL = character(),
                  contact_name=character(),
                  contact_affiliation=character(),
-                 contact_email=character(),
-                 ORCID=character(),
+                 email=character(),
+                 orcid=character(),
                  keywords=character(),
                  stringsAsFactors=FALSE)
 write.csv(Data_Series_Information_template, file = "Data_Series_Information_template.csv", row.names = FALSE)

@@ -19,19 +19,20 @@ if auth.is_logged_in():
 
 
 #if auth.has_membership('VectorbiteAdmin'):
-#    response.menu.append((T('Manage Data Sets'), False, None,[
-#                ('VecDyn data collections', False, URL('vecdyn', 'my_collections'))]))
+ #   response.menu.append((T('Manage Data Sets'), False, None,[
+  #              ('VecDyn data collections', False, URL('vecdyn', 'data_collections'))]))
 
-if auth.is_logged_in():
+if auth.has_membership('VectorbiteAdmin'):
     response.menu.append((T('Manage Data Sets'), False, None,[
-                ('Manage VecDyn data sets', False, URL('vecdyn', 'my_collections'))]))
-
+                #('Messages', False, URL('default', 'messages')),
+                ('Manage VecDyn data sets', False, URL('vecdyn', 'data_collections')),
+                ('Task Manager', False, URL('default', 'tasks'))]))
 
 
 #if auth.has_membership('VectorbiteManagers'):
  #   response.menu.append((T('Management'), False, None,[
                 #('Manage Collections', False, URL('vecdyn', 'manage_collections')),
-                #('Register New Data Collection', False, URL('vecdyn', 'user_collection_registration')),
+                #('Register New Data Collection', False, URL('vecdyn', 'user_dataset_registration')),
   #              ('Messages', False, URL('default', 'messages')),
    #             ('Task Manager', False, URL('default', 'tasks'))]))
                 #('Manage db files & docs', False, URL('default','manage_db_documents')),

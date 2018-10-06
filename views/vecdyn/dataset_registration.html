@@ -1,10 +1,16 @@
 {{extend 'layout.html'}}
 
-        <div class="btn-group">
+<div class="btn-group">
          {{=A('Cancel',_href=URL('data_collections'),_class="btn btn-primary")}}
   </div>
               <div style="background: linear-gradient(240deg, lightgrey, whitesmoke)" class="jumbotron">
 
+
+                                     <div class="alert alert-info" role="alert">
+                                         Add general information about the dataset
+    </div>
+<br>
+    <br>
 {{=BEAUTIFY(form)}}
     </div>
 

@@ -1,3 +1,3 @@
 {{extend 'layout.html'}}
-{{=A('Add New Collection ',_href=URL('user_collection_registration'),_class="btn btn-primary")}}
+{{=A('Add New Collection ',_href=URL('user_dataset_registration'),_class="btn btn-primary")}}
 {{=form}}

@@ -55,13 +55,16 @@ def vec_dyn_query():
                                                     vars={'ids': row.study_meta_data.id}))
 
     # get the grid
-    grid = SQLFORM.grid((db.taxon.taxonID == db.study_meta_data.taxonID)
-                        & (db.study_meta_data.publication_info_id == db.publication_info.id)
+    grid = SQLFORM.grid((db.study_meta_data.publication_info_id == db.publication_info.id)
+                        & (db.taxon.taxonID == db.study_meta_data.taxonID)
+                        & (db.publication_info.data_rights == 'Open')
+                        & (db.publication_info.submit == True)
                         & (db.gaul_admin_layers.ADM_CODE == db.study_meta_data.ADM_CODE),
+                        #left=db.study_meta_data.on(db.study_meta_data.publication_info_id==db.publication_info.id),
                         exportclasses=export,
                         field_id=db.study_meta_data.id,
                         fields= [db.publication_info.title,
-                                 db.publication_info.collection_authority,
+                                 db.publication_info.collection_author,
                                  db.taxon.tax_species, db.taxon.tax_genus,
                                  db.taxon.tax_family, db.taxon.tax_order,
                                  db.taxon.tax_class, db.taxon.tax_phylum,
@@ -70,7 +73,7 @@ def vec_dyn_query():
                                  db.gaul_admin_layers.ADM0_NAME],
 
                         headers={'publication_info.title' : 'Title',
-                                 'publication_info.collection_authority': 'Author',
+                                 'publication_info.collection_author': 'Author',
                                  'taxon.tax_species' : 'Taxon',
                                  'taxon.tax_genus' : 'Genus',
                                  'taxon.tax_family' : 'Family',
@@ -197,14 +200,14 @@ def _get_data_csv(ids):
                     db.study_meta_data.geo_datum,
                     db.publication_info.title,
                     db.publication_info.description,
-                    db.publication_info.collection_authority,
+                    db.publication_info.collection_author,
                     db.publication_info.DOI,
                     db.publication_info.description,
                     db.publication_info.url,
                     db.publication_info.contact_name,
                     db.publication_info.contact_affiliation,
-                    db.publication_info.contact_email,
-                    db.publication_info.ORCID)
+                    db.publication_info.email,
+                    db.publication_info.orcid)
     return rows.as_csv()
 
 

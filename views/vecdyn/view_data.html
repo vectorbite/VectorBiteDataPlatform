@@ -1,7 +1,7 @@
 {{extend 'layout.html'}}
 <div class="btn-group.btn-group-justified" role="group" aria-label="...">
             <a class="btn btn-primary" href="{{=URL('default','index')}}">{{=T("Finish")}}</a>
-            {{=A('Back to data collections page',_href=URL('my_collections'),_class="btn btn-primary")}}
+            {{=A('Back to data collections page',_href=URL('data_collections'),_class="btn btn-primary")}}
             {{if count >=1:}}
             {{=A('Standardise',_href=URL('standardise_taxon',vars={'publication_info_id':publication_info_id}),_class="btn btn-warning")}}
             {{elif count2 >=1:}}
@@ -17,8 +17,13 @@
                <h5>
                    Data set metadata
                </h5>
-<div class="alert alert-warning" role="alert">
-{{=message}}
+
+  <div class="alert alert-warning alert-dismissible">
+  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+  {{=message}}
 </div>
+
+
+
 {{=BEAUTIFY(form)}}
     </div>

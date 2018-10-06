@@ -4,32 +4,33 @@ import csv
 
 def importer():
     response.flash = 'Now upload a time series data set, make sure this is in csv format'
-    page = request.get_vars.page
-    page = page
+    #Get the publicaton infor id from the previous page
     publication_info_id = request.get_vars.id
     #form = SQLFORM.factory(Field('csvfile','upload',uploadfield=False, requires = IS_UPLOAD_FILENAME(extension='csv')))
     form = SQLFORM(db.data_set_upload, comments = False, fields = ['csvfile'],labels={'csvfile': 'Click to search and select a file:'})
     if form.validate():
         try:
+            # read the upload csv
             a = request.vars.csvfile.file
             readCSV = csv.reader(a, delimiter=',')
             next(readCSV, None)
             for row in readCSV:
-                #dict(zip creates a dictionary from two lists i.e. from the field names and the row from the csv)
+                # 'dict(zip' creates a dictionary from two lists i.e. field names and one data row from the csv
                 study = dict(zip(('title', 'taxon', 'location_description', 'study_collection_area', 'geo_datum', \
                 'species_id_method', 'study_design', 'sampling_strategy', 'sampling_method', \
                 'sampling_protocol', 'measurement_unit', 'value_transform'), row[:12]))
+                #check for a match in the db against the 'study' dict
                 record = db.study_meta_data(**study)
                 #####the following code checks to see if a data set has already been uploaded but under a different publication instance
-                check2 = int(publication_info_id)
+                check2 = publication_info_id
                 check1 = record.publication_info_id if record else None
-                if check1 == None:
+                if (check1 == None) | (check1 == check2):
                     pass
-                elif check1 == check2:
-                    pass
+                elif (check1 != None) & (check1 != check2):
+                    return 'It seems like this dataset has already been submitted under a different name, you cannot submit the same dataset twice!'
                 else:
-                    return 'It seems like this dataset has already been submitted under a different name, ' \
-                           'You cannot submit the same dataset twice'
+                    pass
+                ####A similar checker should also be implemented for the time series data to avoid duplicate time series entries, although this could take up a lot of memory
                 study_meta_data_id = record.id if record else db.study_meta_data.insert(publication_info_id=publication_info_id,**study)
                 samples = dict(zip(('sample_start_date','sample_start_time',
                                     'sample_end_date','sample_end_time','trap_duration','value','sample_sex',
