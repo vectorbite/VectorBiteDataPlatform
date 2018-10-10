@@ -3,7 +3,8 @@
 
 #from datetime import datetime
 
-@auth.requires_login()
+#@auth.requires_login()
+@auth.requires_membership('VectorbiteAdmin')
 def vec_dyn_query():
     #datenow = datetime.now()
     #datenow = datenow.date()

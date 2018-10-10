@@ -36,7 +36,7 @@ def tasks():
     return locals()
 
 
-#@auth.requires_membership('VectorbiteManagers')
+#@auth.requires_membership('VectorbiteAdmin')
 def create_task():
     #db.task.status.readable = False
     #db.task.status.writable = False
