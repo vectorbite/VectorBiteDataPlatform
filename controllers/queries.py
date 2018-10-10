@@ -1,11 +1,13 @@
 
 #####VecDyn query
 
-
-
+from datetime import datetime
 
 @auth.requires_login()
 def vec_dyn_query():
+    #datenow = datetime.now()
+    #datenow = datenow.date()
+    #return datenow
     """
     Controller to serve a searchable grid view of the vector dynamics
     datasets with a download function. We want to be able to download
@@ -55,12 +57,13 @@ def vec_dyn_query():
                                                     vars={'ids': row.study_meta_data.id}))
 
     # get the grid
+    # week = datetime.timedelta(days=7)
+    # Field('deadline', 'datetime', default=request.now + week),
     grid = SQLFORM.grid((db.study_meta_data.publication_info_id == db.publication_info.id)
                         & (db.taxon.taxonID == db.study_meta_data.taxonID)
                         & (db.publication_info.data_rights == 'Open')
                         & (db.publication_info.submit == True)
                         & (db.gaul_admin_layers.ADM_CODE == db.study_meta_data.ADM_CODE),
-                        #left=db.study_meta_data.on(db.study_meta_data.publication_info_id==db.publication_info.id),
                         exportclasses=export,
                         field_id=db.study_meta_data.id,
                         fields= [db.publication_info.title,
@@ -169,7 +172,6 @@ def _get_data_csv(ids):
                     db.time_series_data.sample_start_time,
                     db.time_series_data.sample_end_date,
                     db.time_series_data.sample_end_time,
-                    db.time_series_data.trap_duration,
                     db.time_series_data.value,
                     db.study_meta_data.measurement_unit,
                     db.study_meta_data.value_transform,
@@ -194,20 +196,22 @@ def _get_data_csv(ids):
                     db.gaul_admin_layers.ADM2_NAME,
                     db.gaul_admin_layers.ADM1_NAME,
                     db.gaul_admin_layers.ADM0_NAME,
-                    db.study_meta_data.study_collection_area,
                     db.gaul_admin_layers.centroid_latitude,
                     db.gaul_admin_layers.centroid_longitude,
                     db.study_meta_data.geo_datum,
+                    db.gps_obfuscation_info,
                     db.publication_info.title,
                     db.publication_info.description,
                     db.publication_info.collection_author,
-                    db.publication_info.DOI,
+                    db.publication_info.dataset_doi,
+                    db.publication_info.publication_doi,
                     db.publication_info.description,
                     db.publication_info.url,
                     db.publication_info.contact_name,
                     db.publication_info.contact_affiliation,
                     db.publication_info.email,
-                    db.publication_info.orcid)
+                    db.publication_info.orcid,
+                    db.publication_info.dataset_license)
     return rows.as_csv()
 
 
