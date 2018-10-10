@@ -1,7 +1,7 @@
 
 #####VecDyn query
 
-from datetime import datetime
+#from datetime import datetime
 
 @auth.requires_login()
 def vec_dyn_query():
@@ -179,8 +179,8 @@ def _get_data_csv(ids):
                     db.time_series_data.sample_stage,
                     db.time_series_data.sample_location,
                     db.time_series_data.sample_collection_area,
-                    db.time_series_data.sample_lat_DD,
-                    db.time_series_data.sample_long_DD,
+                    db.time_series_data.sample_lat_dd,
+                    db.time_series_data.sample_long_dd,
                     db.time_series_data.sample_environment,
                     db.time_series_data.additional_location_info,
                     db.time_series_data.additional_sample_info,
@@ -199,7 +199,7 @@ def _get_data_csv(ids):
                     db.gaul_admin_layers.centroid_latitude,
                     db.gaul_admin_layers.centroid_longitude,
                     db.study_meta_data.geo_datum,
-                    db.gps_obfuscation_info,
+                    db.study_meta_data.gps_obfuscation_info,
                     db.publication_info.title,
                     db.publication_info.description,
                     db.publication_info.collection_author,
@@ -233,7 +233,7 @@ def vec_dyn_download():
 
     # and now poke the text object out to the browser
     response.headers['Content-Type'] = 'text/csv'
-    attachment = 'attachment;filename=vec_dyn_download_{}.txt'.format(datetime.date.today().isoformat())
+    attachment = 'attachment;filename=vec_dyn_download_{}.csv'.format(datetime.date.today().isoformat())
     response.headers['Content-Disposition'] = attachment
 
     raise HTTP(200, data,
