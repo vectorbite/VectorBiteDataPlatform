@@ -6,6 +6,8 @@
 #@auth.requires_login()
 @auth.requires_membership('VectorbiteAdmin')
 def vec_dyn_query():
+    today = datetime.date.today()
+    #return today
     #datenow = datetime.now()
     #datenow = datenow.date()
     #return datenow
@@ -56,13 +58,14 @@ def vec_dyn_query():
     # turn the MainID into a download link
     db.study_meta_data.represent = lambda value, row: A(value, _href=URL("queries","vec_dyn_download",
                                                     vars={'ids': row.study_meta_data.id}))
-
     # get the grid
     # week = datetime.timedelta(days=7)
     # Field('deadline', 'datetime', default=request.now + week),
     grid = SQLFORM.grid((db.study_meta_data.publication_info_id == db.publication_info.id)
                         & (db.taxon.taxonID == db.study_meta_data.taxonID)
-                        & (db.publication_info.data_rights == 'Open')
+                        & ((db.publication_info.data_rights == 'Open') | (db.publication_info.data_rights == 'Embargo'))
+#need to decide how we want to implement embargo, either auto change to open or keep embargo but becomes searchable on release data
+                        & ((db.publication_info.embargo_release_date == None) | (db.publication_info.embargo_release_date <= today))
                         & (db.publication_info.submit == True)
                         & (db.gaul_admin_layers.ADM_CODE == db.study_meta_data.ADM_CODE),
                         exportclasses=export,

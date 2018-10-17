@@ -1,0 +1,36 @@
+{{extend 'layout.html'}}
+
+<div style="background: linear-gradient(240deg, lightgrey, whitesmoke)" class="jumbotron">
+
+{{=task_form}}
+
+
+            
+
+{{for post in posts:}}
+        <div class="alert alert-warning alert-dismissible" role="alert">
+  <button type="button" class="close" data-dismiss="alert" data-id="{{=post.id}}" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        {{=prettydate((post.created_on))}} {{=fullname(post.created_by)}} says </br>
+            {{=post.body}}
+        </div>
+
+        {{pass}}
+
+
+<h3> add comment </h3>
+{{=form.custom.begin}}
+        {{=form.custom.widget.body}}
+        {{=form.custom.submit}}
+        {{=form.custom.end}}
+</div>
+
+        <script>
+    jQuery('[data-dismiss]').on('click',function(){
+        alert('here');
+        var t=jQuery(this);
+        var id=t.attr('data-id');
+        alert(id);
+        jQuery.post('{{=URL('delete_post')}}',{id:id});
+    });
+
+</script>

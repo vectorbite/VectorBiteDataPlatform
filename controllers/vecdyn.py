@@ -372,10 +372,6 @@ def geo_st_insert():
     return locals()
 
 
-
-
-
-
 def view_time_series_data():
     study_meta_data_id = request.get_vars.id
     publication_info_id = request.get_vars.publication_info_id

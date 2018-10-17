@@ -1,5 +1,4 @@
-def test():
-    return locals()
+
 
 def about_us():
     return locals()
@@ -16,23 +15,23 @@ me = auth.user_id
 def tasks():
     db.task.created_on.readable = False
     db.task.created_by.readable = False
-    #db.task.title.represent = lambda title,row:\
-    #    A(title,_href=URL('view_task',args=row.id))
-    #query = (db.task.assigned_to==me)|(db.task.created_by==me)    # replaced with query below
-    query = (db.task)
-    grid = SQLFORM.grid(query)#\
-        #, orderby=~db.task.modified_on,
-         #               create=False,details=False,editable=False,
-          #              deletable=lambda row: (row.created_by==me),
-           #             fields=[
-            #db.task.status,
-           # db.task.title,
-           # db.task.task_type,
-            #db.task.created_on,
-            #db.task.deadline,
-            #db.task.created_by,
-            #db.task.assigned_to,
-            #])
+    db.task.title.represent = lambda title,row:\
+        A(title,_href=URL('view_task',args=row.id))
+    query = (db.task.assigned_to==me)|(db.task.created_by==me)    # replaced with query below
+    #query = (db.task)
+    grid = SQLFORM.grid(query, orderby=~db.task.modified_on,
+                        create=False,details=False,editable=False,csv=False,
+                        deletable=lambda row: (row.created_by==me),maxtextlength=200,
+                        fields=[db.task.title,
+                                db.task.task_type,
+                                db.task.description,
+                                db.task.email,
+                                db.task.file,
+                                db.task.created_on,
+                                db.task.deadline,
+                                db.task.created_by,
+                                db.task.status,
+                                db.task.assigned_to])
     return locals()
 
 
@@ -51,10 +50,52 @@ def create_task():
 
 #@auth.requires_membership('VectorbiteManagers')
 def view_task():
+    task_form = ()
     task_id = request.args(0,cast=int)
     task = db.task(task_id) or error()
-    #if not task.created_by==me and not task.assigned_to==me: error()
-    # form, posts = make_comments(callback)
+    if not task.created_by==me and not task.assigned_to==me: error()
+    if (task.task_type == 'VecDyn data submission') | (task.task_type == 'VecTraits data submission'):
+        db.task.id.readable = False
+        db.task.file.readable = False
+        db.task.file.writable = False
+        task_form = SQLFORM(db.task, task_id)
+    elif (task.task_type == 'Investigate issue/fix bug') | (task.task_type == 'Enquiry'):
+        db.task.id.readable = False
+        db.task.collection_author.readable = False
+        db.task.publication_date.readable = False
+        db.task.file.readable = False
+        db.task.file.writable = False
+        db.task.title.readable = False
+        db.task.title.readable = False
+        db.task.title.readable = False
+        db.task.title.readable = False
+        task_form = SQLFORM(db.task, task_id)
+    elif (task.task_type == 'VecDyn Data Set Source') | (task.task_type == 'VecTraits Data Set Source'):
+        db.task.id.readable = False
+        db.task.collection_author.readable = False
+        db.task.publication_date.readable = False
+        db.task.file.readable = False
+        db.task.file.writable = False
+        db.task.title.readable = False
+        db.task.title.readable = False
+        db.task.title.readable = False
+        db.task.title.readable = False
+        task_form = SQLFORM(db.task, task_id)
+
+
+
+    db.post.task.default = task.id
+    db.post.task.writable = False
+    db.post.task.readable = False
+    task_form = SQLFORM(db.task, task_id)
+    form = SQLFORM(db.post).process()
+    if form.accepted:
+        user_id = task.created_by if task.assigned_to==me else task.assigned_to
+        #send_email(to=db.auth_user(user_id).email,
+         #          sender=auth.user.email,
+          ##         subject="New Commend About: %s" % task.title,
+            #       message=form.vars.body)
+    posts = db(db.post).select(orderby=db.post.created_by)
     return locals()
 
 #@auth.requires_membership('VectorbiteManagers')
@@ -144,23 +185,6 @@ def report_problem():
      #   response.flash = 'please fill out the form '
     return locals()
 
-## documentation page - could be a static page or connect to a database
-
-def documentation():
-    rows = db(db.database_docs).select(orderby=db.database_docs.id)
-    return locals()
-
-def data_download_help():
-    rows = db(db.database_docs).select(orderby=db.database_docs.id)
-    return locals()
-
-def datasources():
-    form = SQLFORM(db.data_source_tracker)
-    #if form.accepted:
-     #   session.flash = 'Thanks, your comment has been submitted'
-      #  redirect(URL('index'))
-    return locals()
-
 #Admin and community functions
 
 #@auth.requires_membership('VectorbiteManagers')
@@ -168,49 +192,6 @@ def manage_index_page_updates():
     grid = SQLFORM.grid(db.index_page_updates,  searchable=False, deletable=True,\
                         editable=True, details=False, create=False,csv=False)
     return dict(grid=grid)
-
-#@auth.requires_membership('VectorbiteManagers')
-def manage_comments():
-    grid = SQLFORM.grid(db.feedback_post,searchable=False, deletable=True,\
-                        editable=True, details=False, create=False,csv=False)
-    return locals()
-
-
-#@auth.requires_membership('VectorbiteManagers')
-def manage_db_documents():
-    grid = SQLFORM.grid(db.database_docs,searchable=False, deletable=True,\
-                        editable=True, details=False, create=False,csv=False)
-    return locals()
-
-def vec_dyn_query():
-    form = SQLFORM.grid(db.study_data)
-    return locals()
-
-
-
-#@auth.requires_login()
-def leave_comment():
-    form = SQLFORM(db.feedback_post).process()
-    if form.accepted:
-        session.flash = 'Thanks, your comment has been submitted'
-        redirect(URL('view_all_comments'))
-    return locals()
-
-#@auth.requires_login()
-def view_comment():
-    post = db.feedback_post(request.args(0,cast=int))
-    db.post_comment.feedback_post.default = post.id
-    db.post_comment.feedback_post.readable=False
-    db.post_comment.feedback_post.writable=False
-    form = SQLFORM(db.post_comment).process()
-    comments = db(db.post_comment.feedback_post==post.id).select()
-    return locals()
-
-#@auth.requires_login()
-def view_all_comments():
-    rows = db(db.feedback_post).select(orderby=db.feedback_post.created_on)
-    return locals()
-
 
 def contact_us():
     form = SQLFORM(db.contact)
@@ -223,19 +204,8 @@ def contact_us():
     return dict(form=form)
 
 
-def messages():
-    form = SQLFORM.grid(db.contact)
-    return locals()
-
-
-
-##VecDyn functions
-
-
-#def vec_dyn_query_by_id(): add a function that searches or links datasets
-
 def index():
-    if  auth.has_membership('VectorBiTE Managers'): redirect(URL('tasks'))
+    #if auth.has_membership('VectorBiTE Managers'): redirect(URL('tasks'))
     rows = db(db.index_page_updates).select(orderby=~db.index_page_updates.created_on)
     return locals()
 
