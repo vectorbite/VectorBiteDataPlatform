@@ -41,8 +41,8 @@ def data_collections():
         if f.name not in ('db.publication_info.data_rights, db.publication_info.dataset_doi, db.publication_info.title,db.publication_info.collection_author, db.publication_info.submit, db.publication_info.created_by')]
     #db.publication_info.data_rights.represent = lambda data_rights, row: A(data_rights, _href=URL('edit_data_rights', args=row.id))
     links = [lambda row: A('Upload data',_href=URL("data_uploader", "importer",vars={'id':row.id}),_class="btn btn-primary"), \
-             lambda row: A('View data', _href=URL("vecdyn", "view_data", vars={'publication_info_id': row.id}),_class="btn btn-primary"),
-             lambda row: A('Edit rights', _href=URL("vecdyn", "edit_data_rights", vars={'publication_info_id': row.id}),
+             lambda row: A('View dataset', _href=URL("vecdyn", "view_data", vars={'publication_info_id': row.id}),_class="btn btn-primary"),
+             lambda row: A('Edit data rights', _href=URL("vecdyn", "edit_data_rights", vars={'publication_info_id': row.id}),
                            _class="btn btn-primary"),
              lambda row: A('View/edit general info', _href=URL("vecdyn", "edit_dataset_general_info", vars={'publication_info_id': row.id}),
                            _class="btn btn-primary")]
@@ -104,8 +104,10 @@ def edit_data_rights():
     db.publication_info.email.readable = False
     db.publication_info.orcid.writable = False
     db.publication_info.orcid.readable = False
-    #db.publication_info.submit.writable = False
-    #db.publication_info.submit.readable = False
+    db.publication_info.data_set_type.writable = False
+    db.publication_info.data_set_type.readable = False
+    db.publication_info.publication_doi.writable = False
+    db.publication_info.publication_doi.readable = False
     publication_info_id = request.get_vars.publication_info_id
     form = SQLFORM(db.publication_info, publication_info_id, showid=False)
     if form.process().accepted:

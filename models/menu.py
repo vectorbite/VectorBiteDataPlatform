@@ -11,11 +11,13 @@ if auth.is_logged_in():
             ('VecDyn', False, URL('queries', 'vec_dyn_query'))]),
         ('Submit Data', False, None,[
             ('Submit Data Set', False, URL('default', 'submit_data'))]),
-         (T('Further Info'), False, None,[
-                ('Contact Us', False, URL('default', 'contact_us'))]),
+         (T('Contact Us'), False, None,[
+                ('Report problem', False, URL('default', 'report_problem')),
+                ('General enquiries', False, URL('default', 'contact_us'))]),
              #(T('About Us'), False, URL('default', 'about_us'))]),
 
 ]
+
 
 
 #if auth.has_membership('VectorbiteAdmin'):
@@ -23,7 +25,7 @@ if auth.is_logged_in():
   #              ('VecDyn data collections', False, URL('vecdyn', 'data_collections'))]))
 
 if auth.has_membership('VectorbiteAdmin'):
-    response.menu.append((T('Manage Data Sets'), False, None,[
+    response.menu.append((T('Management'), False, None,[
                 #('Messages', False, URL('default', 'messages')),
                 ('Manage VecDyn data sets', False, URL('vecdyn', 'data_collections')),
                 ('Task Manager', False, URL('default', 'tasks'))]))

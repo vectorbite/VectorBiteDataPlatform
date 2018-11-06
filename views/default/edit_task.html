@@ -1,0 +1,18 @@
+{{extend 'layout.html'}}
+
+
+            <div class="btn-group.btn-group-justified" role="group" aria-label="...">
+            {{=A('Back',_href=URL('default','tasks'),_class="btn btn-primary")}}
+            {{if data_set_type == 'VecDyn data submission':}}
+            {{=A('Import',_href=URL('vecdyn','dataset_registration'),_class="btn btn-primary")}}
+            {{else:}}
+            {{pass}}
+
+</div>
+
+<div style="background: linear-gradient(240deg, lightgrey, whitesmoke)" class="jumbotron">
+
+
+{{=form}}
+
+    </div>

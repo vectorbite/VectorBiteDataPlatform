@@ -19,9 +19,7 @@ db.define_table('data_source_tracker',
 # assigns a status to a task -
 STATUSES = ('assigned','accepted','rejected','reassigned','completed')
 
-TASK_TYPE = ('VecDyn data submission', 'VecTraits data submission', 'Investigate issue/fix bug', 'Enquiry', 'VecDyn Data Set Source', 'VecTraits Data Set Source')
-
-
+TASK_TYPE = ('VecDyn data submission', 'VecTraits data submission', 'Investigate issue/fix bug', 'Enquiry', 'Data Set Sources')
 
 
 
@@ -70,21 +68,10 @@ def show_status(status,row=None):
 
 db.task.status.represent = show_status
 
-
-#def send_email_realtime(to, subject, message, sender):
-#    if not isinstance(to,list): to = [to]
-#    # if auth.user: to = [email for email in to if not to==auth.user.email]
-#    mail.settings.sender = sender
-#    return mail.send(to=to, subject=subject, message=message or '(no message)')
-
-
-#def send_email(to, subject, message, sender):
-#    if EMAIL_POLICY == 'realtime':
-#        return send_email_realtime(to, subject, message, sender)
-#    else:
-#        return send_email_deferred(to, subject, message, sender)
-
-
+def send_email(to,subject,message,sender):
+    if not isinstance(to,list): to = [to]
+    mail.settings.sender = sender
+    mail.send(to=to, subject=subject, message=message or '(no message)')
 
 
 ###Add extra tables to auth

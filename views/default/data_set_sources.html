@@ -1,6 +1,8 @@
 {{extend 'layout.html'}}
 <div style="background: linear-gradient(240deg, lightgrey, beige)" class="jumbotron">
 
+
+
     <div class="btn-group.btn-group-justified" role="group" aria-label="...">
 
 
@@ -10,10 +12,21 @@
          <a class="btn btn-link" href="{{=URL('default','issues')}}">{{=T("Issues")}}</a>
          <a class="btn btn-link" href="{{=URL('default','general_enquiries')}}">{{=T("General enquiries")}}</a>
         <a class="btn btn-link" href="{{=URL('default','data_set_sources')}}">{{=T("Dataset source list")}}</a>
-
-
-
  </div>
+
+<br>
+    <div class="btn-group.btn-group-justified" role="group" aria-label="...">
+
+      <a class="btn btn-primary" href="{{=URL('default','new_data_source')}}">{{=T("Add new source to list")}}</a>
+
+</div>
+
+<br>
+
+         <br>
+<p>
+    * = required
+    </p>
 
 
 {{=grid}}
