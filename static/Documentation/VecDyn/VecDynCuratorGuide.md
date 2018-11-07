@@ -1,5 +1,7 @@
 Global **Vec**tor Population **Dyn**amics Database (VecDyn) Curator Documentation
 
+
+
 [TOC]
 
 # Introduction
@@ -8,7 +10,7 @@ Welcome to VectorBiTE’s VecDyn Database curator guidelines. This document prov
 
 ## What is VecDyn?
 
-VecDyn is a global database for spatially and temporally explicit presence-absence and abundance data. We accept and distribute data for animal and plant disease vectors. 
+VecDyn is a global database for spatially and temporally explicit presence-absence and abundance data. We accept and distribute data for all <animal and plant disease vectors. 
 
 ## Data capture
 

@@ -1,12 +1,12 @@
 {{extend 'layout.html'}}
+
+        {{=A('Add new source to list',_href=URL('default', 'new_data_source'),_class="btn btn-primary")}}
+
 <div style="background: linear-gradient(240deg, lightgrey, beige)" class="jumbotron">
 
 
-
     <div class="btn-group.btn-group-justified" role="group" aria-label="...">
-
-
-    <a class="btn btn-link" href="{{=URL('default','tasks')}}">{{=T("All")}}</a>
+        <a class="btn btn-link" href="{{=URL('default','tasks')}}">{{=T("All")}}</a>
          <a class="btn btn-link" href="{{=URL('default','vecdyn_submissions')}}">{{=T("VecDyn submissions")}}</a>
         <a class="btn btn-link" href="{{=URL('default','vectrait_submissions')}}">{{=T("VecTraits submissions")}}</a>
          <a class="btn btn-link" href="{{=URL('default','issues')}}">{{=T("Issues")}}</a>
@@ -15,18 +15,12 @@
  </div>
 
 <br>
-    <div class="btn-group.btn-group-justified" role="group" aria-label="...">
 
-      <a class="btn btn-primary" href="{{=URL('default','new_data_source')}}">{{=T("Add new source to list")}}</a>
-
-</div>
 
 <br>
 
          <br>
-<p>
-    * = required
-    </p>
+
 
 
 {{=grid}}

@@ -208,7 +208,6 @@ def view_task():
 
 #@auth.requires_membership('VectorbiteManagers')
 def edit_task():
-    publication_info_id = request.get_vars.publication_info_id
     data_set_type = db.task.task_type
     db.task.file.readable = False
     db.task.file.writable = False

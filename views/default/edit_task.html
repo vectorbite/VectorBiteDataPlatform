@@ -4,7 +4,7 @@
             <div class="btn-group.btn-group-justified" role="group" aria-label="...">
             {{=A('Back',_href=URL('default','tasks'),_class="btn btn-primary")}}
             {{if data_set_type == 'VecDyn data submission':}}
-            {{=A('Import',_href=URL('vecdyn','dataset_registration'),_class="btn btn-primary")}}
+            {{=A('Import',_href=URL('vecdyn','dataset_registration',vars={'task_id':task.id}),_class="btn btn-primary")}}
             {{else:}}
             {{pass}}
 

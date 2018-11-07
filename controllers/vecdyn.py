@@ -20,6 +20,22 @@ me = auth.user.id
 ### The following code is for USER upload and download of data, ignore_common_filters are applied so only the users who have created a dataset can access the,
 
 def dataset_registration():
+    task_id = request.get_vars.task_id
+    if task_id != None:
+        myrecord = db(db.task.id == task_id).select().first()
+        db.publication_info.title.default = myrecord.title
+        db.publication_info.collection_author.default = myrecord.collection_author
+        db.publication_info.dataset_doi.default = myrecord.digital_object_identifier #need to correct this, dataset doi missing
+        db.publication_info.publication_doi.default = myrecord.publication_doi
+        db.publication_info.url.default = myrecord.url
+        db.publication_info.contact_affiliation.default = myrecord.contact_affiliation
+        db.publication_info.dataset_license.default = myrecord.dataset_license
+        db.publication_info.description.default = myrecord.description
+        db.publication_info.contact_name.default = myrecord.contact_name
+        db.publication_info.email.default = myrecord.email
+        db.publication_info.orcid.default = myrecord.orcid
+    else:
+        pass
     db.publication_info.data_rights.writable = False
     db.publication_info.data_rights.readable = False
     db.publication_info.embargo_release_date.writable = False
