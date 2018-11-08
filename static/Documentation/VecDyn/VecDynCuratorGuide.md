@@ -1,38 +1,56 @@
-Global **Vec**tor Population **Dyn**amics Database (VecDyn) Curator Documentation
-
-
+Global **Vec**tor Population **Dyn**amics Database (VecDyn) User Guide
 
 [TOC]
 
 # Introduction
 
-Welcome to VectorBiTE’s VecDyn Database curator guidelines. This document provides details and instructions on cleaning, preparing and uploading data to the database.
+Welcome to VectorBiTE’s VecDyn Database User and Curator guidelines. This document provides details and instructions on managing the database and web app including usage e.g. querying  (extracting data) and adding new data. 
 
 ## What is VecDyn?
 
-VecDyn is a global database for spatially and temporally explicit presence-absence and abundance data. We accept and distribute data for all <animal and plant disease vectors. 
+VecDyn is a global database for spatially and temporally explicit presence-absence and abundance data. We accept and distribute data for animal and plant disease vectors. 
 
-## Data capture
+### Database Usage
 
-*Population data are presented in published material in many ways. Obviously, it is easiest to extract data from a table of numbers. However, population trends and variations are best depicted in a line plot or histogram and it is in these graphical forms that most data are published. In some cases it has been possible to retrieve the raw data from the author(s) in question, but in others it has been necessary to reconstruct the data from the graphics. This has its limitations, and the accuracy of the derived numbers may be compromised where logarithmic scales are used or where printed copy is of poor quality or is very small. Commercial scanning and data retrieval software was used for this purpose and, generally speaking, we believe that errors due to data extraction are within acceptable limits. Users will need to draw their own conclusions about data accuracy.*
+- **Abundance data**: Tracking populations over time and space
+- **Presence absence data**: Tracking species presence / absence over time and space
+- **Point location data**: Tracking Geo-point locations of where a species was observed. 
 
-### Quality control
+### Overview of data collection
+
+- **What** – description of the sample collected – (e.g. species, count)
+- **When** –  temporal information about time of collection. 
+- **Where** – geographical information about where the collection took place. 
+- **How** – operational information about how the collections were made. 
+- **Who**  – who has responsibility for the collection
+
+### Temporal referencing
+
+Temporal referencing in the VecDyn database has been kept as straightforward as possible. Collection fields are set up to gather information on the date-time a collection was started and the date-time a collection ended.  Using this information it is easy to calculate information like the duration a trap was set or to calculate the duration of other relevant sampling methods like ecological belt transects or line transects. 
+
+### Spatial referencing
+
+in order to facilitate mapping and geo-spatial analysis, spatial referencing has been set up to track general information about a study site e.g. country, region, municipality,  and also specific information about a sample site, where Global Positioning System (GPS) information can be inputted for each collection site. The following figure demonstrates the spatial information that can be captured per study. 
+
+Make assessments about sampling effort 
+
+Decide whether data it is representative of a region
+
+Use to overlay against environmental and demographic covariates
 
 
-*The GPDD only contains time series with ten or more records. Usually, this means ten years. Occasionally, where data sets are particularly interesting—they may be of a very poorly studied species, for example—we have included time series which are at least ten years from the beginning to the end of sampling, i.e. they just fulfil our minimum series length criterion, but which also have one or more missing data points.*
-*Most of the datasets are of natural, i.e. unmanaged populations, or of the unmanipulated controls from experimental studies. Even apparently unmanaged populations may be subject to human intervention, for example some of the primate populations contained in the database have been supported by supplemental feeding in some years. In spite of this we have included them because primate data are comparatively rare. Notes in the database record this fact, and the user is referred to the original source to determine whether or to what extent, this is likely to prejudice any analysis. Population data from some laboratory experiments are also included, and are marked as such.*
-*Including, as it does, population counts from a very wide range of sources, there is considerable variation in the quality of the data. Although it does not guarantee accuracy, the peer review process which is applied to much published work may filter out some of the more unreliable data. It is usually difficult to obtain an accurate, objective measure of data quality, and it is often necessary to fall back on a subjective assessment. This we have done, based on criteria such as the type of environment or habitat sampled, the species in question, the area of the sampling site, and the method of sampling. Each dataset has been ranked, on a scale of 1 (low) to 5 (high), for apparent data quality. For example, the database contains numerous very long datasets of fur trapping and export records from North America. As animal population data they are highly unreliable, because the numbers of skins exported depend heavily on factors other than the numbers of animals available for trapping. Nevertheless they are unique, and have been included to provide a context for other contemporaneous datasets, rather than as hard ecological data themselves. These we have given a rank of 1. At the other end of the scale, the database contains a number of UK estuarine datasets collected by automatic sieve sampling, which has been completely consistent over the entire sampling period (17 years). They exemplify the highest possible quality of sampled population data, and these we have ranked as 5. In all cases the ranking is provided as a guide only, and it will be for the user of each dataset to determine whether or not it meets his/her specific requirements.*
-*The collecting of ecological data, especially over long periods of time, may be subject to all sorts of difficulties and variation as circumstances change over the years. Usually, where such changes are relevant they are referred to in the published material, and we have endeavoured to mirror any warnings, caveats or similar points in the Notes field for each dataset.*
 
-*Temporal Referencing
+![](Images/sample-site-1.png)
 
-*GPDD contains time series of abundance records however there is considerable in how data are temporal referenced. Studies rarely adhere to ridged sampling regimes or publish complete information on sampling as even if a systematic sampling method is aimed for circumstance often intervenes resulting in slight differences between the desired regime and reality.*
-*The majority of series are referenced to absolute time by year or year + sub-annual time period. A minority of series, mostly from lab-based experiments, are only referenced to relative time. For example, generation 1, generation 2, etc. or day 1, day 2, day 3, etc.*
-*Series referenced to absolute time differ in the length of the sampling period and the precision with which the sampling period is recorded. The GPDD does not store exact sampling dates, even when provided in the source. Instead observations are temporally coded to whatever temporal unit the data was presented in on the source graph or tables from which it was extracted. Thus, for example data in the GPDD labelled as being from ‘May 1965’ may be a composite of observations throughout the month or data from any single day in that month; similarly data for ‘1965’ may encompass sampling across any subset of that year. The majority of data in the GPDD is temporally referenced to a year or month and year. Other data is referenced to 3-month, 4-week period, season or other period. GPDD metadata and the original sources should be examined if for further information on temporal sampling.*
 
-### Spatial Referencing
 
-*The location contains information defining the spatial location of the populations the time series relate to. If provided coordinates were extracted from the source, otherwise they were estimated from atlases and Google Earth. The SpatialAccuracy column provides a qualitative estimate of accuracy for the coordinates. Where series relate to extensive geographical areas the given coordinates approximate the centroid of the sampled area. Additional information of the geographical extent of a location is encoded in the Area (contains many nulls), LocationExtent and spatial bounding box columns (North, East, South and West
+
+
+![](Images/sample-site-2.png)
+
+
+
+
 
 Data Storage and Data Collection Specifications
 ------------------------------
@@ -41,11 +59,15 @@ The following section provides an overview of the database structure, describes 
 
 ### VecDyn Database structure (backend)
 
-The following image shows the database schema, this describes where the data is stored in the database.
+The following image shows the database schema, this describes where the data is stored in the database, relationships between tables and the database structure.
 
-![](C:\Web2pyPycharmProjects\web2py\applications\VectorBiteDataPlatform\static\Documentation\VecDyn\Images\erdplus-diagram.png)
+![](Images/erdplus-diagram.png)
 
-The database backend consists of five tables:
+
+
+
+
+The database back-end consists of five tables:
 
 The **Publication Information Table**  captures general information about the dataset e.g. titles,  descriptions,  who collected the data and data usage rights. 
 
@@ -55,12 +77,15 @@ The **Time Series Data Table** captures all the information required to produce 
 
 The **Taxonomic Information Table**  is a database table which is used to standardise all  taxonomic information uploaded into the database. It has been adapted from [The Catalogue of Life database](http://www.catalogueoflife.org), which is the most comprehensive and authoritative global index of species currently available. This enables  front-end search (querying) facilities to use internationally recognised naming conventions thus improving the usability of the web application.   
 
-The **Geographic Database Table** is used to standardise all geographic information that is stored in the database. [The Global Administrative Unit Layers (GAUL) 2014 dataset](http://www.fao.org/geonetwork/srv/en/metadata.show?id=12691) is a spatial database that systematises global administrative regions with a unified coding system at country, first (e.g. departments) and second administrative levels (e.g. districts). Each Administrative unit is assigned a unique ID and is connected to a spatial polygon. Standardising  geographic information will allow users to query data spatially or by using a structured keyword search facility. 
+The **Geographic Database Table** is used to standardize all geographic information that is stored in the database. [The Global Administrative Unit Layers (GAUL) 2014 dataset](http://www.fao.org/geonetwork/srv/en/metadata.show?id=12691) is a spatial database that systematizes global administrative regions with a unified coding system at country, first (e.g. departments) and second administrative levels (e.g. districts). Each Administrative unit is assigned a unique ID and is connected to a spatial polygon. Standardizing  geographic information will allow users to query data spatially or by using a structured keyword search facility. 
 
-### Data Collection Template
 
- The latest [vecdyn data collection template](https://github.com/vectorbite/VectorBiteDataPlatform/blob/master/static/Documentation/VecDyn/Template%26Scripts/VecDyn_template.csv) is available here
 
+### Data collection models 
+
+#### Publication Information Template
+
+Meta-data entered into this table should be entered into the VectorBiTE web app via the data submission forms. 
 
 | Field Name            | Required Y/N | Data format | Details                                                      | Additional Notes                                             |        Db table         |
 | --------------------- | ------------ | ----------- | ------------------------------------------------------------ | ------------------------------------------------------------ | :---------------------: |
@@ -74,8 +99,21 @@ The **Geographic Database Table** is used to standardise all geographic informat
 | contact_affiliation   | No           | String      | Author/contact affiliation                                   | If different from collection author                          | Publication Information |
 | email                 | No           | String      | Contact email address                                        | Email address of the person who may be contacted with enquiries about the dataset. | Publication Information |
 | orchid              | No           | String      | Open Researcher and Contributor ID                           | A unique code used to identify scientific/academic authors and contributors | Publication Information |
-| data_rights           | Yes          | String      | The data reuse policy  for the data set.                     | Write 'open' if available to the public, 'closed' If data is only available to certain groups or  'embargo' along with release date if under embargo. | Publication information |
 | dataset_license       | No           | String      | Creative commons license identification or equivalent.       | Where possible provide a creative commons license identification. See https://creativecommons.org  for more information. | Publication information |
+| data_rights | Yes | String | The data reuse policy  for the data set. | Write 'open' if available to the public, 'closed' If data is only available to certain groups or  'embargo' along with release date if under embargo. | Publication information |
+| embargo_release_date | No | Date | ISO 8601 date format (YYYY-MM-DD) | Date when the dataset will be freed from the embargo | Publication information |
+
+
+
+
+#### Main Data Collection Template
+
+The latest [vecdyn data collection template](https://github.com/vectorbite/VectorBiteDataPlatform/blob/master/static/Documentation/VecDyn/Template%26Scripts/VecDyn_template.csv) is available here
+
+
+| Field Name            | Required Y/N | Data format | Details                                                      | Additional Notes                                             |        Db table         |
+| --------------------- | ------------ | ----------- | ------------------------------------------------------------ | ------------------------------------------------------------ | :---------------------: |
+| title                 | Yes          | String      | Short title identifying the data set                         | E.g. “Mosquito Surveillance in Iowa”                         | Publication Information |
 | taxon                 | Yes          | String      | Classification of sample collected                           |                                                              |     Study Metadata      |
 | location_description  | Yes          | String      | Description of study location                                | In order of smallest geographic subdivision e.g.  district, town, county, state, Country |     Study Metadata      |
 | study_collection_area | No           | String      | The spatial extent (area or volume) of the study.            | Information supplied here should represent the total study area. A study area could contain multiple sample sites. |     Study Metadata      |
@@ -99,14 +137,16 @@ The **Geographic Database Table** is used to standardise all geographic informat
 | sample_collection_area   | No           | string                            | Area of sample location                                      | If relevant (*e.g*., when collection method is transect or quadrat), in units of area or volume, the spatial coverage of the sampling unit |    Time Series data     |
 | sample_latitude_dd     | No           | Float                             | Latitude of sample area as a decimal degree Specific location of the sample | Ranges [-90,+90] for latitude (north-south measurement)      |    Time Series data     |
 | sample_longitude_dd    | No           | Float                             | Longitude of sample area as a decimal degree                 | Ranges [-180,180] for longitude (east-west measurement)      |    Time Series data     |
-| sample_environment | No | String | Additional c information relating to the environment | Should be used to describe specific information about the location / environment e.g.  forest, field , urban area; elevation. |  |
+| sample_environment | No | String | Additional c information relating to the environment | Should be used to describe specific information about the location / environment e.g.  forest, field , urban area; elevation. | Time Series data |
 | additional_location_info | No           | String                            | Additional geographic information                            | Should be used to describe specific information about the location e.g. near to house, near playing fields, Near to population of farm animals |    Time Series data     |
 | additional_sample_info   | No           | String                            | Additional sample information                                | Should be used to describe specific information about conditions at the time of sampling e.g. wind speeds, temperatures, weather. |    Time Series data     |
 | sample_name              | No           | String                            | A human readable sample name                                 | May exist solely for the benefit of the depositor in organizing their data, use their own internal naming conventions etc. Naming convention is not restricted, but any encoded metadata should be revealed in the other data fields. For example, you may name a sample named ‘Aphid1_StickyTrap_Jan4,’ but you will still have “Sticky Trap” listed in a Collection Method field, and “Jan 4, 2017” in the date field. |    Time Series data     |
 
 
 
-**Taxonomic Information Table**
+### Data Standardization models / Data integrity
+
+#### **Taxonomic Standardization Database**
 
 The original [The Catalogue of Life database](http://www.catalogueoflife.org) field names had to be renamed for issues concerning Python keywords, the main programming language that was used to build the Web app and control the database. 
 
@@ -124,7 +164,9 @@ The original [The Catalogue of Life database](http://www.catalogueoflife.org) fi
 | infraspecificEpithet | taxonomic_infraspecificEpithet |
 | species              | taxonomic_species              |
 
-**Geographic Database Table**
+
+
+#### **Geographic Standardization Database **
 
 [The Global Administrative Unit Layers (GAUL) 2014 dataset](http://www.fao.org/geonetwork/srv/en/metadata.show?id=12691) has been restructured in order to provide one unique observation for each individual geographic entry  or row within the data table e.g. a specific country or specific region. Each specific geographic entity has as individual conde assigned to it and shape file. 
 
@@ -137,13 +179,19 @@ The original [The Catalogue of Life database](http://www.catalogueoflife.org) fi
 | ------------------------------  | centroid_latitude       | latitude of centroid representing centre of administrative unit |
 | ------------------------------  | centroid_longitude      | longitude centroid taking representing centre of administrative unit |
 
+![](Images/gual-world-map.png)
+
+![](Images/gaul-us-mex-map.png)
 
 
-### Accessing the VecDyn
 
 
 
-### Preparing data for upload
+## Curator guidelines
+
+#### Accessing the VecDyn
+
+#### Preparing data for upload
 
 *To prepare a dataset for the VecDyn database, follow the subsequent
 guidelines*
@@ -166,13 +214,23 @@ only work if you have been granted access rights.
 
 Click on **‘Add New Collection’**
 
+
+
 <img src="https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Images/DataUploadStep1.png" width="75%" style="display: block; margin: auto;" />
 
-The first table captures general information about the data provider and the data series. A data collection may provide centralised information about one or many related datasets.
+
+
+The first table captures general information about the data provider and the data series. A data collection may provide centralized information about one or many related datasets.
+
+
 
 <img src="https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Images/DataUploadStep2.png" width="75%" style="display: block; margin: auto;" />
 
-Once the collection information has been registered, you now be able to submit data sets to that collection. Click on ‘Add new data set to collection’
+
+
+Once the collection information has been registered, you now be able to submit data sets to that collection. Click on ‘Add new data set to collection.
+
+
 
 <img src="https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Images/DataUploadStep3.png" width="75%" style="display: block; margin: auto;" />
 
@@ -204,6 +262,84 @@ width="75%" style="display: block; margin: auto;" />
 Note that you can also edit every part of your data after it has been submitted with the exception of taxon names and place names.
 
 Restricted Data
+
+
+
+## User Guide
+
+### Querying the database and downloading data
+
+TODO
+
+### Submitting data
+
+*If you want to submit a dataset that is not in the vecdyn format, please follow [Requirements for data sets not in the VecDyn format](#requirements-for-data-sets-not-in-the-vecdyn-format). Otherwise please read below*
+
+1. Download the latest template by right clicking on the following [link](https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Template%26Scripts/VecDyn_template.csv) and selecting ‘save.as’.  
+   A completed [example data set can be found here](https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Examples/ManateeCountyMosquitoMonitoring/vecdyn_manatee_county_aedes_aegypti.csv). This will help you to understand how to compile data in the VecDyn template format. You can also access an example [R Markdown recipe](https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Examples/ManateeCountyMosquitoMonitoring/ManateeCountryMosquitoMonitoring.Rmd) that provides an example of converting an existing data set into a VecDyn formatted dataset. Notice that all files are in plain text e.g. ‘.csv’ format, and not in Excel format or similar. This facilitates text parsing by scripts, prevents data loss/corruption, and allows for detailed comparisons of changes via version control
+   systems.
+2. You can refer to the [VecDyn template field descriptions](#vecdyn-template-field-descriptions) to guide you through the data collection and compilation process.
+3. To submit your dataset, upload and submit the dataset via the [upload page](http://vectorbyte.org/default/submit_data) on the VectorBiTE web app.
+4. We’ll contact you regarding the outcome of your submission once we have had a look at it.
+
+### Requirements for datasets not in the VecDyn template format
+
+*If you are submitting a dataset not in the VecDyn format, please make
+sure you supply the following information.*
+
+<table>
+<colgroup>
+<col style="width: 19%" />
+<col style="width: 60%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Details</th>
+<th>Additional Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Data set name</td>
+<td>Short title identifying the data set</td>
+<td>E.g. Mosquito Surveillance in Iowa</td>
+</tr>
+<tr class="even">
+<td>Taxon name/s</td>
+<td>Classification of samples collected</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Country/countries</td>
+<td>Country or countries where study was conducted</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Description of locations</td>
+<td>Description of study locations in order of largest to smallest subdivision</td>
+<td>E.g. state, county, town</td>
+</tr>
+<tr class="odd">
+<td>Sample end date &amp; time</td>
+<td>The date and time a sample was collected</td>
+<td>Time is optional</td>
+</tr>
+<tr class="even">
+<td>Value</td>
+<td>The numerical amount or result from the sample collection</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Measurement unit</td>
+<td>What is the unit of measurement</td>
+<td>E.g. ‘number of individuals’, ‘presence/absence’, ‘Presence only’, ‘proportion’, Percent cover</td>
+</tr>
+</tbody>
+</table>
+
+## 
 
 Templates, Examples & Tutorials
 -------------------------------
@@ -254,15 +390,16 @@ The `GPDD` directory also contains the documentation of the [**G**lobal **P**opu
 
 ## Credits
 
-
+TODO
 
 ## Contact
 
-
+Submitting data
 
 ## Citing  VecDyn
 
-
+TODO
 
 ## References
 
+TODO

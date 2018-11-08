@@ -305,6 +305,12 @@ def contact_us():
     db.task.url.readable = False
     db.task.file.writable = False
     db.task.file.readable = False
+    db.task.orcid.writable = False
+    db.task.orcid.readable = False
+    db.task.embargo_release_date.writable = False
+    db.task.embargo_release_date.readable = False
+    db.task.data_rights.writable = False
+    db.task.data_rights.readable = False
     form = SQLFORM(db.task).process()
     if form.accepted:
         session.flash = 'Thanks for your comment, we will get back to you soon!'
@@ -353,6 +359,12 @@ def report_problem():
     db.task.url.readable = False
     db.task.file.writable = False
     db.task.file.readable = False
+    db.task.orcid.writable = False
+    db.task.orcid.readable = False
+    db.task.embargo_release_date.writable = False
+    db.task.embargo_release_date.readable = False
+    db.task.data_rights.writable = False
+    db.task.data_rights.readable = False
     form = SQLFORM(db.task).process()
     if form.accepted:
         session.flash = 'Thanks for your comment, we will get back to you soon!'

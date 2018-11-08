@@ -10,7 +10,7 @@ if auth.is_logged_in():
         ('Get Data', False, None, [
             ('VecDyn', False, URL('queries', 'vec_dyn_query'))]),
         ('Submit Data', False, None,[
-            ('Submit Data Set', False, URL('default', 'submit_data'))]),
+            ('Submit VecDyn Dataset', False, URL('default', 'submit_data'))]),
          (T('Contact Us'), False, None,[
                 ('Report problem', False, URL('default', 'report_problem')),
                 ('General enquiries', False, URL('default', 'contact_us'))]),

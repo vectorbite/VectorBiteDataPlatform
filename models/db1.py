@@ -21,7 +21,7 @@ STATUSES = ('assigned','accepted','rejected','reassigned','completed')
 
 TASK_TYPE = ('VecDyn data submission', 'VecTraits data submission', 'Investigate issue/fix bug', 'Enquiry', 'Data Set Sources')
 
-
+DATARIGHTS = ('Open', 'Embargo')
 
 db.define_table('task',
                 Field('title', requires=IS_NOT_EMPTY(), comment='*'),
@@ -31,16 +31,19 @@ db.define_table('task',
                 Field('publication_doi', type='string', comment = 'Digital Object Identifier'),
                 Field('url', requires=IS_EMPTY_OR(IS_URL()), comment = 'web link to dataset'),
                 Field('contact_affiliation', type='string'),
-                Field('dataset_license', type='string'),
                 Field('description', type='text', required=True, comment='*Brief description of data set'),
                 Field('contact_name', type='string', required=True, comment='*'),
                 Field('orcid', type='string'),
                 Field('email', requires=IS_EMAIL(), comment='*'),
+                Field('dataset_license', type='string'),
+                Field('data_rights', requires=IS_IN_SET(DATARIGHTS), default=DATARIGHTS[0]),
+                Field('embargo_release_date', type ='date', requires=IS_EMPTY_OR(IS_DATE()), comment = 'Embargo release date'),
                 Field('file', 'upload', required=False, comment='*'),
                 Field('assigned_to','reference auth_user'), #### needs to be set to something like Field('assigned_to', requires=IS_IN_DB(db.auth_membership.group_id==3))),
                 Field('status',requires=IS_IN_SET(STATUSES), default=STATUSES[0]),
                 Field('deadline', 'datetime', default=request.now + week * 4),
                 auth.signature)
+
 db.define_table('post',
                 Field('task', 'reference task'),
                 Field('body', 'text'),

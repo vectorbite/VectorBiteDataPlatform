@@ -32,16 +32,11 @@ db.define_table('publication_info',
                 auth.signature)#,
                 #format='%(id)s')
 
-
-
 ###could write a query to automatically update embargo date once it reaches data >= today
 today = datetime.date.today()
 embargo_status_updates = db((db.publication_info.data_rights == 'Embargo') & (db.publication_info.embargo_release_date <= today)).select()
 for row in embargo_status_updates:
     row.update_record(data_rights='Open', embargo_release_date=None)
-
-
-
 
 def show_data_rights(data_rights,row=None):
     return SPAN(data_rights,_class=data_rights)
@@ -74,8 +69,6 @@ db.study_meta_data.publication_info_id.requires = IS_IN_DB(db, db.publication_in
 
 if db(db.study_meta_data.id>0).count() == 0:
     db.study_meta_data.truncate()
-
-
 
 
 db.define_table('time_series_data',
