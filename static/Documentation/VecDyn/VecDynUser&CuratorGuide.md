@@ -1,8 +1,40 @@
-Global **Vec**tor Population **Dyn**amics Database (VecDyn) User Guide
+# Global **Vec**tor Population **Dyn**amics Database (VecDyn) User Guide
 
-[TOC]
+- [Introduction](#introduction)
+- [What is VecDyn?](#what-is-vecdyn-)
+  * [Database Usage](#database-usage)
+  * [Overview of data collection](#overview-of-data-collection)
+  * [Temporal referencing](#temporal-referencing)
+  * [Spatial referencing](#spatial-referencing)
+- [Data Storage and Data Collection Specifications](#data-storage-and-data-collection-specifications)
+  * [VecDyn Database structure (backend)](#vecdyn-database-structure--backend-)
+  * [Data collection models](#data-collection-models)
+    + [Publication Information Template](#publication-information-template)
+    + [Main Data Collection Template](#main-data-collection-template)
+  * [Data Standardization models / Data integrity](#data-standardization-models---data-integrity)
+    + [**Taxonomic Standardization Database**](#--taxonomic-standardization-database--)
+    + [**Geographic Standardization Database **](#--geographic-standardization-database---)
+- [Curator guidelines](#curator-guidelines)
+    + [Accessing the VecDyn](#accessing-the-vecdyn)
+    + [Preparing data for upload](#preparing-data-for-upload)
+  * [Adding data to the database](#adding-data-to-the-database)
+- [User Guide](#user-guide)
+  * [Querying the database and downloading data](#querying-the-database-and-downloading-data)
+  * [Submitting data](#submitting-data)
+  * [Requirements for datasets not in the VecDyn template format](#requirements-for-datasets-not-in-the-vecdyn-template-format)
+- [Templates, Examples & Tutorials](#templates--examples---tutorials)
+- [Issues, troubleshooting & suggestions](#issues--troubleshooting---suggestions)
+  * [Known issues](#known-issues)
+- [Miscellaneous](#miscellaneous)
+- [Credits](#credits)
+- [Contact](#contact)
+- [Citing  VecDyn](#citing--vecdyn)
+- [References](#references)
 
-# Introduction
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
+
+## Introduction
 
 Welcome to VectorBiTE’s VecDyn Database User and Curator guidelines. This document provides details and instructions on managing the database and web app including usage e.g. querying  (extracting data) and adding new data. 
 
@@ -238,11 +270,17 @@ Next select a taxon, it is best to search using the first box first. When you ha
 
 <img src="https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Images/DataUploadStep4.png" width="75%" style="display: block; margin: auto;" />
 
+
+
 Next select a geographical location, this either needs to be country or an ADM1 (e.g. State) or ADM2 (county) administrative subdivision. Again, hit the ‘select’ button on the row of your choice.
+
+
 
 <img src="https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Images/DataUploadStep5.png" width="75%" style="display: block; margin: auto;" />
 
 Next submit all the study data (metadata) and click on submit once you have completed the page.
+
+
 
 <img src="https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Images/DataUploadStep6.png" width="75%" style="display: block; margin: auto;" />
 
@@ -254,10 +292,14 @@ Once completed, you’ll be taken the final page where you can can verify if all
 
 <img src="https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Images/DataUploadStep9.png" width="75%" style="display: block; margin: auto;" />
 
-However, if there is a problem you can delete or edit each entry. To delete all the entries hit ‘select’ all and scroll down to the bottom of the page and click ‘delete selected’  
+However, if there is a problem you can delete or edit each entry. To delete all the entries hit ‘select’ all and scroll down to the bottom of the page and click ‘delete selected’ 
+
+
 <img
 src="https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Images/DataUploadStep8.png"
 width="75%" style="display: block; margin: auto;" />
+
+
 
 Note that you can also edit every part of your data after it has been submitted with the exception of taxon names and place names.
 
@@ -284,62 +326,19 @@ TODO
 
 ### Requirements for datasets not in the VecDyn template format
 
-*If you are submitting a dataset not in the VecDyn format, please make
-sure you supply the following information.*
+*If you are submitting a dataset not in the VecDyn format, please make sure you supply the following information.*
 
-<table>
-<colgroup>
-<col style="width: 19%" />
-<col style="width: 60%" />
-<col style="width: 20%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Field</th>
-<th>Details</th>
-<th>Additional Notes</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Data set name</td>
-<td>Short title identifying the data set</td>
-<td>E.g. Mosquito Surveillance in Iowa</td>
-</tr>
-<tr class="even">
-<td>Taxon name/s</td>
-<td>Classification of samples collected</td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>Country/countries</td>
-<td>Country or countries where study was conducted</td>
-<td></td>
-</tr>
-<tr class="even">
-<td>Description of locations</td>
-<td>Description of study locations in order of largest to smallest subdivision</td>
-<td>E.g. state, county, town</td>
-</tr>
-<tr class="odd">
-<td>Sample end date &amp; time</td>
-<td>The date and time a sample was collected</td>
-<td>Time is optional</td>
-</tr>
-<tr class="even">
-<td>Value</td>
-<td>The numerical amount or result from the sample collection</td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>Measurement unit</td>
-<td>What is the unit of measurement</td>
-<td>E.g. ‘number of individuals’, ‘presence/absence’, ‘Presence only’, ‘proportion’, Percent cover</td>
-</tr>
-</tbody>
-</table>
+| Field                    | Details                                                      | Additional Notes                                             |
+| ------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| Data set name            | Short title identifying the data set                         | E.g. Mosquito Surveillance in Iowa                           |
+| Taxon name/s             | Classification of samples collected                          |                                                              |
+| Country/countries        | Country or countries where study was conducted               |                                                              |
+| Description of locations | Description of study locations in order of largest to smallest subdivision | E.g. state, county, town                                     |
+| Sample end date & time   | The date and time a sample was collected                     | Time is optional                                             |
+| Value                    | The numerical amount or result from the sample collection    |                                                              |
+| Measurement unit         | What is the unit of measurement                              | E.g. ‘number of individuals’, ‘presence/absence’, ‘Presence only’, ‘proportion’, Percent cover |
 
-## 
+
 
 Templates, Examples & Tutorials
 -------------------------------
