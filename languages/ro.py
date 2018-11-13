@@ -377,7 +377,7 @@
 'upload application:': 'incarcă aplicația:',
 'Upload existing application': 'Încarcă aplicația existentă',
 'upload file:': 'încarcă fișier:',
-'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex queries.': 'Folosiți (...)&(...) pentru AND, (...)|(...) pentru OR, și ~(...) pentru NOT, pentru a crea interogări complexe.',
+'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex vecdyn_queries.': 'Folosiți (...)&(...) pentru AND, (...)|(...) pentru OR, și ~(...) pentru NOT, pentru a crea interogări complexe.',
 'User': 'User',
 'User %(id)s Logged-in': 'Utilizator %(id)s autentificat',
 'User %(id)s Logged-out': 'Utilizator %(id)s delogat',

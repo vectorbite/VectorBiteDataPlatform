@@ -8,7 +8,7 @@ if auth.is_logged_in():
     response.menu = [
         (T('Home'), False, URL('default', 'index'), []),
         ('Get Data', False, None, [
-            ('VecDyn', False, URL('queries', 'vec_dyn_query'))]),
+            ('VecDyn', False, URL('vecdyn_queries', 'vd_grid_query'))]),
         ('Submit Data', False, None,[
             ('Submit VecDyn Dataset', False, URL('default', 'submit_data'))]),
          (T('Contact Us'), False, None,[

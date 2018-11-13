@@ -203,7 +203,7 @@
 'Twitter': 'Twitter',
 'unable to parse csv file': 'não foi possível carregar ficheiro csv',
 'Update:': 'Actualização:',
-'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex queries.': 'Utilize (...)&(...) para AND, (...)|(...) para OR, e ~(...)  para NOT para construir interrogações mais complexas.',
+'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex vecdyn_queries.': 'Utilize (...)&(...) para AND, (...)|(...) para OR, e ~(...)  para NOT para construir interrogações mais complexas.',
 'User': 'User',
 'Username': 'Username',
 'Users': 'Users',

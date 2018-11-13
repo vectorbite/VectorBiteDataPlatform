@@ -274,7 +274,7 @@
 'Upload and install packed application': 'Upload and install packed application',
 'upload file:': 'upload file:',
 'upload plugin file:': 'upload plugin file:',
-'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex queries.': 'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex queries.',
+'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex vecdyn_queries.': 'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex vecdyn_queries.',
 'User': 'အသုံးပြုသူ',
 'User ID': 'User ID',
 'Users': 'အသုံးပြုသူများ',

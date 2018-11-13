@@ -1,12 +1,12 @@
 
 import csv
 
+####the following function imports a vecdyn csv
 
 def importer():
     response.flash = 'Now upload a time series data set, make sure this is in csv format'
     #Get the publicaton infor id from the previous page
     publication_info_id = request.get_vars.id
-    #form = SQLFORM.factory(Field('csvfile','upload',uploadfield=False, requires = IS_UPLOAD_FILENAME(extension='csv')))
     form = SQLFORM(db.data_set_upload, comments = False, fields = ['csvfile'],labels={'csvfile': 'Click to search and select a file:'})
     if form.validate():
         try:
@@ -19,9 +19,9 @@ def importer():
                 study = dict(zip(('title', 'taxon', 'location_description', 'study_collection_area', 'geo_datum', \
                 'gps_obfuscation_info', 'species_id_method', 'study_design', 'sampling_strategy', 'sampling_method', \
                 'sampling_protocol', 'measurement_unit', 'value_transform'), row[:13]))
-                #check for a match in the db against the 'study' dict
+                ##### check for a match in the db against the 'study' dict
                 record = db.study_meta_data(**study)
-                #####the following code checks to see if a data set has already been uploaded but under a different publication instance
+                ##### the following code checks to see if a data set has already been uploaded but under a different publication instance
                 check2 = publication_info_id
                 check1 = record.publication_info_id if record else None
                 if (check1 == None) | (check1 == check2):
@@ -43,11 +43,11 @@ def importer():
             response.flash = 'Errors, no data submitted. Please ensure the data set meets all the validation requirements, hit cancel to go back to data collections page'#response.flash = 'Thank you, your data has been submitted'
         else:
             session.flash = 'Thank you, your data has been submitted. Now standardise  taxonomic information'
-            redirect(URL("data_uploader", "taxon_checker", vars={'publication_info_id': publication_info_id}))
+            redirect(URL("vecdyn_data_uploader", "taxon_checker", vars={'publication_info_id': publication_info_id}))
     return dict(form=form)
 
 
-#####The next controller checks to see if taxon and geographic names are already in a standardized format, if so then it will add them to the dataset standardizing it
+#####The next controller checks to see if taxon  names are already in a standardized format, if so then it will add them to the dataset standardizing it
 def taxon_checker():
     publication_info_id = request.get_vars.publication_info_id
     rows = db(db.study_meta_data.publication_info_id == publication_info_id).select()

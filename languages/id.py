@@ -325,7 +325,7 @@
 'Upload and install packed application': 'Upload dan pasang aplikasi yang dikemas',
 'upload file:': 'unggah file:',
 'upload plugin file:': 'unggah file plugin:',
-'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex queries.': 'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex queries.',
+'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex vecdyn_queries.': 'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex vecdyn_queries.',
 'User': 'User',
 'User %(id)s Logged-in': 'Pengguna %(id)s Masuk',
 'User %(id)s Logged-out': 'Pengguna %(id)s Keluar',

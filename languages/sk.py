@@ -186,7 +186,7 @@
 'Twitter': 'Twitter',
 'unable to parse csv file': 'nedá sa načítať csv súbor',
 'Update:': 'Upraviť:',
-'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex queries.': 'Použite (...)&(...) pre AND, (...)|(...) pre OR a ~(...) pre NOT na poskladanie komplexnejších otázok.',
+'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex vecdyn_queries.': 'Použite (...)&(...) pre AND, (...)|(...) pre OR a ~(...) pre NOT na poskladanie komplexnejších otázok.',
 'User': 'User',
 'User %(id)s Logged-in': 'Používateľ %(id)s prihlásený',
 'User %(id)s Logged-out': 'Používateľ %(id)s odhlásený',

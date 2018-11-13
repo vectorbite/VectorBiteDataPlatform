@@ -1,0 +1,61 @@
+{{extend 'layout.html'}}
+
+<head>
+
+
+
+    <style>
+h3 {
+    text-shadow: 1px 1px 1px whitesmoke;
+}
+p {
+text-shadow: 0.5px 0.5px 0.5px whitesmoke;
+}
+
+</style>
+
+  </head>
+
+
+        <body>
+<div style="background: linear-gradient(40deg, lightgray, beige)" class="jumbotron jumbotron-fluid">
+    <div class="container">
+  <center><h3>VecDyn Dataset Search</h3></center>
+
+        <div class="container">
+  <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo">Instructions</button>
+            <br>
+            <br>
+  <div id="demo" class="collapse">
+            <ul>
+                <li>You can search for data using keywords in the search box which capture information on taxon, geography or the body who collected the data.!</li>
+  <li>To conduct a quick search, use the search box in the first row, just enter a keyword and hit search!</li>
+  <li>If you need to conduct an in-depth search you can use the query builder in the second row.</li>
+                <ol>
+  <li>In the left box select which element of the data set you wish to search e.g. title, taxon name (note geographic subdivision names start with ADM)</li>
+  <li>In the middle box select which Boolean Operator you wish to use for the search</li>
+  <li>In the right box enter the keyword</li>
+        <li>Hit 'New Search' to query, or '+ And' or '+ Or' to build a complex query </li>
+        <li>You'll now see your search terms in the first box, hit search in the first box!</li>
+</ol>
+        <li>To download data either click on 'Download all' to download the entire search (limited to 50) or use the select checkbox on each right hand side row and click 'Download selected'. </li>
+</ul>
+
+  </div>
+</div>
+
+<br>
+
+  {{=BEAUTIFY(grid)}}
+    </body>
+     </div>
+    </div>
+
+<script type="text/javascript">
+         $(document).ready(function() {
+            $("#fake_exp_sel").click(function() {
+                $("#exp_sel").click();
+            });
+         });
+     </script>
+

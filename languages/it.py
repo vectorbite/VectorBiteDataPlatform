@@ -254,7 +254,7 @@
 'unable to parse csv file': 'non riesco a decodificare questo file CSV',
 'Update': 'Aggiorna',
 'Update:': 'Aggiorna:',
-'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex queries.': 'Per costruire richieste (query) più complesse si usano (...)&(...) come "e" (AND), (...)|(...) come "o" (OR), e ~(...) come negazione (NOT).',
+'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex vecdyn_queries.': 'Per costruire richieste (query) più complesse si usano (...)&(...) come "e" (AND), (...)|(...) come "o" (OR), e ~(...) come negazione (NOT).',
 'User': 'User',
 'User %(id)s Logged-in': 'User %(id)s Logged-in',
 'User %(id)s Logged-out': 'User %(id)s Logged-out',

@@ -380,7 +380,7 @@
 'upload application:': 'upload applicatie:',
 'Upload existing application': 'Upload bestaande applicatie',
 'upload file:': 'upload bestand',
-'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex queries.': 'Gebruik (...)&(...) voor AND, (...)|(...) voor OR, en ~(...)  voor NOT om meer complexe queries te maken.',
+'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex vecdyn_queries.': 'Gebruik (...)&(...) voor AND, (...)|(...) voor OR, en ~(...)  voor NOT om meer complexe vecdyn_queries te maken.',
 'User': 'User',
 'User %(id)s Logged-in': 'Gebruiker %(id)s Logged-in',
 'User %(id)s Logged-out': 'Gebruiker %(id)s Logged-out',

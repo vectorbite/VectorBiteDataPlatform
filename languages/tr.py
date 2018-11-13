@@ -210,7 +210,7 @@
 'Twitter': 'Twitter',
 'unable to parse csv file': 'unable to parse csv file',
 'Update:': 'Güncelle:',
-'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex queries.': 'Karmaşık sorgularda Ve (AND) için (...)&(...) kullanın, Veya (OR) için (...)|(...) kullanın ve DEĞİL (NOT) için ~(...) kullanın. ',
+'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex vecdyn_queries.': 'Karmaşık sorgularda Ve (AND) için (...)&(...) kullanın, Veya (OR) için (...)|(...) kullanın ve DEĞİL (NOT) için ~(...) kullanın. ',
 'User': 'User',
 'User %(id)s Logged-in': '%(id)s Giriş yaptı',
 'User %(id)s Logged-out': '%(id)s çıkış yaptı',

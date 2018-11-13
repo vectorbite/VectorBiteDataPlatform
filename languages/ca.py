@@ -488,7 +488,7 @@
 'upload application:': 'pujar aplicació:',
 'Upload existing application': 'Puji aquesta aplicació',
 'upload file:': 'puji fitxer:',
-'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex queries.': 'Use (...)&(...) para AND, (...)|(...) para OR, i ~(...) para NOT, para crear consultas més complexes.',
+'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex vecdyn_queries.': 'Use (...)&(...) para AND, (...)|(...) para OR, i ~(...) para NOT, para crear consultas més complexes.',
 'User': 'Usuari',
 'User %(id)s is impersonating %(other_id)s': 'El usuari %(id)s està suplantant %(other_id)s',
 'User %(id)s Logged-in': 'El usuari %(id)s inicià la sessió',

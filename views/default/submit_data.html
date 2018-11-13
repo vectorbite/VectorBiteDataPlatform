@@ -3,11 +3,16 @@
 
 
 <div style="background: linear-gradient(240deg, lightgrey, beige)" class="jumbotron">
-       <h2>
-       VecDyn Data Submissions
+      <center><h2> VecDyn Data Submissions </h2></center>
 <br>
            <br>
-      </h2>
+
+                   <div class="container">
+  <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo">Instructions</button>
+            <br>
+            <br>
+  <div id="demo" class="collapse">
+
     <li>To download our current data set templates 'right click' and select ‘save.as’ on the appropriate link below. </li>
        <li>You can also view the field descriptions for each template by following the link beside them </li>
         <li> {{=A('VecDyn population data collection template', _href='https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Template%26Scripts/VecDyn_template.csv')}};
@@ -15,6 +20,11 @@
     </li>
 
     <li> To submit a data set, please fill in the form below and upload your dataset. Note that the all files need to be submitted in CSV format.</li>
+
+
+  </div>
+</div>
+
      <br>
 <p>
     * = required

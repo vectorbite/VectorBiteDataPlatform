@@ -258,7 +258,7 @@
 'unable to parse csv file': '无法解析CSV文件',
 'Update:': '更新:',
 'Upload existing application': '上传已有应用程序',
-'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex queries.': '使用下列方式可得到更复杂的条件表达式, (...)&(...) 代表必须都满足, (...)|(...) 代表其一, ~(...)则代表否.',
+'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex vecdyn_queries.': '使用下列方式可得到更复杂的条件表达式, (...)&(...) 代表必须都满足, (...)|(...) 代表其一, ~(...)则代表否.',
 'User': 'User',
 'User %(id)s Logged-in': '用户 %(id)s 已登录',
 'User %(id)s Registered': '用户 %(id)s 已注册',

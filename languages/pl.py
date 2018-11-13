@@ -189,7 +189,7 @@
 'Twitter': 'Twitter',
 'unable to parse csv file': 'nie można sparsować pliku csv',
 'Update:': 'Uaktualnij:',
-'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex queries.': 'Użyj (...)&(...) jako AND, (...)|(...) jako OR oraz ~(...)  jako NOT do tworzenia bardziej skomplikowanych zapytań.',
+'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex vecdyn_queries.': 'Użyj (...)&(...) jako AND, (...)|(...) jako OR oraz ~(...)  jako NOT do tworzenia bardziej skomplikowanych zapytań.',
 'User': 'User',
 'User %(id)s Registered': 'Użytkownik %(id)s został zarejestrowany',
 'User ID': 'ID użytkownika',

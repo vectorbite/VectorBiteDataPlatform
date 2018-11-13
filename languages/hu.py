@@ -182,7 +182,7 @@
 'Twitter': 'Twitter',
 'unable to parse csv file': 'nem lehet a csv fájlt beolvasni',
 'Update:': 'Frissít:',
-'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex queries.': 'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex queries.',
+'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex vecdyn_queries.': 'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex vecdyn_queries.',
 'User': 'User',
 'User ID': 'User ID',
 'Users': 'Users',

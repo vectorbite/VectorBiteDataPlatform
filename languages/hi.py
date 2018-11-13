@@ -171,7 +171,7 @@
 'Twitter': 'Twitter',
 'unable to parse csv file': 'csv फ़ाइल पार्स करने में असमर्थ',
 'Update:': 'अद्यतन करना:',
-'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex queries.': 'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex queries.',
+'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex vecdyn_queries.': 'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex vecdyn_queries.',
 'User': 'User',
 'Users': 'Users',
 'Videos': 'Videos',

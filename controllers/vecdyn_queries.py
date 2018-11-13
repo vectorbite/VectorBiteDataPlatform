@@ -5,12 +5,8 @@
 
 #@auth.requires_login()
 @auth.requires_membership('VectorbiteAdmin')
-def vec_dyn_query():
+def vd_grid_query():
     today = datetime.date.today()
-    #return today
-    #datenow = datetime.now()
-    #datenow = datenow.date()
-    #return datenow
     """
     Controller to serve a searchable grid view of the vector dynamics
     datasets with a download function. We want to be able to download
@@ -32,18 +28,17 @@ def vec_dyn_query():
     [setattr(f, 'readable', False) for f in db.taxon
         if f.name not in ('db.taxon.tax_species,db.taxon.tax_genus,'
                           'db.taxon.tax_family,db.taxon.tax_order')]
-   # [setattr(f, 'readable', False) for f in db.StudyLocation
-   #     if f.name not in ('db.StudyLocation.Country,db.StudyLocation.CountyStateProvince')]
+    [setattr(f, 'readable', False) for f in db.publication_info
+        if f.name not in ('db.publication_info.title')]
     # MainID is not made unreadable, so that it can be accessed by the export controller
     [setattr(f, 'readable', False) for f in db.study_meta_data
-        if f.name not in ('db.study_meta_data.id, db.study_meta_data.location_description')]
-
+        if f.name not in ('db.study_meta_data.id, db.study_meta_data.location_description,')]
     [setattr(f, 'readable', False) for f in db.gaul_admin_layers
      if f.name not in ('db.gaul_admin_layers.ADM2_NAME, db.gaul_admin_layers.ADM1_NAME, db.gaul_admin_layers.ADM0_NAME')]
 
     # Add selectability checkboxes
     select = [('Download selected',
-               lambda ids : redirect(URL('queries', 'vec_dyn_download', vars=dict(ids=ids))),
+               lambda ids : redirect(URL('vecdyn_queries', 'vec_dyn_download', vars=dict(ids=ids))),
                'btn btn-default')]
 
     # Adding an exporter that grabs all the data from a query,
@@ -56,7 +51,7 @@ def vec_dyn_query():
                   tsv_with_hidden_cols=False, tsv=False)
 
     # turn the MainID into a download link
-    db.study_meta_data.represent = lambda value, row: A(value, _href=URL("queries","vec_dyn_download",
+    db.study_meta_data.represent = lambda value, row: A(value, _href=URL("vecdyn_queries","vec_dyn_download",
                                                     vars={'ids': row.study_meta_data.id}))
     # get the grid
     # week = datetime.timedelta(days=7)
@@ -75,9 +70,10 @@ def vec_dyn_query():
                                  db.taxon.tax_species, db.taxon.tax_genus,
                                  db.taxon.tax_family, db.taxon.tax_order,
                                  db.taxon.tax_class, db.taxon.tax_phylum,
-                                 db.gaul_admin_layers.ADM2_NAME,
+                                 db.study_meta_data.location_description,
+                                 db.gaul_admin_layers.ADM0_NAME,
                                  db.gaul_admin_layers.ADM1_NAME,
-                                 db.gaul_admin_layers.ADM0_NAME],
+                                 db.gaul_admin_layers.ADM2_NAME],
 
                         headers={'publication_info.title' : 'Title',
                                  'publication_info.collection_author': 'Author',
@@ -87,9 +83,9 @@ def vec_dyn_query():
                                  'taxon.tax_order' : 'Order',
                                  'taxon.tax_class' : 'Class',
                                  'taxon.tax_phylum' : 'Phylum',
-                                 'gaul_admin_layers.ADM2_NAME': 'County',
-                                 'gaul_admin_layers.ADM1_NAME' : 'Region',
-                                 'gaul_admin_layers.ADM0_NAME': 'Country',
+                                 'gaul_admin_layers.ADM0_NAME': 'Administrative Division 0',
+                                 'gaul_admin_layers.ADM1_NAME' : 'Administrative Division 1',
+                                 'gaul_admin_layers.ADM2_NAME': 'Administrative Division 2',
                                  'study_meta_data.id' : 'Dataset ID' },
                         maxtextlength=200,
                         selectable=select,

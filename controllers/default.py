@@ -1,5 +1,14 @@
 
 
+
+###### The default controller
+
+def index():
+    #if auth.has_membership('VectorBiTE Managers'): redirect(URL('tasks'))
+    rows = db(db.index_page_updates).select(orderby=~db.index_page_updates.created_on)
+    return locals()
+
+
 def about_us():
     return locals()
 
@@ -385,11 +394,6 @@ def manage_index_page_updates():
                         editable=True, details=False, create=False,csv=False)
     return dict(grid=grid)
 
-
-def index():
-    #if auth.has_membership('VectorBiTE Managers'): redirect(URL('tasks'))
-    rows = db(db.index_page_updates).select(orderby=~db.index_page_updates.created_on)
-    return locals()
 
 
 # ---- API (example) -----
