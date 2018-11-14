@@ -92,7 +92,10 @@ auth = Auth(db, host_names=configuration.get('host.names'))
 # -------------------------------------------------------------------------
 # create all tables needed by auth, maybe add a list of extra fields
 # -------------------------------------------------------------------------
-auth.settings.extra_fields['auth_user'] = []
+auth.settings.extra_fields['auth_user']= [
+    Field('affiliation'),
+    Field('position'),
+    Field('country')]
 auth.define_tables(username=False, signature=False)
 
 # -------------------------------------------------------------------------
@@ -111,6 +114,16 @@ mail.settings.ssl = configuration.get('smtp.ssl') or False
 auth.settings.registration_requires_verification = False
 auth.settings.registration_requires_approval = False
 auth.settings.reset_password_requires_verification = True
+
+from gluon.tools import Recaptcha2
+auth.settings.captcha = Recaptcha2(request,
+    'PUBLIC_KEY', 'PRIVATE_KEY')
+
+PUBLIC_KEY = '6LfMxHoUAAAAAH9MZ5ccvaeSsMX4eTgLPKts0N64'
+
+PRIVATE_KEY = '6LfMxHoUAAAAAA4mYqaia4CV9_4E2N9DTKdp6tcp'
+
+
 
 # -------------------------------------------------------------------------  
 # read more at http://dev.w3.org/html5/markup/meta.name.html               

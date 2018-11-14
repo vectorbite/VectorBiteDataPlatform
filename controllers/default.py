@@ -20,6 +20,8 @@ def about_us():
 
 me = auth.user_id
 
+####the following functions represent the task manager
+
 #@auth.requires_membership('VectorbiteManagers')
 def tasks():
     db.task.created_on.readable = False
@@ -154,9 +156,6 @@ def data_set_sources():
     return locals()
 
 
-
-
-
 #@auth.requires_membership('VectorbiteAdmin')
 def create_task():
     #db.task.status.readable = False
@@ -263,7 +262,51 @@ def submit_data():
      #   response.flash = 'please fill out the form in full and attach a csv file'
     return locals()
 
+def submit_vecdyn_data():
+    db.task.task_type.default = 'VecDyn data submission'
+    db.task.task_type.readable = False
+    db.task.task_type.writable = False
+    db.task.status.readable = False
+    db.task.status.writable = False
+    db.task.assigned_to.writable = False
+    db.task.assigned_to.readable = False
+    db.task.deadline.writable = False
+    db.task.deadline.readable = False
+    db.task.file.requires=IS_UPLOAD_FILENAME(extension='csv')
+    form = SQLFORM(db.task, labels={'task_type':'Data set category'}).process()
+    if form.accepted:
+        session.flash = 'Thanks, your data set has been submitted for review, we will get back to you soon!'
+        #send_email(to=db.auth_user(form.vars.assigned_to).email,
+        #           sender=auth.user.email,
+        #           subject="New data set submitted: %s" % form.vars.title,
+        #           message=form.vars.description)
+        redirect(URL('index'))
+    #else:
+     #   response.flash = 'please fill out the form in full and attach a csv file'
+    return locals()
 
+def submit_vectrait_data():
+    db.task.task_type.default = 'VecTraits data submission'
+    db.task.task_type.readable = False
+    db.task.task_type.writable = False
+    db.task.status.readable = False
+    db.task.status.writable = False
+    db.task.assigned_to.writable = False
+    db.task.assigned_to.readable = False
+    db.task.deadline.writable = False
+    db.task.deadline.readable = False
+    db.task.file.requires=IS_UPLOAD_FILENAME(extension='csv')
+    form = SQLFORM(db.task, labels={'task_type':'Data set category'}).process()
+    if form.accepted:
+        session.flash = 'Thanks, your data set has been submitted for review, we will get back to you soon!'
+        #send_email(to=db.auth_user(form.vars.assigned_to).email,
+        #           sender=auth.user.email,
+        #           subject="New data set submitted: %s" % form.vars.title,
+        #           message=form.vars.description)
+        redirect(URL('index'))
+    #else:
+     #   response.flash = 'please fill out the form in full and attach a csv file'
+    return locals()
 
 def new_data_source():
     db.task.task_type.default = 'Data Set Sources'

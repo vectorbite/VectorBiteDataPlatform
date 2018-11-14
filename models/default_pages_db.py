@@ -39,21 +39,24 @@ db.define_table('task',
                 Field('data_rights', requires=IS_IN_SET(DATARIGHTS), default=DATARIGHTS[0]),
                 Field('embargo_release_date', type ='date', requires=IS_EMPTY_OR(IS_DATE()), comment = 'Embargo release date'),
                 Field('file', 'upload', required=False, comment='*'),
-                Field('assigned_to','reference auth_user'), #### needs to be set to something like Field('assigned_to', requires=IS_IN_DB(db.auth_membership.group_id==3))),
+                Field('assigned_to'),
                 Field('status',requires=IS_IN_SET(STATUSES), default=STATUSES[0]),
                 Field('deadline', 'datetime', default=request.now + week * 4),
                 auth.signature)
+
+
+
+# we create a query that selects user ids from a members of VectorbiteAdmin
+query = db((db.auth_user.id==db.auth_membership.user_id) & (db.auth_group.id==db.auth_membership.group_id) & (db.auth_group.role == 'VectorbiteAdmin'))
+db.task.assigned_to.requires = IS_IN_DB(query, 'auth_user.id', '%(first_name)s' ' %(last_name)s')
+
+
+
 
 db.define_table('post',
                 Field('task', 'reference task'),
                 Field('body', 'text'),
                 auth.signature)
-
-
-
-
-
-
 
 db.task.file.requires=IS_UPLOAD_FILENAME(extension='csv')
 
