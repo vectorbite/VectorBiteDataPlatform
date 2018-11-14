@@ -115,13 +115,13 @@ auth.settings.registration_requires_verification = False
 auth.settings.registration_requires_approval = False
 auth.settings.reset_password_requires_verification = True
 
-from gluon.tools import Recaptcha2
-auth.settings.captcha = Recaptcha2(request,
-    'PUBLIC_KEY', 'PRIVATE_KEY')
-
-PUBLIC_KEY = '6LfMxHoUAAAAAH9MZ5ccvaeSsMX4eTgLPKts0N64'
-
-PRIVATE_KEY = '6LfMxHoUAAAAAA4mYqaia4CV9_4E2N9DTKdp6tcp'
+#from gluon.tools import Recaptcha2
+#auth.settings.captcha = Recaptcha2(request,
+#    'PUBLIC_KEY', 'PRIVATE_KEY')
+#
+#PUBLIC_KEY = '6LfMxHoUAAAAAH9MZ5ccvaeSsMX4eTgLPKts0N64'
+#
+#PRIVATE_KEY = '6LfMxHoUAAAAAA4mYqaia4CV9_4E2N9DTKdp6tcp'
 
 
 
