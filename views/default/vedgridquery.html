@@ -1,0 +1,23 @@
+{{extend 'layout.html'}}
+<div style="background: linear-gradient(240deg, lightgrey, beige)" class="jumbotron">
+
+    <div class="btn-group.btn-group-justified" role="group" aria-label="...">
+
+
+    <a class="btn btn-link" href="{{=URL('default','tasks')}}">{{=T("All")}}</a>
+         <a class="btn btn-link" href="{{=URL('default','vecdyn_submissions')}}">{{=T("VecDyn submissions")}}</a>
+        <a class="btn btn-link" href="{{=URL('default','vectrait_submissions')}}">{{=T("VecTraits submissions")}}</a>
+         <a class="btn btn-link" href="{{=URL('default','issues')}}">{{=T("Issues")}}</a>
+         <a class="btn btn-link" href="{{=URL('default','general_enquiries')}}">{{=T("General enquiries")}}</a>
+        <a class="btn btn-link" href="{{=URL('default','data_set_sources')}}">{{=T("Dataset source list")}}</a>
+
+
+
+ </div>
+
+<br>
+
+
+{{=grid}}
+
+    </div>

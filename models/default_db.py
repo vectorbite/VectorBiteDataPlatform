@@ -39,7 +39,7 @@ db.define_table('task',
                 Field('data_rights', requires=IS_IN_SET(DATARIGHTS), default=DATARIGHTS[0]),
                 Field('embargo_release_date', type ='date', requires=IS_EMPTY_OR(IS_DATE()), comment = 'Embargo release date'),
                 Field('file', 'upload', required=False, comment='*'),
-                Field('assigned_to'),
+                Field('assigned_to', 'reference auth_user'),
                 Field('status',requires=IS_IN_SET(STATUSES), default=STATUSES[0]),
                 Field('deadline', 'datetime', default=request.now + week * 4),
                 auth.signature)

@@ -50,7 +50,8 @@ def vecdyn_submissions():
     db.task.created_by.readable = False
     db.task.title.represent = lambda title,row:\
         A(title,_href=URL('edit_task',args=row.id))
-    query = (db.task.assigned_to==me)|(db.task.created_by==me) & (db.task.task_type == 'VecDyn data submission')   # replaced with query below
+    query = db((db.task.task_type == 'VecDyn data submission') & ((db.task.created_by == me | (db.task.created_by == me))))
+    # replaced with query below
     #query = (db.task)
     grid = SQLFORM.grid(query, orderby=~db.task.modified_on,
                         create=False,details=False,editable=False,csv=False,
@@ -72,7 +73,8 @@ def vectrait_submissions():
     db.task.created_by.readable = False
     db.task.title.represent = lambda title,row:\
         A(title,_href=URL('edit_task',args=row.id))
-    query = (db.task.assigned_to==me)|(db.task.created_by==me) & (db.task.task_type == 'VecTraits data submission')   # replaced with query below
+    query = db((db.task.task_type == 'VecTraits data submission') & ((db.task.created_by==me | (db.task.created_by==me))))
+    # replaced with query below
     #query = (db.task)
     grid = SQLFORM.grid(query, orderby=~db.task.modified_on,
                         create=False,details=False,editable=False,csv=False,
@@ -94,8 +96,7 @@ def issues():
     db.task.created_by.readable = False
     db.task.title.represent = lambda title,row:\
         A(title,_href=URL('edit_task',args=row.id))
-    query = (db.task.assigned_to==me)|(db.task.created_by==me) & (db.task.task_type == 'Investigate issue/fix bug')   # replaced with query below
-    #query = (db.task)
+    query = db((db.task.task_type == 'Investigate issue/fix bug') & ((db.task.created_by == me | (db.task.created_by == me))))
     grid = SQLFORM.grid(query, orderby=~db.task.modified_on,
                         create=False,details=False,editable=False,csv=False,
                         deletable=lambda row: (row.created_by==me),maxtextlength=200,
@@ -116,8 +117,7 @@ def general_enquiries():
     db.task.created_by.readable = False
     db.task.title.represent = lambda title,row:\
         A(title,_href=URL('edit_task',args=row.id))
-    query = (db.task.assigned_to==me)|(db.task.created_by==me) & (db.task.task_type == 'Enquiry')   # replaced with query below
-    #query = (db.task)
+    query = db((db.task.task_type == 'Enquiry') & ((db.task.created_by == me | (db.task.created_by == me))))
     grid = SQLFORM.grid(query, orderby=~db.task.modified_on,
                         create=False,details=False,editable=False,csv=False,
                         deletable=lambda row: (row.created_by==me),maxtextlength=200,
@@ -138,8 +138,7 @@ def data_set_sources():
     db.task.created_by.readable = False
     db.task.title.represent = lambda title,row:\
         A(title,_href=URL('edit_task',args=row.id))
-    query = (db.task.assigned_to==me)|(db.task.created_by==me) & (db.task.task_type == 'Data Set Sources')   # replaced with query below
-    #query = (db.task)
+    query = db((db.task.task_type == 'Data Set Sources') & ((db.task.created_by == me | (db.task.created_by == me))))
     grid = SQLFORM.grid(query, orderby=~db.task.modified_on,
                         create=False,details=False,editable=False,csv=False,
                         deletable=lambda row: (row.created_by==me),maxtextlength=200,
@@ -221,6 +220,7 @@ def edit_task():
     db.task.file.writable = False
     task_id = request.args(0,cast=int)
     task = db.task(task_id) or error()
+    dataset = db.task(task_id)
     #if not task.created_by==me and not task.assigned_to==me: error()
     #if task.created_by==me:
     #    task.assigned_to.writable = True

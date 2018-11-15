@@ -1,28 +1,14 @@
 {{extend 'layout.html'}}
 
-<head>
 
 
 
-    <style>
-h3 {
-    text-shadow: 1px 1px 1px whitesmoke;
-}
-p {
-text-shadow: 0.5px 0.5px 0.5px whitesmoke;
-}
-
-</style>
-
-  </head>
+     <div style="background: linear-gradient(240deg, lightgrey, whitesmoke)" class="jumbotron">
+         <h5>Data set registrations</h5>
+         <br>
 
 
-        <body>
-<div style="background: linear-gradient(40deg, lightgray, beige)" class="jumbotron jumbotron-fluid">
-    <div class="container">
-  <center><h3>VecDyn Dataset Search</h3></center>
-
-        <div class="container">
+<div class="container left">
   <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo">Instructions</button>
             <br>
             <br>
@@ -40,15 +26,9 @@ text-shadow: 0.5px 0.5px 0.5px whitesmoke;
 </ol>
         <li>To download data either click on 'Download all' to download the entire search (limited to 50) or use the select checkbox on each right hand side row and click 'Download selected'. </li>
 </ul>
-
-  </div>
-</div>
-
-<br>
-
-  {{=BEAUTIFY(grid)}}
-    </body>
-     </div>
+   </div>
+       </div>
+{{=BEAUTIFY(grid)}}
     </div>
 
 <script type="text/javascript">
@@ -58,4 +38,7 @@ text-shadow: 0.5px 0.5px 0.5px whitesmoke;
             });
          });
      </script>
+
+<br>
+
 
