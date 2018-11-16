@@ -1,12 +1,13 @@
+
 {{extend 'layout.html'}}
 
         <div class="btn-group">
-           {{=A('Cancel',_href=URL('view_data',vars={'publication_info_id':publication_info_id}),_class="btn btn-primary")}}
+           {{=A('Back',_href=URL('view_data',vars={'publication_info_id':publication_info_id}),_class="btn btn-primary")}}
+{{if taxon_entries_count >=1:}}
+            {{=A('Skip to geo standardisation',_href=URL('standardise_geo_data', vars={'publication_info_id':publication_info_id}),_class="btn btn-primary")}}
 
-            {{=A('Skip to geo standardisation',_href=URL('standardise_geo_data',vars={'publication_info_id':publication_info_id}),_class="btn btn-primary")}}
-
-
-
+            {{else:}}
+            {{pass}}
 
   </div>
            <div style="background: linear-gradient(240deg, lightgrey, whitesmoke)" class="jumbotron">

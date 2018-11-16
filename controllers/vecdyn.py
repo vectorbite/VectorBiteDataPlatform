@@ -57,10 +57,10 @@ def data_collections():
         if f.name not in ('db.publication_info.data_rights, db.publication_info.dataset_doi, db.publication_info.title,db.publication_info.collection_author, db.publication_info.submit, db.publication_info.created_by')]
     #db.publication_info.data_rights.represent = lambda data_rights, row: A(data_rights, _href=URL('edit_data_rights', args=row.id))
     links = [lambda row: A('Upload data',_href=URL("vecdyn_data_uploader", "importer",vars={'id':row.id}),_class="btn btn-primary"), \
-             lambda row: A('View dataset', _href=URL("vecdyn", "view_data", vars={'publication_info_id': row.id}),_class="btn btn-primary"),
+             lambda row: A('View dataset entries', _href=URL("vecdyn", "view_data", vars={'publication_info_id': row.id}),_class="btn btn-primary"),
              lambda row: A('Edit data rights', _href=URL("vecdyn", "edit_data_rights", vars={'publication_info_id': row.id}),
                            _class="btn btn-primary"),
-             lambda row: A('View/edit general info', _href=URL("vecdyn", "edit_dataset_general_info", vars={'publication_info_id': row.id}),
+             lambda row: A('View/edit publication info', _href=URL("vecdyn", "edit_dataset_general_info", vars={'publication_info_id': row.id}),
                            _class="btn btn-primary")]
     form = SQLFORM.grid(db.publication_info, links = links, searchable=False, deletable=False,\
                         editable=False, details=False, create=False,csv=False, maxtextlength=200,
@@ -93,8 +93,6 @@ def edit_dataset_general_info():
         session.flash = 'Thanks you have successfully submit your changes'
         redirect(URL('data_collections'))
     return locals()
-
-
 
 
 def edit_data_rights():
@@ -166,7 +164,7 @@ def view_data():
     ####code for grid
     links = [lambda row: A('View/edit meta data',_href=URL("vecdyn", "edit_meta_data", vars={'study_meta_data_id':row.study_meta_data.id,
                                                                                      'publication_info_id':publication_info_id}),_class="btn btn-primary"),
-             lambda row: A('View time series data',_class="btn btn-primary",_href=URL("vecdyn", "view_time_series_data",vars={'id':row.study_meta_data.id, 'publication_info_id':publication_info_id})),
+             lambda row: A('View time series data entries',_class="btn btn-primary",_href=URL("vecdyn", "view_time_series_data",vars={'id':row.study_meta_data.id, 'publication_info_id':publication_info_id})),
                            ]
     query = ((db.study_meta_data.publication_info_id == publication_info_id) & (db.study_meta_data.ADM_CODE == db.gaul_admin_layers.ADM_CODE) & (
                 db.taxon.taxonID == db.study_meta_data.taxonID))
@@ -197,12 +195,15 @@ def view_data():
 def edit_meta_data():
     publication_info_id = request.get_vars.publication_info_id
     study_meta_data_id = request.get_vars.study_meta_data_id
+    meta_edit = "yes"
     rows = db((db.study_meta_data.id == study_meta_data_id) & (db.study_meta_data.taxonID == db.taxon.taxonID)
               & (db.study_meta_data.ADM_CODE == db.gaul_admin_layers.ADM_CODE)).select()
     response.flash = 'Edit meta-data entry!'
     db.study_meta_data.title.writable = False
+    db.study_meta_data.title.readable = False
     db.study_meta_data.taxon.writable = False
-    db.study_meta_data.location_description.writable = False
+    db.study_meta_data.taxon.readable = False
+    #db.study_meta_data.location_description.writable = False
     db.study_meta_data.taxonID.writable = False
     db.study_meta_data.ADM_CODE.writable = False
     db.study_meta_data.publication_info_id.writable = False
@@ -227,6 +228,10 @@ def standardise_taxon():
     a = db((db.study_meta_data.publication_info_id == publication_info_id) & (db.study_meta_data.taxonID == None)).select(
         groupby=db.study_meta_data.taxon)
     count = len(a)
+    taxon_entries = db((db.study_meta_data.publication_info_id == publication_info_id) & (db.study_meta_data.ADM_CODE == None)).select(
+        groupby=db.study_meta_data.location_description)
+    taxon_entries_count = len(taxon_entries)
+    taxon_entries_count = int(taxon_entries_count)
     first_row = rows.first()
     if first_row.taxonID == None:
         pass
@@ -253,6 +258,7 @@ def taxon_select():
     publication_info_id = request.get_vars.publication_info_id
     study_meta_data_id = request.get_vars.study_meta_data_id
     taxon = request.get_vars.taxon
+    meta_edit = request.get_vars.meta_edit
     response.flash = 'Now search and select the taxon used in the study, if you make a mistake hit the "Cancel" button to restart'
     [setattr(f, 'readable', False)
      for f in db.taxon
@@ -263,6 +269,7 @@ def taxon_select():
                                                              vars={'taxonID': row.taxonID, \
                                                                    'publication_info_id': publication_info_id, \
                                                                    'taxon': taxon, \
+                                                                   'meta_edit': meta_edit, \
                                                                    'tax_species': row.tax_species, \
                                                                    'study_meta_data_id': study_meta_data_id}))]
     db.taxon.taxonID.readable = False
@@ -279,14 +286,18 @@ def taxon_confirm():
     tax_species = request.get_vars.tax_species
     taxon = request.get_vars.taxon
     taxonID = request.get_vars.taxonID
+    meta_edit = request.get_vars.meta_edit
     form = FORM(INPUT(_type='submit', _value='Confirm', _class="btn btn-primary"))
     if form.process().accepted:
-        redirect(URL("vecdyn", "taxon_insert", vars={'publication_info_id': publication_info_id,
-                                                     'study_meta_data_id': study_meta_data_id,
-                                                     'tax_species': tax_species,
-                                                     'taxonID': taxonID,
-                                                     'taxon': taxon,
-                                                     'publication_info_id': publication_info_id}))
+            redirect(URL("vecdyn", "taxon_insert", vars={'publication_info_id': publication_info_id,
+                                                         'study_meta_data_id': study_meta_data_id,
+                                                         'tax_species': tax_species,
+                                                         'taxonID': taxonID,
+                                                         'taxon': taxon,
+                                                         'meta_edit': meta_edit, \
+                                                         'publication_info_id': publication_info_id}))
+
+
     return locals()
 
 ## Searches through all the entries for a taxon  and adds the tax standardized taxon name to each row
@@ -296,12 +307,19 @@ def taxon_insert():
     study_meta_data_id = request.get_vars.study_meta_data_id
     tax_species = request.get_vars.tax_species
     taxonID = request.get_vars.taxonID
+    meta_edit = request.get_vars.meta_edit
     rows = db(db.study_meta_data.publication_info_id == publication_info_id).select()
     for row in rows:
         if taxon == row.taxon:
             row.update_record(taxonID=taxonID)
         else: continue
-    redirect(URL("vecdyn", "standardise_taxon", vars={'publication_info_id': publication_info_id}))
+    if meta_edit == 'yes':
+        session.flash = 'Success!'
+        redirect(URL("vecdyn", "edit_meta_data", vars={'publication_info_id': publication_info_id,
+                                                       'study_meta_data_id': study_meta_data_id,
+                                                       'publication_info_id': publication_info_id}))
+    else:
+        redirect(URL("vecdyn", "standardise_taxon", vars={'publication_info_id': publication_info_id}))
     return locals()
 
 
@@ -335,11 +353,13 @@ def location_select():
     publication_info_id = request.get_vars.publication_info_id
     study_meta_data_id = request.get_vars.study_meta_data_id
     location_description = request.get_vars.location_description
+    meta_edit = request.get_vars.meta_edit
     db.gaul_admin_layers.ADM_CODE.readable = False
     db.gaul_admin_layers.centroid_latitude.readable = False
     db.gaul_admin_layers.centroid_longitude.readable = False
     links = [lambda row: A('Select', _class="btn btn-primary",_href=URL("vecdyn", "geo_confirm",
                                                                          vars={'ADM_CODE': row.ADM_CODE, \
+                                                                                'meta_edit': meta_edit, \
                                                                                'study_meta_data_id': study_meta_data_id, \
                                                                                'ADM0_NAME': row.ADM0_NAME, \
                                                                                'ADM1_NAME': row.ADM1_NAME, \
@@ -357,16 +377,19 @@ def location_select():
 def geo_confirm():
     publication_info_id = request.get_vars.publication_info_id
     study_meta_data_id = request.get_vars.study_meta_data_id
+    meta_edit = request.get_vars.meta_edit
     ADM_CODE = request.get_vars.ADM_CODE
     ADM0_NAME = request.get_vars.ADM0_NAME
     ADM1_NAME = request.get_vars.ADM1_NAME
     ADM2_NAME = request.get_vars.ADM2_NAME
+    meta_edit = request.get_vars.meta_edit
     location_description = request.get_vars.location_description
     form = FORM(INPUT(_type='submit', _value='Confirm', _class="btn btn-primary"))
     if form.process().accepted:
         redirect(URL("vecdyn", "geo_st_insert",
                      vars={'ADM_CODE': ADM_CODE, \
                            'study_meta_data_id': study_meta_data_id, \
+                           'meta_edit': meta_edit, \
                            'location_description': location_description, \
                            'publication_info_id': publication_info_id}))
     return locals()
@@ -377,6 +400,7 @@ def geo_st_insert():
     publication_info_id = request.get_vars.publication_info_id
     study_meta_data_id = request.get_vars.study_meta_data_id
     ADM_CODE = request.get_vars.ADM_CODE
+    meta_edit = request.get_vars.meta_edit
     location_description = request.get_vars.location_description
     rows = db(db.study_meta_data.publication_info_id == publication_info_id).select()
     for row in rows:
@@ -384,9 +408,14 @@ def geo_st_insert():
             row.update_record(ADM_CODE=ADM_CODE)
         #else:
         #    continue
-    response.flash = 'Success!'
-    redirect(URL("vecdyn", "standardise_geo_data", vars={'publication_info_id': publication_info_id}))
-    response.flash = 'Success!'
+    if meta_edit == 'yes':
+        session.flash = 'Success!'
+        redirect(URL("vecdyn", "edit_meta_data", vars={'publication_info_id': publication_info_id,
+                                                       'study_meta_data_id': study_meta_data_id,
+                                                       'meta_edit': meta_edit}))
+    else:
+        redirect(URL("vecdyn", "standardise_geo_data", vars={'publication_info_id': publication_info_id}))
+        response.flash = 'Success!'
     return locals()
 
 
