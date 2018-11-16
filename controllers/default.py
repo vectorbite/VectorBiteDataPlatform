@@ -215,12 +215,36 @@ def view_task():
 
 #@auth.requires_membership('VectorbiteManagers')
 def edit_task():
-    data_set_type = db.task.task_type
-    db.task.file.readable = False
-    db.task.file.writable = False
+    #db.task.file.readable = False
+    #db.task.file.writable = False
     task_id = request.args(0,cast=int)
     task = db.task(task_id) or error()
-    dataset = db.task(task_id)
+    if (task.task_type == 'Investigate issue/fix bug') | (task.task_type == 'Enquiry'):
+        db.task.task_type.writable = False
+        db.task.task_type.readable = False
+        db.task.collection_author.writable = False
+        db.task.collection_author.readable = False
+        db.task.digital_object_identifier.writable = False
+        db.task.digital_object_identifier.readable = False
+        db.task.publication_doi.writable = False
+        db.task.publication_doi.readable = False
+        db.task.contact_affiliation.writable = False
+        db.task.contact_affiliation.readable = False
+        db.task.dataset_license.writable = False
+        db.task.dataset_license.readable = False
+        db.task.url.writable = False
+        db.task.url.readable = False
+        db.task.file.writable = False
+        db.task.file.readable = False
+        db.task.orcid.writable = False
+        db.task.orcid.readable = False
+        db.task.embargo_release_date.writable = False
+        db.task.embargo_release_date.readable = False
+        db.task.data_rights.writable = False
+        db.task.data_rights.readable = False
+    else:
+        pass
+
     #if not task.created_by==me and not task.assigned_to==me: error()
     #if task.created_by==me:
     #    task.assigned_to.writable = True
