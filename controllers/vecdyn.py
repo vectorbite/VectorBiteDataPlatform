@@ -45,12 +45,12 @@ def dataset_registration():
     form = SQLFORM(db.publication_info)
     if form.process().accepted:
         session.flash = 'Thank you, your data set has been registered, now upload a data set'
-        redirect(URL('data_collections'))
+        redirect(URL('dataset_registrations'))
     return locals()
 #lambda row: A('Add new data set to collection',_href=URL("vecdyn", "taxon_select",vars={'id':row.id})),\
 
 
-def data_collections():
+def dataset_registrations():
     #query = db.publication_info.created_by==me
     [setattr(f, 'readable', False)
     for f in db.publication_info
@@ -91,7 +91,7 @@ def edit_dataset_general_info():
     form = SQLFORM(db.publication_info,publication_info_id, showid=False)
     if form.process().accepted:
         session.flash = 'Thanks you have successfully submit your changes'
-        redirect(URL('data_collections'))
+        redirect(URL('dataset_registrations'))
     return locals()
 
 
@@ -126,7 +126,7 @@ def edit_data_rights():
     form = SQLFORM(db.publication_info, publication_info_id, showid=False)
     if form.process().accepted:
         session.flash = 'Thanks you have successfully submitted your changes'
-        redirect(URL('data_collections'))
+        redirect(URL('dataset_registrations'))
     return locals()
 
 
@@ -164,7 +164,7 @@ def view_data():
     ####code for grid
     links = [lambda row: A('View/edit meta data',_href=URL("vecdyn", "edit_meta_data", vars={'study_meta_data_id':row.study_meta_data.id,
                                                                                      'publication_info_id':publication_info_id}),_class="btn btn-primary"),
-             lambda row: A('View time series data entries',_class="btn btn-primary",_href=URL("vecdyn", "view_time_series_data",vars={'id':row.study_meta_data.id, 'publication_info_id':publication_info_id})),
+             lambda row: A('View time series data entries',_class="btn btn-primary",_href=URL("vecdyn", "view_time_series_data",vars={'study_meta_data_id':row.study_meta_data.id, 'publication_info_id':publication_info_id})),
                            ]
     query = ((db.study_meta_data.publication_info_id == publication_info_id) & (db.study_meta_data.ADM_CODE == db.gaul_admin_layers.ADM_CODE) & (
                 db.taxon.taxonID == db.study_meta_data.taxonID))
@@ -420,12 +420,16 @@ def geo_st_insert():
 
 
 def view_time_series_data():
-    study_meta_data_id = request.get_vars.id
+    study_meta_data_id = request.get_vars.study_meta_data_id
     publication_info_id = request.get_vars.publication_info_id
     db.time_series_data.id.readable = False
     db.time_series_data.study_meta_data_id.readable = False
-    form = SQLFORM.grid(db.time_series_data.study_meta_data_id  == study_meta_data_id, selectable = lambda ids:del_emp(ids), paginate=1000, searchable=False, deletable=False, editable=True, details=False, create=False,csv=False)
-    #form.element(_type='submit')['_value'] = T("Delete")
+    links = [
+        lambda row: A('Edit time series entry',_class="btn btn-primary", _href=URL("vecdyn", "edit_time_series_entry",
+                                                                                    vars={'id': row.id, \
+                                                                                          'study_meta_data_id': study_meta_data_id, \
+                                                                                          'publication_info_id': publication_info_id}))]
+    form = SQLFORM.grid(db.time_series_data.study_meta_data_id  == study_meta_data_id,links=links,selectable = lambda ids:del_emp(ids), paginate=1000, searchable=False, deletable=False, editable=False, details=False, create=False,csv=False)
     if form.elements('th'):
         form.elements('th')[0].append(SPAN('Select all', BR(), INPUT(_type='checkbox',
                                                               _onclick="jQuery('input:checkbox').not(this).prop('checked', this.checked);"
@@ -450,6 +454,18 @@ def del_emp(ids):
 		pass
 	pass
 	return
+
+def edit_time_series_entry():
+    study_meta_data_id = request.get_vars.study_meta_data_id
+    publication_info_id = request.get_vars.publication_info_id
+    time_series_entry = request.get_vars.id
+    db.time_series_data.study_meta_data_id.writable = False
+    db.time_series_data.study_meta_data_id.readable = False
+    form = SQLFORM(db.time_series_data, time_series_entry, showid=False, comments=False)
+    if form.process().accepted:
+        session.flash = 'Thanks you have successfully submit your changes'
+        redirect(URL('vecdyn','view_time_series_data', vars={'study_meta_data_id': study_meta_data_id}))
+    return locals()
 
 
 

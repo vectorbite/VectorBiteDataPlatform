@@ -5,7 +5,7 @@
             {{=A('Back',_href=URL('default','tasks'),_class="btn btn-primary")}}
             {{if task.task_type == 'VecDyn data submission':}}
             {{=A('Import',_href=URL('vecdyn','dataset_registration',vars={'task_id':task.id}),_class="btn btn-primary")}}
-            {{=A('Download attached dataset',_href=URL('default', 'download', args=dataset.file),_class="btn btn-primary")}}
+            {{=A('Download attached dataset',_href=URL('default', 'download', args=task.file),_class="btn btn-primary")}}
             {{else:}}
             {{pass}}
 

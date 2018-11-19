@@ -1,0 +1,13 @@
+{{extend 'layout.html'}}
+
+
+<div class="btn-group.btn-group-justified" role="group" aria-label="...">
+         {{=A('Back',_href=URL('vecdyn','view_time_series_data', vars={'study_meta_data_id':study_meta_data_id, 'publication_info_id':publication_info_id}),_class="btn btn-primary")}}
+ </div>
+<div style="background: linear-gradient(240deg, lightgrey, whitesmoke)" class="jumbotron">
+
+
+<br>
+    <br>
+{{=BEAUTIFY(form)}}
+    </div>

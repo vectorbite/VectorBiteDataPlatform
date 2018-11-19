@@ -22,12 +22,12 @@ if auth.is_logged_in():
 
 #if auth.has_membership('VectorbiteAdmin'):
  #   response.menu.append((T('Manage Data Sets'), False, None,[
-  #              ('VecDyn data collections', False, URL('vecdyn', 'data_collections'))]))
+  #              ('VecDyn data collections', False, URL('vecdyn', 'dataset_registrations'))]))
 
 if auth.has_membership('VectorbiteAdmin'):
     response.menu.append((T('Management'), False, None,[
                 #('Messages', False, URL('default', 'messages')),
-                ('Manage VecDyn data sets', False, URL('vecdyn', 'data_collections')),
+                ('Manage VecDyn data sets', False, URL('vecdyn', 'dataset_registrations')),
                 ('Task Manager', False, URL('default', 'tasks'))]))
 
 
