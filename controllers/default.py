@@ -387,7 +387,7 @@ def contact_us():
     db.task.embargo_release_date.readable = False
     db.task.data_rights.writable = False
     db.task.data_rights.readable = False
-    form = SQLFORM(db.task).process()
+    form = SQLFORM(db.task, comments=False).process()
     if form.accepted:
         session.flash = 'Thanks for your comment, we will get back to you soon!'
         #send_email(to=db.auth_user(form.vars.assigned_to).email,
@@ -441,7 +441,7 @@ def report_problem():
     db.task.embargo_release_date.readable = False
     db.task.data_rights.writable = False
     db.task.data_rights.readable = False
-    form = SQLFORM(db.task).process()
+    form = SQLFORM(db.task,  comments=False).process()
     if form.accepted:
         session.flash = 'Thanks for your comment, we will get back to you soon!'
         #send_email(to=db.auth_user(form.vars.assigned_to).email,

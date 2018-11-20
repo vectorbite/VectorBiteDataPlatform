@@ -102,7 +102,7 @@ auth.define_tables(username=False, signature=False)
 # configure email
 # -------------------------------------------------------------------------
 mail = auth.settings.mailer
-mail.settings.server = 'logging' if request.is_local else configuration.get('smtp.server')
+mail.settings.server = configuration.get('smtp.server')
 mail.settings.sender = configuration.get('smtp.sender')
 mail.settings.login = configuration.get('smtp.login')
 mail.settings.tls = configuration.get('smtp.tls') or False

@@ -62,7 +62,7 @@ def dataset_registrations():
                            _class="btn btn-primary"),
              lambda row: A('View/edit publication info', _href=URL("vecdyn", "edit_dataset_general_info", vars={'publication_info_id': row.id}),
                            _class="btn btn-primary")]
-    form = SQLFORM.grid(db.publication_info, links = links, searchable=False, deletable=False,\
+    form = SQLFORM.grid(db.publication_info, links = links, searchable=False, deletable=lambda row: (row.created_by==me),\
                         editable=False, details=False, create=False,csv=False, maxtextlength=200,
                         fields=[
                             db.publication_info.title,
