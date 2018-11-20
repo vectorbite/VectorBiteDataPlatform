@@ -3,12 +3,13 @@
 
 ###### The default controller
 
+@auth.requires_login()
 def index():
     #if auth.has_membership('VectorBiTE Managers'): redirect(URL('tasks'))
     rows = db(db.index_page_updates).select(orderby=~db.index_page_updates.created_on)
     return locals()
 
-
+@auth.requires_login()
 def about_us():
     return locals()
 
@@ -22,7 +23,7 @@ me = auth.user_id
 
 ####the following functions represent the task manager
 
-#@auth.requires_membership('VectorbiteManagers')
+@auth.requires_membership('VectorbiteAdmin')
 def tasks():
     db.task.created_on.readable = False
     db.task.created_by.readable = False
@@ -45,6 +46,7 @@ def tasks():
                                 db.task.assigned_to])
     return locals()
 
+@auth.requires_membership('VectorbiteAdmin')
 def vecdyn_submissions():
     db.task.created_on.readable = False
     db.task.created_by.readable = False
@@ -68,6 +70,7 @@ def vecdyn_submissions():
                                 db.task.assigned_to])
     return locals()
 
+@auth.requires_membership('VectorbiteAdmin')
 def vectrait_submissions():
     db.task.created_on.readable = False
     db.task.created_by.readable = False
@@ -91,6 +94,7 @@ def vectrait_submissions():
                                 db.task.assigned_to])
     return locals()
 
+@auth.requires_membership('VectorbiteAdmin')
 def issues():
     db.task.created_on.readable = False
     db.task.created_by.readable = False
@@ -112,6 +116,7 @@ def issues():
                                 db.task.assigned_to])
     return locals()
 
+@auth.requires_membership('VectorbiteAdmin')
 def general_enquiries():
     db.task.created_on.readable = False
     db.task.created_by.readable = False
@@ -133,6 +138,7 @@ def general_enquiries():
                                 db.task.assigned_to])
     return locals()
 
+@auth.requires_membership('VectorbiteAdmin')
 def data_set_sources():
     db.task.created_on.readable = False
     db.task.created_by.readable = False
@@ -155,7 +161,7 @@ def data_set_sources():
     return locals()
 
 
-#@auth.requires_membership('VectorbiteAdmin')
+@auth.requires_membership('VectorbiteAdmin')
 def create_task():
     #db.task.status.readable = False
     #db.task.status.writable = False
@@ -168,7 +174,7 @@ def create_task():
         redirect(URL('tasks'))
     return locals()
 
-#@auth.requires_membership('VectorbiteManagers')
+@auth.requires_membership('VectorbiteAdmin')
 def view_task():
     task_form = ()
     task_id = request.args(0,cast=int)
@@ -213,7 +219,7 @@ def view_task():
     posts = db(db.post).select(orderby=db.post.created_by)
     return locals()
 
-#@auth.requires_membership('VectorbiteManagers')
+@auth.requires_membership('VectorbiteAdmin')
 def edit_task():
     #db.task.file.readable = False
     #db.task.file.writable = False
@@ -264,7 +270,7 @@ def edit_task():
         redirect(URL('tasks'))
     return locals()
 
-
+@auth.requires_login()
 def submit_data():
     db.task.task_type.requires = IS_IN_SET(('VecDyn data submission', 'VecTraits data submission'))
     db.task.status.readable = False
@@ -286,6 +292,7 @@ def submit_data():
      #   response.flash = 'please fill out the form in full and attach a csv file'
     return locals()
 
+@auth.requires_login()
 def submit_vecdyn_data():
     db.task.task_type.default = 'VecDyn data submission'
     db.task.task_type.readable = False
@@ -309,6 +316,7 @@ def submit_vecdyn_data():
      #   response.flash = 'please fill out the form in full and attach a csv file'
     return locals()
 
+@auth.requires_login()
 def submit_vectrait_data():
     db.task.task_type.default = 'VecTraits data submission'
     db.task.task_type.readable = False
@@ -332,6 +340,8 @@ def submit_vectrait_data():
      #   response.flash = 'please fill out the form in full and attach a csv file'
     return locals()
 
+
+@auth.requires_login()
 def new_data_source():
     db.task.task_type.default = 'Data Set Sources'
     db.task.task_type.writable = False
@@ -356,7 +366,7 @@ def new_data_source():
     return locals()
 
 
-
+@auth.requires_login()
 def contact_us():
     db.task.task_type.default = 'Enquiry'
     db.task.task_type.writable = False
@@ -399,18 +409,10 @@ def contact_us():
         session.flash = 'please complete the form'
     return locals()
 
-'''def contact_us():
-    form = SQLFORM(db.contact)
-    if form.process().accepted:
-        mail.send(to='vectorbiteonlineplatform@gmail.com',
-                  subject='contact request from %(your_name)s %(email)s'  % form.vars,
-                  message = form.vars.message)
-        session.flash = 'Thank you, your message was sent'
-        redirect(URL('index'))
-    return dict(form=form)'''
 
 
 
+@auth.requires_login()
 def report_problem():
     db.task.task_type.default = 'Investigate issue/fix bug'
     db.task.task_type.writable = False
@@ -455,10 +457,22 @@ def report_problem():
 
 #Admin and community functions
 
+@auth.requires_membership('VectorbiteAdmin')
+def group_membership():
+    db.auth_membership.group_id.default = 2
+    #db.auth_membership.group_id.readable = True
+    db.auth_membership.group_id.writable = False
+    #form = SQLFORM(db.auth_membership, showid=False, comments=False)
+    form = SQLFORM.grid(db.auth_membership.group_id == 2, searchable=False, deletable=True, \
+                        editable=False, details=False, create=True, csv=False)
+    #if form.process().accepted:
+     #   session.flash = 'Thanks you have successfully submit your changes'
+    return locals()
+
 #@auth.requires_membership('VectorbiteManagers')
 def manage_index_page_updates():
     grid = SQLFORM.grid(db.index_page_updates,  searchable=False, deletable=True,\
-                        editable=True, details=False, create=False,csv=False)
+                        editable=True, details=False, create=True,csv=False)
     return dict(grid=grid)
 
 

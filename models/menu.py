@@ -26,9 +26,9 @@ if auth.is_logged_in():
 
 if auth.has_membership('VectorbiteAdmin'):
     response.menu.append((T('Management'), False, None,[
-                #('Messages', False, URL('default', 'messages')),
                 ('Manage VecDyn data sets', False, URL('vecdyn', 'dataset_registrations')),
-                ('Task Manager', False, URL('default', 'tasks'))]))
+                ('Task Manager', False, URL('default', 'tasks')),
+                ('Group Membership', False, URL('default', 'group_membership'))]))
 
 
 #if auth.has_membership('VectorbiteManagers'):

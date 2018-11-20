@@ -19,6 +19,7 @@ me = auth.user.id
 
 ### The following code is for USER upload and download of data, ignore_common_filters are applied so only the users who have created a dataset can access the,
 
+@auth.requires_membership('VectorbiteAdmin')
 def dataset_registration():
     task_id = request.get_vars.task_id
     if task_id != None:
@@ -49,7 +50,7 @@ def dataset_registration():
     return locals()
 #lambda row: A('Add new data set to collection',_href=URL("vecdyn", "taxon_select",vars={'id':row.id})),\
 
-
+@auth.requires_membership('VectorbiteAdmin')
 def dataset_registrations():
     #query = db.publication_info.created_by==me
     [setattr(f, 'readable', False)
@@ -80,6 +81,8 @@ def dataset_registrations():
         response.flash = 'data set registrations'
     return locals()
 
+
+@auth.requires_membership('VectorbiteAdmin')
 def edit_dataset_general_info():
     db.publication_info.submit.writable = False
     db.publication_info.submit.readable = False
@@ -94,7 +97,7 @@ def edit_dataset_general_info():
         redirect(URL('dataset_registrations'))
     return locals()
 
-
+@auth.requires_membership('VectorbiteAdmin')
 def edit_data_rights():
     #db.data_rights.publication_info_id.writable = False
     #db.data_rights.publication_info_id.readable = False
@@ -133,7 +136,7 @@ def edit_data_rights():
 #lambda row: A('Submit Sample Data', _href=URL("vecdyn", "upload_time_series_data", vars={'id':row.id}))
 
 
-
+@auth.requires_membership('VectorbiteAdmin')
 def view_data():
     #####user message code
     publication_info_id = request.get_vars.publication_info_id
@@ -192,6 +195,7 @@ def view_data():
     return locals()
 
 
+@auth.requires_membership('VectorbiteAdmin')
 def edit_meta_data():
     publication_info_id = request.get_vars.publication_info_id
     study_meta_data_id = request.get_vars.study_meta_data_id
@@ -220,6 +224,7 @@ def edit_meta_data():
 
 
 ##write a function if name is in db do something, if not standardise data
+@auth.requires_membership('VectorbiteAdmin')
 def standardise_taxon():
     response.flash = 'You have uploaded taxonomic data that is not recognised in our database, you need to standardise this manually. Click on the link next to each taxon name to search for equivalent taxon names.  !'
     publication_info_id = request.get_vars.publication_info_id
@@ -254,6 +259,7 @@ def standardise_taxon():
                         )
     return locals()
 
+@auth.requires_membership('VectorbiteAdmin')
 def taxon_select():
     publication_info_id = request.get_vars.publication_info_id
     study_meta_data_id = request.get_vars.study_meta_data_id
@@ -280,6 +286,7 @@ def taxon_select():
     #grid.search.default = request.get_vars.get_vars.taxon
     return locals()
 
+@auth.requires_membership('VectorbiteAdmin')
 def taxon_confirm():
     publication_info_id = request.get_vars.publication_info_id
     study_meta_data_id = request.get_vars.study_meta_data_id
@@ -300,6 +307,7 @@ def taxon_confirm():
 
     return locals()
 
+@auth.requires_membership('VectorbiteAdmin')
 ## Searches through all the entries for a taxon  and adds the tax standardized taxon name to each row
 def taxon_insert():
     taxon = request.get_vars.taxon
@@ -322,7 +330,7 @@ def taxon_insert():
         redirect(URL("vecdyn", "standardise_taxon", vars={'publication_info_id': publication_info_id}))
     return locals()
 
-
+@auth.requires_membership('VectorbiteAdmin')
 def standardise_geo_data():
     response.flash = 'Please standardise geo data. Click on the link next to each geo description name to search for equivalent geo names!'
     publication_info_id = request.get_vars.publication_info_id
@@ -349,6 +357,8 @@ def standardise_geo_data():
                         details=False, create=False, csv=False)
     return locals()
 
+
+@auth.requires_membership('VectorbiteAdmin')
 def location_select():
     publication_info_id = request.get_vars.publication_info_id
     study_meta_data_id = request.get_vars.study_meta_data_id
@@ -374,6 +384,8 @@ def location_select():
     return locals()
 
 
+
+@auth.requires_membership('VectorbiteAdmin')
 def geo_confirm():
     publication_info_id = request.get_vars.publication_info_id
     study_meta_data_id = request.get_vars.study_meta_data_id
@@ -395,7 +407,7 @@ def geo_confirm():
     return locals()
 
 
-
+@auth.requires_membership('VectorbiteAdmin')
 def geo_st_insert():
     publication_info_id = request.get_vars.publication_info_id
     study_meta_data_id = request.get_vars.study_meta_data_id
@@ -419,6 +431,7 @@ def geo_st_insert():
     return locals()
 
 
+@auth.requires_membership('VectorbiteAdmin')
 def view_time_series_data():
     study_meta_data_id = request.get_vars.study_meta_data_id
     publication_info_id = request.get_vars.publication_info_id
@@ -455,6 +468,7 @@ def del_emp(ids):
 	pass
 	return
 
+@auth.requires_membership('VectorbiteAdmin')
 def edit_time_series_entry():
     study_meta_data_id = request.get_vars.study_meta_data_id
     publication_info_id = request.get_vars.publication_info_id

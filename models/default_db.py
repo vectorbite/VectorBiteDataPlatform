@@ -51,8 +51,6 @@ query = db((db.auth_user.id==db.auth_membership.user_id) & (db.auth_group.id==db
 db.task.assigned_to.requires = IS_IN_DB(query, 'auth_user.id', '%(first_name)s' ' %(last_name)s')
 
 
-
-
 db.define_table('post',
                 Field('task', 'reference task'),
                 Field('body', 'text'),
@@ -79,6 +77,7 @@ def send_email(to,subject,message,sender):
     if not isinstance(to,list): to = [to]
     mail.settings.sender = sender
     mail.send(to=to, subject=subject, message=message or '(no message)')
+
 
 
 ###Add extra tables to auth
@@ -113,3 +112,4 @@ db.define_table('contact',
    Field('your_name',requires=IS_NOT_EMPTY()),
    Field('email',requires=IS_EMAIL()),
    Field('message','text'))
+

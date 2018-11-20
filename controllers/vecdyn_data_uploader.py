@@ -3,6 +3,7 @@ import csv
 
 ####the following function imports a vecdyn csv
 
+@auth.requires_membership('VectorbiteAdmin')
 def importer():
     response.flash = 'Now upload a time series data set, make sure this is in csv format'
     #Get the publicaton infor id from the previous page
@@ -48,6 +49,7 @@ def importer():
 
 
 #####The next controller checks to see if taxon  names are already in a standardized format, if so then it will add them to the dataset standardizing it
+
 def taxon_checker():
     publication_info_id = request.get_vars.publication_info_id
     rows = db(db.study_meta_data.publication_info_id == publication_info_id).select()
