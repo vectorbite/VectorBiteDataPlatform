@@ -23,12 +23,12 @@ def importer():
                 ##### check for a match in the db against the 'study' dict
                 record = db.study_meta_data(**study)
                 ##### the following code checks to see if a data set has already been uploaded but under a different publication instance
-                check2 = publication_info_id
-                check1 = record.publication_info_id if record else None
+                check2 = int(publication_info_id)
+                check1 = int(record.publication_info_id) if record else None
                 if (check1 == None) | (check1 == check2):
                     pass
-                #elif (check1 != None) & (check1 != check2):
-                #    return 'It seems like this dataset has already been submitted under a different name, you cannot submit the same dataset twice!'
+                elif (check1 != None) & (check1 != check2):
+                    return 'It seems like this dataset has already been submitted under a different name, you cannot submit the same dataset twice!'
                 else:
                     pass
                 ####A similar checker should also be implemented for the time series data to avoid duplicate time series entries, although this could take up a lot of memory
@@ -39,7 +39,6 @@ def importer():
                 'sample_environment', 'additional_location_info', 'additional_sample_info',
                                     'sample_name'), row[13:27]))
                 time_series_data = db.time_series_data.insert(study_meta_data_id=study_meta_data_id,**samples)
-            #redirect(URL("vecdyn", "view_study_meta_datas", vars={'study_meta_data_id': study_meta_data_id}))
         except:
             response.flash = 'Errors, no data submitted. Please ensure the data set meets all the validation requirements, hit cancel to go back to data collections page'#response.flash = 'Thank you, your data has been submitted'
         else:
