@@ -213,7 +213,9 @@ The original [The Catalogue of Life database](http://www.catalogueoflife.org) fi
 
 
 
-### Adding data to the database
+## Data Management
+
+### Mapping Data to VecDyn Template format
 
 Most population abundance and presence absence data will come from various government or research institutions in various table formats, whoever it may also come from many sources publication. 
 
@@ -221,7 +223,6 @@ Most population abundance and presence absence data will come from various gover
 
 1. Download the latest template by right clicking on the following [link](https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Template%26Scripts/VecDyn_template.csv) and selecting ‘save.as’.   A completed [example data set can be found here](https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Examples/ManateeCountyMosquitoMonitoring/vecdyn_manatee_county_aedes_aegypti.csv). This will help you to understand how to compile data in the VecDyn template format. You can also access an example [R Markdown recipe](https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Examples/ManateeCountyMosquitoMonitoring/ManateeCountryMosquitoMonitoring.Rmd) that provides an example of converting an existing data set into a VecDyn formatted dataset.
 2. You can refer to the [VecDyn Data Collection Specifications](#vecdyn-data-collection-specifications) to guide you through the data collection and compilation process.
-3. Note that the data upload facility (*temporary*) is only set up to process one dataset at a time, one data set compromises of one species and one main umbrella geographical location.
 
 *Notice that all files are in plain text e.g. ‘.csv’ format, and not in Excel format or similar. This facilitates text parsing by scripts, prevents data loss/corruption, and allows for detailed comparisons of changes via version control systems.
 
@@ -232,7 +233,14 @@ only work if you have been granted access rights.
 
 *Note that the data upload facility (temporary) is only set up to process one dataset at a time, one data set compromises of one species and one main umbrella geographical location.*
 
-Click on **‘Add New Collection’**
+### Adding data to the database
+
+- This feature is currently only available to VectorBite  curators, however it will be opened to community members at a later date.
+- This process will only work with a .CSV file,  formatted in the VecDyn template style.
+
+Once logged into the VectorBite web application navigate to '**Management**' and then '**Manage VecDyn datasets**'
+
+Click on **‘Register New Dataset’**
 
 
 
@@ -240,15 +248,13 @@ Click on **‘Add New Collection’**
 
 
 
-The first table captures general information about the data provider and the data series. A data collection may provide centralized information about one or many related datasets.
+The publication information table captures general publication information about the dataset i.e. title, DOI, data provider. Note that, every time a separate DOI is registered for a particular dataset, a new publication information table must be submitted. 
 
 
 
 <img src="https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Images/DataUploadStep2.png" width="75%" style="display: block; margin: auto;" />
 
-
-
-Once the collection information has been registered, you now be able to submit data sets to that collection. Click on ‘Add new data set to collection.
+You'll now see an entry in the table for the data set you have just registered.  You can now add a dataset to this entry (upload a csv).  Click on ‘Add new data set to collection on the particular row of the dataset. 
 
 
 

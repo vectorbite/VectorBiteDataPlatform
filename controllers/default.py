@@ -292,7 +292,8 @@ def submit_data():
      #   response.flash = 'please fill out the form in full and attach a csv file'
     return locals()
 
-@auth.requires_login()
+#@auth.requires_login()
+@auth.requires_membership('VectorbiteAdmin')
 def submit_vecdyn_data():
     db.task.task_type.default = 'VecDyn data submission'
     db.task.task_type.readable = False

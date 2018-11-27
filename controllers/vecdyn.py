@@ -140,6 +140,9 @@ def edit_data_rights():
 def view_data():
     #####user message code
     publication_info_id = request.get_vars.publication_info_id
+    ds_check = db(db.study_meta_data.publication_info_id == publication_info_id).select(groupby=db.study_meta_data.publication_info_id)
+    ds_count = len(ds_check)
+    ds_count = int(ds_count)
     b = db((db.study_meta_data.publication_info_id == publication_info_id) & (db.study_meta_data.taxonID == None)).select(
         groupby=db.study_meta_data.taxon)
     count = len(b)
@@ -149,7 +152,9 @@ def view_data():
     count2 = len(a)
     count2 = int(count2)
     message = ()
-    if (count >=1) & (count2 >=1):
+    if ds_count < 1:
+        message="You have not uploaded any data yet"
+    elif (count >=1) & (count2 >=1):
         message="You have %s taxonomic entries and %s geographic entries to standardise, click on the standardise button above and follow the insructions" % (count, count2)
     elif (count >=1) & (count2 <1):
         message="You have %s taxonomic entries to standardise, click on the standardise button above and follow the insructions" % count
@@ -159,7 +164,7 @@ def view_data():
         message = "All taxonomic and geographic data has been standardised for this data set!"
     query = db(db.study_meta_data.publication_info_id == publication_info_id).count()
     if query == 0:
-            response.flash = "You have not yet submitted any study data to this collection, click on 'Add time series data to add a data set' !"
+            response.flash = "You have not yet submitted any data yet, click on 'Add time series data to add a data set' !"
     elif (count >= 1) | (count2 >= 1):
             response.flash = 'You still need to standardise entries before they will become available in this page, once data is visible in this page it is ready to submit!'
     else:
@@ -193,6 +198,75 @@ def view_data():
                         searchable=False, deletable=False,
                         editable=False, details=False, create=False, csv=False)
     return locals()
+
+
+
+
+@auth.requires_membership('VectorbiteAdmin')
+def view_unstandardised_data():
+        #####user message code
+        publication_info_id = request.get_vars.publication_info_id
+        b = db((db.study_meta_data.publication_info_id == publication_info_id) & (
+                    db.study_meta_data.taxonID == None)).select(
+            groupby=db.study_meta_data.taxon)
+        count = len(b)
+        count = int(count)
+        a = db((db.study_meta_data.publication_info_id == publication_info_id) & (
+                    db.study_meta_data.ADM_CODE == None)).select(
+            groupby=db.study_meta_data.location_description)
+        count2 = len(a)
+        count2 = int(count2)
+        message = ()
+        if (count >= 1) & (count2 >= 1):
+            message = "You have %s taxonomic entries and %s geographic entries to standardise, click on the standardise button above and follow the insructions" % (
+            count, count2)
+        elif (count >= 1) & (count2 < 1):
+            message = "You have %s taxonomic entries to standardise, click on the standardise button above and follow the insructions" % count
+        elif (count < 1) & (count2 >= 1):
+            message = "You have %s geographic entries to standardise" % count2
+        elif (count < 1) & (count2 < 1):
+            message = "All taxonomic and geographic data has been standardised for this data set!"
+        query = db(db.study_meta_data.publication_info_id == publication_info_id).count()
+        if query == 0:
+            response.flash = "You have not yet submitted any study data to this collection, click on 'Add time series data to add a data set' !"
+        elif (count >= 1) | (count2 >= 1):
+            response.flash = 'You still need to standardise entries before they will become available in this page, once data is visible in this page it is ready to submit!'
+        else:
+            response.flash = 'This is a list of all the standardised  time series data linked to this data set!'
+        ####code for grid
+        links = [lambda row: A('View/edit meta data',
+                               _href=URL("vecdyn", "edit_meta_data", vars={'study_meta_data_id': row.study_meta_data.id,
+                                                                           'publication_info_id': publication_info_id}),
+                               _class="btn btn-primary"),
+                 lambda row: A('View time series data entries', _class="btn btn-primary",
+                               _href=URL("vecdyn", "view_time_series_data",
+                                         vars={'study_meta_data_id': row.study_meta_data.id,
+                                               'publication_info_id': publication_info_id})),
+                 ]
+        query = ((db.study_meta_data.publication_info_id == publication_info_id) & (
+                    db.study_meta_data.ADM_CODE == None) | (
+                         db.taxon.taxonID == None))
+        form = SQLFORM.grid(query, field_id=db.study_meta_data.id,
+                            fields=[db.study_meta_data.taxon,
+                                    db.study_meta_data.location_description,
+                                    db.study_meta_data.study_design,
+                                    db.study_meta_data.sampling_method,
+                                    db.study_meta_data.measurement_unit,
+                                    db.study_meta_data.value_transform],
+                            headers={'taxon.tax_species': 'Taxon',
+                                     'gaul_admin_layers.ADM2_NAME': 'District',
+                                     'gaul_admin_layers.ADM1_NAME': 'Province',
+                                     'gaul_admin_layers.ADM0_NAME': 'Country',
+                                     'study_meta_data.study_design': 'Study Design',
+                                     'study_meta_data.sampling_method': 'Sampling Method',
+                                     'study_meta_data.measurement_unit': 'Measurement Unit',
+                                     'study_meta_data.value_transform': 'Value Transformation'},
+                            links=links,
+                            maxtextlength=200,
+                            searchable=False, deletable=False,
+                            editable=False, details=False, create=False, csv=False)
+        return locals()
+
 
 
 @auth.requires_membership('VectorbiteAdmin')

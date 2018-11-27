@@ -1,7 +1,7 @@
 {{extend 'layout.html'}}
 <div class="btn-group.btn-group-justified" role="group" aria-label="...">
-            {{=A('Back to Data Collections Page',_href=URL('dataset_registrations'),_class="btn btn-primary")}}
-            {{=A('Upload Data',_href=URL('vecdyn_data_uploader','importer',vars={'id':publication_info_id}),_class="btn btn-primary")}}
+            <a class="btn btn-primary" href="{{=URL('default','index')}}">{{=T("Finish")}}</a>
+            {{=A('Back to data collections page',_href=URL('dataset_registrations'),_class="btn btn-primary")}}
             {{if count >=1:}}
             {{=A('Standardise',_href=URL('standardise_taxon',vars={'publication_info_id':publication_info_id}),_class="btn btn-warning")}}
             {{elif count2 >=1:}}
@@ -9,12 +9,15 @@
             {{else:}}
             {{pass}}
 
+
+
+
   </div>
            <div style="background: linear-gradient(240deg, lightgrey, whitesmoke)" class="jumbotron">
 <h2><center>Data Set Metadata<center></center></h2>
                                   <div class="btn-group.btn-group-justified" role="group" aria-label="...">
-    <a class="btn btn-link" href="{{=URL('vecdyn','view_data',vars={'publication_info_id':publication_info_id})}}">{{=T("View standardised data")}}</a>
-         <a class="btn btn-link" href="{{=URL('vecdyn','view_unstandardised_data',vars={'publication_info_id':publication_info_id})}}">{{=T("View unstandardised data")}}</a>
+    <a class="btn btn-link" href="{{=URL('vecdyn','view_data',vars={'publication_info_id':publication_info_id})}}">{{=T("Standardised datasets")}}</a>
+         <a class="btn btn-link" href="{{=URL('vecdyn','view_unstandardised_data',vars={'publication_info_id':publication_info_id})}}">{{=T("Unstandardised datasets")}}</a>
  </div>
 
 
