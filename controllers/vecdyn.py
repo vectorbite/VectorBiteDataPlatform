@@ -206,6 +206,10 @@ def view_data():
 def view_unstandardised_data():
         #####user message code
         publication_info_id = request.get_vars.publication_info_id
+        ds_check = db(db.study_meta_data.publication_info_id == publication_info_id).select(
+            groupby=db.study_meta_data.publication_info_id)
+        ds_count = len(ds_check)
+        ds_count = int(ds_count)
         b = db((db.study_meta_data.publication_info_id == publication_info_id) & (
                     db.study_meta_data.taxonID == None)).select(
             groupby=db.study_meta_data.taxon)
@@ -228,7 +232,7 @@ def view_unstandardised_data():
             message = "All taxonomic and geographic data has been standardised for this data set!"
         query = db(db.study_meta_data.publication_info_id == publication_info_id).count()
         if query == 0:
-            response.flash = "You have not yet submitted any study data to this collection, click on 'Add time series data to add a data set' !"
+            response.flash = "You have not yet submitted any data yet, click on 'Add time series data to add a data set' !"
         elif (count >= 1) | (count2 >= 1):
             response.flash = 'You still need to standardise entries before they will become available in this page, once data is visible in this page it is ready to submit!'
         else:
@@ -244,11 +248,13 @@ def view_unstandardised_data():
                                                'publication_info_id': publication_info_id})),
                  ]
         query = ((db.study_meta_data.publication_info_id == publication_info_id) & (
-                    db.study_meta_data.ADM_CODE == None) | (
-                         db.taxon.taxonID == None))
+                    db.study_meta_data.ADM_CODE == db.gaul_admin_layers.ADM_CODE) & (
+                         db.taxon.taxonID == db.study_meta_data.taxonID))
         form = SQLFORM.grid(query, field_id=db.study_meta_data.id,
-                            fields=[db.study_meta_data.taxon,
-                                    db.study_meta_data.location_description,
+                            fields=[db.taxon.tax_species,
+                                    db.gaul_admin_layers.ADM2_NAME,
+                                    db.gaul_admin_layers.ADM1_NAME,
+                                    db.gaul_admin_layers.ADM0_NAME,
                                     db.study_meta_data.study_design,
                                     db.study_meta_data.sampling_method,
                                     db.study_meta_data.measurement_unit,

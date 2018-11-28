@@ -21,10 +21,16 @@
  <br>
 
 
-  <div class="alert alert-warning alert-dismissible">
+
+      {{if ds_count != 0:}}
+                 <div class="alert alert-warning alert-dismissible">
   <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-  {{=message}}
-</div>
+        {{=message}}</div>
+      {{else:}}
+            {{pass}}
+
+
+
 
 
 
