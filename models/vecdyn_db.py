@@ -9,13 +9,20 @@
 db.define_table('data_set_upload',
                 Field('csvfile','upload',uploadfield=False, requires = IS_UPLOAD_FILENAME(extension='csv')))
 
+
+db.define_table('collection_author',
+    Field('name', 'string', notnull=True, unique=True),
+    Field('description', 'text')
+)
+
 DATARIGHTS = ('Open', 'Embargo', 'Closed')
 
 DATATYPE = ('Abundance', 'Presence/Absence')
 
 db.define_table('publication_info',
                 Field('title', unique=True, type='string', required=True, comment ='Short title identifying the data collection'),
-                Field('collection_author', comment='State the name of collection author'),
+                Field('collection_author_id', db.collection_author,
+                      requires=IS_IN_DB(db, 'collection_author.id', 'collection_author.name')),
                 Field('dataset_doi', type='string', comment = 'Digital Object Identifier for the dataset'),
                 Field('publication_doi', type='string', comment = 'If linked to a publication, enter the Digital Object Identifier of the publication'),
                 Field('description', type='text',  required=True, comment='Brief description of the dataset'),
@@ -94,5 +101,51 @@ if db(db.time_series_data.id>0).count() == 0:
     db.time_series_data.truncate()
 
 
+#THIS IS FOR SELECT_OR_ADD
+class SelectOrAdd(object):
+    def __init__(self, controller=None, function=None, form_title=None, button_text=None, dialog_width=450):
+        if form_title == None:
+            self.form_title = T('Add New')
+        else:
+            self.form_title = T(form_title)
+        if button_text == None:
+            self.button_text = T('Add')
+        else:
+            self.button_text = T(button_text)
+        self.dialog_width = dialog_width
 
+        self.controller = controller
+        self.function = function
+
+    def widget(self, field, value):
+        #generate the standard widget for this field
+        from gluon.sqlhtml import OptionsWidget
+        select_widget = OptionsWidget.widget(field, value)
+
+        #get the widget's id (need to know later on so can tell receiving controller what to update)
+        my_select_id = select_widget.attributes.get('_id', None)
+        add_args = [my_select_id]
+        #create a div that will load the specified controller via ajax
+        form_loader_div = DIV(LOAD(c=self.controller, f=self.function, args=add_args, ajax=True), _id=my_select_id + "_dialog-form", _title=self.form_title)
+        #generate the "add" button that will appear next the options widget and open our dialog
+        activator_button = A(T(self.button_text), _class='button button-primary', _id=my_select_id + "_option_add_trigger")
+        #create javascript for creating and opening the dialog
+        js = 'jQuery( "#%s_dialog-form" ).dialog({autoOpen: false, show: "blind", hide: "explode", width: %s});' % (my_select_id, self.dialog_width)
+        js += 'jQuery( "#%s_option_add_trigger" ).click(function() { jQuery( "#%s_dialog-form" ).dialog( "open" );return false;}); ' % (my_select_id, my_select_id)  # decorate our activator button for good measure
+        js += 'jQuery(function() { jQuery( "#%s_option_add_trigger" ).button({text: true, icons: { primary: "ui-icon-circle-plus"} }); });' % (my_select_id)
+        jq_script = SCRIPT(js, _type="text/javascript")
+
+        wrapper = DIV(_id=my_select_id + "_adder_wrapper")
+        wrapper.components.extend([select_widget, form_loader_div, activator_button, jq_script])
+        return wrapper
+
+
+add_option = SelectOrAdd(form_title=T("Add a new something"),
+                                              controller="vecdyn",
+                                              function="add_collection_author",
+                                              button_text=T("Add New"),
+                                              dialog_width=600)
+
+
+db.publication_info.collection_author_id.widget = add_option.widget
 

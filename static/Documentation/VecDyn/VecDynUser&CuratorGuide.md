@@ -233,36 +233,29 @@ only work if you have been granted access rights.
 
 *Note that the data upload facility (temporary) is only set up to process one dataset at a time, one data set compromises of one species and one main umbrella geographical location.*
 
-### Adding data to the database
+### Adding data to the database (Curators only)
 
-- This feature is currently only available to VectorBite  curators, however it will be opened to community members at a later date.
-- This process will only work with a .CSV file,  formatted in the VecDyn template style.
+This process will only work if all entries are mapped to the VecDyn template, the file also needs to be submitted in CSV format.
 
-Once logged into the VectorBite web application navigate to '**Management**' and then '**Manage VecDyn datasets**'
+Once logged into the VectorBiTE web application, in the navigation bar click on '**Management**', then '**Manage VecDyn Datasets**'. Next click on **‘Register New Dataset’**. 
 
-Click on **‘Register New Dataset’**
+![](Images/DataUploadStep1.png)
 
+Fill in the publication information table. Information captured in this table describes general meta data relating to the dataset i.e. title, DOI, collection author, copyright information and so on. If it is the first time of submitting a dataset for a particular collection author, then click on 'Add new next to ' the relevant field then insert and submit the new collection author details in the pop up box. 
 
+![](Images/DataUploadStep2.1.png) 
 
-<img src="https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Images/DataUploadStep1.png" width="75%" style="display: block; margin: auto;" />
+![](Images/DataUploadStep2.2.png)
 
-
-
-The publication information table captures general publication information about the dataset i.e. title, DOI, data provider. Note that, every time a separate DOI is registered for a particular dataset, a new publication information table must be submitted. 
-
-
-
-<img src="https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Images/DataUploadStep2.png" width="75%" style="display: block; margin: auto;" />
-
-You'll now see an entry in the table for the data set you have just registered.  You can now add a dataset to this entry (upload a csv).  Click on ‘Add new data set to collection on the particular row of the dataset. 
+You'll now see an entry in the table for the data set you have just registered.  You can now add a dataset to this entry (upload a CSV).  Click on ‘Add new data set to collection on the particular row of the dataset. 
 
 
 
-<img src="https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Images/DataUploadStep3.png" width="75%" style="display: block; margin: auto;" />
+![](Images/DataUploadStep3.png)
 
 Next select a taxon, it is best to search using the first box first. When you have found the taxon you are after. Hit the ‘select’ button on the aligning row.
 
-<img src="https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Images/DataUploadStep4.png" width="75%" style="display: block; margin: auto;" />
+![](Images/DataUploadStep4.png) width="75%" 
 
 
 
@@ -271,6 +264,8 @@ Next select a geographical location, this either needs to be country or an ADM1 
 
 
 <img src="https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Images/DataUploadStep5.png" width="75%" style="display: block; margin: auto;" />
+
+
 
 Next submit all the study data (metadata) and click on submit once you have completed the page.
 
@@ -293,7 +288,7 @@ However, if there is a problem you can delete or edit each entry. To delete all 
 src="https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Images/DataUploadStep8.png"
 width="75%" style="display: block; margin: auto;" />
 
-
+![]()
 
 Note that you can also edit every part of your data after it has been submitted with the exception of taxon names and place names.
 

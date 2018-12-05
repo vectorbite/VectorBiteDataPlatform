@@ -25,7 +25,7 @@ def dataset_registration():
     if task_id != None:
         myrecord = db(db.task.id == task_id).select().first()
         db.publication_info.title.default = myrecord.title
-        db.publication_info.collection_author.default = myrecord.collection_author
+        db.publication_info.collection_author_id.default = myrecord.collection_author_id
         db.publication_info.dataset_doi.default = myrecord.digital_object_identifier #need to correct this, dataset doi missing
         db.publication_info.publication_doi.default = myrecord.publication_doi
         db.publication_info.url.default = myrecord.url
@@ -43,31 +43,66 @@ def dataset_registration():
     db.publication_info.embargo_release_date.readable = False
     db.publication_info.submit.writable = False
     db.publication_info.submit.readable = False
+    add_option = SelectOrAdd(form_title="Add new collection author",
+                             controller="vecdyn",
+                             function="add_collection_author",
+                             button_text = "Add New")
+    #assign widget to field
+    db.publication_info.collection_author_id.widget = add_option.widget
     form = SQLFORM(db.publication_info)
     if form.process().accepted:
         session.flash = 'Thank you, your data set has been registered, now upload a data set'
         redirect(URL('dataset_registrations'))
+        # you need jQuery for the widget to work; include here or just put it in your master layout.html
+    response.files.append("http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js")
+    response.files.append("http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css")
     return locals()
 #lambda row: A('Add new data set to collection',_href=URL("vecdyn", "taxon_select",vars={'id':row.id})),\
+
+def add_collection_author():
+    #this is the controller function that will appear in our dialog
+    form = SQLFORM(db.collection_author)
+    if form.accepts(request):
+        #Successfully added new item
+        #do whatever else you may want
+        #Then let the user know adding via our widget worked
+        response.flash = T("Added")
+        target = request.args[0]
+        #close the widget's dialog box
+        response.js = 'jQuery( "#%s_dialog-form" ).dialog( "close" ); ' %(target)
+        #update the options they can select their new category in the main form
+        response.js += """jQuery("#%s").append("<option value='%s'>%s</option>");""" \
+                % (target, form.vars.id, form.vars.name)
+        #and select the one they just added
+        response.js += """jQuery("#%s").val("%s");""" % (target, form.vars.id)
+        #finally, return a blank form incase for some reason they wanted to add another option
+        return form
+    elif form.errors:
+        # silly user, just send back the form and it'll still be in our dialog box complete with error messages
+        return form
+    else:
+        #hasn't been submitted yet, just give them the fresh blank form
+        return form
+
 
 @auth.requires_membership('VectorbiteAdmin')
 def dataset_registrations():
     #query = db.publication_info.created_by==me
     [setattr(f, 'readable', False)
     for f in db.publication_info
-        if f.name not in ('db.publication_info.data_rights, db.publication_info.dataset_doi, db.publication_info.title,db.publication_info.collection_author, db.publication_info.submit, db.publication_info.created_by')]
+        if f.name not in ('db.publication_info.data_rights, db.publication_info.dataset_doi, db.publication_info.title,db.publication_info.collection_author_id, db.publication_info.submit, db.publication_info.created_by')]
     #db.publication_info.data_rights.represent = lambda data_rights, row: A(data_rights, _href=URL('edit_data_rights', args=row.id))
     links = [lambda row: A('Upload data',_href=URL("vecdyn_data_uploader", "importer",vars={'id':row.id}),_class="btn btn-primary"), \
-             lambda row: A('View dataset entries', _href=URL("vecdyn", "view_data", vars={'publication_info_id': row.id}),_class="btn btn-primary"),
+             lambda row: A('View dataset', _href=URL("vecdyn", "view_data", vars={'publication_info_id': row.id}),_class="btn btn-primary"),
              lambda row: A('Edit data rights', _href=URL("vecdyn", "edit_data_rights", vars={'publication_info_id': row.id}),
                            _class="btn btn-primary"),
-             lambda row: A('View/edit publication info', _href=URL("vecdyn", "edit_dataset_general_info", vars={'publication_info_id': row.id}),
+             lambda row: A('edit', _href=URL("vecdyn", "edit_dataset_general_info", vars={'publication_info_id': row.id}),
                            _class="btn btn-primary")]
     form = SQLFORM.grid(db.publication_info, links = links, searchable=False, deletable=lambda row: (row.created_by==me),\
                         editable=False, details=False, create=False,csv=False, maxtextlength=200,
                         fields=[
                             db.publication_info.title,
-                            db.publication_info.collection_author,
+                            db.publication_info.collection_author_id,
                             db.publication_info.dataset_doi,
                             db.publication_info.data_rights,
                             db.publication_info.submit,
@@ -91,11 +126,22 @@ def edit_dataset_general_info():
     db.publication_info.embargo_release_date.writable = False
     db.publication_info.embargo_release_date.readable = False
     publication_info_id = request.get_vars.publication_info_id
+    add_option = SelectOrAdd(form_title="Add new collection author",
+                             controller="vecdyn",
+                             function="add_collection_author",
+                             button_text="Add New")
+    # assign widget to field
+    db.publication_info.collection_author_id.widget = add_option.widget
+    # you need jQuery for the widget to work; include here or just put it in your master layout.html
+    response.files.append("http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js")
+    response.files.append("http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css")
     form = SQLFORM(db.publication_info,publication_info_id, showid=False)
     if form.process().accepted:
         session.flash = 'Thanks you have successfully submit your changes'
         redirect(URL('dataset_registrations'))
     return locals()
+
+
 
 @auth.requires_membership('VectorbiteAdmin')
 def edit_data_rights():
@@ -103,8 +149,8 @@ def edit_data_rights():
     #db.data_rights.publication_info_id.readable = False
     db.publication_info.title.writable = False
     db.publication_info.title.readable = False
-    db.publication_info.collection_author.writable = False
-    db.publication_info.collection_author.readable = False
+    db.publication_info.collection_author_id.writable = False
+    db.publication_info.collection_author_id.readable = False
     db.publication_info.dataset_doi.writable = False
     db.publication_info.dataset_doi.readable = False
     #db.publication_info.publication_date.writable = False
@@ -247,9 +293,10 @@ def view_unstandardised_data():
                                          vars={'study_meta_data_id': row.study_meta_data.id,
                                                'publication_info_id': publication_info_id})),
                  ]
+
         query = ((db.study_meta_data.publication_info_id == publication_info_id) & (
                     db.study_meta_data.ADM_CODE == db.gaul_admin_layers.ADM_CODE) & (
-                         db.taxon.taxonID == db.study_meta_data.taxonID))
+                         db.study_meta_data.taxonID==None))
         form = SQLFORM.grid(query, field_id=db.study_meta_data.id,
                             fields=[db.taxon.tax_species,
                                     db.gaul_admin_layers.ADM2_NAME,
