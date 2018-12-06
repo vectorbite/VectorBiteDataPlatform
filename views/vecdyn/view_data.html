@@ -1,29 +1,57 @@
 {{extend 'layout.html'}}
+
 <div class="btn-group.btn-group-justified" role="group" aria-label="...">
             {{=A('Back to Data Collections Page',_href=URL('dataset_registrations'),_class="btn btn-primary")}}
             {{=A('Upload Data',_href=URL('vecdyn_data_uploader','vecdyn_importer',vars={'publication_info_id':publication_info_id}),_class="btn btn-primary")}}
-            {{=A('Edit dataset rights',_href=URL("vecdyn", "edit_data_rights",vars={'publication_info_id':publication_info_id}),_class="btn btn-primary")}}
-            {{=A('Edit publication info',_href=URL("vecdyn", "edit_dataset_general_info",vars={'publication_info_id':publication_info_id}),_class="btn btn-primary")}}
             {{if count >=1:}}
             {{=A('Standardise',_href=URL('standardise_taxon',vars={'publication_info_id':publication_info_id}),_class="btn btn-warning")}}
             {{elif count2 >=1:}}
             {{=A('Standardise',_href=URL('standardise_taxon',vars={'publication_info_id':publication_info_id}),_class="btn btn-warning")}}
             {{else:}}
             {{pass}}
-
+    <div class="btn-group">
+    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+    Data status <span class="caret"></span></button>
+    <ul class="dropdown-menu" role="menu">
+      <li>{{=A('View Standardised',_href=URL('vecdyn','view_data',vars={'publication_info_id':publication_info_id}))}}</li>
+      <li>{{=A('View Unstandardised',_href=URL('vecdyn','view_unstandardised_data',vars={'publication_info_id':publication_info_id}))}}</li>
+    </ul>
+  </div>
   </div>
            <div style="background: linear-gradient(240deg, lightgrey, whitesmoke)" class="jumbotron">
 
 
+                                 <h3><center> {{for row in publication_info_query:}}
+                      Dataset title: {{=row.title}}
+                      {{pass}}
+                  </center>
+                  </h3>
+<br>
+                     {{if ds_count != 0:}}
+                 <div class="alert alert-warning alert-dismissible">
+  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        {{=message}}</div>
+      {{else:}}
+            {{pass}}
+
+
+
+               <br>
+
+
+
+
+
+
+<div class="container-fluid">
+  <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#pub_info">Publication Information</button>
+            <br>
+            <br>
+  <div id="pub_info" class="collapse">
 
     <table class="table table-condensed" cellspacing="1px">
       {{for row in publication_info_query:}}
-    <thead>
-      <tr>
-        <th>Publication Information</th>
-        <th></th>
-      </tr>
-    </thead>
+
     <tbody>
       <tr>
         <td>Title: </td>
@@ -49,59 +77,95 @@
         <td>DataSet Type: </td>
         <td>{{=row.data_set_type}}</td>
       </tr>
-            <tr>
-        <th>Contact Information</th>
-        <th></th>
-      </tr>
-      <tr>
-        <td>DataSet Type: </td>
-        <td>{{=row.data_set_type}}</td>
-      </tr>
-            <tr>
-        <td>DataSet Type: </td>
-        <td>{{=row.data_set_type}}</td>
-      </tr>
-            <tr>
-        <td>DataSet Type: </td>
-        <td>{{=row.data_set_type}}</td>
-      </tr>
-            <tr>
-        <td>DataSet Type: </td>
-        <td>{{=row.data_set_type}}</td>
-      </tr>
-            <tr>
-        <td>DataSet Type: </td>
-        <td>{{=row.data_set_type}}</td>
-      </tr>
+    </tbody>
+  </table>
+    {{pass}}
 
-                <tr>
-        <th>Dataset rights </th>
-        <th></th>
+   </div>
+       </div>
+
+
+
+      <div class="container-fluid">
+  <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#contact_info">Contact Information</button>
+            <br>
+            <br>
+  <div id="contact_info" class="collapse">
+
+    <table class="table table-condensed" cellspacing="1px">
+      {{for row in publication_info_query:}}
+
+    <tbody>
+      <tr>
+        <td>Contact Name: </td>
+        <td>{{=row.contact_name}}</td>
+      </tr>
+            <tr>
+        <td>Contact Affiliation: </td>
+        <td>{{=row.contact_affiliation}}</td>
+      </tr>
+            <tr>
+        <td>Email: </td>
+        <td>{{=row.email}}</td>
+      </tr>
+            <tr>
+        <td>ORCID: </td>
+        <td>{{=row.orcid}}</td>
+      </tr>
+          </tbody>
+  </table>
+    {{pass}}
+
+   </div>
+       </div>
+
+
+
+
+
+
+
+
+            <div class="container-fluid">
+  <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#rights_info">Dataset Rights & Access</button>
+            <br>
+            <br>
+  <div id="rights_info" class="collapse">
+
+    <table class="table table-condensed" cellspacing="1px">
+      {{for row in publication_info_query:}}
+
+    <tbody>
+    <tr>
+        <td>Dataset License: </td>
+        <td>{{=row.dataset_license}}</td>
+      </tr>
+    <tr>
+        <td>Data Rights: </td>
+        <td>{{=row.data_rights}}</td>
+      </tr>
+    <tr>
+        <td>Embargo Release Date: </td>
+        <td>{{=row.embargo_release_date}}</td>
+      </tr>
+    <tr>
+        <td>Submitted: </td>
+        <td>{{=row.submit}}</td>
       </tr>
     </tbody>
   </table>
     {{pass}}
 
+   </div>
+       </div>
 
 
 
-
-                                  <div class="btn-group.btn-group-justified" role="group" aria-label="...">
-    <a class="btn btn-link" href="{{=URL('vecdyn','view_data',vars={'publication_info_id':publication_info_id})}}">{{=T("View standardised data")}}</a>
-         <a class="btn btn-link" href="{{=URL('vecdyn','view_unstandardised_data',vars={'publication_info_id':publication_info_id})}}">{{=T("View unstandardised data")}}</a>
- </div>
 
 
  <br>
 
 
-
-      {{if ds_count != 0:}}
-                 <div class="alert alert-warning alert-dismissible">
-  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-        {{=message}}</div>
-      {{else:}}
-            {{pass}}
 
 
 
