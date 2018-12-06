@@ -12,8 +12,8 @@ db.define_table('data_set_upload',
 
 db.define_table('collection_author',
     Field('name', 'string', notnull=True, unique=True),
-    Field('description', 'text')
-)
+    Field('description', 'text'),
+                format='%(name)s')
 
 DATARIGHTS = ('Open', 'Embargo', 'Closed')
 
@@ -21,7 +21,7 @@ DATATYPE = ('Abundance', 'Presence/Absence')
 
 db.define_table('publication_info',
                 Field('title', unique=True, type='string', required=True, comment ='Short title identifying the data collection'),
-                Field('collection_author_id', db.collection_author,
+                Field('collection_author', db.collection_author,
                       requires=IS_IN_DB(db, 'collection_author.id', 'collection_author.name')),
                 Field('dataset_doi', type='string', comment = 'Digital Object Identifier for the dataset'),
                 Field('publication_doi', type='string', comment = 'If linked to a publication, enter the Digital Object Identifier of the publication'),
@@ -147,5 +147,5 @@ add_option = SelectOrAdd(form_title=T("Add a new something"),
                                               dialog_width=600)
 
 
-db.publication_info.collection_author_id.widget = add_option.widget
+db.publication_info.collection_author.widget = add_option.widget
 

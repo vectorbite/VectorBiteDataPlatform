@@ -25,7 +25,7 @@ def dataset_registration():
     if task_id != None:
         myrecord = db(db.task.id == task_id).select().first()
         db.publication_info.title.default = myrecord.title
-        db.publication_info.collection_author_id.default = myrecord.collection_author_id
+        db.publication_info.collection_author.default = myrecord.collection_author
         db.publication_info.dataset_doi.default = myrecord.digital_object_identifier #need to correct this, dataset doi missing
         db.publication_info.publication_doi.default = myrecord.publication_doi
         db.publication_info.url.default = myrecord.url
@@ -48,7 +48,7 @@ def dataset_registration():
                              function="add_collection_author",
                              button_text = "Add New")
     #assign widget to field
-    db.publication_info.collection_author_id.widget = add_option.widget
+    db.publication_info.collection_author.widget = add_option.widget
     form = SQLFORM(db.publication_info)
     if form.process().accepted:
         session.flash = 'Thank you, your data set has been registered, now upload a data set'
@@ -90,19 +90,14 @@ def dataset_registrations():
     #query = db.publication_info.created_by==me
     [setattr(f, 'readable', False)
     for f in db.publication_info
-        if f.name not in ('db.publication_info.data_rights, db.publication_info.dataset_doi, db.publication_info.title,db.publication_info.collection_author_id, db.publication_info.submit, db.publication_info.created_by')]
+        if f.name not in ('db.publication_info.data_rights, db.publication_info.dataset_doi, db.publication_info.title,db.publication_info.collection_author, db.publication_info.submit, db.publication_info.created_by')]
     #db.publication_info.data_rights.represent = lambda data_rights, row: A(data_rights, _href=URL('edit_data_rights', args=row.id))
-    links = [lambda row: A('Upload data',_href=URL("vecdyn_data_uploader", "importer",vars={'id':row.id}),_class="btn btn-primary"), \
-             lambda row: A('View dataset', _href=URL("vecdyn", "view_data", vars={'publication_info_id': row.id}),_class="btn btn-primary"),
-             lambda row: A('Edit data rights', _href=URL("vecdyn", "edit_data_rights", vars={'publication_info_id': row.id}),
-                           _class="btn btn-primary"),
-             lambda row: A('edit', _href=URL("vecdyn", "edit_dataset_general_info", vars={'publication_info_id': row.id}),
-                           _class="btn btn-primary")]
+    links = [lambda row: A('Enter Dataset Control Panel', _href=URL("vecdyn", "view_data", vars={'publication_info_id': row.id}),_class="btn btn-primary")]
     form = SQLFORM.grid(db.publication_info, links = links, searchable=False, deletable=lambda row: (row.created_by==me),\
                         editable=False, details=False, create=False,csv=False, maxtextlength=200,
                         fields=[
                             db.publication_info.title,
-                            db.publication_info.collection_author_id,
+                            db.publication_info.collection_author,
                             db.publication_info.dataset_doi,
                             db.publication_info.data_rights,
                             db.publication_info.submit,
@@ -131,7 +126,7 @@ def edit_dataset_general_info():
                              function="add_collection_author",
                              button_text="Add New")
     # assign widget to field
-    db.publication_info.collection_author_id.widget = add_option.widget
+    db.publication_info.collection_author.widget = add_option.widget
     # you need jQuery for the widget to work; include here or just put it in your master layout.html
     response.files.append("http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js")
     response.files.append("http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css")
@@ -145,12 +140,13 @@ def edit_dataset_general_info():
 
 @auth.requires_membership('VectorbiteAdmin')
 def edit_data_rights():
+    publication_info_id = request.get_vars.publication_info_id
     #db.data_rights.publication_info_id.writable = False
     #db.data_rights.publication_info_id.readable = False
     db.publication_info.title.writable = False
     db.publication_info.title.readable = False
-    db.publication_info.collection_author_id.writable = False
-    db.publication_info.collection_author_id.readable = False
+    db.publication_info.collection_author.writable = False
+    db.publication_info.collection_author.readable = False
     db.publication_info.dataset_doi.writable = False
     db.publication_info.dataset_doi.readable = False
     #db.publication_info.publication_date.writable = False
@@ -171,7 +167,6 @@ def edit_data_rights():
     db.publication_info.data_set_type.readable = False
     db.publication_info.publication_doi.writable = False
     db.publication_info.publication_doi.readable = False
-    publication_info_id = request.get_vars.publication_info_id
     form = SQLFORM(db.publication_info, publication_info_id, showid=False)
     if form.process().accepted:
         session.flash = 'Thanks you have successfully submitted your changes'
@@ -186,6 +181,7 @@ def edit_data_rights():
 def view_data():
     #####user message code
     publication_info_id = request.get_vars.publication_info_id
+    publication_info_query = db(db.publication_info.id == publication_info_id).select()
     ds_check = db(db.study_meta_data.publication_info_id == publication_info_id).select(groupby=db.study_meta_data.publication_info_id)
     ds_count = len(ds_check)
     ds_count = int(ds_count)

@@ -4,10 +4,10 @@ import csv
 ####the following function imports a vecdyn csv
 
 @auth.requires_membership('VectorbiteAdmin')
-def importer():
+def vecdyn_importer():
+    publication_info_id = request.get_vars.publication_info_id
     response.flash = 'Now upload a time series data set, make sure this is in csv format'
     #Get the publicaton infor id from the previous page
-    publication_info_id = request.get_vars.id
     form = SQLFORM(db.data_set_upload, comments = False, fields = ['csvfile'],labels={'csvfile': 'Click to search and select a file:'})
     if form.validate():
         try:
@@ -44,7 +44,7 @@ def importer():
         else:
             session.flash = 'Thank you, your data has been submitted. Now standardise  taxonomic information'
             redirect(URL("vecdyn_data_uploader", "taxon_checker", vars={'publication_info_id': publication_info_id}))
-    return dict(form=form)
+    return dict(form=form, publication_info_id=publication_info_id)
 
 
 #####The next controller checks to see if taxon  names are already in a standardized format, if so then it will add them to the dataset standardizing it
