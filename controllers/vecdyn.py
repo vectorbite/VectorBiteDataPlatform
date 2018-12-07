@@ -128,10 +128,8 @@ def edit_dataset_general_info():
     # assign widget to field
     db.publication_info.collection_author.widget = add_option.widget
     # you need jQuery for the widget to work; include here or just put it in your master layout.html
-    #response.files.append("http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js")
     response.files.append(URL('static', 'jquery-ui-1.12.1/jquery-ui.js'))
     response.files.append(URL('static', 'jquery-ui-1.12.1/jquery-ui.theme.css'))
-    #response.files.append("http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css")
     form = SQLFORM(db.publication_info,publication_info_id, showid=False)
     if form.process().accepted:
         session.flash = 'Thanks you have successfully submit your changes'
