@@ -148,4 +148,3 @@ add_option = SelectOrAdd(form_title=T("Add a new something"),
 
 
 db.publication_info.collection_author.widget = add_option.widget
-

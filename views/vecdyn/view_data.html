@@ -3,55 +3,42 @@
 <div class="btn-group.btn-group-justified" role="group" aria-label="...">
             {{=A('Back to Data Collections Page',_href=URL('dataset_registrations'),_class="btn btn-primary")}}
             {{=A('Upload Data',_href=URL('vecdyn_data_uploader','vecdyn_importer',vars={'publication_info_id':publication_info_id}),_class="btn btn-primary")}}
-            {{if count >=1:}}
-            {{=A('Standardise',_href=URL('standardise_taxon',vars={'publication_info_id':publication_info_id}),_class="btn btn-warning")}}
-            {{elif count2 >=1:}}
-            {{=A('Standardise',_href=URL('standardise_taxon',vars={'publication_info_id':publication_info_id}),_class="btn btn-warning")}}
-            {{else:}}
-            {{pass}}
+                 {{if count >=1:}}
     <div class="btn-group">
     <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-    Data status <span class="caret"></span></button>
+    View Standardised/untandardised Entries <span class="caret"></span></button>
     <ul class="dropdown-menu" role="menu">
       <li>{{=A('View Standardised',_href=URL('vecdyn','view_data',vars={'publication_info_id':publication_info_id}))}}</li>
       <li>{{=A('View Unstandardised',_href=URL('vecdyn','view_unstandardised_data',vars={'publication_info_id':publication_info_id}))}}</li>
     </ul>
   </div>
+        {{else:}}
+            {{pass}}
   </div>
            <div style="background: linear-gradient(240deg, lightgrey, whitesmoke)" class="jumbotron">
 
 
-                                 <h3><center> {{for row in publication_info_query:}}
-                      Dataset title: {{=row.title}}
+                                 <h5><center> {{for row in publication_info_query:}}
+ <center>Dataset: {{=row.title}}</center>
                       {{pass}}
                   </center>
-                  </h3>
+                  </h5>
 <br>
-                     {{if ds_count != 0:}}
-                 <div class="alert alert-warning alert-dismissible">
-  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-        {{=message}}</div>
-      {{else:}}
-            {{pass}}
+<hr>
 
-
-
-               <br>
-
-
-
-
-
+             <center>General Dataset Publication</center>
 
 <div class="container-fluid">
-  <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#pub_info">Publication Information</button>
-            <br>
-            <br>
+  <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#pub_info">View Publication Information</button>
   <div id="pub_info" class="collapse">
 
     <table class="table table-condensed" cellspacing="1px">
       {{for row in publication_info_query:}}
-
+  <thead>
+      <tr>
+        <th><a class="btn btn-link" href="{{=URL('vecdyn','edit_dataset_general_info',vars={'publication_info_id':publication_info_id})}}">{{=T("Edit Publication Information")}}</a></th>
+      </tr>
+    </thead>
     <tbody>
       <tr>
         <td>Title: </td>
@@ -87,14 +74,18 @@
 
 
       <div class="container-fluid">
-  <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#contact_info">Contact Information</button>
-            <br>
-            <br>
+  <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#contact_info">View  Contact Information</button>
+
   <div id="contact_info" class="collapse">
 
     <table class="table table-condensed" cellspacing="1px">
       {{for row in publication_info_query:}}
-
+          <!-- Need to create a controller for edit data set contacts  -->
+  <thead>
+      <tr>
+        <th><a class="btn btn-link" href="{{=URL('vecdyn','edit_dataset_general_info',vars={'publication_info_id':publication_info_id})}}">{{=T("Edit Contact Information")}}</a></th>
+      </tr>
+    </thead>
     <tbody>
       <tr>
         <td>Contact Name: </td>
@@ -121,20 +112,18 @@
 
 
 
-
-
-
-
-
             <div class="container-fluid">
-  <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#rights_info">Dataset Rights & Access</button>
-            <br>
-            <br>
+  <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#rights_info">View Dataset Rights & Access</button>
+
   <div id="rights_info" class="collapse">
 
     <table class="table table-condensed" cellspacing="1px">
       {{for row in publication_info_query:}}
-
+  <thead>
+      <tr>
+        <th><a class="btn btn-link" href="{{=URL('vecdyn','edit_data_rights',vars={'publication_info_id':publication_info_id})}}">{{=T("Edit Dataset Rights & Access")}}</a></th>
+      </tr>
+    </thead>
     <tbody>
     <tr>
         <td>Dataset License: </td>
@@ -160,15 +149,7 @@
        </div>
 
 
-
-
-
- <br>
-
-
-
-
-
+<hr>
 
 
 

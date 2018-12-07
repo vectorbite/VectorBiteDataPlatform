@@ -133,7 +133,7 @@ def edit_dataset_general_info():
     form = SQLFORM(db.publication_info,publication_info_id, showid=False)
     if form.process().accepted:
         session.flash = 'Thanks you have successfully submit your changes'
-        redirect(URL('dataset_registrations'))
+        redirect(URL("vecdyn", "standardise_taxon", vars={'publication_info_id': publication_info_id}))
     return locals()
 
 
@@ -170,7 +170,7 @@ def edit_data_rights():
     form = SQLFORM(db.publication_info, publication_info_id, showid=False)
     if form.process().accepted:
         session.flash = 'Thanks you have successfully submitted your changes'
-        redirect(URL('dataset_registrations'))
+        redirect(URL("vecdyn", "standardise_taxon", vars={'publication_info_id': publication_info_id}))
     return locals()
 
 
@@ -179,12 +179,14 @@ def edit_data_rights():
 
 @auth.requires_membership('VectorbiteAdmin')
 def view_data():
-    #####user message code
+    #####query for publication info pages, found at the top of the view data pages
     publication_info_id = request.get_vars.publication_info_id
     publication_info_query = db(db.publication_info.id == publication_info_id).select()
+    ###checks to see if there are understadnardised data sets in the data collection
     ds_check = db(db.study_meta_data.publication_info_id == publication_info_id).select(groupby=db.study_meta_data.publication_info_id)
     ds_count = len(ds_check)
     ds_count = int(ds_count)
+    ###following queries count to see how many unstandardiesed data sets are in the collection, supplies user with a message
     b = db((db.study_meta_data.publication_info_id == publication_info_id) & (db.study_meta_data.taxonID == None)).select(
         groupby=db.study_meta_data.taxon)
     count = len(b)
@@ -212,7 +214,8 @@ def view_data():
     else:
             response.flash = 'This is a list of all the standardised  time series data linked to this data set!'
     ####code for grid
-    links = [lambda row: A('View/edit meta data',_href=URL("vecdyn", "edit_meta_data", vars={'study_meta_data_id':row.study_meta_data.id,
+    ####row.id isnt working in this function since we are joining multiple tables, instead we need to specify the row.study_meta_data.id for the links in the table
+    links = [lambda row: A('View/edit meta entry',_href=URL("vecdyn", "edit_meta_data", vars={'study_meta_data_id':row.study_meta_data.id,
                                                                                      'publication_info_id':publication_info_id}),_class="btn btn-primary"),
              lambda row: A('View time series data entries',_class="btn btn-primary",_href=URL("vecdyn", "view_time_series_data",vars={'study_meta_data_id':row.study_meta_data.id, 'publication_info_id':publication_info_id})),
                            ]
@@ -242,16 +245,19 @@ def view_data():
     return locals()
 
 
-
-
 @auth.requires_membership('VectorbiteAdmin')
 def view_unstandardised_data():
         #####user message code
         publication_info_id = request.get_vars.publication_info_id
+        #####query for publication info pages, found at the top of the view data pages
+        publication_info_id = request.get_vars.publication_info_id
+        publication_info_query = db(db.publication_info.id == publication_info_id).select()
+        ###checks to see if there are understadnardised data sets in the data collection
         ds_check = db(db.study_meta_data.publication_info_id == publication_info_id).select(
             groupby=db.study_meta_data.publication_info_id)
         ds_count = len(ds_check)
         ds_count = int(ds_count)
+        ###following queries count to see how many unstandardiesed data sets are in the collection, supplies user with a message
         b = db((db.study_meta_data.publication_info_id == publication_info_id) & (
                     db.study_meta_data.taxonID == None)).select(
             groupby=db.study_meta_data.taxon)
@@ -263,7 +269,9 @@ def view_unstandardised_data():
         count2 = len(a)
         count2 = int(count2)
         message = ()
-        if (count >= 1) & (count2 >= 1):
+        if ds_count < 1:
+            message = "You have not uploaded any data yet"
+        elif (count >= 1) & (count2 >= 1):
             message = "You have %s taxonomic entries and %s geographic entries to standardise, click on the standardise button above and follow the insructions" % (
             count, count2)
         elif (count >= 1) & (count2 < 1):
@@ -276,42 +284,33 @@ def view_unstandardised_data():
         if query == 0:
             response.flash = "You have not yet submitted any data yet, click on 'Add time series data to add a data set' !"
         elif (count >= 1) | (count2 >= 1):
-            response.flash = 'You still need to standardise entries before they will become available in this page, once data is visible in this page it is ready to submit!'
+            response.flash = 'You still need to standardise entries!'
         else:
             response.flash = 'This is a list of all the standardised  time series data linked to this data set!'
-        ####code for grid
-        links = [lambda row: A('View/edit meta data',
-                               _href=URL("vecdyn", "edit_meta_data", vars={'study_meta_data_id': row.study_meta_data.id,
+        links = [lambda row: A('View/edit meta data entry',
+                               _href=URL("vecdyn", "edit_meta_data", vars={'study_meta_data_id': row.id,
                                                                            'publication_info_id': publication_info_id}),
                                _class="btn btn-primary"),
                  lambda row: A('View time series data entries', _class="btn btn-primary",
                                _href=URL("vecdyn", "view_time_series_data",
-                                         vars={'study_meta_data_id': row.study_meta_data.id,
+                                         vars={'study_meta_data_id': row.id,
                                                'publication_info_id': publication_info_id})),
                  ]
-
-        query = ((db.study_meta_data.publication_info_id == publication_info_id) & (
-                    db.study_meta_data.ADM_CODE == db.gaul_admin_layers.ADM_CODE) & (
-                         db.study_meta_data.taxonID==None))
+        query = ((db.study_meta_data.taxonID==None) | (db.study_meta_data.ADM_CODE==None) & (db.study_meta_data.publication_info_id == publication_info_id))
         form = SQLFORM.grid(query, field_id=db.study_meta_data.id,
-                            fields=[db.taxon.tax_species,
-                                    db.gaul_admin_layers.ADM2_NAME,
-                                    db.gaul_admin_layers.ADM1_NAME,
-                                    db.gaul_admin_layers.ADM0_NAME,
+                            fields=[db.study_meta_data.taxon,
+                                    db.study_meta_data.location_description,
                                     db.study_meta_data.study_design,
                                     db.study_meta_data.sampling_method,
                                     db.study_meta_data.measurement_unit,
                                     db.study_meta_data.value_transform],
-                            headers={'taxon.tax_species': 'Taxon',
-                                     'gaul_admin_layers.ADM2_NAME': 'District',
-                                     'gaul_admin_layers.ADM1_NAME': 'Province',
-                                     'gaul_admin_layers.ADM0_NAME': 'Country',
+                            headers={'study_meta_data.taxon': 'Original Taxon',
+                                     'study_meta_data.location_description': 'Original Location Description',
                                      'study_meta_data.study_design': 'Study Design',
                                      'study_meta_data.sampling_method': 'Sampling Method',
                                      'study_meta_data.measurement_unit': 'Measurement Unit',
                                      'study_meta_data.value_transform': 'Value Transformation'},
-                            links=links,
-                            maxtextlength=200,
+                            maxtextlength=200,links=links,
                             searchable=False, deletable=False,
                             editable=False, details=False, create=False, csv=False)
         return locals()
@@ -341,7 +340,7 @@ def edit_meta_data():
                    )
     if form.process().accepted:
         session.flash = 'Thanks you have successfully submit your changes'
-        redirect(URL('view_data'))
+        redirect(URL("vecdyn", "standardise_taxon", vars={'publication_info_id': publication_info_id}))
     return locals()
 
 

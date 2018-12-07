@@ -317,6 +317,7 @@ def submit_vecdyn_data():
      #   response.flash = 'please fill out the form in full and attach a csv file'
     return locals()
 
+
 @auth.requires_login()
 def submit_vectrait_data():
     db.task.task_type.default = 'VecTraits data submission'

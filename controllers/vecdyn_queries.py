@@ -1,5 +1,13 @@
+import datetime
+
+from gluon.tools import prettydate
+
+week = datetime.timedelta(days=7)
+
+
 
 #####VecDyn query
+
 
 #from datetime import datetime
 

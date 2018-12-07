@@ -26,7 +26,7 @@ DATARIGHTS = ('Open', 'Embargo')
 db.define_table('task',
                 Field('title', requires=IS_NOT_EMPTY(), comment='* Short title identifying the data collection'),
                 Field('task_type', requires=IS_IN_SET(TASK_TYPE), comment='*Select data submission type i.e. VecDyn or VecTraits'),
-                Field('collection_author', comment='* Name of collection author'),
+                Field('collection_author'),
                 Field('digital_object_identifier', type='string', comment='Digital Object Identifier for the dataset'),
                 Field('publication_doi', type='string', comment = 'If linked to a publication, enter the Digital Object Identifier of the publication'),
                 Field('url', requires=IS_EMPTY_OR(IS_URL()), comment = 'Web link to dataset or collection author website'),
