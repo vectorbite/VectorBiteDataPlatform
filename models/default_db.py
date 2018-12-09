@@ -31,7 +31,8 @@ DATARIGHTS = ('Open', 'Embargo')
 db.define_table('task',
                 Field('title', requires=IS_NOT_EMPTY(), comment='* Short title identifying the data collection'),
                 Field('task_type', requires=IS_IN_SET(TASK_TYPE), comment='*Select data submission type i.e. VecDyn or VecTraits'),
-                Field('collection_author', 'reference collection_author'),
+                Field('collection_author', db.collection_author,
+                      requires=IS_IN_DB(db, 'collection_author.id', 'collection_author.name')),
                 Field('digital_object_identifier', type='string', comment='Digital Object Identifier for the dataset'),
                 Field('publication_doi', type='string', comment = 'If linked to a publication, enter the Digital Object Identifier of the publication'),
                 Field('url', requires=IS_EMPTY_OR(IS_URL()), comment = 'Web link to dataset or collection author website'),
@@ -117,4 +118,14 @@ db.define_table('contact',
    Field('your_name',requires=IS_NOT_EMPTY()),
    Field('email',requires=IS_EMAIL()),
    Field('message','text'))
+
+add_option_2 = SelectOrAdd(form_title=T("Add a new something"),
+                                              controller="vecdyn",
+                                              function="add_collection_author",
+                                              button_text=T("Add New"),
+                                              dialog_width=600)
+
+
+db.task.collection_author.widget = add_option_2.widget
+
 
