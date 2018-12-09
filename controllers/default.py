@@ -307,6 +307,8 @@ def submit_vecdyn_data():
     db.task.file.requires=IS_UPLOAD_FILENAME(extension='csv')
     form = SQLFORM(db.task, labels={'task_type':'Data set category'}).process()
     if form.accepted:
+        collection_author = request.vars.collection_author
+        db.collection_author.update_or_insert(name=collection_author)
         session.flash = 'Thanks, your data set has been submitted for review, we will get back to you soon!'
         #send_email(to=db.auth_user(form.vars.assigned_to).email,
         #           sender=auth.user.email,

@@ -10,10 +10,7 @@ db.define_table('data_set_upload',
                 Field('csvfile','upload',uploadfield=False, requires = IS_UPLOAD_FILENAME(extension='csv')))
 
 
-db.define_table('collection_author',
-    Field('name', 'string', notnull=True, unique=True),
-    Field('description', 'text'),
-                format='%(name)s')
+
 
 DATARIGHTS = ('Open', 'Embargo', 'Closed')
 

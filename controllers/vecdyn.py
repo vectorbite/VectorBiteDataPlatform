@@ -25,7 +25,9 @@ def dataset_registration():
     if task_id != None:
         myrecord = db(db.task.id == task_id).select().first()
         db.publication_info.title.default = myrecord.title
-        db.publication_info.collection_author.default = myrecord.collection_author
+        collection_author = myrecord.collection_author
+        collection_author = db(db.collection_author.name == collection_author).select().first()
+        db.publication_info.collection_author.default = collection_author.id
         db.publication_info.dataset_doi.default = myrecord.digital_object_identifier #need to correct this, dataset doi missing
         db.publication_info.publication_doi.default = myrecord.publication_doi
         db.publication_info.url.default = myrecord.url
