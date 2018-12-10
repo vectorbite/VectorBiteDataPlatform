@@ -1,0 +1,42 @@
+{{extend 'layout.html'}}
+
+
+     <div style="background: linear-gradient(240deg, lightgrey, whitesmoke)" class="jumbotron">
+         <h2><center>Explore by Dataset and Collection Author </center></h2>
+         <br>
+
+
+<div class="container-fluid">
+  <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#demo">Instructions</button>
+            <br>
+            <br>
+  <div id="demo" class="collapse">
+            <ul>
+                <li>You can search for data by entering keywords related to a data set or a collector e.g. 'Imperial College'</li>
+  <li>To conduct a quick search, use the search box in the first row, just enter a keyword and hit search!</li>
+  <li>If you need to conduct an in-depth search you can use the query builder in the second row.</li>
+                <ol>
+  <li>In the left box select which element of the data set you wish to search e.g. title or collector</li>
+  <li>In the middle box select which Boolean Operator you wish to use for the search</li>
+  <li>In the right box enter the keyword</li>
+        <li>Hit 'New Search' to query, or '+ And' or '+ Or' to build a complex query </li>
+        <li>You'll now see your search terms in the first box, you should hit search here!</li>
+</ol>
+        <li>To download data either click on 'Download all' to download the entire search (limited to 50) or use the select checkbox on each right hand side row and click 'Download selected'. </li>
+</ul>
+   </div>
+       </div>
+{{=BEAUTIFY(grid)}}
+    </div>
+
+<script type="text/javascript">
+         $(document).ready(function() {
+            $("#fake_exp_sel").click(function() {
+                $("#exp_sel").click();
+            });
+         });
+     </script>
+
+<br>
+
+

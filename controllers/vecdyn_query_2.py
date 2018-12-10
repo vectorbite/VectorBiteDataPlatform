@@ -13,7 +13,7 @@ week = datetime.timedelta(days=7)
 
 #@auth.requires_login()
 @auth.requires_membership('VectorbiteAdmin')
-def vd_grid_query():
+def vecdyn_author_query():
     today = datetime.date.today()
     """
     Controller to serve a searchable grid view of the vector dynamics
@@ -33,20 +33,16 @@ def vd_grid_query():
     """
 
     # control which fields available
-    [setattr(f, 'readable', False) for f in db.taxon
-        if f.name not in ('db.taxon.tax_species,db.taxon.tax_genus,'
-                          'db.taxon.tax_family,db.taxon.tax_order')]
     [setattr(f, 'readable', False) for f in db.publication_info
-        if f.name not in ('db.publication_info.title')]
-    # MainID is not made unreadable, so that it can be accessed by the export controller
-    [setattr(f, 'readable', False) for f in db.study_meta_data
-        if f.name not in ('db.study_meta_data.id, db.study_meta_data.location_description,')]
-    [setattr(f, 'readable', False) for f in db.gaul_admin_layers
-     if f.name not in ('db.gaul_admin_layers.ADM2_NAME, db.gaul_admin_layers.ADM1_NAME, db.gaul_admin_layers.ADM0_NAME')]
+        if f.name not in ('db.publication_info.title, db.publication_info.collection_author,'
+                          'db.publication_info.data_set_type,'
+                          'db.publication_info.dataset_doi, db.publication_info.description')]
+    [setattr(f, 'readable', False) for f in db.collection_author
+     if f.name not in ('db.collection_author.id, db.collection_author.name')]
 
     # Add selectability checkboxes
     select = [('Download selected',
-               lambda ids : redirect(URL('vecdyn_queries', 'vec_dyn_download', vars=dict(ids=ids))),
+               lambda ids : redirect(URL('vecdyn_query_2', 'vec_dyn_download', vars=dict(ids=ids))),
                'btn btn-default')]
 
     # Adding an exporter that grabs all the data from a query,
@@ -58,43 +54,36 @@ def vd_grid_query():
                   csv=False, xml=False, html=False, json=False,
                   tsv_with_hidden_cols=False, tsv=False)
 
-    # turn the MainID into a download link
-    db.study_meta_data.represent = lambda value, row: A(value, _href=URL("vecdyn_queries","vec_dyn_download",
-                                                    vars={'ids': row.study_meta_data.id}))
+    # turn the study_meta_data.id into a download link
+    db.publication_info.represent = lambda value, row: A(value, _href=URL("vecdyn_query_2","vec_dyn_download",
+                                                    vars={'ids': row.publication_info.id}))
     # get the grid
     # week = datetime.timedelta(days=7)
     # Field('deadline', 'datetime', default=request.now + week),
-    grid = SQLFORM.grid((db.study_meta_data.publication_info_id == db.publication_info.id)
-                        & (db.taxon.taxonID == db.study_meta_data.taxonID)
-                        & (db.publication_info.data_rights == 'Open') #| (db.publication_info.data_rights == 'Embargo'))
-#need to decide how we want to implement embargo, either auto change to open or keep embargo but becomes searchable on release data
-                        #& ((db.publication_info.embargo_release_date == None) | (db.publication_info.embargo_release_date <= today))
-                        & (db.publication_info.submit == True)
-                        & (db.gaul_admin_layers.ADM_CODE == db.study_meta_data.ADM_CODE),
+    #    A(name, _href=URL('edit_task', vars={'collection_author': row.collection_author.name}))
+    collection_author = request.get_vars.collection_author
+    if collection_author != None:
+        collection_author = db(db.collection_author.name == collection_author).select().first()
+        query = ((db.publication_info.collection_author == collection_author.id)
+                        & (db.publication_info.data_rights == 'Open')
+                        & (db.publication_info.submit == True))
+    else:
+        query = ((db.publication_info.collection_author == db.collection_author.id)
+                 & (db.publication_info.data_rights == 'Open')
+                 & (db.publication_info.submit == True))
+    grid = SQLFORM.grid(query,
                         exportclasses=export,
-                        field_id=db.study_meta_data.id,
+                        field_id=db.publication_info.id,
                         fields= [db.publication_info.title,
                                  db.publication_info.collection_author,
-                                 db.taxon.tax_species, db.taxon.tax_genus,
-                                 db.taxon.tax_family, db.taxon.tax_order,
-                                 db.taxon.tax_class, db.taxon.tax_phylum,
-                                 db.study_meta_data.location_description,
-                                 db.gaul_admin_layers.ADM0_NAME,
-                                 db.gaul_admin_layers.ADM1_NAME,
-                                 db.gaul_admin_layers.ADM2_NAME],
-
+                                 db.publication_info.dataset_doi,
+                                 db.publication_info.description,
+                                 db.publication_info.data_set_type],
                         headers={'publication_info.title' : 'Title',
-                                 'publication_info.collection_author': 'Author',
-                                 'taxon.tax_species' : 'Taxon',
-                                 'taxon.tax_genus' : 'Genus',
-                                 'taxon.tax_family' : 'Family',
-                                 'taxon.tax_order' : 'Order',
-                                 'taxon.tax_class' : 'Class',
-                                 'taxon.tax_phylum' : 'Phylum',
-                                 'gaul_admin_layers.ADM0_NAME': 'Administrative Division 0',
-                                 'gaul_admin_layers.ADM1_NAME' : 'Administrative Division 1',
-                                 'gaul_admin_layers.ADM2_NAME': 'Administrative Division 2',
-                                 'study_meta_data.id' : 'Dataset ID' },
+                                 'publication_info.collection_author': 'Collection Author',
+                                 'publication_info.dataset_doi': 'DOI',
+                                 'publication_info.description': 'Description',
+                                 'publication_info.data_set_type': 'Dataset Type'},
                         maxtextlength=200,
                         selectable=select,
                         deletable=False, editable=False, details=False, create=False)
@@ -164,10 +153,11 @@ def _get_data_csv(ids):
     and the Exporter class, so define here once and call from each.
     """
 
-    rows = db((db.study_meta_data.id.belongs(ids)) &
+    rows = db((db.publication_info.id.belongs(ids)) &
+              (db.publication_info.collection_author == db.collection_author.id) &
+              (db.study_meta_data.publication_info_id == db.publication_info.id) &
               (db.taxon.taxonID == db.study_meta_data.taxonID) &
               (db.gaul_admin_layers.ADM_CODE == db.study_meta_data.ADM_CODE) &
-              (db.publication_info.id == db.study_meta_data.publication_info_id) &
               (db.time_series_data.study_meta_data_id == db.study_meta_data.id)).select(
                     db.study_meta_data.title,
                     db.taxon.tax_species,
@@ -210,7 +200,7 @@ def _get_data_csv(ids):
                     db.study_meta_data.gps_obfuscation_info,
                     db.publication_info.title,
                     db.publication_info.description,
-                    db.publication_info.collection_author,
+                    db.collection_author.name,
                     db.publication_info.dataset_doi,
                     db.publication_info.publication_doi,
                     db.publication_info.description,
