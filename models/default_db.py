@@ -120,7 +120,7 @@ db.define_table('contact',
    Field('message','text'))
 
 add_option_2 = SelectOrAdd(form_title=T("Add a new something"),
-                                              controller="vecdyn",
+                                              controller="default",
                                               function="add_collection_author",
                                               button_text=T("Add New"),
                                               dialog_width=600)

@@ -65,8 +65,8 @@ db.define_table('study_meta_data',
                 Field('sampling_protocol', type = 'string', comment='How entities were sampled'), #9
                 Field('measurement_unit', type = 'string', required=True, comment='Unit of measurement'), #10
                 Field('value_transform', type = 'string', comment='Note if the original values have been transformed'), #11
-                Field('taxonID', default=None), #12
-                Field('ADM_CODE', default=None), #13
+                Field('taxonID', 'reference taxon', default=None), #12
+                Field('ADM_CODE', 'reference gaul_admin_layers', default=None), #13
                 Field('publication_info_id', 'reference publication_info')) #14
 
 db.study_meta_data.publication_info_id.requires = IS_IN_DB(db, db.publication_info.id)#, '%(title)s')

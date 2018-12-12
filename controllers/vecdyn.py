@@ -135,7 +135,7 @@ def edit_dataset_general_info():
     form = SQLFORM(db.publication_info,publication_info_id, showid=False)
     if form.process().accepted:
         session.flash = 'Thanks you have successfully submit your changes'
-        redirect(URL("vecdyn", "standardise_taxon", vars={'publication_info_id': publication_info_id}))
+        redirect(URL("vecdyn", "view_data", vars={'publication_info_id': publication_info_id}))
     return locals()
 
 
@@ -172,7 +172,7 @@ def edit_data_rights():
     form = SQLFORM(db.publication_info, publication_info_id, showid=False)
     if form.process().accepted:
         session.flash = 'Thanks you have successfully submitted your changes'
-        redirect(URL("vecdyn", "standardise_taxon", vars={'publication_info_id': publication_info_id}))
+        redirect(URL("vecdyn", "view_data", vars={'publication_info_id': publication_info_id}))
     return locals()
 
 
@@ -301,17 +301,13 @@ def view_unstandardised_data():
         query = ((db.study_meta_data.taxonID==None) | (db.study_meta_data.ADM_CODE==None) & (db.study_meta_data.publication_info_id == publication_info_id))
         form = SQLFORM.grid(query, field_id=db.study_meta_data.id,
                             fields=[db.study_meta_data.taxon,
+                                    db.study_meta_data.taxonID,
                                     db.study_meta_data.location_description,
-                                    db.study_meta_data.study_design,
-                                    db.study_meta_data.sampling_method,
-                                    db.study_meta_data.measurement_unit,
-                                    db.study_meta_data.value_transform],
+                                    db.study_meta_data.ADM_CODE],
                             headers={'study_meta_data.taxon': 'Original Taxon',
+                                     'study_meta_data.taxonID': 'Replacement Taxon Name',
                                      'study_meta_data.location_description': 'Original Location Description',
-                                     'study_meta_data.study_design': 'Study Design',
-                                     'study_meta_data.sampling_method': 'Sampling Method',
-                                     'study_meta_data.measurement_unit': 'Measurement Unit',
-                                     'study_meta_data.value_transform': 'Value Transformation'},
+                                     'study_meta_data.ADM_CODE': 'Replacement Location'},
                             maxtextlength=200,links=links,
                             searchable=False, deletable=False,
                             editable=False, details=False, create=False, csv=False)
@@ -342,7 +338,7 @@ def edit_meta_data():
                    )
     if form.process().accepted:
         session.flash = 'Thanks you have successfully submit your changes'
-        redirect(URL("vecdyn", "standardise_taxon", vars={'publication_info_id': publication_info_id}))
+        redirect(URL("vecdyn", "view_data", vars={'publication_info_id': publication_info_id}))
     return locals()
 
 

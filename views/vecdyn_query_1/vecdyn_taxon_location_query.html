@@ -2,9 +2,17 @@
 
 
      <div style="background: linear-gradient(240deg, lightgrey, whitesmoke)" class="jumbotron">
-         <h2><center>Explore Datasets by Species and Location</center></h2>
+             <h2><center>Explore Datasets by Species and Location</center></h2>
          <br>
 
+             <div class="btn-group.btn-group-justified" role="group" aria-label="...">
+
+         <a class="btn btn-link" href="{{=URL('vecdyn_query_1','vecdyn_taxon_location_query')}}">{{=T("Explore by species & location")}}</a>
+        <a class="btn btn-link" href="{{=URL('vecdyn_query_2','vecdyn_author_query')}}">{{=T("Explore by provider & title")}}</a>
+ </div>
+
+
+<br>
 
 <div class="container-fluid">
   <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#demo">Instructions</button>

@@ -231,6 +231,12 @@ def edit_task():
     #db.task.file.writable = False
     task_id = request.args(0,cast=int)
     task = db.task(task_id) or error()
+    add_option_2 = SelectOrAdd(form_title="Add new collection author",
+                               controller="default",
+                               function="add_collection_author",
+                               button_text="Add New")
+    # assign widget to field
+    db.task.collection_author.widget = add_option.widget
     if (task.task_type == 'Investigate issue/fix bug') | (task.task_type == 'Enquiry'):
         db.task.task_type.writable = False
         db.task.task_type.readable = False
@@ -274,6 +280,8 @@ def edit_task():
      #              subject="Task Changed (%(status)s): %(title)s" % form.vars,
      #              message=form.vars.description)
         redirect(URL('tasks'))
+    response.files.append(URL('static', 'jquery-ui-1.12.1/jquery-ui.js'))
+    response.files.append(URL('static', 'jquery-ui-1.12.1/jquery-ui.theme.css'))
     return locals()
 
 @auth.requires_login()
