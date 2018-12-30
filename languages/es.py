@@ -421,7 +421,7 @@
 'upload application:': 'subir aplicación:',
 'Upload existing application': 'Suba esta aplicación',
 'upload file:': 'suba archivo:',
-'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex vecdyn_queries.': 'Use (...)&(...) para AND, (...)|(...) para OR, y ~(...) para NOT, para crear consultas más complejas.',
+'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex vecdyn_query_1.': 'Use (...)&(...) para AND, (...)|(...) para OR, y ~(...) para NOT, para crear consultas más complejas.',
 'User': 'Usuario',
 'User %(id)s is impersonating %(other_id)s': 'El usuario %(id)s está suplantando %(other_id)s',
 'User %(id)s Logged-in': 'El usuario %(id)s inició la sesión',

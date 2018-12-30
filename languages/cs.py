@@ -475,7 +475,7 @@
 'Upload and install packed application': 'Nahrát a instalovat zabalenou aplikaci',
 'upload file:': 'nahrát soubor:',
 'upload plugin file:': 'nahrát soubor modulu:',
-'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex vecdyn_queries.': 'Použijte (...)&(...) pro AND, (...)|(...) pro OR a ~(...) pro NOT pro sestavení složitějších dotazů.',
+'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex vecdyn_query_1.': 'Použijte (...)&(...) pro AND, (...)|(...) pro OR a ~(...) pro NOT pro sestavení složitějších dotazů.',
 'User': 'User',
 'User %(id)s Logged-in': 'Uživatel %(id)s přihlášen',
 'User %(id)s Logged-out': 'Uživatel %(id)s odhlášen',

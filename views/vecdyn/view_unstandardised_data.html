@@ -3,21 +3,25 @@
 <div class="btn-group.btn-group-justified" role="group" aria-label="...">
             {{=A('Back to Data Collections Page',_href=URL('dataset_registrations'),_class="btn btn-primary")}}
             {{=A('Upload Data',_href=URL('vecdyn_data_uploader','vecdyn_importer',vars={'publication_info_id':publication_info_id}),_class="btn btn-primary")}}
-            {{if count >=1:}}
+
+    <div class="btn-group">
+    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+    Standardisation<span class="caret"></span></button>
+
+    <ul class="dropdown-menu" role="menu">
+      <li>{{=A('View Standardised',_href=URL('vecdyn','view_data',vars={'publication_info_id':publication_info_id}))}}</li>
+      <li>{{=A('View Unstandardised',_href=URL('vecdyn','view_unstandardised_data',vars={'publication_info_id':publication_info_id}))}}</li>
+        <li>{{=A('Re-standardize Taxonomic Entries',_href=URL('vecdyn','re_standardise_taxon',vars={'publication_info_id':publication_info_id}))}}</li>
+            <li>{{=A('Re-standardize Geographic Entries',_href=URL('vecdyn','re_standardise_geo_data',vars={'publication_info_id':publication_info_id}))}}</li>
+    </ul>
+        {{if count >=1:}}
             {{=A('Standardise',_href=URL('standardise_taxon',vars={'publication_info_id':publication_info_id}),_class="btn btn-warning")}}
             {{elif count2 >=1:}}
             {{=A('Standardise',_href=URL('standardise_taxon',vars={'publication_info_id':publication_info_id}),_class="btn btn-warning")}}
             {{else:}}
             {{pass}}
-    <div class="btn-group">
-    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-    View Standardised/untandardised Entries <span class="caret"></span></button>
-    <ul class="dropdown-menu" role="menu">
-      <li>{{=A('View Standardised',_href=URL('vecdyn','view_data',vars={'publication_info_id':publication_info_id}))}}</li>
-      <li>{{=A('View Unstandardised',_href=URL('vecdyn','view_unstandardised_data',vars={'publication_info_id':publication_info_id}))}}</li>
-    </ul>
   </div>
-  </div>
+</div>
            <div style="background: linear-gradient(240deg, lightgrey, whitesmoke)" class="jumbotron">
 
 
@@ -27,99 +31,6 @@
                   </center>
                   </h5>
 <br>
-
-
-<hr>
-             <center>General Dataset Publication Information</center>
-
-<div class="container-fluid">
-  <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#pub_info">View Publication Information</button>
-  <div id="pub_info" class="collapse">
-
-    <table class="table table-condensed" cellspacing="1px">
-      {{for row in publication_info_query:}}
-  <thead>
-      <tr>
-        <th><a class="btn btn-link" href="{{=URL('vecdyn','edit_dataset_general_info',vars={'publication_info_id':publication_info_id})}}">{{=T("Edit Publication Information")}}</a></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Title: </td>
-        <td>{{=row.title}}</td>
-      </tr>
-      <tr>
-        <td>Collection Author: </td>
-        <td>{{=row.collection_author}}</td>
-      </tr>
-      <tr>
-        <td>Dataset DOI: </td>
-        <td>{{=row.dataset_doi}}</td>
-      </tr>
-      <tr>
-        <td>Publication DOI: </td>
-        <td>{{=row.publication_doi}}</td>
-      </tr>
-      <tr>
-        <td>Description: </td>
-        <td>{{=row.description}}</td>
-      </tr>
-      <tr>
-        <td>DataSet Type: </td>
-        <td>{{=row.data_set_type}}</td>
-      </tr>
-    </tbody>
-  </table>
-    {{pass}}
-
-   </div>
-       </div>
-
-
-
-      <div class="container-fluid">
-  <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#contact_info">View  Contact Information</button>
-
-  <div id="contact_info" class="collapse">
-
-    <table class="table table-condensed" cellspacing="1px">
-      {{for row in publication_info_query:}}
-          <!-- Need to create a controller for edit data set contacts  -->
-  <thead>
-      <tr>
-        <th><a class="btn btn-link" href="{{=URL('vecdyn','edit_dataset_general_info',vars={'publication_info_id':publication_info_id})}}">{{=T("Edit Contact Information")}}</a></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Contact Name: </td>
-        <td>{{=row.contact_name}}</td>
-      </tr>
-            <tr>
-        <td>Contact Affiliation: </td>
-        <td>{{=row.contact_affiliation}}</td>
-      </tr>
-            <tr>
-        <td>Email: </td>
-        <td>{{=row.email}}</td>
-      </tr>
-            <tr>
-        <td>ORCID: </td>
-        <td>{{=row.orcid}}</td>
-      </tr>
-          </tbody>
-  </table>
-    {{pass}}
-
-   </div>
-       </div>
-
-
-
-
-
-<hr>
-
 
                                     {{if ds_count != 0:}}
                  <div class="alert alert-warning alert-dismissible">

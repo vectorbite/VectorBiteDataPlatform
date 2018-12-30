@@ -6,10 +6,12 @@
                  {{if count >=1:}}
     <div class="btn-group">
     <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-    View Standardised/untandardised Entries <span class="caret"></span></button>
+    Standardisation<span class="caret"></span></button>
     <ul class="dropdown-menu" role="menu">
       <li>{{=A('View Standardised',_href=URL('vecdyn','view_data',vars={'publication_info_id':publication_info_id}))}}</li>
       <li>{{=A('View Unstandardised',_href=URL('vecdyn','view_unstandardised_data',vars={'publication_info_id':publication_info_id}))}}</li>
+        <li>{{=A('Re-standardize Taxonomic Entries',_href=URL('vecdyn','re_standardise_taxon',vars={'publication_info_id':publication_info_id}))}}</li>
+            <li>{{=A('Re-standardize Geographic Entries',_href=URL('vecdyn','re_standardise_geo_data',vars={'publication_info_id':publication_info_id}))}}</li>
     </ul>
   </div>
 
@@ -27,18 +29,14 @@
 <br>
 <hr>
 
-             <center>General Dataset Publication Information</center>
-
 <div class="container-fluid">
-  <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#pub_info">View Publication Information</button>
+  <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#pub_info">View Publication Information</button> <a class="btn btn-link" href="{{=URL('vecdyn','edit_dataset_general_info',vars={'publication_info_id':publication_info_id})}}">{{=T("(Edit)")}}</a>
+
   <div id="pub_info" class="collapse">
 
     <table class="table table-condensed" cellspacing="1px">
       {{for row in publication_info_query:}}
   <thead>
-      <tr>
-        <th><a class="btn btn-link" href="{{=URL('vecdyn','edit_dataset_general_info',vars={'publication_info_id':publication_info_id})}}">{{=T("Edit Publication Information")}}</a></th>
-      </tr>
     </thead>
     <tbody>
       <tr>
@@ -75,18 +73,13 @@
 
 
       <div class="container-fluid">
-  <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#contact_info">View  Contact Information</button>
+  <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#contact_info">View  Contact Information  &#8205;  &#8205; &#8205; &#8205; &#8205; </button></button> <a class="btn btn-link" href="{{=URL('vecdyn','edit_dataset_general_info',vars={'publication_info_id':publication_info_id})}}">{{=T("(Edit)")}}</a>
 
   <div id="contact_info" class="collapse">
 
     <table class="table table-condensed" cellspacing="1px">
       {{for row in publication_info_query:}}
           <!-- Need to create a controller for edit data set contacts  -->
-  <thead>
-      <tr>
-        <th><a class="btn btn-link" href="{{=URL('vecdyn','edit_dataset_general_info',vars={'publication_info_id':publication_info_id})}}">{{=T("Edit Contact Information")}}</a></th>
-      </tr>
-    </thead>
     <tbody>
       <tr>
         <td>Contact Name: </td>
@@ -113,19 +106,13 @@
 
                 {{if count >=1:}}
 
-
             <div class="container-fluid">
-  <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#rights_info">View Dataset Rights & Access</button>
+  <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#rights_info">Dataset Rights & Access &#8205; &#8205; &#8205; &#8205; &#8205; &#8205; </button><a class="btn btn-link" <a class="btn btn-link" href="{{=URL('vecdyn','edit_data_rights',vars={'publication_info_id':publication_info_id})}}">{{=T("(Edit)")}}</a>
 
   <div id="rights_info" class="collapse">
 
     <table class="table table-condensed" cellspacing="1px">
       {{for row in publication_info_query:}}
-  <thead>
-      <tr>
-        <th><a class="btn btn-link" href="{{=URL('vecdyn','edit_data_rights',vars={'publication_info_id':publication_info_id})}}">{{=T("Edit Dataset Rights & Access")}}</a></th>
-      </tr>
-    </thead>
     <tbody>
     <tr>
         <td>Dataset License: </td>
@@ -148,13 +135,10 @@
     {{pass}}
   {{else:}}
             {{pass}}
-   </div>
-       </div>
 
-
-<hr>
-
-
+ </div>
+      <hr>
 
 {{=BEAUTIFY(form)}}
-    </div>
+
+                  </div>

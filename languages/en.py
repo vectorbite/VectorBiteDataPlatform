@@ -143,7 +143,7 @@
 'Twitter': 'Twitter',
 'unable to parse csv file': 'unable to parse csv file',
 'Update:': 'Update:',
-'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex vecdyn_queries.': 'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex vecdyn_queries.',
+'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex vecdyn_query_1.': 'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex vecdyn_query_1.',
 'User': 'User',
 'Users': 'Users',
 'Videos': 'Videos',

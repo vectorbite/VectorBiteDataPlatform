@@ -279,7 +279,7 @@
 'Upload a package:': 'Unggah pakej:',
 'upload file:': 'unggah fail:',
 'upload plugin file:': 'unggah fail plugin:',
-'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex vecdyn_queries.': 'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex vecdyn_queries.',
+'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex vecdyn_query_1.': 'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex vecdyn_query_1.',
 'User': 'User',
 'User %(id)s Logged-in': 'Pengguna %(id)s Masuk',
 'User %(id)s Logged-out': 'Pengguna %(id)s Keluar',

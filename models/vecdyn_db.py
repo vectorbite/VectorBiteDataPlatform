@@ -10,8 +10,6 @@ db.define_table('data_set_upload',
                 Field('csvfile','upload',uploadfield=False, requires = IS_UPLOAD_FILENAME(extension='csv')))
 
 
-
-
 DATARIGHTS = ('Open', 'Embargo', 'Closed')
 
 DATATYPE = ('Abundance', 'Presence/Absence')

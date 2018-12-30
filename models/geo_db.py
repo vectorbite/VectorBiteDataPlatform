@@ -1,17 +1,5 @@
 
 
-db.define_table('country',
-                Field('Country_or_Area', 'string', comment='UN Standard country or area codes for statistical'),
-                Field('M49_code', 'string'),
-                Field('ISO_alpha3_code', 'string'),
-                format='%(Country_or_Area)s')
-
-
-#if db(db.country.id>0).count() == 0:
- #   db.country.truncate()
-
-
-
 db.define_table('gaul_admin_layers',
                 Field('ADM_CODE'),
                 Field('ADM0_NAME'),

@@ -33,7 +33,8 @@ def tasks():
     #query = (db.task)
     grid = SQLFORM.grid(query, orderby=~db.task.modified_on,
                         create=False,details=False,editable=False,csv=False,
-                        deletable=lambda row: (row.created_by==me),maxtextlength=200,
+                        deletable=True,
+                        #deletable=lambda row: (row.created_by==me),maxtextlength=200,
                         fields=[db.task.title,
                                 db.task.task_type,
                                 db.task.description,
@@ -57,7 +58,8 @@ def vecdyn_submissions():
     #query = (db.task)
     grid = SQLFORM.grid(query, orderby=~db.task.modified_on,
                         create=False,details=False,editable=False,csv=False,
-                        deletable=lambda row: (row.created_by==me),maxtextlength=200,
+                        deletable=True,
+                        #deletable=lambda row: (row.created_by==me),maxtextlength=200,
                         fields=[db.task.title,
                                 db.task.task_type,
                                 db.task.description,
@@ -87,7 +89,8 @@ def vectrait_submissions():
     #query = (db.task)
     grid = SQLFORM.grid(query, orderby=~db.task.modified_on,
                         create=False,details=False,editable=False,csv=False,
-                        deletable=lambda row: (row.created_by==me),maxtextlength=200,
+                        #deletable=lambda row: (row.created_by==me),maxtextlength=200,
+                        deletable=True,
                         fields=[db.task.title,
                                 db.task.task_type,
                                 db.task.description,
@@ -109,7 +112,8 @@ def issues():
     query = db((db.task.task_type == 'Investigate issue/fix bug') & ((db.task.created_by == me | (db.task.created_by == me))))
     grid = SQLFORM.grid(query, orderby=~db.task.modified_on,
                         create=False,details=False,editable=False,csv=False,
-                        deletable=lambda row: (row.created_by==me),maxtextlength=200,
+                        deletable=True,
+                        #deletable=lambda row: (row.created_by==me),maxtextlength=200,
                         fields=[db.task.title,
                                 db.task.task_type,
                                 db.task.description,
@@ -131,7 +135,8 @@ def general_enquiries():
     query = db((db.task.task_type == 'Enquiry') & ((db.task.created_by == me | (db.task.created_by == me))))
     grid = SQLFORM.grid(query, orderby=~db.task.modified_on,
                         create=False,details=False,editable=False,csv=False,
-                        deletable=lambda row: (row.created_by==me),maxtextlength=200,
+                        deletable=True,
+                        #deletable=lambda row: (row.created_by==me),maxtextlength=200,
                         fields=[db.task.title,
                                 db.task.task_type,
                                 db.task.description,
@@ -153,7 +158,8 @@ def data_set_sources():
     query = db((db.task.task_type == 'Data Set Sources') & ((db.task.created_by == me | (db.task.created_by == me))))
     grid = SQLFORM.grid(query, orderby=~db.task.modified_on,
                         create=False,details=False,editable=False,csv=False,
-                        deletable=lambda row: (row.created_by==me),maxtextlength=200,
+                        deletable=True,
+                        #deletable=lambda row: (row.created_by==me),maxtextlength=200,
                         fields=[db.task.title,
                                 db.task.task_type,
                                 db.task.description,
@@ -327,8 +333,8 @@ def submit_vecdyn_data():
     db.task.collection_author.widget = add_option.widget
     form = SQLFORM(db.task, labels={'task_type':'Data set category'}).process()
     if form.accepted:
-        collection_author = request.vars.collection_author
-        db.collection_author.update_or_insert(name=collection_author)
+        #collection_author = request.vars.collection_author
+        #db.collection_author.update_or_insert(name=collection_author)
         session.flash = 'Thanks, your data set has been submitted for review, we will get back to you soon!'
         #send_email(to=db.auth_user(form.vars.assigned_to).email,
         #           sender=auth.user.email,

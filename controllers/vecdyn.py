@@ -25,9 +25,9 @@ def dataset_registration():
     if task_id != None:
         myrecord = db(db.task.id == task_id).select().first()
         db.publication_info.title.default = myrecord.title
-        collection_author = myrecord.collection_author
-        collection_author = db(db.collection_author.name == collection_author).select().first()
-        db.publication_info.collection_author.default = collection_author.id
+        #collection_author = myrecord.collection_author
+        #collection_author = db(db.collection_author.name == collection_author).select().first()
+        db.publication_info.collection_author.default = myrecord.collection_author
         db.publication_info.dataset_doi.default = myrecord.digital_object_identifier #need to correct this, dataset doi missing
         db.publication_info.publication_doi.default = myrecord.publication_doi
         db.publication_info.url.default = myrecord.url
@@ -289,11 +289,7 @@ def view_unstandardised_data():
             response.flash = 'You still need to standardise entries!'
         else:
             response.flash = 'This is a list of all the standardised  time series data linked to this data set!'
-        links = [lambda row: A('View/edit meta data entry',
-                               _href=URL("vecdyn", "edit_meta_data", vars={'study_meta_data_id': row.id,
-                                                                           'publication_info_id': publication_info_id}),
-                               _class="btn btn-primary"),
-                 lambda row: A('View time series data entries', _class="btn btn-primary",
+        links = [lambda row: A('View time series data entries', _class="btn btn-primary",
                                _href=URL("vecdyn", "view_time_series_data",
                                          vars={'study_meta_data_id': row.id,
                                                'publication_info_id': publication_info_id})),
@@ -312,7 +308,6 @@ def view_unstandardised_data():
                             searchable=False, deletable=False,
                             editable=False, details=False, create=False, csv=False)
         return locals()
-
 
 
 @auth.requires_membership('VectorbiteAdmin')
@@ -379,6 +374,27 @@ def standardise_taxon():
                         )
     return locals()
 
+##write a function if name is in db do something, if not standardise data
+@auth.requires_membership('VectorbiteAdmin')
+def re_standardise_taxon():
+    publication_info_id = request.get_vars.publication_info_id
+    study_meta_data_id = request.get_vars.id
+    links = [lambda row: A('Standardise taxon', _href=URL("vecdyn", "taxon_select", vars={'study_meta_data_id': row.id, \
+                                                                                          'taxon': row.taxon, \
+                                                                                          'publication_info_id': publication_info_id}),_class="btn btn-primary")]
+    [setattr(f, 'readable', False)
+     for f in db.study_meta_data
+     if f.name not in ('study_meta_data.taxon, study_meta_data.taxonID')]
+    form = SQLFORM.grid((db.study_meta_data.publication_info_id == publication_info_id),
+                        groupby=db.study_meta_data.taxon,
+                        links=links, maxtextlength=200, searchable=False,
+                        headers={'study_meta_data.taxon': 'Original Taxon Name',
+                                 'study_meta_data.taxonID': 'Replacement'},
+                        deletable=False, editable=False,
+                        details=False, create=False, csv=False
+                        )
+    return locals()
+
 @auth.requires_membership('VectorbiteAdmin')
 def taxon_select():
     publication_info_id = request.get_vars.publication_info_id
@@ -423,8 +439,6 @@ def taxon_confirm():
                                                          'taxon': taxon,
                                                          'meta_edit': meta_edit, \
                                                          'publication_info_id': publication_info_id}))
-
-
     return locals()
 
 @auth.requires_membership('VectorbiteAdmin')
@@ -477,6 +491,26 @@ def standardise_geo_data():
                         details=False, create=False, csv=False)
     return locals()
 
+@auth.requires_membership('VectorbiteAdmin')
+def re_standardise_geo_data():
+    response.flash = 'Please standardise geo data. Click on the link next to each geo description name to search for equivalent geo names!'
+    publication_info_id = request.get_vars.publication_info_id
+    study_meta_data_id = request.get_vars.id
+    links = [lambda row: A('Standardise geo information',_class="btn btn-primary",_href=URL("vecdyn", "location_select", vars={'study_meta_data_id': row.id, \
+                                                                                                       'location_description': row.location_description,
+                                                                                                            'publication_info_id': publication_info_id}))]
+    [setattr(f, 'readable', False)
+    for f in db.study_meta_data
+    if f.name not in ('db.study_meta_data.location_description, db.study_meta_data.ADM_CODE')]
+    form = SQLFORM.grid((db.study_meta_data.publication_info_id == publication_info_id),
+                        groupby=db.study_meta_data.location_description,
+                        headers={'study_meta_data.location_description': 'Original Geo Name',
+                                 'study_meta_data.ADM_CODE': 'Replacement'},
+                        ignore_common_filters=True, links=links, maxtextlength=200, searchable=False,
+                        deletable=False, editable=False,
+                        details=False, create=False, csv=False)
+    return locals()
+
 
 @auth.requires_membership('VectorbiteAdmin')
 def location_select():
@@ -502,8 +536,6 @@ def location_select():
     if search_input:
         search_input['_value'] = location_description
     return locals()
-
-
 
 @auth.requires_membership('VectorbiteAdmin')
 def geo_confirm():
@@ -557,36 +589,13 @@ def view_time_series_data():
     publication_info_id = request.get_vars.publication_info_id
     db.time_series_data.id.readable = False
     db.time_series_data.study_meta_data_id.readable = False
-    links = [
-        lambda row: A('Edit time series entry',_class="btn btn-primary", _href=URL("vecdyn", "edit_time_series_entry",
-                                                                                    vars={'id': row.id, \
-                                                                                          'study_meta_data_id': study_meta_data_id, \
-                                                                                          'publication_info_id': publication_info_id}))]
-    form = SQLFORM.grid(db.time_series_data.study_meta_data_id  == study_meta_data_id,links=links,selectable = lambda ids:del_emp(ids), paginate=1000, searchable=False, deletable=False, editable=False, details=False, create=False,csv=False)
-    if form.elements('th'):
-        form.elements('th')[0].append(SPAN('Select all', BR(), INPUT(_type='checkbox',
-                                                              _onclick="jQuery('input:checkbox').not(this).prop('checked', this.checked);"
-                                                              )))
+    form = SQLFORM.grid(db.time_series_data.study_meta_data_id  == study_meta_data_id, paginate=50, searchable=False, deletable=False, editable=False, details=False, create=False,csv=False)
     if db(db.time_series_data.id).count() == 0:
         response.flash = 'You have not added any time series data to this dataset'
     else:
         response.flash = 'Time series data'
-    o = form.element(_type='submit', _value='%s' % T('Submit'))
-    if not form.create_form and not form.update_form and not form.view_form:
-        if o is not None:
-            o['_value'] = T("Delete selected")
     return locals()
 
-
-def del_emp(ids):
-	if not ids:
-		response.flash='Please Select the Check-box to Delete'
-	else:
-		for row in ids:
-			db(db.time_series_data.id == row).delete()
-		pass
-	pass
-	return
 
 @auth.requires_membership('VectorbiteAdmin')
 def edit_time_series_entry():

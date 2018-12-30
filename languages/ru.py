@@ -209,7 +209,7 @@
 'Twitter': 'Twitter',
 'unable to parse csv file': 'нечитаемый csv-файл',
 'Update:': 'Изменить:',
-'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex vecdyn_queries.': 'Для построение сложных запросов используйте операторы "И": (...)&(...), "ИЛИ": (...)|(...), "НЕ": ~(...).',
+'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex vecdyn_query_1.': 'Для построение сложных запросов используйте операторы "И": (...)&(...), "ИЛИ": (...)|(...), "НЕ": ~(...).',
 'User': 'User',
 'User %(id)s Logged-in': 'Пользователь %(id)s вошёл',
 'User %(id)s Logged-out': 'Пользователь %(id)s вышел',

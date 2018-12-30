@@ -5,6 +5,8 @@ import csv
 
 @auth.requires_membership('VectorbiteAdmin')
 def vecdyn_importer():
+    '''At the moment the importer imports fields based on their position om the CSV, rather than using field names. eventually\
+    this should import data based on field names'''
     publication_info_id = request.get_vars.publication_info_id
     response.flash = 'Now upload a time series data set, make sure this is in csv format'
     #Get the publicaton infor id from the previous page

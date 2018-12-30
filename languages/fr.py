@@ -220,7 +220,7 @@
 'Twitter': 'Twitter',
 'unable to parse csv file': "incapable d'analyser le fichier cvs",
 'Update:': 'Mise à jour:',
-'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex vecdyn_queries.': 'Employez (...)&(...) pour AND, (...)|(...) pour OR, and ~(...)  pour NOT afin de construire des requêtes plus complexes.',
+'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex vecdyn_query_1.': 'Employez (...)&(...) pour AND, (...)|(...) pour OR, and ~(...)  pour NOT afin de construire des requêtes plus complexes.',
 'User': 'User',
 'User %(id)s Logged-in': 'Utilisateur %(id)s connecté',
 'User %(id)s Registered': 'Utilisateur %(id)s enregistré',

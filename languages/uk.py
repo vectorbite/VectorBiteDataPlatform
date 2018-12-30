@@ -236,7 +236,7 @@
 'Twitter': 'Твіттер',
 'unable to parse csv file': 'не вдається розібрати csv-файл',
 'Update:': 'Оновити:',
-'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex vecdyn_queries.': 'Для створення складних запитів використовуйте (...)&(...) замість AND, (...)|(...) замість OR, та ~(...) замість NOT.',
+'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex vecdyn_query_1.': 'Для створення складних запитів використовуйте (...)&(...) замість AND, (...)|(...) замість OR, та ~(...) замість NOT.',
 'User': 'User',
 'User %(id)s Logged-in': 'Користувач %(id)s увійшов',
 'User %(id)s Logged-out': 'Користувач  %(id)s вийшов',

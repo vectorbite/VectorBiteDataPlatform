@@ -197,7 +197,7 @@
 'Twitter': 'Twitter',
 'unable to parse csv file': 'csv Datei konnte nicht geparst werden',
 'Update:': 'Update:',
-'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex vecdyn_queries.': 'Benutze (...)&(...) für AND, (...)|(...) für OR, und ~(...)  für NOT um komplexere vecdyn_queries zu erstellen.',
+'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex vecdyn_query_1.': 'Benutze (...)&(...) für AND, (...)|(...) für OR, und ~(...)  für NOT um komplexere vecdyn_query_1 zu erstellen.',
 'User': 'Benutzer',
 'User %(id)s Logged-in': 'Benutzer %(id)s hat sich eingeloggt',
 'User %(id)s Logged-out': 'Benutzer %(id)s hat sich ausgeloggt',

@@ -89,13 +89,22 @@ response.form_label_separator = ''
 # host names must be a list of allowed host names (glob syntax allowed)
 auth = Auth(db, host_names=configuration.get('host.names'))
 
+db.define_table('country',
+                Field('Country_or_Area', 'string', comment='UN Standard country or area codes for statistical'),
+                Field('M49_code', 'string'),
+                Field('ISO_alpha3_code', 'string'),
+                format='%(Country_or_Area)s')
+
+
+#if db(db.country.id>0).count() == 0:
+ #   db.country.truncate()
 # -------------------------------------------------------------------------
 # create all tables needed by auth, maybe add a list of extra fields
 # -------------------------------------------------------------------------
 auth.settings.extra_fields['auth_user']= [
     Field('affiliation'),
     Field('position'),
-    Field('country')]
+    Field('country', 'reference country')]
 auth.define_tables(username=False, signature=False)
 
 # -------------------------------------------------------------------------

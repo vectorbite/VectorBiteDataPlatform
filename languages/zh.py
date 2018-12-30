@@ -246,7 +246,7 @@
 'unable to parse csv file': '無法解析逗號分隔檔(csv)',
 'Update:': '更新:',
 'Upload existing application': '更新存在的應用程式',
-'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex vecdyn_queries.': '使用下列方式來組合更複雜的條件式, (...)&(...) 代表同時存在的條件, (...)|(...) 代表擇一的條件, ~(...)則代表反向條件.',
+'Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex vecdyn_query_1.': '使用下列方式來組合更複雜的條件式, (...)&(...) 代表同時存在的條件, (...)|(...) 代表擇一的條件, ~(...)則代表反向條件.',
 'User': 'User',
 'User %(id)s Logged-in': '使用者 %(id)s 已登入',
 'User %(id)s Registered': '使用者 %(id)s 已註冊',
