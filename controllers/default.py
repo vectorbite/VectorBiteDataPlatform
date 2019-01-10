@@ -1,11 +1,8 @@
-
-
-
-###### The default controller
+# The default controller
 
 @auth.requires_login()
 def index():
-    #if auth.has_membership('VectorBiTE Managers'): redirect(URL('tasks'))
+    # if auth.has_membership('VectorBiTE Managers'): redirect(URL('tasks'))
     rows = db(db.index_page_updates).select(orderby=~db.index_page_updates.created_on)
     return locals()
 
@@ -13,16 +10,17 @@ def index():
 def about_us():
     return locals()
 
-#def error(message="not authorized"):
+# def error(message="not authorized"):
 #    session.flash = message
 #    redirect(URL('tasks'))
 
-##create a view all tasks too, and a see my tasks/assigned to me tasks
+# create a view all tasks too, and a see my tasks/assigned to me tasks
+
 
 me = auth.user_id
 
-####the following functions represent the task manager
 
+# the following functions represent the task manager
 @auth.requires_membership('VectorbiteAdmin')
 def tasks():
     db.task.created_on.readable = False
@@ -30,11 +28,11 @@ def tasks():
     db.task.title.represent = lambda title,row:\
         A(title,_href=URL('edit_task',args=row.id))
     query = (db.task.assigned_to==me)|(db.task.created_by==me)    # replaced with query below
-    #query = (db.task)
+    # query = (db.task)
     grid = SQLFORM.grid(query, orderby=~db.task.modified_on,
                         create=False,details=False,editable=False,csv=False,
                         deletable=True,
-                        #deletable=lambda row: (row.created_by==me),maxtextlength=200,
+                        # deletable=lambda row: (row.created_by==me),maxtextlength=200,
                         fields=[db.task.title,
                                 db.task.task_type,
                                 db.task.description,
@@ -46,6 +44,7 @@ def tasks():
                                 db.task.status,
                                 db.task.assigned_to])
     return locals()
+
 
 @auth.requires_membership('VectorbiteAdmin')
 def vecdyn_submissions():
