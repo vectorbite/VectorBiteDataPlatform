@@ -175,7 +175,8 @@ if configuration.get('scheduler.enabled'):
 # auth.enable_record_versioning(db)
 
 
-#THIS IS FOR SELECT_OR_ADD
+'''SELECT OF ADD FUNCTION, USED TO TRACK COLLECTION AUTHOR(INFORMATION ON DATA PROVIDERS)
+IN THE VECDYN PUBLICATION INFO TABLE AND SUBMIT VECDYN DATA'''
 class SelectOrAdd(object):
     def __init__(self, controller=None, function=None, form_title=None, button_text=None, dialog_width=450):
         if form_title == None:
