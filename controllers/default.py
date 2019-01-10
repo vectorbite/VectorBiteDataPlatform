@@ -74,10 +74,6 @@ def vecdyn_submissions():
     return locals()
 
 
-
-
-
-
 @auth.requires_membership('VectorbiteAdmin')
 def vectrait_submissions():
     db.task.created_on.readable = False
