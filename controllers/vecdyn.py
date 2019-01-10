@@ -184,11 +184,11 @@ def view_data():
     #####query for publication info pages, found at the top of the view data pages
     publication_info_id = request.get_vars.publication_info_id
     publication_info_query = db(db.publication_info.id == publication_info_id).select()
-    ###checks to see if there are understadnardised data sets in the data collection
+    ###following queries count to see how many unstandardised entries are in the collection, unstandardised dates are
+    ###recognised by the absence of either a no taxonID (None) or no ADM_CODE (None) supplies user with a message
     ds_check = db(db.study_meta_data.publication_info_id == publication_info_id).select(groupby=db.study_meta_data.publication_info_id)
     ds_count = len(ds_check)
     ds_count = int(ds_count)
-    ###following queries count to see how many unstandardiesed data sets are in the collection, supplies user with a message
     b = db((db.study_meta_data.publication_info_id == publication_info_id) & (db.study_meta_data.taxonID == None)).select(
         groupby=db.study_meta_data.taxon)
     count = len(b)
@@ -212,7 +212,7 @@ def view_data():
     if query == 0:
             response.flash = "You have not yet submitted any data yet, click on 'Add time series data to add a data set' !"
     elif (count >= 1) | (count2 >= 1):
-            response.flash = 'You still need to standardise entries before they will become available in this page, once data is visible in this page it is ready to submit!'
+            response.flash = 'You still need to standardise entries before they will become available in this page, go the the unstandardised data page and run through the stadardisation process, once data is visible in this page it is ready to submit!'
     else:
             response.flash = 'This is a list of all the standardised  time series data linked to this data set!'
     ####code for grid
