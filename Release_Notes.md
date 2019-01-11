@@ -1,6 +1,10 @@
 # VectorBiTE Data Platform Release Notes
-Current version: v0.0.1
+Current version: v0.0.3
 ## Release Notes
+### v0.0.3
+- Added documentation
+    - Release procedure
+    - Logging guide
 ### v0.0.2
 - Added comments, added Country csv file
 ### v0.0.1
