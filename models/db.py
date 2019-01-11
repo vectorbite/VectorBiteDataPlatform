@@ -89,23 +89,34 @@ response.form_label_separator = ''
 # host names must be a list of allowed host names (glob syntax allowed)
 auth = Auth(db, host_names=configuration.get('host.names'))
 
+
+'''this table is referenced in the user registration'''
 db.define_table('country',
                 Field('Country_or_Area', 'string', comment='UN Standard country or area codes for statistical'),
                 Field('M49_code', 'string'),
                 Field('ISO_alpha3_code', 'string'),
                 format='%(Country_or_Area)s')
 
+'''if db(db.country.id>0).count() == 0:
+    db.country.truncate()'''
 
-#if db(db.country.id>0).count() == 0:
- #   db.country.truncate()
+####not sure why this isn't working
+'''if db(db.country.id>0).count() == 0:
+    db.country.import_from_csv_file(open('static/additional_files/', 'UNcountries.csv'), 'r')'''
+
+#db.person.import_from_csv_file(open('test.csv', 'r'))
 # -------------------------------------------------------------------------
 # create all tables needed by auth, maybe add a list of extra fields
 # -------------------------------------------------------------------------
+
+'''extra fields for the auth fields, note that the country db table above needs to be  populated first '''
+
 auth.settings.extra_fields['auth_user']= [
     Field('affiliation'),
     Field('position'),
     Field('country', 'reference country')]
 auth.define_tables(username=False, signature=False)
+
 
 # -------------------------------------------------------------------------
 # configure email
@@ -177,6 +188,7 @@ if configuration.get('scheduler.enabled'):
 
 '''SELECT OF ADD FUNCTION, USED TO TRACK COLLECTION AUTHOR(INFORMATION ON DATA PROVIDERS)
 IN THE VECDYN PUBLICATION INFO TABLE AND SUBMIT VECDYN DATA'''
+
 class SelectOrAdd(object):
     def __init__(self, controller=None, function=None, form_title=None, button_text=None, dialog_width=450):
         if form_title == None:

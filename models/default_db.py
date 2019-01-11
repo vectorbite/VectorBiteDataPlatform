@@ -31,6 +31,9 @@ TASK_TYPE = ('vecdyn data submission', 'vectraits data submission', 'investigate
 
 DATARIGHTS = ('open', 'embargo')
 
+'''the following db table 'task' is set up to deal with data submissions, messages via the website, and also to 
+to keep track of potential data sets we can incorporate into the dbs. '''
+
 db.define_table('task',
                 Field('title', requires=IS_NOT_EMPTY(), comment='* Short title identifying the data collection'),
                 Field('task_type', requires=IS_IN_SET(TASK_TYPE), comment='*Select data submission type i.e. VecDyn or VecTraits'),
@@ -53,11 +56,11 @@ db.define_table('task',
                 Field('deadline', 'datetime', default=request.now + week * 4),
                 auth.signature)
 
-# we create a query that selects user ids from a members of VectorbiteAdmin
+db.task.file.requires=IS_UPLOAD_FILENAME(extension='csv')
+
+'''this query selects user ids from a members of VectorbiteAdmin'''
 query = db((db.auth_user.id==db.auth_membership.user_id) & (db.auth_group.id==db.auth_membership.group_id) & (db.auth_group.role == 'VectorbiteAdmin'))
 db.task.assigned_to.requires = IS_IN_DB(query, 'auth_user.id', '%(first_name)s' ' %(last_name)s')
-
-db.task.file.requires=IS_UPLOAD_FILENAME(extension='csv')
 
 db.task.created_on.represent = lambda v,row: prettydate(v)
 db.task.deadline.represent = lambda v,row: SPAN(prettydate(v),_class='overdue' if v and v < datetime.datetime.today() else None)
@@ -72,7 +75,6 @@ def show_status(status,row=None):
 
 db.task.status.represent = show_status
 
-
 '''function to send email, used in task manager, not currently implemented'''
 def send_email(to,subject,message,sender):
     if not isinstance(to,list): to = [to]
@@ -80,7 +82,7 @@ def send_email(to,subject,message,sender):
     mail.send(to=to, subject=subject, message=message or '(no message)')
 
 
-'''Assigns the select or add fuction to db.task.collection_author table'''
+'''Assigns the select or add widget to db.task.collection_author table'''
 
 add_option_2 = SelectOrAdd(form_title=T("Add a new something"),
                                               controller="default",
