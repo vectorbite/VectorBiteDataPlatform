@@ -100,7 +100,7 @@ db.define_table('country',
 '''if db(db.country.id>0).count() == 0:
     db.country.truncate()'''
 
-####not sure why this isn't working
+####not sure why this isn't working i'll test it again
 '''if db(db.country.id>0).count() == 0:
     db.country.import_from_csv_file(open('static/additional_files/', 'UNcountries.csv'), 'r')'''
 
