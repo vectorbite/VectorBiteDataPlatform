@@ -10,7 +10,7 @@ db.define_table('data_set_upload',
                 Field('csvfile','upload',uploadfield=False, requires = IS_UPLOAD_FILENAME(extension='csv')))
 
 
-DATARIGHTS = ('Open', 'Embargo', 'Closed')
+DATARIGHTS = ('open', 'embargo', 'Closed')
 
 DATATYPE = ('Abundance', 'Presence/Absence')
 
@@ -36,9 +36,9 @@ db.define_table('publication_info',
 
 ###could write a query to automatically update embargo date once it reaches data >= today
 today = datetime.date.today()
-embargo_status_updates = db((db.publication_info.data_rights == 'Embargo') & (db.publication_info.embargo_release_date <= today)).select()
+embargo_status_updates = db((db.publication_info.data_rights == 'embargo') & (db.publication_info.embargo_release_date <= today)).select()
 for row in embargo_status_updates:
-    row.update_record(data_rights='Open', embargo_release_date=None)
+    row.update_record(data_rights='open', embargo_release_date=None)
 
 def show_data_rights(data_rights,row=None):
     return SPAN(data_rights,_class=data_rights)
@@ -69,8 +69,8 @@ db.define_table('study_meta_data',
 
 db.study_meta_data.publication_info_id.requires = IS_IN_DB(db, db.publication_info.id)#, '%(title)s')
 
-if db(db.study_meta_data.id>0).count() == 0:
-    db.study_meta_data.truncate()
+#if db(db.study_meta_data.id>0).count() == 0:
+ #   db.study_meta_data.truncate()
 
 
 db.define_table('time_series_data',

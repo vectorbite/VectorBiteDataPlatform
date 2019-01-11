@@ -1,24 +1,14 @@
 # The default controller
 
+
 @auth.requires_login()
 def index():
-    # if auth.has_membership('VectorBiTE Managers'): redirect(URL('tasks'))
+    '''Index page text  not yet implented in the correspodning view '''
     rows = db(db.index_page_updates).select(orderby=~db.index_page_updates.created_on)
     return locals()
 
-@auth.requires_login()
-def about_us():
-    return locals()
-
-# def error(message="not authorized"):
-#    session.flash = message
-#    redirect(URL('tasks'))
-
-# create a view all tasks too, and a see my tasks/assigned to me tasks
-
 
 me = auth.user_id
-
 
 # the following functions represent the task manager
 @auth.requires_membership('VectorbiteAdmin')
@@ -28,11 +18,9 @@ def tasks():
     db.task.title.represent = lambda title,row:\
         A(title,_href=URL('edit_task',args=row.id))
     query = (db.task.assigned_to==me)|(db.task.created_by==me)    # replaced with query below
-    # query = (db.task)
     grid = SQLFORM.grid(query, orderby=~db.task.modified_on,
                         create=False,details=False,editable=False,csv=False,
                         deletable=True,
-                        # deletable=lambda row: (row.created_by==me),maxtextlength=200,
                         fields=[db.task.title,
                                 db.task.task_type,
                                 db.task.description,
@@ -52,13 +40,10 @@ def vecdyn_submissions():
     db.task.created_by.readable = False
     db.task.title.represent = lambda title,row:\
         A(title,_href=URL('edit_task',args=row.id))
-    query = db((db.task.task_type == 'VecDyn data submission') & ((db.task.created_by == me | (db.task.created_by == me))))
-    # replaced with query below
-    #query = (db.task)
+    query = db(db.task.task_type == 'vecdyn data submission')
     grid = SQLFORM.grid(query, orderby=~db.task.modified_on,
                         create=False,details=False,editable=False,csv=False,
                         deletable=True,
-                        #deletable=lambda row: (row.created_by==me),maxtextlength=200,
                         fields=[db.task.title,
                                 db.task.task_type,
                                 db.task.description,
@@ -79,12 +64,9 @@ def vectrait_submissions():
     db.task.created_by.readable = False
     db.task.title.represent = lambda title,row:\
         A(title,_href=URL('edit_task',args=row.id))
-    query = db((db.task.task_type == 'VecTraits data submission') & ((db.task.created_by==me | (db.task.created_by==me))))
-    # replaced with query below
-    #query = (db.task)
+    query = db(db.task.task_type == 'vectraits data submission')
     grid = SQLFORM.grid(query, orderby=~db.task.modified_on,
                         create=False,details=False,editable=False,csv=False,
-                        #deletable=lambda row: (row.created_by==me),maxtextlength=200,
                         deletable=True,
                         fields=[db.task.title,
                                 db.task.task_type,
@@ -104,11 +86,10 @@ def issues():
     db.task.created_by.readable = False
     db.task.title.represent = lambda title,row:\
         A(title,_href=URL('edit_task',args=row.id))
-    query = db((db.task.task_type == 'Investigate issue/fix bug') & ((db.task.created_by == me | (db.task.created_by == me))))
+    query = db(db.task.task_type == 'investigate issue/fix bug')
     grid = SQLFORM.grid(query, orderby=~db.task.modified_on,
                         create=False,details=False,editable=False,csv=False,
                         deletable=True,
-                        #deletable=lambda row: (row.created_by==me),maxtextlength=200,
                         fields=[db.task.title,
                                 db.task.task_type,
                                 db.task.description,
@@ -127,11 +108,10 @@ def general_enquiries():
     db.task.created_by.readable = False
     db.task.title.represent = lambda title,row:\
         A(title,_href=URL('edit_task',args=row.id))
-    query = db((db.task.task_type == 'Enquiry') & ((db.task.created_by == me | (db.task.created_by == me))))
+    query = db(db.task.task_type == 'enquiry')
     grid = SQLFORM.grid(query, orderby=~db.task.modified_on,
                         create=False,details=False,editable=False,csv=False,
                         deletable=True,
-                        #deletable=lambda row: (row.created_by==me),maxtextlength=200,
                         fields=[db.task.title,
                                 db.task.task_type,
                                 db.task.description,
@@ -150,11 +130,10 @@ def data_set_sources():
     db.task.created_by.readable = False
     db.task.title.represent = lambda title,row:\
         A(title,_href=URL('edit_task',args=row.id))
-    query = db((db.task.task_type == 'Data Set Sources') & ((db.task.created_by == me | (db.task.created_by == me))))
+    query = db(db.task.task_type == 'data set sources')
     grid = SQLFORM.grid(query, orderby=~db.task.modified_on,
                         create=False,details=False,editable=False,csv=False,
                         deletable=True,
-                        #deletable=lambda row: (row.created_by==me),maxtextlength=200,
                         fields=[db.task.title,
                                 db.task.task_type,
                                 db.task.description,
@@ -170,8 +149,6 @@ def data_set_sources():
 
 @auth.requires_membership('VectorbiteAdmin')
 def create_task():
-    #db.task.status.readable = False
-    #db.task.status.writable = False
     form = SQLFORM(db.task).process()
     if form.accepted:
         #send_email(to=db.auth_user(form.vars.assigned_to).email,
@@ -187,12 +164,12 @@ def view_task():
     task_id = request.args(0,cast=int)
     task = db.task(task_id) or error()
     if not task.created_by==me and not task.assigned_to==me: error()
-    if (task.task_type == 'VecDyn data submission') | (task.task_type == 'VecTraits data submission'):
+    if (task.task_type == 'vecdyn data submission') | (task.task_type == 'vectraits data submission'):
         db.task.id.readable = False
         db.task.file.readable = False
         db.task.file.writable = False
         task_form = SQLFORM(db.task, task_id)
-    elif (task.task_type == 'Investigate issue/fix bug') | (task.task_type == 'Enquiry'):
+    elif (task.task_type == 'investigate issue/fix bug') | (task.task_type == 'enquiry'):
         db.task.id.readable = False
         db.task.collection_author.readable = False
         db.task.file.readable = False
@@ -202,7 +179,7 @@ def view_task():
         db.task.title.readable = False
         db.task.title.readable = False
         task_form = SQLFORM(db.task, task_id)
-    elif (task.task_type == 'VecDyn Data Set Source') | (task.task_type == 'VecTraits Data Set Source'):
+    elif (task.task_type == 'data set sources'):
         db.task.id.readable = False
         db.task.collection_author.readable = False
         db.task.file.readable = False
@@ -238,7 +215,7 @@ def edit_task():
                                button_text="Add New")
     # assign widget to field
     db.task.collection_author.widget = add_option.widget
-    if (task.task_type == 'Investigate issue/fix bug') | (task.task_type == 'Enquiry'):
+    if (task.task_type == 'investigate issue/fix bug') | (task.task_type == 'enquiry'):
         db.task.task_type.writable = False
         db.task.task_type.readable = False
         db.task.collection_author.writable = False
@@ -287,7 +264,7 @@ def edit_task():
 
 @auth.requires_login()
 def submit_data():
-    db.task.task_type.requires = IS_IN_SET(('VecDyn data submission', 'VecTraits data submission'))
+    db.task.task_type.requires = IS_IN_SET(('vecdyn data submission', 'vectraits data submission'))
     db.task.status.readable = False
     db.task.status.writable = False
     db.task.assigned_to.writable = False
@@ -310,7 +287,7 @@ def submit_data():
 #@auth.requires_login()
 @auth.requires_membership('VectorbiteAdmin')
 def submit_vecdyn_data():
-    db.task.task_type.default = 'VecDyn data submission'
+    db.task.task_type.default = 'vecdyn data submission'
     db.task.task_type.readable = False
     db.task.task_type.writable = False
     db.task.status.readable = False
@@ -371,7 +348,7 @@ def add_collection_author():
 
 @auth.requires_login()
 def submit_vectrait_data():
-    db.task.task_type.default = 'VecTraits data submission'
+    db.task.task_type.default = 'vectraits data submission'
     db.task.task_type.readable = False
     db.task.task_type.writable = False
     db.task.status.readable = False
@@ -396,7 +373,7 @@ def submit_vectrait_data():
 
 @auth.requires_login()
 def new_data_source():
-    db.task.task_type.default = 'Data Set Sources'
+    db.task.task_type.default = 'data set sources'
     db.task.task_type.writable = False
     db.task.task_type.readable = False
     db.task.assigned_to.writable = False
@@ -421,7 +398,7 @@ def new_data_source():
 
 @auth.requires_login()
 def contact_us():
-    db.task.task_type.default = 'Enquiry'
+    db.task.task_type.default = 'enquiry'
     db.task.task_type.writable = False
     db.task.task_type.readable = False
     db.task.status.readable = False
@@ -467,7 +444,7 @@ def contact_us():
 
 @auth.requires_login()
 def report_problem():
-    db.task.task_type.default = 'Investigate issue/fix bug'
+    db.task.task_type.default = 'investigate issue/fix bug'
     db.task.task_type.writable = False
     db.task.task_type.readable = False
     db.task.status.readable = False

@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-#db2 contains admin, community databases and task manager
-
 
 import datetime
 
@@ -8,25 +6,29 @@ from gluon.tools import prettydate
 
 week = datetime.timedelta(days=7)
 
+''' Text updates for index page not currently implemented'''
+db.define_table('index_page_updates',
+                Field('title', type='string', requires=IS_NOT_EMPTY()),
+                Field('file', 'upload', required=False),
+                Field('body', type='text', requires=IS_NOT_EMPTY()),
+                auth.signature)
+
+'''database table for collection author, this is used as a lookup in the submit vecdyn data task table and 
+the the vecdyn publication info table, both tables and functions use the SelectOrAdd function so user can add a collection 
+author when submitting or setting up a new vecdy dataset'''
+
 db.define_table('collection_author',
     Field('name', 'string', notnull=True, unique=True),
     Field('description', 'text'),
                 format='%(name)s')
 
-db.define_table('data_source_tracker',
-                Field('title', requires=IS_NOT_EMPTY()),
-                Field('provider', requires=IS_NOT_EMPTY()),
-                Field('species',  requires=IS_NOT_EMPTY()),
-                Field('description','text'),
-                Field('Web', requires=IS_URL))
-
-
 # assigns a status to a task -
 STATUSES = ('assigned','accepted','rejected','reassigned','completed')
 
-TASK_TYPE = ('VecDyn data submission', 'VecTraits data submission', 'Investigate issue/fix bug', 'Enquiry', 'Data Set Sources')
+#assign a task type to a task
+TASK_TYPE = ('vecdyn data submission', 'vectraits data submission', 'investigate issue/fix bug', 'enquiry', 'data set sources')
 
-DATARIGHTS = ('Open', 'Embargo')
+DATARIGHTS = ('open', 'embargo')
 
 db.define_table('task',
                 Field('title', requires=IS_NOT_EMPTY(), comment='* Short title identifying the data collection'),
@@ -50,24 +52,14 @@ db.define_table('task',
                 Field('deadline', 'datetime', default=request.now + week * 4),
                 auth.signature)
 
-
-
 # we create a query that selects user ids from a members of VectorbiteAdmin
 query = db((db.auth_user.id==db.auth_membership.user_id) & (db.auth_group.id==db.auth_membership.group_id) & (db.auth_group.role == 'VectorbiteAdmin'))
 db.task.assigned_to.requires = IS_IN_DB(query, 'auth_user.id', '%(first_name)s' ' %(last_name)s')
 
-
-db.define_table('post',
-                Field('task', 'reference task'),
-                Field('body', 'text'),
-                auth.signature)
-
 db.task.file.requires=IS_UPLOAD_FILENAME(extension='csv')
-
 
 db.task.created_on.represent = lambda v,row: prettydate(v)
 db.task.deadline.represent = lambda v,row: SPAN(prettydate(v),_class='overdue' if v and v < datetime.datetime.today() else None)
-
 
 def fullname(user_id):
     if user_id is None:
@@ -79,52 +71,21 @@ def show_status(status,row=None):
 
 db.task.status.represent = show_status
 
+
+'''function to send email, used in task manager, not currently implemented'''
 def send_email(to,subject,message,sender):
     if not isinstance(to,list): to = [to]
     mail.settings.sender = sender
     mail.send(to=to, subject=subject, message=message or '(no message)')
 
 
-
-###Add extra tables to auth
-
-#ORG_TYPE = ('Academic', 'Governmental', 'NGO','Private Sector')
-
-#auth = Auth(db)
-#auth.settings.extra_fields['auth_user']= [
-#  Field('Organisation'),
-#  Field('Organisation_type', requires=IS_IN_SET(ORG_TYPE))]
-#auth.define_tables(username=True)
-
-
-DOC_TYPE = ('VecDyn Documentation', 'VecTraits data submission')
-
-db.define_table('documentation',
-                Field('title', type='string', requires=IS_NOT_EMPTY()),
-                Field('doc_type', requires=IS_IN_SET(DOC_TYPE)),
-                Field('file', 'upload', required=False),
-                Field('body', type='text', requires=IS_NOT_EMPTY()),
-                auth.signature)
-
-db.define_table('index_page_updates',
-                Field('title', type='string', requires=IS_NOT_EMPTY()),
-                Field('file', 'upload', required=False),
-                Field('body', type='text', requires=IS_NOT_EMPTY()),
-                auth.signature)
-
-
-##Contact form example
-db.define_table('contact',
-   Field('your_name',requires=IS_NOT_EMPTY()),
-   Field('email',requires=IS_EMAIL()),
-   Field('message','text'))
+'''Assigns the select or add fuction to db.task.collection_author table'''
 
 add_option_2 = SelectOrAdd(form_title=T("Add a new something"),
                                               controller="default",
                                               function="add_collection_author",
                                               button_text=T("Add New"),
                                               dialog_width=600)
-
 
 db.task.collection_author.widget = add_option_2.widget
 
