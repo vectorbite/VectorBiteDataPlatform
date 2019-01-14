@@ -3,16 +3,15 @@
 
 # VecDyn
 
-###add ondelete='CASCADE' to these tables, so
-
+'''all datasets submitted thorugh the website will go into this folder'''
 
 db.define_table('data_set_upload',
                 Field('csvfile','upload',uploadfield=False, requires = IS_UPLOAD_FILENAME(extension='csv')))
 
 
-DATARIGHTS = ('open', 'embargo', 'Closed')
+DATARIGHTS = ('open', 'embargo', 'closed')
 
-DATATYPE = ('Abundance', 'Presence/Absence')
+DATATYPE = ('abundance', 'presence/absence')
 
 db.define_table('publication_info',
                 Field('title', unique=True, type='string', required=True, comment ='Short title identifying the data collection'),
@@ -29,25 +28,25 @@ db.define_table('publication_info',
                 Field('dataset_license', type='string', comment = 'e.g. Creative Commons license CC0 “No Rights Reserved”'),
                 Field('data_rights', requires=IS_IN_SET(DATARIGHTS), default=DATARIGHTS[2]),
                 Field('embargo_release_date', type ='date', requires=IS_EMPTY_OR(IS_DATE()), comment = 'If dataset is under embargo for a period of time please add its release date'),
-                Field('submit', type ='boolean',default=False),
                 Field('data_set_type', requires=IS_IN_SET(DATATYPE), default=DATATYPE[0]),
                 auth.signature)#,
                 #format='%(id)s')
 
-###could write a query to automatically update embargo date once it reaches data >= today
+'''the following code updates the DATARIGHTS status,  once the  embargo date is reached it sets the dataset to open'''
 today = datetime.date.today()
 embargo_status_updates = db((db.publication_info.data_rights == 'embargo') & (db.publication_info.embargo_release_date <= today)).select()
 for row in embargo_status_updates:
     row.update_record(data_rights='open', embargo_release_date=None)
 
+'''gives colour coding to various data rights statuses, go to /views/layout.html to edit colour coding '''
 def show_data_rights(data_rights,row=None):
     return SPAN(data_rights,_class=data_rights)
 
 db.publication_info.data_rights.represent = show_data_rights
 
-
-#if db(db.study_meta_data.id>0).count() == 0:
- #   db.study_meta_data.truncate()
+'''use the following code to reset the db, un comment and refresh, should only be commented out when not in use'''
+# if db(db.publication_info.id>0).count() == 0:
+#    db.publication_info.truncate()
 
 db.define_table('study_meta_data',
                 Field('title'), #0
@@ -69,8 +68,6 @@ db.define_table('study_meta_data',
 
 db.study_meta_data.publication_info_id.requires = IS_IN_DB(db, db.publication_info.id)#, '%(title)s')
 
-#if db(db.study_meta_data.id>0).count() == 0:
- #   db.study_meta_data.truncate()
 
 
 db.define_table('time_series_data',
@@ -91,9 +88,7 @@ db.define_table('time_series_data',
                 Field('sample_name', type = 'string', comment ='A human readable sample name'),
                 Field('study_meta_data_id'))
 
-
-if db(db.time_series_data.id>0).count() == 0:
-    db.time_series_data.truncate()
+'''this adds the select or add widget to the '''
 
 add_option = SelectOrAdd(form_title=T("Add a new something"),
                                               controller="vecdyn",
@@ -101,5 +96,5 @@ add_option = SelectOrAdd(form_title=T("Add a new something"),
                                               button_text=T("Add New"),
                                               dialog_width=600)
 
-
 db.publication_info.collection_author.widget = add_option.widget
+

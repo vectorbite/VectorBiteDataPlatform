@@ -65,12 +65,10 @@ def vecdyn_author_query():
     if collection_author != None:
         collection_author = db(db.collection_author.name == collection_author).select().first()
         query = ((db.publication_info.collection_author == collection_author.id)
-                        & (db.publication_info.data_rights == 'open')
-                        & (db.publication_info.submit == True))
+                        & (db.publication_info.data_rights == 'open'))
     else:
         query = ((db.publication_info.collection_author == db.collection_author.id)
-                 & (db.publication_info.data_rights == 'open')
-                 & (db.publication_info.submit == True))
+                 & (db.publication_info.data_rights == 'open'))
     grid = SQLFORM.grid(query,
                         exportclasses=export,
                         field_id=db.publication_info.id,

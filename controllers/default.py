@@ -1,16 +1,18 @@
 # The default controller
 
-
+'''Index page text  not yet implented in the correspodning view'''
 @auth.requires_login()
 def index():
-    '''Index page text  not yet implented in the correspodning view '''
     rows = db(db.index_page_updates).select(orderby=~db.index_page_updates.created_on)
     return locals()
 
-
+'''used to indicated if specific databases havebeen set up by a specific user, 
+can used to delete dor edit database entries'''
 me = auth.user_id
 
-# the following functions represent the task manager
+'''the following functions create the task manager tables in default/tasks'''
+
+'''creates a table which displays all tasks '''
 @auth.requires_membership('VectorbiteAdmin')
 def tasks():
     db.task.created_on.readable = False
@@ -33,7 +35,7 @@ def tasks():
                                 db.task.assigned_to])
     return locals()
 
-
+'''creates a vecdyn submission table from from tasks, recieves data submitted through the website '''
 @auth.requires_membership('VectorbiteAdmin')
 def vecdyn_submissions():
     db.task.created_on.readable = False
@@ -57,7 +59,7 @@ def vecdyn_submissions():
 
     return locals()
 
-
+'''creates a vectraits submission table from tasks db table,  recieves data submitted through the website '''
 @auth.requires_membership('VectorbiteAdmin')
 def vectrait_submissions():
     db.task.created_on.readable = False
@@ -80,6 +82,8 @@ def vectrait_submissions():
                                 db.task.assigned_to])
     return locals()
 
+
+'''creates an issue tracker from the tasks db table, recieves messages submitted through the website '''
 @auth.requires_membership('VectorbiteAdmin')
 def issues():
     db.task.created_on.readable = False
@@ -102,6 +106,8 @@ def issues():
                                 db.task.assigned_to])
     return locals()
 
+
+'''creates a general enquiry tracker from the tasks db table, recieves messages submitted through the website '''
 @auth.requires_membership('VectorbiteAdmin')
 def general_enquiries():
     db.task.created_on.readable = False
@@ -124,6 +130,8 @@ def general_enquiries():
                                 db.task.assigned_to])
     return locals()
 
+
+'''creates a general enquiry tracker from the tasks db table, recieves messages submitted through the website '''
 @auth.requires_membership('VectorbiteAdmin')
 def data_set_sources():
     db.task.created_on.readable = False
@@ -147,66 +155,9 @@ def data_set_sources():
     return locals()
 
 
-@auth.requires_membership('VectorbiteAdmin')
-def create_task():
-    form = SQLFORM(db.task).process()
-    if form.accepted:
-        #send_email(to=db.auth_user(form.vars.assigned_to).email,
-        #           sender=auth.user.email,
-        #           subject="New Task Assigned: %s" % form.vars.title,
-         #          message=form.vars.description)
-        redirect(URL('tasks'))
-    return locals()
-
-@auth.requires_membership('VectorbiteAdmin')
-def view_task():
-    task_form = ()
-    task_id = request.args(0,cast=int)
-    task = db.task(task_id) or error()
-    if not task.created_by==me and not task.assigned_to==me: error()
-    if (task.task_type == 'vecdyn data submission') | (task.task_type == 'vectraits data submission'):
-        db.task.id.readable = False
-        db.task.file.readable = False
-        db.task.file.writable = False
-        task_form = SQLFORM(db.task, task_id)
-    elif (task.task_type == 'investigate issue/fix bug') | (task.task_type == 'enquiry'):
-        db.task.id.readable = False
-        db.task.collection_author.readable = False
-        db.task.file.readable = False
-        db.task.file.writable = False
-        db.task.title.readable = False
-        db.task.title.readable = False
-        db.task.title.readable = False
-        db.task.title.readable = False
-        task_form = SQLFORM(db.task, task_id)
-    elif (task.task_type == 'data set sources'):
-        db.task.id.readable = False
-        db.task.collection_author.readable = False
-        db.task.file.readable = False
-        db.task.file.writable = False
-        db.task.title.readable = False
-        db.task.title.readable = False
-        db.task.title.readable = False
-        db.task.title.readable = False
-        task_form = SQLFORM(db.task, task_id)
-    db.post.task.default = task.id
-    db.post.task.writable = False
-    db.post.task.readable = False
-    task_form = SQLFORM(db.task, task_id)
-    form = SQLFORM(db.post).process()
-    if form.accepted:
-        user_id = task.created_by if task.assigned_to==me else task.assigned_to
-        #send_email(to=db.auth_user(user_id).email,
-         #          sender=auth.user.email,
-          ##         subject="New Commend About: %s" % task.title,
-            #       message=form.vars.body)
-    posts = db(db.post).select(orderby=db.post.created_by)
-    return locals()
-
+'''view/edit task, depending on task type. loads specif fields depedning on task type'''
 @auth.requires_membership('VectorbiteAdmin')
 def edit_task():
-    #db.task.file.readable = False
-    #db.task.file.writable = False
     task_id = request.args(0,cast=int)
     task = db.task(task_id) or error()
     add_option_2 = SelectOrAdd(form_title="Add new collection author",
@@ -240,51 +191,19 @@ def edit_task():
         db.task.data_rights.readable = False
     else:
         pass
-
-    #if not task.created_by==me and not task.assigned_to==me: error()
-    #if task.created_by==me:
-    #    task.assigned_to.writable = True
-    #else:
-    #    task.assigned_to.writable = False
-    #    task.status.requires=IS_IN_SET(('accepted','rejected','completed'))
     form = SQLFORM(db.task,task,
                    showid=False,
                    deletable=True).process() ### change true for (task.created_by==me) so only users who created a task can delete it
     if form.accepted:
-    #    email_to = db.auth_user(
-    #        form.vars.assigned_to if task.created_by==me else task.created_b
-     #       ).email
-     #   send_email(to=email_to,sender=auth.user.email,
-     #              subject="Task Changed (%(status)s): %(title)s" % form.vars,
-     #              message=form.vars.description)
         redirect(URL('tasks'))
     response.files.append(URL('static', 'jquery-ui-1.12.1/jquery-ui.js'))
     response.files.append(URL('static', 'jquery-ui-1.12.1/jquery-ui.theme.css'))
     return locals()
 
-@auth.requires_login()
-def submit_data():
-    db.task.task_type.requires = IS_IN_SET(('vecdyn data submission', 'vectraits data submission'))
-    db.task.status.readable = False
-    db.task.status.writable = False
-    db.task.assigned_to.writable = False
-    db.task.assigned_to.readable = False
-    db.task.deadline.writable = False
-    db.task.deadline.readable = False
-    db.task.file.requires=IS_UPLOAD_FILENAME(extension='csv')
-    form = SQLFORM(db.task, labels={'task_type':'Data set category'}).process()
-    if form.accepted:
-        session.flash = 'Thanks, your data set has been submitted for review, we will get back to you soon!'
-        #send_email(to=db.auth_user(form.vars.assigned_to).email,
-        #           sender=auth.user.email,
-        #           subject="New data set submitted: %s" % form.vars.title,
-        #           message=form.vars.description)
-        redirect(URL('index'))
-    #else:
-     #   response.flash = 'please fill out the form in full and attach a csv file'
-    return locals()
 
-#@auth.requires_login()
+'''the following functions are pass various tasks from the website to the task manager'''
+
+'''function set up to Submit vecdyn  data through the website'''
 @auth.requires_membership('VectorbiteAdmin')
 def submit_vecdyn_data():
     db.task.task_type.default = 'vecdyn data submission'
@@ -305,20 +224,15 @@ def submit_vecdyn_data():
     db.task.collection_author.widget = add_option.widget
     form = SQLFORM(db.task, labels={'task_type':'Data set category'}).process()
     if form.accepted:
-        #collection_author = request.vars.collection_author
-        #db.collection_author.update_or_insert(name=collection_author)
-        session.flash = 'Thanks, your data set has been submitted for review, we will get back to you soon!'
-        #send_email(to=db.auth_user(form.vars.assigned_to).email,
-        #           sender=auth.user.email,
-        #           subject="New data set submitted: %s" % form.vars.title,
-        #           message=form.vars.description)
         redirect(URL('index'))
-    #else:
-     #   response.flash = 'please fill out the form in full and attach a csv file'
+    else:
+        response.flash = 'please fill out the form in full and attach a csv file'
     response.files.append(URL('static', 'jquery-ui-1.12.1/jquery-ui.js'))
     response.files.append(URL('static', 'jquery-ui-1.12.1/jquery-ui.theme.css'))
     return locals()
 
+
+'''add or set up a collection authro to add to the submit vecdyn data function'''
 def add_collection_author():
     #this is the controller function that will appear in our dialog
     form = SQLFORM(db.collection_author)
@@ -345,7 +259,7 @@ def add_collection_author():
         return form
 
 
-
+'''function set up to submit vectrait  data through the website'''
 @auth.requires_login()
 def submit_vectrait_data():
     db.task.task_type.default = 'vectraits data submission'
@@ -370,12 +284,14 @@ def submit_vectrait_data():
      #   response.flash = 'please fill out the form in full and attach a csv file'
     return locals()
 
-
+'''this function is set up to create a list of potential data sources through the task manager  '''
 @auth.requires_login()
 def new_data_source():
     db.task.task_type.default = 'data set sources'
     db.task.task_type.writable = False
     db.task.task_type.readable = False
+    db.task.collection_author.writable = False
+    db.task.collection_author.readable = False
     db.task.assigned_to.writable = False
     db.task.assigned_to.readable = False
     db.task.deadline.writable = False
@@ -386,8 +302,14 @@ def new_data_source():
     db.task.contact_affiliation.readable = False
     db.task.dataset_license.writable = False
     db.task.dataset_license.readable = False
+    db.task.data_rights.writable = False
+    db.task.data_rights.readable = False
+    db.task.orcid.writable = False
+    db.task.orcid.readable = False
     db.task.file.writable = False
     db.task.file.readable = False
+    db.task.embargo_release_date.writable = False
+    db.task.embargo_release_date.readable = False
     form = SQLFORM(db.task, labels={'task_type':'Data set category'}).process()
     if form.accepted:
         session.flash = 'Thanks, source added'
@@ -395,7 +317,7 @@ def new_data_source():
      #   response.flash = 'please fill out the form in full and attach a csv file'
     return locals()
 
-
+'''function allows users to submit messages via task manager '''
 @auth.requires_login()
 def contact_us():
     db.task.task_type.default = 'enquiry'
@@ -440,7 +362,7 @@ def contact_us():
     return locals()
 
 
-
+'''function allows users to report problems through the website  via task manager '''
 
 @auth.requires_login()
 def report_problem():
@@ -485,8 +407,9 @@ def report_problem():
         session.flash = 'please complete the form'
     return locals()
 
-#Admin and community functions
+'''additional controls for the management pages'''
 
+'''function to add user to admin membership'''
 @auth.requires_membership('VectorbiteAdmin')
 def group_membership():
     db.auth_membership.group_id.default = 2
@@ -499,6 +422,7 @@ def group_membership():
      #   session.flash = 'Thanks you have successfully submit your changes'
     return locals()
 
+'''function to manage index page messsages, not currently implemented, sould eveutally use Markmin'''
 #@auth.requires_membership('VectorbiteManagers')
 def manage_index_page_updates():
     grid = SQLFORM.grid(db.index_page_updates,  searchable=False, deletable=True,\
