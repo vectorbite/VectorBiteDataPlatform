@@ -73,7 +73,7 @@
 
 
       <div class="container-fluid">
-  <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#contact_info">View  Contact Information  &#8205;  &#8205; &#8205; &#8205; &#8205; </button></button> <a class="btn btn-link" href="{{=URL('vecdyn','edit_dataset_general_info',vars={'publication_info_id':publication_info_id})}}">{{=T("(Edit)")}}</a>
+  <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#contact_info">View  Contact Information&#8205;  &#8205; &#8205; &#8205; &#8205; </button></button> <a class="btn btn-link" href="{{=URL('vecdyn','edit_dataset_general_info',vars={'publication_info_id':publication_info_id})}}">{{=T("(Edit)")}}</a>
 
   <div id="contact_info" class="collapse">
 
@@ -126,17 +126,13 @@
         <td>Embargo Release Date: </td>
         <td>{{=row.embargo_release_date}}</td>
       </tr>
-    <tr>
-        <td>Submitted: </td>
-        <td>{{=row.submit}}</td>
-      </tr>
     </tbody>
   </table>
     {{pass}}
   {{else:}}
             {{pass}}
 
- </div>
+
       <hr>
 
 {{=BEAUTIFY(form)}}

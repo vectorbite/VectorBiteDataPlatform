@@ -5,7 +5,6 @@ from gluon.tools import prettydate
 week = datetime.timedelta(days=7)
 
 
-
 #####VecDyn query
 
 
@@ -73,10 +72,7 @@ def vecdyn_taxon_location_query():
     grid = SQLFORM.grid((db.study_meta_data.publication_info_id == db.publication_info.id)
                         & (db.publication_info.collection_author == db.collection_author.id)
                         & (db.taxon.taxonID == db.study_meta_data.taxonID)
-                        & (db.publication_info.data_rights == 'open') #| (db.publication_info.data_rights == 'embargo'))
-#need to decide how we want to implement embargo, either auto change to open or keep embargo but becomes searchable on release data
-                        #& ((db.publication_info.embargo_release_date == None) | (db.publication_info.embargo_release_date <= today))
-                        & (db.publication_info.submit == True)
+                        & (db.publication_info.data_rights == 'open')
                         & (db.gaul_admin_layers.ADM_CODE == db.study_meta_data.ADM_CODE),
                         exportclasses=export,
                         field_id=db.study_meta_data.id,

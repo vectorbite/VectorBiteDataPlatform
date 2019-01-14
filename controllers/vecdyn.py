@@ -43,8 +43,6 @@ def dataset_registration():
     db.publication_info.data_rights.readable = False
     db.publication_info.embargo_release_date.writable = False
     db.publication_info.embargo_release_date.readable = False
-    db.publication_info.submit.writable = False
-    db.publication_info.submit.readable = False
     add_option = SelectOrAdd(form_title="Add new collection author",
                              controller="vecdyn",
                              function="add_collection_author",
@@ -59,7 +57,6 @@ def dataset_registration():
     response.files.append(URL('static', 'jquery-ui-1.12.1/jquery-ui.js'))
     response.files.append(URL('static', 'jquery-ui-1.12.1/jquery-ui.theme.css'))
     return locals()
-#lambda row: A('Add new data set to collection',_href=URL("vecdyn", "taxon_select",vars={'id':row.id})),\
 
 def add_collection_author():
     #this is the controller function that will appear in our dialog
@@ -92,7 +89,7 @@ def dataset_registrations():
     #query = db.publication_info.created_by==me
     [setattr(f, 'readable', False)
     for f in db.publication_info
-        if f.name not in ('db.publication_info.data_rights, db.publication_info.dataset_doi, db.publication_info.title,db.publication_info.collection_author, db.publication_info.submit, db.publication_info.created_by')]
+        if f.name not in ('db.publication_info.data_rights, db.publication_info.dataset_doi, db.publication_info.title,db.publication_info.collection_author, db.publication_info.created_by')]
     #db.publication_info.data_rights.represent = lambda data_rights, row: A(data_rights, _href=URL('edit_data_rights', args=row.id))
     links = [lambda row: A('Enter Dataset Control Panel', _href=URL("vecdyn", "view_data", vars={'publication_info_id': row.id}),_class="btn btn-primary")]
     form = SQLFORM.grid(db.publication_info, links = links, searchable=False, deletable=lambda row: (row.created_by==me),\
@@ -102,7 +99,6 @@ def dataset_registrations():
                             db.publication_info.collection_author,
                             db.publication_info.dataset_doi,
                             db.publication_info.data_rights,
-                            db.publication_info.submit,
                             db.publication_info.created_by],
                         #buttons_placement='left',
                         #links_placement='left'
@@ -116,8 +112,6 @@ def dataset_registrations():
 
 @auth.requires_membership('VectorbiteAdmin')
 def edit_dataset_general_info():
-    db.publication_info.submit.writable = False
-    db.publication_info.submit.readable = False
     db.publication_info.data_rights.writable = False
     db.publication_info.data_rights.readable = False
     db.publication_info.embargo_release_date.writable = False
@@ -174,9 +168,6 @@ def edit_data_rights():
         session.flash = 'Thanks you have successfully submitted your changes'
         redirect(URL("vecdyn", "view_data", vars={'publication_info_id': publication_info_id}))
     return locals()
-
-
-#lambda row: A('Submit Sample Data', _href=URL("vecdyn", "upload_time_series_data", vars={'id':row.id}))
 
 
 @auth.requires_membership('VectorbiteAdmin')
@@ -332,7 +323,7 @@ def edit_meta_data():
     form = SQLFORM(db.study_meta_data,study_meta_data_id, showid=False, comments=False
                    )
     if form.process().accepted:
-        session.flash = 'Thanks you have successfully submit your changes'
+        session.flash = 'Thanks you have successfully submitted your changes'
         redirect(URL("vecdyn", "view_data", vars={'publication_info_id': publication_info_id}))
     return locals()
 
@@ -606,7 +597,7 @@ def edit_time_series_entry():
     db.time_series_data.study_meta_data_id.readable = False
     form = SQLFORM(db.time_series_data, time_series_entry, showid=False, comments=False)
     if form.process().accepted:
-        session.flash = 'Thanks you have successfully submit your changes'
+        session.flash = 'Thanks you have successfully submitted your changes'
         redirect(URL('vecdyn','view_time_series_data', vars={'study_meta_data_id': study_meta_data_id}))
     return locals()
 
