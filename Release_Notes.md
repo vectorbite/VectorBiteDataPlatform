@@ -1,6 +1,8 @@
 # VectorBiTE Data Platform Release Notes
 Current version: v0.0.3
 ## Release Notes
+### v0.0.5
+- minor changes to Vecdyn data manager
 ### v0.0.4
 - improved dataset rights facility
 ### v0.0.3

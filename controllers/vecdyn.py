@@ -172,6 +172,7 @@ def edit_data_rights():
 
 @auth.requires_membership('VectorbiteAdmin')
 def view_data():
+    page = "view_stan_data"
     #####query for publication info pages, found at the top of the view data pages
     publication_info_id = request.get_vars.publication_info_id
     publication_info_query = db(db.publication_info.id == publication_info_id).select()
@@ -305,15 +306,13 @@ def view_unstandardised_data():
 def edit_meta_data():
     publication_info_id = request.get_vars.publication_info_id
     study_meta_data_id = request.get_vars.study_meta_data_id
-    meta_edit = "yes"
     rows = db((db.study_meta_data.id == study_meta_data_id) & (db.study_meta_data.taxonID == db.taxon.taxonID)
               & (db.study_meta_data.ADM_CODE == db.gaul_admin_layers.ADM_CODE)).select()
     response.flash = 'Edit meta-data entry!'
     db.study_meta_data.title.writable = False
     db.study_meta_data.title.readable = False
     db.study_meta_data.taxon.writable = False
-    db.study_meta_data.taxon.readable = False
-    #db.study_meta_data.location_description.writable = False
+    db.study_meta_data.location_description.writable = False
     db.study_meta_data.taxonID.writable = False
     db.study_meta_data.ADM_CODE.writable = False
     db.study_meta_data.publication_info_id.writable = False
@@ -335,6 +334,7 @@ def standardise_taxon():
     response.flash = 'You have uploaded taxonomic data that is not recognised in our database, you need to standardise this manually. Click on the link next to each taxon name to search for equivalent taxon names.  !'
     publication_info_id = request.get_vars.publication_info_id
     study_meta_data_id = request.get_vars.id
+    page = request.get_vars.page
     rows = db(db.study_meta_data.publication_info_id == publication_info_id).select(orderby=db.study_meta_data.taxonID)
     a = db((db.study_meta_data.publication_info_id == publication_info_id) & (db.study_meta_data.taxonID == None)).select(
         groupby=db.study_meta_data.taxon)
@@ -351,6 +351,7 @@ def standardise_taxon():
         redirect(URL("vecdyn", "standardise_geo_data", vars={'publication_info_id': publication_info_id}))
     links = [lambda row: A('Standardise taxon', _href=URL("vecdyn", "taxon_select", vars={'study_meta_data_id': row.id, \
                                                                                           'taxon': row.taxon, \
+                                                                                          'page': page,\
                                                                                           'publication_info_id': publication_info_id}),_class="btn btn-primary")]
     [setattr(f, 'readable', False)
      for f in db.study_meta_data
@@ -368,10 +369,12 @@ def standardise_taxon():
 ##write a function if name is in db do something, if not standardise data
 @auth.requires_membership('VectorbiteAdmin')
 def re_standardise_taxon():
+    page = request.get_vars.page
     publication_info_id = request.get_vars.publication_info_id
     study_meta_data_id = request.get_vars.id
     links = [lambda row: A('Standardise taxon', _href=URL("vecdyn", "taxon_select", vars={'study_meta_data_id': row.id, \
                                                                                           'taxon': row.taxon, \
+                                                                                          'page': page,\
                                                                                           'publication_info_id': publication_info_id}),_class="btn btn-primary")]
     [setattr(f, 'readable', False)
      for f in db.study_meta_data
@@ -388,6 +391,7 @@ def re_standardise_taxon():
 
 @auth.requires_membership('VectorbiteAdmin')
 def taxon_select():
+    page = request.get_vars.page
     publication_info_id = request.get_vars.publication_info_id
     study_meta_data_id = request.get_vars.study_meta_data_id
     taxon = request.get_vars.taxon
@@ -402,6 +406,7 @@ def taxon_select():
                                                              vars={'taxonID': row.taxonID, \
                                                                    'publication_info_id': publication_info_id, \
                                                                    'taxon': taxon, \
+                                                                   'page': page, \
                                                                    'meta_edit': meta_edit, \
                                                                    'tax_species': row.tax_species, \
                                                                    'study_meta_data_id': study_meta_data_id}))]
@@ -415,6 +420,7 @@ def taxon_select():
 
 @auth.requires_membership('VectorbiteAdmin')
 def taxon_confirm():
+    page = request.get_vars.page
     publication_info_id = request.get_vars.publication_info_id
     study_meta_data_id = request.get_vars.study_meta_data_id
     tax_species = request.get_vars.tax_species
@@ -428,6 +434,7 @@ def taxon_confirm():
                                                          'tax_species': tax_species,
                                                          'taxonID': taxonID,
                                                          'taxon': taxon,
+                                                         'page': page, \
                                                          'meta_edit': meta_edit, \
                                                          'publication_info_id': publication_info_id}))
     return locals()
@@ -435,6 +442,7 @@ def taxon_confirm():
 @auth.requires_membership('VectorbiteAdmin')
 ## Searches through all the entries for a taxon  and adds the tax standardized taxon name to each row
 def taxon_insert():
+    page = request.get_vars.page
     taxon = request.get_vars.taxon
     publication_info_id = request.get_vars.publication_info_id
     study_meta_data_id = request.get_vars.study_meta_data_id
@@ -446,9 +454,9 @@ def taxon_insert():
         if taxon == row.taxon:
             row.update_record(taxonID=taxonID)
         else: continue
-    if meta_edit == 'yes':
+    if page == 'view_stan_data':
         session.flash = 'Success!'
-        redirect(URL("vecdyn", "edit_meta_data", vars={'publication_info_id': publication_info_id,
+        redirect(URL("vecdyn", "re_standardise_taxon", vars={'publication_info_id': publication_info_id,
                                                        'study_meta_data_id': study_meta_data_id,
                                                        'publication_info_id': publication_info_id}))
     else:
