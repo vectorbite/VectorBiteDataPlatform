@@ -19,3 +19,6 @@
  *Finally*
  - Move appropriate cards in Trello to Done
  - Resolve any Bitbucket/github issues and tag with release merge commit
+ 
+ 
+ 
