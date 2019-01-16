@@ -8,23 +8,6 @@
   </div>
               <div style="background: linear-gradient(240deg, lightgrey, whitesmoke)" class="jumbotron">
 
- {{for row in rows:}}
-
-        <div class="alert alert-info" role="alert">
-            Original taxon name:  <strong>{{=row.study_meta_data.taxon}} </strong> <br>
-        Standardised taxon name: <strong>{{=row.taxon.tax_species}} </strong>
-        <br>
-            <br>
-        {{=A('Re-standardise Taxon',_href=URL('taxon_select',vars={'publication_info_id':publication_info_id,
-        'study_meta_data_id':study_meta_data_id, 'taxon':row.study_meta_data.taxon, 'meta_edit':meta_edit}),_class="btn btn-warning")}}  </strong></div>
-        <div class="alert alert-info" role="alert">
-          Original geo name: <strong>{{=row.study_meta_data.location_description}} </strong> <br>
-            Standardised geo name: <strong>{{=row.gaul_admin_layers.ADM2_NAME}}, {{=row.gaul_admin_layers.ADM1_NAME}},  {{=row.gaul_admin_layers.ADM0_NAME}}   </strong>
-        <br>
-        <br>{{=A('Re-standardise Geo Info',_href=URL('location_select',vars={'publication_info_id':publication_info_id,
-        'study_meta_data_id':study_meta_data_id, 'location_description':row.study_meta_data.location_description, 'meta_edit':meta_edit}),_class="btn btn-warning")}}
-</div>
-     {{pass}}
 
 
 <br>
