@@ -10,8 +10,8 @@
     <ul class="dropdown-menu" role="menu">
       <li>{{=A('View Standardised',_href=URL('vecdyn','view_data',vars={'publication_info_id':publication_info_id}))}}</li>
       <li>{{=A('View Unstandardised',_href=URL('vecdyn','view_unstandardised_data',vars={'publication_info_id':publication_info_id}))}}</li>
-        <li>{{=A('Re-standardize Taxonomic Entries',_href=URL('vecdyn','re_standardise_taxon',vars={'publication_info_id':publication_info_id, 'page':page}))}}</li>
-            <li>{{=A('Re-standardize Geographic Entries',_href=URL('vecdyn','re_standardise_geo_data',vars={'publication_info_id':publication_info_id,'page':page}))}}</li>
+        <li>{{=A('Taxonomic Standardiser ',_href=URL('vecdyn','re_standardise_taxon',vars={'publication_info_id':publication_info_id, 'page':page}))}}</li>
+            <li>{{=A('Geographic Standardiser',_href=URL('vecdyn','re_standardise_geo_data',vars={'publication_info_id':publication_info_id,'page':page}))}}</li>
     </ul>
   </div>
 
