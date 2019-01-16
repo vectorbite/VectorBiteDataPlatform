@@ -10,8 +10,8 @@
     <ul class="dropdown-menu" role="menu">
       <li>{{=A('View Standardised',_href=URL('vecdyn','view_data',vars={'publication_info_id':publication_info_id}))}}</li>
       <li>{{=A('View Unstandardised',_href=URL('vecdyn','view_unstandardised_data',vars={'publication_info_id':publication_info_id}))}}</li>
-        <li>{{=A('Re-standardize Taxonomic Entries',_href=URL('vecdyn','re_standardise_taxon',vars={'publication_info_id':publication_info_id}))}}</li>
-            <li>{{=A('Re-standardize Geographic Entries',_href=URL('vecdyn','re_standardise_geo_data',vars={'publication_info_id':publication_info_id}))}}</li>
+        <li>{{=A('Re-standardize Taxonomic Entries',_href=URL('vecdyn','re_standardise_taxon',vars={'publication_info_id':publication_info_id, 'page':page}))}}</li>
+            <li>{{=A('Re-standardize Geographic Entries',_href=URL('vecdyn','re_standardise_geo_data',vars={'publication_info_id':publication_info_id,'page':page}))}}</li>
     </ul>
   </div>
 
@@ -73,7 +73,7 @@
 
 
       <div class="container-fluid">
-  <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#contact_info">View  Contact Information&#8205;  &#8205; &#8205; &#8205; &#8205; </button></button> <a class="btn btn-link" href="{{=URL('vecdyn','edit_dataset_general_info',vars={'publication_info_id':publication_info_id})}}">{{=T("(Edit)")}}</a>
+  <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#contact_info">View  Contact Information&#8205; &#8205;  &#8205; &#8205; &#8205; &#8205; </button></button> <a class="btn btn-link" href="{{=URL('vecdyn','edit_dataset_general_info',vars={'publication_info_id':publication_info_id})}}">{{=T("(Edit)")}}</a>
 
   <div id="contact_info" class="collapse">
 
@@ -107,7 +107,7 @@
                 {{if count >=1:}}
 
             <div class="container-fluid">
-  <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#rights_info">Dataset Rights & Access &#8205; &#8205; &#8205; &#8205; &#8205; &#8205; </button><a class="btn btn-link" <a class="btn btn-link" href="{{=URL('vecdyn','edit_data_rights',vars={'publication_info_id':publication_info_id})}}">{{=T("(Edit)")}}</a>
+  <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#rights_info">Dataset Rights & Access&#8205; &#8205; &#8205; &#8205; &#8205; &#8205; &#8205; </button><a class="btn btn-link" <a class="btn btn-link" href="{{=URL('vecdyn','edit_data_rights',vars={'publication_info_id':publication_info_id})}}">{{=T("(Edit)")}}</a>
 
   <div id="rights_info" class="collapse">
 
@@ -134,7 +134,7 @@
 
 
       <hr>
-
+</div>
 {{=BEAUTIFY(form)}}
 
                   </div>
