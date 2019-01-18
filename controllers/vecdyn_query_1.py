@@ -1,19 +1,15 @@
 import datetime
 
 from gluon.tools import prettydate
+# from datetime import datetime
 
 week = datetime.timedelta(days=7)
 
 
-#####VecDyn query
-
-
-#from datetime import datetime
-
-#@auth.requires_login()
+# VecDyn query
+# @auth.requires_login()
 @auth.requires_membership('VectorbiteAdmin')
 def vecdyn_taxon_location_query():
-    today = datetime.date.today()
     """
     Controller to serve a searchable grid view of the vector dynamics
     datasets with a download function. We want to be able to download
@@ -30,6 +26,7 @@ def vecdyn_taxon_location_query():
     returning. Currently, this won't let you Download All for more than
     50 MainID records.
     """
+    today = datetime.date.today()
 
     # control which fields available
     [setattr(f, 'readable', False) for f in db.taxon
@@ -47,7 +44,7 @@ def vecdyn_taxon_location_query():
 
     # Add selectability checkboxes
     select = [('Download selected',
-               lambda ids : redirect(URL('vecdyn_query_1', 'vec_dyn_download', vars=dict(ids=ids))),
+               lambda ids: redirect(URL('vecdyn_query_1', 'vec_dyn_download', vars=dict(ids=ids))),
                'btn btn-default')]
 
     # Adding an exporter that grabs all the data from a query,
@@ -60,15 +57,15 @@ def vecdyn_taxon_location_query():
                   tsv_with_hidden_cols=False, tsv=False)
 
     # turn the study_meta_data.id into a download link
-    db.study_meta_data.represent = lambda value, row: A(value, _href=URL("vecdyn_query_1","vec_dyn_download",
-                                                    vars={'ids': row.study_meta_data.id}))
+    db.study_meta_data.represent = lambda value, row: A(value, _href=URL("vecdyn_query_1", "vec_dyn_download",
+                                                        vars={'ids': row.study_meta_data.id}))
     # get the grid
     # week = datetime.timedelta(days=7)
     # Field('deadline', 'datetime', default=request.now + week),
-    #db.publication_info.collection_author.represent = lambda collection_author, row: \
+    # db.publication_info.collection_author.represent = lambda collection_author, row: \
     #    A(collection_author, _href=URL('edit_task', args=row.publication_info.collection_author))
     db.collection_author.name.represent = lambda name, row: \
-        A(name, _href=URL('vecdyn_query_2','vecdyn_author_query', vars={'collection_author': row.collection_author.name}))
+        A(name, _href=URL('vecdyn_query_2', 'vecdyn_author_query', vars={'collection_author': row.collection_author.name}))
     grid = SQLFORM.grid((db.study_meta_data.publication_info_id == db.publication_info.id)
                         & (db.publication_info.collection_author == db.collection_author.id)
                         & (db.taxon.taxonID == db.study_meta_data.taxonID)
@@ -76,28 +73,28 @@ def vecdyn_taxon_location_query():
                         & (db.gaul_admin_layers.ADM_CODE == db.study_meta_data.ADM_CODE),
                         exportclasses=export,
                         field_id=db.study_meta_data.id,
-                        fields= [db.publication_info.title,
-                                 db.collection_author.name,
-                                 db.taxon.tax_species, db.taxon.tax_genus,
-                                 db.taxon.tax_family, db.taxon.tax_order,
-                                 db.taxon.tax_class, db.taxon.tax_phylum,
-                                 db.study_meta_data.location_description,
-                                 db.gaul_admin_layers.ADM0_NAME,
-                                 db.gaul_admin_layers.ADM1_NAME,
-                                 db.gaul_admin_layers.ADM2_NAME],
+                        fields=[db.publication_info.title,
+                                db.collection_author.name,
+                                db.taxon.tax_species, db.taxon.tax_genus,
+                                db.taxon.tax_family, db.taxon.tax_order,
+                                db.taxon.tax_class, db.taxon.tax_phylum,
+                                db.study_meta_data.location_description,
+                                db.gaul_admin_layers.ADM0_NAME,
+                                db.gaul_admin_layers.ADM1_NAME,
+                                db.gaul_admin_layers.ADM2_NAME],
 
-                        headers={'publication_info.title' : 'Title',
+                        headers={'publication_info.title': 'Title',
                                  'collection_author.name': 'Author',
-                                 'taxon.tax_species' : 'Taxon',
-                                 'taxon.tax_genus' : 'Genus',
-                                 'taxon.tax_family' : 'Family',
-                                 'taxon.tax_order' : 'Order',
-                                 'taxon.tax_class' : 'Class',
-                                 'taxon.tax_phylum' : 'Phylum',
+                                 'taxon.tax_species': 'Taxon',
+                                 'taxon.tax_genus': 'Genus',
+                                 'taxon.tax_family': 'Family',
+                                 'taxon.tax_order': 'Order',
+                                 'taxon.tax_class': 'Class',
+                                 'taxon.tax_phylum': 'Phylum',
                                  'gaul_admin_layers.ADM0_NAME': 'Administrative Division 0',
-                                 'gaul_admin_layers.ADM1_NAME' : 'Administrative Division 1',
+                                 'gaul_admin_layers.ADM1_NAME': 'Administrative Division 1',
                                  'gaul_admin_layers.ADM2_NAME': 'Administrative Division 2',
-                                 'study_meta_data.id' : 'Dataset ID' },
+                                 'study_meta_data.id': 'Dataset ID'},
                         maxtextlength=200,
                         selectable=select,
                         deletable=False, editable=False, details=False, create=False)
@@ -134,8 +131,8 @@ def vecdyn_taxon_location_query():
                     _href=exp_menu[1].attributes['_href'],
                     _style='padding:6px 12px;line-height:20px')
         fake_exp_sel = INPUT(_value='Download selected', _type='submit',
-                            _class="btn btn-primary", _id='fake_exp_sel',
-                            _style='padding:6px 12px;line-height:20px')
+                             _class="btn btn-primary", _id='fake_exp_sel',
+                             _style='padding:6px 12px;line-height:20px')
 
         # add the buttons after the end of the web2py console form
         console = grid.element('.web2py_console')
@@ -145,7 +142,6 @@ def vecdyn_taxon_location_query():
         # new button to form submission
         sel_form = grid.element('.web2py_table form')
         sel_form['_id'] = 'select_form'
-
 
         # Delete the original export menu
         export_menu_idx = [x.attributes['_class'] for x in grid].index('w2p_export_menu')
@@ -157,6 +153,7 @@ def vecdyn_taxon_location_query():
         exp_sel['_id'] = 'exp_sel'
 
     return dict(grid=grid)
+
 
 def _get_data_csv(ids):
     """
@@ -226,9 +223,7 @@ def _get_data_csv(ids):
     return rows.as_csv()
 
 
-
 def vec_dyn_download():
-
     """
     Function to return the data of records matching the ids
     """
@@ -248,12 +243,11 @@ def vec_dyn_download():
     response.headers['Content-Disposition'] = attachment
 
     raise HTTP(200, data,
-               **{'Content-Type':'text/csv',
-                  'Content-Disposition':attachment + ';'})
+               **{'Content-Type': 'text/csv',
+                  'Content-Disposition': attachment + ';'})
 
 
 class ExporterAll(object):
-
     """
     Used to export all the data associated with rows in the grid
     """
