@@ -1,4 +1,8 @@
 # The default controller
+import logging
+
+logger = logging.getLogger("web2py.app.vbdp")
+logger.setLevel(logging.DEBUG)
 
 
 # Index page text not yet implemented in the corresponding view
@@ -140,7 +144,7 @@ def general_enquiries():
 
 @auth.requires_membership('VectorbiteAdmin')
 def data_set_sources():
-    """creates a general enquiry tracker from the tasks db table, recieves messages submitted through the website"""
+    """creates a general enquiry tracker from the tasks db table, receives messages submitted through the website"""
     db.task.created_on.readable = False
     db.task.created_by.readable = False
     db.task.title.represent = lambda title, row:\
@@ -164,7 +168,7 @@ def data_set_sources():
 
 @auth.requires_membership('VectorbiteAdmin')
 def edit_task():
-    """view/edit task, depending on task type. loads specif fields depedning on task type"""
+    """view/edit task, depending on task type. loads specif fields depending on task type"""
     task_id = request.args(0, cast=int)
     task = db.task(task_id) or error()  # TODO: Wrap in try/catch to see if this bugs out?
     add_option_2 = SelectOrAdd(form_title="Add new collection author",
@@ -233,10 +237,21 @@ def submit_vecdyn_data():
     # assign widget to field
     db.task.collection_author.widget = add_option.widget
     form = SQLFORM(db.task, labels={'task_type': 'Data set category'}).process()
+
+    # Here we would like to know if the DB is written to, and also whether people are having problems with the form
+    # (Hence logging on errors)
     if form.accepted:
+        logger.info("VD dataset submitted: task ID {} - {}".format(form.vars["id"], form.vars["title"]))
         redirect(URL('index'))
+    elif form.errors:
+        logger.debug("VD data submission errors: {}".format(len(form.errors)))
+        logger.debug("in the following fields: {}".format(form.errors.keys()))
+
+        # response.flash = CENTER(B('Problems with the form in the following fields: {}'
+        #                           .format(form.errors.keys())), _style='color: red')
     else:
         response.flash = 'please fill out the form in full and attach a csv file'
+
     response.files.append(URL('static', 'jquery-ui-1.12.1/jquery-ui.js'))
     response.files.append(URL('static', 'jquery-ui-1.12.1/jquery-ui.theme.css'))
     return locals()
@@ -327,6 +342,7 @@ def new_data_source():
     form = SQLFORM(db.task, labels={'task_type': 'Data set category'}).process()
     if form.accepted:
         session.flash = 'Thanks, source added'
+        logger.info("Data source submitted: task ID {} - {}".format(form.vars["id"], form.vars["title"]))
         redirect(URL('default', 'data_set_sources'))
     # response.flash = 'please fill out the form in full and attach a csv file'
     return locals()
@@ -367,6 +383,7 @@ def contact_us():
     form = SQLFORM(db.task, comments=False).process()
     if form.accepted:
         session.flash = 'Thanks for your comment, we will get back to you soon!'
+        logger.info("Enquiry submitted: task ID {} - {}".format(form.vars["id"], form.vars["title"]))
         # send_email(to=db.auth_user(form.vars.assigned_to).email,
         #           sender=auth.user.email,
         #           subject="New data set submitted: %s" % form.vars.title,
@@ -410,12 +427,12 @@ def report_problem():
     db.task.data_rights.writable = False
     db.task.data_rights.readable = False
     form = SQLFORM(db.task,  comments=False).process()
+
+    # Here it is not critical to notify sysadmin through the log when there are form submission errors
+    # However it is always good to log times when the db is written to when possible
     if form.accepted:
         session.flash = 'Thanks for your comment, we will get back to you soon!'
-        # send_email(to=db.auth_user(form.vars.assigned_to).email,
-        #           sender=auth.user.email,
-        #           subject="New data set submitted: %s" % form.vars.title,
-        #           message=form.vars.description)
+        logger.info("Problem submitted: task ID {} - {}".format(form.vars["id"], form.vars["title"]))
         redirect(URL('index'))
     else:
         session.flash = 'please complete the form'
