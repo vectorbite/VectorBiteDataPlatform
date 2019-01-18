@@ -1,20 +1,15 @@
 import datetime
 
 from gluon.tools import prettydate
+# from datetime import datetime
 
 week = datetime.timedelta(days=7)
 
 
-
-#####VecDyn query
-
-
-#from datetime import datetime
-
-#@auth.requires_login()
+# VecDyn query
+# @auth.requires_login()
 @auth.requires_membership('VectorbiteAdmin')
 def vecdyn_author_query():
-    today = datetime.date.today()
     """
     Controller to serve a searchable grid view of the vector dynamics
     datasets with a download function. We want to be able to download
@@ -31,6 +26,7 @@ def vecdyn_author_query():
     returning. Currently, this won't let you Download All for more than
     50 MainID records.
     """
+    today = datetime.date.today()
 
     # control which fields available
     [setattr(f, 'readable', False) for f in db.publication_info
@@ -42,7 +38,7 @@ def vecdyn_author_query():
 
     # Add selectability checkboxes
     select = [('Download selected',
-               lambda ids : redirect(URL('vecdyn_query_2', 'vec_dyn_download', vars=dict(ids=ids))),
+               lambda ids: redirect(URL('vecdyn_query_2', 'vec_dyn_download', vars=dict(ids=ids))),
                'btn btn-default')]
 
     # Adding an exporter that grabs all the data from a query,
@@ -55,8 +51,8 @@ def vecdyn_author_query():
                   tsv_with_hidden_cols=False, tsv=False)
 
     # turn the study_meta_data.id into a download link
-    db.publication_info.represent = lambda value, row: A(value, _href=URL("vecdyn_query_2","vec_dyn_download",
-                                                    vars={'ids': row.publication_info.id}))
+    db.publication_info.represent = lambda value, row: A(value, _href=URL("vecdyn_query_2", "vec_dyn_download",
+                                                         vars={'ids': row.publication_info.id}))
     # get the grid
     # week = datetime.timedelta(days=7)
     # Field('deadline', 'datetime', default=request.now + week),
@@ -65,19 +61,19 @@ def vecdyn_author_query():
     if collection_author != None:
         collection_author = db(db.collection_author.name == collection_author).select().first()
         query = ((db.publication_info.collection_author == collection_author.id)
-                        & (db.publication_info.data_rights == 'open'))
+                 & (db.publication_info.data_rights == 'open'))
     else:
         query = ((db.publication_info.collection_author == db.collection_author.id)
                  & (db.publication_info.data_rights == 'open'))
     grid = SQLFORM.grid(query,
                         exportclasses=export,
                         field_id=db.publication_info.id,
-                        fields= [db.publication_info.title,
-                                 db.publication_info.collection_author,
-                                 db.publication_info.dataset_doi,
-                                 db.publication_info.description,
-                                 db.publication_info.data_set_type],
-                        headers={'publication_info.title' : 'Title',
+                        fields=[db.publication_info.title,
+                                db.publication_info.collection_author,
+                                db.publication_info.dataset_doi,
+                                db.publication_info.description,
+                                db.publication_info.data_set_type],
+                        headers={'publication_info.title': 'Title',
                                  'publication_info.collection_author': 'Collection Author',
                                  'publication_info.dataset_doi': 'DOI',
                                  'publication_info.description': 'Description',
@@ -118,8 +114,8 @@ def vecdyn_author_query():
                     _href=exp_menu[1].attributes['_href'],
                     _style='padding:6px 12px;line-height:20px')
         fake_exp_sel = INPUT(_value='Download selected', _type='submit',
-                            _class="btn btn-primary", _id='fake_exp_sel',
-                            _style='padding:6px 12px;line-height:20px')
+                             _class="btn btn-primary", _id='fake_exp_sel',
+                             _style='padding:6px 12px;line-height:20px')
 
         # add the buttons after the end of the web2py console form
         console = grid.element('.web2py_console')
@@ -129,7 +125,6 @@ def vecdyn_author_query():
         # new button to form submission
         sel_form = grid.element('.web2py_table form')
         sel_form['_id'] = 'select_form'
-
 
         # Delete the original export menu
         export_menu_idx = [x.attributes['_class'] for x in grid].index('w2p_export_menu')
@@ -141,6 +136,7 @@ def vecdyn_author_query():
         exp_sel['_id'] = 'exp_sel'
 
     return dict(grid=grid)
+
 
 def _get_data_csv(ids):
     """
@@ -211,7 +207,6 @@ def _get_data_csv(ids):
     return rows.as_csv()
 
 
-
 def vec_dyn_download():
 
     """
@@ -233,8 +228,8 @@ def vec_dyn_download():
     response.headers['Content-Disposition'] = attachment
 
     raise HTTP(200, data,
-               **{'Content-Type':'text/csv',
-                  'Content-Disposition':attachment + ';'})
+               **{'Content-Type': 'text/csv',
+                  'Content-Disposition': attachment + ';'})
 
 
 class ExporterAll(object):
