@@ -1,6 +1,10 @@
 # VectorBiTE Data Platform Release Notes
 Current version: v0.0.3
 ## Release Notes
+## v0.0.8
+- Completed Vecdyn Admin Interface (beta)
+    - Fixed general layout, page linking and logic. Interface allows admin to upload datasets, visualise data entries, standardise taxonomic data and geographic data.
+
 ### v0.0.7
 - Full controller code cleanup
     - Fixed small coding style errors and improved readability throughout the codebase 

@@ -1,15 +1,47 @@
 {{extend 'layout.html'}}
+        <head>
+<style>
+.pagination {
+  display: inline-block;
+}
 
+.pagination a {
+    background-color: darkseagreen;
+  color: black;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+  transition: background-color .3s;
+  border: 1px solid #ddd;
+}
+
+.pagination a.active {
+  background-color: #4CAF50;
+  color: white;
+  border: 1px solid #4CAF50;
+}
+
+.pagination a:hover:not(.active) {background-color: lightgreen;}
+.pagination a:hover {background-color: lightgreen;}
+
+</style>
+</head>
+<body>
 
      <div style="background: linear-gradient(240deg, lightgrey, whitesmoke)" class="jumbotron">
-         <h2><center>Explore by Dataset</center></h2>
+             <h2><center>Explore Datasets</center></h2>
          <br>
-             <div class="btn-group.btn-group-justified" role="group" aria-label="...">
 
-         <a class="btn btn-link" href="{{=URL('vecdyn_query_1','vecdyn_taxon_location_query')}}">{{=T("Explore by species & location")}}</a>
-        <a class="btn btn-link" href="{{=URL('vecdyn_query_2','vecdyn_author_query')}}">{{=T("Explore by dataset")}}</a>
- </div>
+ <div>
+
+         <div class="pagination">
+    {{=A('Explore by species & location',_href=URL('vecdyn_query_1','vecdyn_taxon_location_query'))}}
+    {{=A('Explore by provider & title',_href=URL('vecdyn_query_2','vecdyn_author_query'),_class="active")}}
+</div>
+    <br>
+    <br>
 <br>
+
 <div class="container-fluid">
   <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#demo">Instructions</button>
             <br>
@@ -44,3 +76,4 @@
 <br>
 
 
+<body/>
