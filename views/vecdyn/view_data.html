@@ -1,23 +1,56 @@
 {{extend 'layout.html'}}
 
+        <head>
+<style>
+.pagination {
+  display: inline-block;
+}
+
+.pagination a {
+    background-color: darkseagreen;
+  color: black;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+  transition: background-color .3s;
+  border: 1px solid #ddd;
+}
+
+.pagination a.active {
+  background-color: #4CAF50;
+  color: white;
+  border: 1px solid #4CAF50;
+}
+
+.pagination a:hover:not(.active) {background-color: lightgreen;}
+.pagination a:hover {background-color: lightgreen;}
+
+</style>
+</head>
+<body>
+
 <div class="btn-group.btn-group-justified" role="group" aria-label="...">
             {{=A('Back to Data Collections Page',_href=URL('dataset_registrations'),_class="btn btn-primary")}}
             {{=A('Upload Data',_href=URL('vecdyn_data_uploader','vecdyn_importer',vars={'publication_info_id':publication_info_id}),_class="btn btn-primary")}}
-                 {{if count >=1:}}
+
     <div class="btn-group">
     <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
     Standardisation<span class="caret"></span></button>
-    <ul class="dropdown-menu" role="menu">
-      <li>{{=A('View Standardised',_href=URL('vecdyn','view_data',vars={'publication_info_id':publication_info_id}))}}</li>
-      <li>{{=A('View Unstandardised',_href=URL('vecdyn','view_unstandardised_data',vars={'publication_info_id':publication_info_id}))}}</li>
-        <li>{{=A('Re-standardize Taxonomic Entries',_href=URL('vecdyn','re_standardise_taxon',vars={'publication_info_id':publication_info_id, 'page':page}))}}</li>
-            <li>{{=A('Re-standardize Geographic Entries',_href=URL('vecdyn','re_standardise_geo_data',vars={'publication_info_id':publication_info_id,'page':page}))}}</li>
-    </ul>
-  </div>
 
-        {{else:}}
+    <ul class="dropdown-menu" role="menu">
+             {{if count >=1:}}
+           <li> {{=A('Standardise Outstanding',_href=URL('standardise_taxon',vars={'publication_info_id':publication_info_id}))}}</li>
+            {{elif count2 >=1:}}
+            <li>{{=A('Standardise Outstanding',_href=URL('standardise_taxon',vars={'publication_info_id':publication_info_id}))}}</li>
+            {{else:}}
             {{pass}}
+        <li>{{=A('Re-standardize Taxonomic Entries',_href=URL('vecdyn','re_standardise_taxon',vars={'publication_info_id':publication_info_id}))}}</li>
+            <li>{{=A('Re-standardize Geographic Entries',_href=URL('vecdyn','re_standardise_geo_data',vars={'publication_info_id':publication_info_id}))}}</li>
+
+    </ul>
+
   </div>
+</div>
            <div style="background: linear-gradient(240deg, lightgrey, whitesmoke)" class="jumbotron">
 
 
@@ -27,6 +60,12 @@
                   </center>
                   </h5>
 <br>
+               <div class="pagination">
+    {{=A('View Standardised',_href=URL('vecdyn','view_data',vars={'publication_info_id':publication_info_id}),_class="active")}}
+  {{=A('View Un-standardised',_href=URL('vecdyn','view_unstandardised_data',vars={'publication_info_id':publication_info_id}))}}
+</div>
+ <br>
+
 <hr>
 
 <div class="container-fluid">
@@ -135,6 +174,11 @@
 
       <hr>
 </div>
+             </div>
 {{=BEAUTIFY(form)}}
 
                   </div>
+                </div>
+
+
+</body>
