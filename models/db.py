@@ -35,6 +35,12 @@ if not request.env.web2py_runtime_gae:
              migrate_enabled=configuration.get('db.migrate'),
              lazy_tables=True,
              check_reserved=['sqlite'])
+    db2 = DAL(configuration.get('db2.uri'),
+              pool_size=configuration.get('db2.pool_size'),
+              migrate_enabled=configuration.get('db2.migrate'),
+              lazy_tables=True,
+              # fake_migrate_all=True,        # Allow fake migration to rebuild table metadata
+              check_reserved=['postgres', 'postgres_nonreserved'])
 else:
     # ---------------------------------------------------------------------
     # connect to Google BigTable (optional 'google:datastore://namespace')
