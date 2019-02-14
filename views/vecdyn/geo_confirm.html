@@ -1,5 +1,13 @@
 {{extend 'layout.html'}}
-
+<head>
+<style>
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+</style>
+</head>
+<body>
 
 
         <div class="btn-group">
@@ -13,9 +21,33 @@
 
 
             <div class="alert alert-warning" role="alert">
-  <strong>Warning!</strong> Are you sure you the best match for <b> "{{=location_description}}" </b>  is  <b> "{{=ADM2_NAME}}, {{=ADM1_NAME}}, {{=ADM0_NAME}}" </b> ?
-</div>
+  <strong>Warning!
+    <br>
+  </strong> Are you sure you the best match for <b> "{{=location_description}}" </b>  is:
+<br>
 
+                <br>
+
+            <table style="width:100%">
+  <tr>
+    <th>Country</th>
+    <th>Administrative Division 1</th>
+      <th>Administrative Division 2</th>
+      <th>Administrative Division 3</th>
+      <th>Administrative Division 4</th>
+      <th>Administrative Division 5</th>
+  </tr>
+  <tr>
+    <td>{{=name_0}}</td>
+    <td>{{=name_1}}</td>
+    <td>{{=name_2}}</td>
+      <td>{{=name_3}}</td>
+      <td>{{=name_4}}</td>
+        <td>{{=name_5}}</td>
+  </tr>
+</table>
+ </div>
+
+ <br>
         {{=BEAUTIFY(form)}}
     </div>
-

@@ -119,7 +119,8 @@ def vecdyn_author_query():
 
         # add the buttons after the end of the web2py console form
         console = grid.element('.web2py_console')
-        console[1].insert(1, CAT(exp_all, fake_exp_sel))
+        # console[1].insert(1, CAT(exp_all, fake_exp_sel))
+        console[1].insert(1, CAT(fake_exp_sel))
 
         # add an ID to the selection form, to allow JS to link the
         # new button to form submission
@@ -150,21 +151,18 @@ def _get_data_csv(ids):
     rows = db((db.publication_info.id.belongs(ids)) &
               (db.publication_info.collection_author == db.collection_author.id) &
               (db.study_meta_data.publication_info_id == db.publication_info.id) &
-              (db.taxon.taxonID == db.study_meta_data.taxonID) &
-              (db.gaul_admin_layers.ADM_CODE == db.study_meta_data.ADM_CODE) &
+              (db.gbif_taxon.taxon_id == db.study_meta_data.taxon_id) &
+              (db.gadm_admin_areas.geo_id == db.study_meta_data.geo_id) &
               (db.time_series_data.study_meta_data_id == db.study_meta_data.id)).select(
                     db.study_meta_data.title,
-                    db.taxon.tax_species,
-                    db.taxon.tax_genus,
-                    db.taxon.tax_family,
-                    db.taxon.tax_order,
-                    db.taxon.tax_class,
-                    db.taxon.tax_phylum,
+                    db.gbif_taxon.canonical_name,
+                    db.gbif_taxon.genus_or_above,
+                    db.gbif_taxon.taxonomic_rank,
                     db.time_series_data.sample_start_date,
                     db.time_series_data.sample_start_time,
                     db.time_series_data.sample_end_date,
                     db.time_series_data.sample_end_time,
-                    db.time_series_data.value,
+                    db.time_series_data.sample_value,
                     db.study_meta_data.measurement_unit,
                     db.study_meta_data.value_transform,
                     db.time_series_data.sample_sex,
@@ -185,11 +183,12 @@ def _get_data_csv(ids):
                     db.study_meta_data.measurement_unit,
                     db.study_meta_data.value_transform,
                     db.study_meta_data.location_description,
-                    db.gaul_admin_layers.ADM2_NAME,
-                    db.gaul_admin_layers.ADM1_NAME,
-                    db.gaul_admin_layers.ADM0_NAME,
-                    db.gaul_admin_layers.centroid_latitude,
-                    db.gaul_admin_layers.centroid_longitude,
+                    db.gadm_admin_areas.name_5,
+                    db.gadm_admin_areas.name_4,
+                    db.gadm_admin_areas.name_3,
+                    db.gadm_admin_areas.name_2,
+                    db.gadm_admin_areas.name_1,
+                    db.gadm_admin_areas.name_0,
                     db.study_meta_data.geo_datum,
                     db.study_meta_data.gps_obfuscation_info,
                     db.publication_info.title,
