@@ -1,6 +1,15 @@
 # VectorBiTE Data Platform Release Notes
 Current version: v0.0.3
 ## Release Notes
+
+## v0.1 
+- resructured vecdyn database files
+- fixed vecdyn data downloader bug
+    - vecdyn now fully functional
+
+## v0.0.9
+- gbif & gadm updates
+    - Incorporated gbif taxonimc and gadm spatial database into vecdyn database
 ## v0.0.8
 - Completed Vecdyn Admin Interface (beta)
     - Fixed general layout, page linking and logic. Interface allows admin to upload datasets, visualise data entries, standardise taxonomic data and geographic data.
