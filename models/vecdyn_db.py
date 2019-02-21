@@ -1,6 +1,20 @@
 # -*- coding: utf-8 -*-
 
 
+import datetime
+
+from gluon.tools import prettydate
+
+week = datetime.timedelta(days=7)
+
+
+
+db.define_table('collection_author',
+    Field('name', 'string', notnull=True, unique=True),
+    Field('description', 'text'),
+                format='%(name)s')
+
+
 # VecDyn
 
 '''all datasets submitted thorugh the website will go into this folder'''

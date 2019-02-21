@@ -41,15 +41,6 @@ def vecdyn_author_query():
                lambda ids: redirect(URL('vecdyn_query_2', 'vec_dyn_download', vars=dict(ids=ids))),
                'btn btn-default')]
 
-    # Adding an exporter that grabs all the data from a query,
-    # the name _with_hidden_cols is needed to expose the MainID in the
-    # rows passed to the exporter class. Note that nothing unreadable
-    # can be exposed.
-    export = dict(data_with_hidden_cols=(ExporterAll, 'Export All'),
-                  csv_with_hidden_cols=False,
-                  csv=False, xml=False, html=False, json=False,
-                  tsv_with_hidden_cols=False, tsv=False)
-
     # turn the study_meta_data.id into a download link
     db.publication_info.represent = lambda value, row: A(value, _href=URL("vecdyn_query_2", "vec_dyn_download",
                                                          vars={'ids': row.publication_info.id}))
@@ -66,7 +57,6 @@ def vecdyn_author_query():
         query = ((db.publication_info.collection_author == db.collection_author.id)
                  & (db.publication_info.data_rights == 'open'))
     grid = SQLFORM.grid(query,
-                        exportclasses=export,
                         field_id=db.publication_info.id,
                         fields=[db.publication_info.title,
                                 db.publication_info.collection_author,
@@ -109,17 +99,12 @@ def vecdyn_author_query():
     exp_menu = grid.element('.w2p_export_menu')
     if exp_menu is not None:
 
-        exp_menu = grid.element('.w2p_export_menu')
-        exp_all = A("Download all", _class="btn btn-primary",
-                    _href=exp_menu[1].attributes['_href'],
-                    _style='padding:6px 12px;line-height:20px')
         fake_exp_sel = INPUT(_value='Download selected', _type='submit',
                              _class="btn btn-primary", _id='fake_exp_sel',
                              _style='padding:6px 12px;line-height:20px')
 
         # add the buttons after the end of the web2py console form
         console = grid.element('.web2py_console')
-        # console[1].insert(1, CAT(exp_all, fake_exp_sel))
         console[1].insert(1, CAT(fake_exp_sel))
 
         # add an ID to the selection form, to allow JS to link the
@@ -207,7 +192,6 @@ def _get_data_csv(ids):
 
 
 def vec_dyn_download():
-
     """
     Function to return the data of records matching the ids
     """
@@ -216,45 +200,21 @@ def vec_dyn_download():
     # and we need an iterable for belongs, so all we have to trap
     # is a single ID which comes in as a string
     ids = request.vars['ids']
-    if isinstance(ids, str):
-        ids = [ids]
+    if ids != None:
+        if isinstance(ids, str):
+            ids = [ids]
+        data = _get_data_csv(ids)
 
-    data = _get_data_csv(ids)
+        # and now poke the text object out to the browser
+        response.headers['Content-Type'] = 'text/csv'
+        attachment = 'attachment;filename=vec_dyn_download_{}.csv'.format(datetime.date.today().isoformat())
+        response.headers['Content-Disposition'] = attachment
 
-    # and now poke the text object out to the browser
-    response.headers['Content-Type'] = 'text/csv'
-    attachment = 'attachment;filename=vec_dyn_download_{}.csv'.format(datetime.date.today().isoformat())
-    response.headers['Content-Disposition'] = attachment
+        raise HTTP(200, data,
+                   **{'Content-Type': 'text/csv',
+                      'Content-Disposition': attachment + ';'})
 
-    raise HTTP(200, data,
-               **{'Content-Type': 'text/csv',
-                  'Content-Disposition': attachment + ';'})
+    else:
+        redirect(URL("vecdyn_query_2", "vecdyn_author_query"))
 
 
-class ExporterAll(object):
-
-    """
-    Used to export all the data associated with rows in the grid
-    """
-
-    file_ext = "csv"
-    content_type = "text/csv"
-
-    def __init__(self, rows):
-        self.rows = rows
-
-    def export(self):
-
-        if self.rows:
-            # expand rows to get full data and return that
-            request.vars._export_filename = "yourname"
-            ids = [rw.study_meta_data.id for rw in self.rows]
-
-            # currently simple check that we aren't trying to export too much
-            if len(ids) > 50:
-                return 'Download all is currently restricted to searches including fewer than 50 records.'
-            else:
-                data = _get_data_csv(ids)
-                return data
-        else:
-            return

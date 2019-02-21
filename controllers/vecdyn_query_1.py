@@ -49,15 +49,6 @@ def vecdyn_taxon_location_query():
                lambda ids: redirect(URL('vecdyn_query_1', 'vec_dyn_download', vars=dict(ids=ids))),
                'btn btn-default')]
 
-    # Adding an exporter that grabs all the data from a query,
-    # the name _with_hidden_cols is needed to expose the MainID in the
-    # rows passed to the exporter class. Note that nothing unreadable
-    # can be exposed.
-    export = dict(data_with_hidden_cols=(ExporterAll, 'Export All'),
-                  csv_with_hidden_cols=False,
-                  csv=False, xml=False, html=False, json=False,
-                  tsv_with_hidden_cols=False, tsv=False)
-
     # turn the study_meta_data.id into a download link
     db.study_meta_data.represent = lambda value, row: A(value, _href=URL("vecdyn_query_1", "vec_dyn_download",
                                                         vars={'ids': row.study_meta_data.id}))
@@ -73,7 +64,6 @@ def vecdyn_taxon_location_query():
                         & (db.gbif_taxon.taxon_id == db.study_meta_data.taxon_id)
                         & (db.publication_info.data_rights == 'open')
                         & (db.gadm_admin_areas.geo_id == db.study_meta_data.geo_id),
-                        exportclasses=export,
                         field_id=db.study_meta_data.id,
                         fields=[db.publication_info.title,
                                 db.collection_author.name,
@@ -132,9 +122,6 @@ def vecdyn_taxon_location_query():
     if exp_menu is not None:
 
         exp_menu = grid.element('.w2p_export_menu')
-        exp_all = A("Download all", _class="btn btn-primary",
-                    _href=exp_menu[1].attributes['_href'],
-                    _style='padding:6px 12px;line-height:20px')
         fake_exp_sel = INPUT(_value='Download selected', _type='submit',
                              _class="btn btn-primary", _id='fake_exp_sel',
                              _style='padding:6px 12px;line-height:20px')
@@ -236,44 +223,20 @@ def vec_dyn_download():
     # and we need an iterable for belongs, so all we have to trap
     # is a single ID which comes in as a string
     ids = request.vars['ids']
-    if isinstance(ids, str):
-        ids = [ids]
+    if ids != None:
+        if isinstance(ids, str):
+            ids = [ids]
+        data = _get_data_csv(ids)
 
-    data = _get_data_csv(ids)
+        # and now poke the text object out to the browser
+        response.headers['Content-Type'] = 'text/csv'
+        attachment = 'attachment;filename=vec_dyn_download_{}.csv'.format(datetime.date.today().isoformat())
+        response.headers['Content-Disposition'] = attachment
 
-    # and now poke the text object out to the browser
-    response.headers['Content-Type'] = 'text/csv'
-    attachment = 'attachment;filename=vec_dyn_download_{}.csv'.format(datetime.date.today().isoformat())
-    response.headers['Content-Disposition'] = attachment
+        raise HTTP(200, data,
+                   **{'Content-Type': 'text/csv',
+                      'Content-Disposition': attachment + ';'})
 
-    raise HTTP(200, data,
-               **{'Content-Type': 'text/csv',
-                  'Content-Disposition': attachment + ';'})
+    else:
+        redirect(URL("vecdyn_query_1", "vecdyn_taxon_location_query"))
 
-
-class ExporterAll(object):
-    """
-    Used to export all the data associated with rows in the grid
-    """
-
-    file_ext = "csv"
-    content_type = "text/csv"
-
-    def __init__(self, rows):
-        self.rows = rows
-
-    def export(self):
-
-        if self.rows:
-            # expand rows to get full data and return that
-            request.vars._export_filename = "yourname"
-            ids = [rw.study_meta_data.id for rw in self.rows]
-
-            # currently simple check that we aren't trying to export too much
-            if len(ids) > 50:
-                return 'Download all is currently restricted to searches including fewer than 50 records.'
-            else:
-                data = _get_data_csv(ids)
-                return data
-        else:
-            return
