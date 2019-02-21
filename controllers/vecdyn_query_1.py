@@ -30,8 +30,8 @@ def vecdyn_taxon_location_query():
 
     # control which fields available
     [setattr(f, 'readable', False) for f in db.taxon
-        if f.name not in ('db.taxon.tax_species,db.taxon.tax_genus,'
-                          'db.taxon.tax_family,db.taxon.tax_order')]
+        if f.name not in ('db.gbif_taxon.canonical_name,db.gbif_taxon.genus_or_above,'
+                          'db.gbif_taxon.taxonomic_rank')]
     [setattr(f, 'readable', False) for f in db.publication_info
         if f.name not in ('db.publication_info.title, db.publication_info.collection_author')]
     [setattr(f, 'readable', False) for f in db.collection_author
@@ -39,22 +39,15 @@ def vecdyn_taxon_location_query():
     # MainID is not made unreadable, so that it can be accessed by the export controller
     [setattr(f, 'readable', False) for f in db.study_meta_data
         if f.name not in ('db.study_meta_data.id, db.study_meta_data.location_description,')]
-    [setattr(f, 'readable', False) for f in db.gaul_admin_layers
-     if f.name not in ('db.gaul_admin_layers.ADM2_NAME, db.gaul_admin_layers.ADM1_NAME, db.gaul_admin_layers.ADM0_NAME')]
+    [setattr(f, 'readable', False) for f in db.gadm_admin_areas
+     if f.name not in ('db.gadm_admin_areas.name_5, db.gadm_admin_areas.name_4,'
+                       'db.gadm_admin_areas.name_3, db.gadm_admin_areas.name_2,'
+                       'db.gadm_admin_areas.name_0, db.gadm_admin_areas.name_0')]
 
     # Add selectability checkboxes
     select = [('Download selected',
                lambda ids: redirect(URL('vecdyn_query_1', 'vec_dyn_download', vars=dict(ids=ids))),
                'btn btn-default')]
-
-    # Adding an exporter that grabs all the data from a query,
-    # the name _with_hidden_cols is needed to expose the MainID in the
-    # rows passed to the exporter class. Note that nothing unreadable
-    # can be exposed.
-    export = dict(data_with_hidden_cols=(ExporterAll, 'Export All'),
-                  csv_with_hidden_cols=False,
-                  csv=False, xml=False, html=False, json=False,
-                  tsv_with_hidden_cols=False, tsv=False)
 
     # turn the study_meta_data.id into a download link
     db.study_meta_data.represent = lambda value, row: A(value, _href=URL("vecdyn_query_1", "vec_dyn_download",
@@ -68,32 +61,34 @@ def vecdyn_taxon_location_query():
         A(name, _href=URL('vecdyn_query_2', 'vecdyn_author_query', vars={'collection_author': row.collection_author.name}))
     grid = SQLFORM.grid((db.study_meta_data.publication_info_id == db.publication_info.id)
                         & (db.publication_info.collection_author == db.collection_author.id)
-                        & (db.taxon.taxonID == db.study_meta_data.taxonID)
+                        & (db.gbif_taxon.taxon_id == db.study_meta_data.taxon_id)
                         & (db.publication_info.data_rights == 'open')
-                        & (db.gaul_admin_layers.ADM_CODE == db.study_meta_data.ADM_CODE),
-                        exportclasses=export,
+                        & (db.gadm_admin_areas.geo_id == db.study_meta_data.geo_id),
                         field_id=db.study_meta_data.id,
                         fields=[db.publication_info.title,
                                 db.collection_author.name,
-                                db.taxon.tax_species, db.taxon.tax_genus,
-                                db.taxon.tax_family, db.taxon.tax_order,
-                                db.taxon.tax_class, db.taxon.tax_phylum,
+                                db.gbif_taxon.canonical_name,
+                                db.gbif_taxon.genus_or_above,
+                                db.gbif_taxon.taxonomic_rank,
                                 db.study_meta_data.location_description,
-                                db.gaul_admin_layers.ADM0_NAME,
-                                db.gaul_admin_layers.ADM1_NAME,
-                                db.gaul_admin_layers.ADM2_NAME],
+                                db.gadm_admin_areas.name_5,
+                                db.gadm_admin_areas.name_4,
+                                db.gadm_admin_areas.name_3,
+                                db.gadm_admin_areas.name_2,
+                                db.gadm_admin_areas.name_1,
+                                db.gadm_admin_areas.name_0],
 
                         headers={'publication_info.title': 'Title',
                                  'collection_author.name': 'Author',
-                                 'taxon.tax_species': 'Taxon',
-                                 'taxon.tax_genus': 'Genus',
-                                 'taxon.tax_family': 'Family',
-                                 'taxon.tax_order': 'Order',
-                                 'taxon.tax_class': 'Class',
-                                 'taxon.tax_phylum': 'Phylum',
-                                 'gaul_admin_layers.ADM0_NAME': 'Administrative Division 0',
-                                 'gaul_admin_layers.ADM1_NAME': 'Administrative Division 1',
-                                 'gaul_admin_layers.ADM2_NAME': 'Administrative Division 2',
+                                 'taxon.canonical_name': 'Taxon',
+                                 'taxon.genus_or_above': 'genus_or_above',
+                                 'taxon.taxonomic_rank': 'taxonomic_rank',
+                                 'gadm_admin_areas.name_5': 'Administrative Division 5',
+                                 'gadm_admin_areas.name_4': 'Administrative Division 4',
+                                 'gadm_admin_areas.name_3': 'Administrative Division 3',
+                                 'gadm_admin_areas.name_2': 'Administrative Division 2',
+                                 'gadm_admin_areas.name_1': 'Administrative Division 1',
+                                 'gadm_admin_areas.name_0': 'Country Name',
                                  'study_meta_data.id': 'Dataset ID'},
                         maxtextlength=200,
                         selectable=select,
@@ -127,16 +122,14 @@ def vecdyn_taxon_location_query():
     if exp_menu is not None:
 
         exp_menu = grid.element('.w2p_export_menu')
-        exp_all = A("Download all", _class="btn btn-primary",
-                    _href=exp_menu[1].attributes['_href'],
-                    _style='padding:6px 12px;line-height:20px')
         fake_exp_sel = INPUT(_value='Download selected', _type='submit',
                              _class="btn btn-primary", _id='fake_exp_sel',
                              _style='padding:6px 12px;line-height:20px')
 
         # add the buttons after the end of the web2py console form
         console = grid.element('.web2py_console')
-        console[1].insert(1, CAT(exp_all, fake_exp_sel))
+        #console[1].insert(1, CAT(exp_all, fake_exp_sel))
+        console[1].insert(1, CAT(fake_exp_sel))
 
         # add an ID to the selection form, to allow JS to link the
         # new button to form submission
@@ -165,22 +158,19 @@ def _get_data_csv(ids):
     """
 
     rows = db((db.study_meta_data.id.belongs(ids)) &
-              (db.taxon.taxonID == db.study_meta_data.taxonID) &
-              (db.gaul_admin_layers.ADM_CODE == db.study_meta_data.ADM_CODE) &
+              (db.gbif_taxon.taxon_id == db.study_meta_data.taxon_id) &
+              (db.gadm_admin_areas.geo_id == db.study_meta_data.geo_id) &
               (db.publication_info.id == db.study_meta_data.publication_info_id) &
               (db.time_series_data.study_meta_data_id == db.study_meta_data.id)).select(
                     db.study_meta_data.title,
-                    db.taxon.tax_species,
-                    db.taxon.tax_genus,
-                    db.taxon.tax_family,
-                    db.taxon.tax_order,
-                    db.taxon.tax_class,
-                    db.taxon.tax_phylum,
+                    db.gbif_taxon.canonical_name,
+                    db.gbif_taxon.genus_or_above,
+                    db.gbif_taxon.taxonomic_rank,
                     db.time_series_data.sample_start_date,
                     db.time_series_data.sample_start_time,
                     db.time_series_data.sample_end_date,
                     db.time_series_data.sample_end_time,
-                    db.time_series_data.value,
+                    db.time_series_data.sample_value,
                     db.study_meta_data.measurement_unit,
                     db.study_meta_data.value_transform,
                     db.time_series_data.sample_sex,
@@ -201,11 +191,12 @@ def _get_data_csv(ids):
                     db.study_meta_data.measurement_unit,
                     db.study_meta_data.value_transform,
                     db.study_meta_data.location_description,
-                    db.gaul_admin_layers.ADM2_NAME,
-                    db.gaul_admin_layers.ADM1_NAME,
-                    db.gaul_admin_layers.ADM0_NAME,
-                    db.gaul_admin_layers.centroid_latitude,
-                    db.gaul_admin_layers.centroid_longitude,
+                    db.gadm_admin_areas.name_5,
+                    db.gadm_admin_areas.name_4,
+                    db.gadm_admin_areas.name_3,
+                    db.gadm_admin_areas.name_2,
+                    db.gadm_admin_areas.name_1,
+                    db.gadm_admin_areas.name_0,
                     db.study_meta_data.geo_datum,
                     db.study_meta_data.gps_obfuscation_info,
                     db.publication_info.title,
@@ -232,44 +223,20 @@ def vec_dyn_download():
     # and we need an iterable for belongs, so all we have to trap
     # is a single ID which comes in as a string
     ids = request.vars['ids']
-    if isinstance(ids, str):
-        ids = [ids]
+    if ids != None:
+        if isinstance(ids, str):
+            ids = [ids]
+        data = _get_data_csv(ids)
 
-    data = _get_data_csv(ids)
+        # and now poke the text object out to the browser
+        response.headers['Content-Type'] = 'text/csv'
+        attachment = 'attachment;filename=vec_dyn_download_{}.csv'.format(datetime.date.today().isoformat())
+        response.headers['Content-Disposition'] = attachment
 
-    # and now poke the text object out to the browser
-    response.headers['Content-Type'] = 'text/csv'
-    attachment = 'attachment;filename=vec_dyn_download_{}.csv'.format(datetime.date.today().isoformat())
-    response.headers['Content-Disposition'] = attachment
+        raise HTTP(200, data,
+                   **{'Content-Type': 'text/csv',
+                      'Content-Disposition': attachment + ';'})
 
-    raise HTTP(200, data,
-               **{'Content-Type': 'text/csv',
-                  'Content-Disposition': attachment + ';'})
+    else:
+        redirect(URL("vecdyn_query_1", "vecdyn_taxon_location_query"))
 
-
-class ExporterAll(object):
-    """
-    Used to export all the data associated with rows in the grid
-    """
-
-    file_ext = "csv"
-    content_type = "text/csv"
-
-    def __init__(self, rows):
-        self.rows = rows
-
-    def export(self):
-
-        if self.rows:
-            # expand rows to get full data and return that
-            request.vars._export_filename = "yourname"
-            ids = [rw.study_meta_data.id for rw in self.rows]
-
-            # currently simple check that we aren't trying to export too much
-            if len(ids) > 50:
-                return 'Download all is currently restricted to searches including fewer than 50 records.'
-            else:
-                data = _get_data_csv(ids)
-                return data
-        else:
-            return

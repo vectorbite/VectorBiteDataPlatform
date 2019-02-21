@@ -34,7 +34,8 @@ if not request.env.web2py_runtime_gae:
              pool_size=configuration.get('db.pool_size'),
              migrate_enabled=configuration.get('db.migrate'),
              lazy_tables=True,
-             check_reserved=['sqlite'])
+             check_reserved=['postgres', 'postgres_nonreserved'])
+    
     db2 = DAL(configuration.get('db2.uri'),
               pool_size=configuration.get('db2.pool_size'),
               migrate_enabled=configuration.get('db2.migrate'),
@@ -119,7 +120,7 @@ db.define_table('country',
 
 auth.settings.extra_fields['auth_user']= [
     Field('affiliation'),
-    Field('position'),
+    Field('job_title'),
     Field('country', 'reference country')]
 auth.define_tables(username=False, signature=False)
 
