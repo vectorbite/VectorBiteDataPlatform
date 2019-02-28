@@ -57,10 +57,6 @@
 
 
                                         <h5><center> {{for row in publication_info_query:}} <center>Dataset: {{=row.title}}</center> {{pass}} </center> </h5>
-
-
-
-<br>
                <div class="pagination">
     {{=A('View Standardised',_href=URL('vecdyn','view_data',vars={'publication_info_id':publication_info_id}),_class="active")}}
   {{=A('View Un-standardised',_href=URL('vecdyn','view_unstandardised_data',vars={'publication_info_id':publication_info_id}))}}
@@ -73,7 +69,7 @@
 
   <div id="pub_info" class="collapse">
 
-    <table class="table table-condensed" cellspacing="1px">
+  <table class="table table-striped" cellspacing="1px">
       {{for row in publication_info_query:}}
   <thead>
     </thead>
@@ -115,7 +111,7 @@
 
   <div id="contact_info" class="collapse">
 
-    <table class="table table-condensed" cellspacing="1px">
+  <table class="table table-striped" cellspacing="1px">
       {{for row in publication_info_query:}}
           <!-- Need to create a controller for edit data set contacts  -->
     <tbody>
@@ -142,14 +138,15 @@
    </div>
        </div>
 
-               {{if count == 0 & count2 == 0:}}
+               {{if count == 0 | count2 == 0:}}
 
             <div class="container-fluid">
   <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#rights_info">Dataset Rights & Access&#8205; &#8205;&#8205;  &#8205; &#8205;  &#8205;&#8205; &#8205; &#8205; </button><a class="btn btn-link" <a class="btn btn-link" href="{{=URL('vecdyn','edit_data_rights',vars={'publication_info_id':publication_info_id})}}">{{=T("(Edit)")}}</a>
 
   <div id="rights_info" class="collapse">
 
-    <table class="table table-condensed" cellspacing="1px">
+  <table class="table table-striped" cellspacing="1px">
+
       {{for row in publication_info_query:}}
     <tbody>
     <tr>
@@ -176,7 +173,14 @@
 
 
 </div>
-                 {{=BEAUTIFY(form)}}
+                <br>
+                <div>
+                     {{if (count < 1) | (count2 < 1):}}
+                      {{=BEAUTIFY(form)}}
+                     {{else:}}
+                    {{pass}}
+                </div>
+
              </div>
 
 

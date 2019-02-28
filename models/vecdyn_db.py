@@ -77,7 +77,7 @@ db.define_table('study_meta_data',
                 Field('measurement_unit', type = 'string', required=True, comment='Unit of measurement'), #10
                 Field('value_transform', type = 'string', comment='Note if the original values have been transformed'), #11
                 Field('taxon_id', 'reference gbif_taxon', default=None),
-                Field('geo_id', 'reference gaul_admin_layers',  requires = IS_IN_DB(db, db.gaul_admin_layers.geo_id, '%(adm0_name)s')), # default=None),
+                Field('geo_id', 'reference gaul_admin_layers', default=None),
                 Field('publication_info_id', 'reference publication_info')) #14
 
 #db.study_meta_data.publication_info_id.requires = IS_IN_DB(db, db.publication_info.id)#, '%(title)s')

@@ -380,7 +380,7 @@ def standardise_taxon():
     geo_entries_count = len(geo_entries)
     geo_entries_count = int(geo_entries_count)
     first_row = rows.first()
-    if first_row.taxon_id is None:
+    if first_row.taxon_id < 1:
         pass
     else:
         response.flash = 'Now standardise geo data'
@@ -395,18 +395,7 @@ def re_standardise_taxon():
     page = 're_standardise_taxon'
     publication_info_id = request.get_vars.publication_info_id
     study_meta_data_id = request.get_vars.id
-    taxon_entries = db(db.study_meta_data.publication_info_id == publication_info_id).select(distinct=db.study_meta_data.taxon_id)
-    # form = SQLFORM.grid(query,
-    #                     field_id=db.study_meta_data.id,
-    #                     groupby=db.study_meta_data.taxon,
-    #                     fields=[db.study_meta_data.taxon,
-    #                             db.study_meta_data.taxon_id],
-    #                     headers={'study_meta_data.taxon': 'Original Taxon Name',
-    #                              'study_meta_data.taxon_id': 'Replacement Taxon Name'},
-    #                     links=links, maxtextlength=200, searchable=True, advanced_search=False,
-    #                     deletable=False, editable=False,
-    #                     details=False, create=False, csv=False
-    #                     )
+    rows = db((db.study_meta_data.publication_info_id == publication_info_id) & (db.study_meta_data.taxon_id == db.gbif_taxon.taxon_id)).select(distinct=db.study_meta_data.taxon_id)
     return locals()
 
 
@@ -439,7 +428,6 @@ def taxon_select():
     search_input = grid.element('#w2p_keywords')
     if search_input:
         search_input['_value'] = taxon
-    # grid.search.default = request.get_vars.get_vars.taxon
     return locals()
 
 
@@ -504,10 +492,10 @@ def standardise_geo_data():
     geo_entries = db((db.study_meta_data.publication_info_id == publication_info_id) & (db.study_meta_data.geo_id == None)).select(distinct=db.study_meta_data.location_description)
     count = len(geo_entries)
     first_row = rows.first()
-    if first_row.geo_id is None:
+    if first_row.geo_id < 1:
         pass
     else:
-        response.flash = 'All data attached to this data set has been standardised standardise'
+        response.flash = 'All data attached to this data set has been standardised'
         redirect(URL("vecdyn", "view_data", vars={'publication_info_id': publication_info_id}))
     return locals()
 
@@ -518,7 +506,7 @@ def re_standardise_geo_data():
     page = 're_standardise_geo_data'
     publication_info_id = request.get_vars.publication_info_id
     study_meta_data_id = request.get_vars.id
-    rows = db(db.study_meta_data.publication_info_id == publication_info_id).select(distinct=db.study_meta_data.location_description)
+    rows = db((db.study_meta_data.publication_info_id == publication_info_id) & ( db.study_meta_data.geo_id == db.gaul_admin_layers.geo_id)).select(distinct=db.study_meta_data.location_description)
     return locals()
 
 

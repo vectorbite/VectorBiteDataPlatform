@@ -18,7 +18,7 @@
     <tbody>
       <tr>
         <td class="col-md-5">{{=row.location_description}}</td>
-        <td>{{=A('Standardise geo information',_href=URL("vecdyn", "location_select", vars={'study_meta_data_id': row.id, 'location_description': row.location_description,
+        <td>{{=A('Standardise geo information',_href=URL("vecdyn", "location_select", vars={'study_meta_data_id': row.id, 'location_description': row.location_description, 'page': page,
                                            'publication_info_id': publication_info_id}),_class="btn btn-primary")}} </td>
       </tr>
     </tbody>

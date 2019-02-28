@@ -22,29 +22,33 @@ table, th, td {
 
             <div class="alert alert-warning" role="alert">
   <strong>Warning!
-    <br>
-  </strong> Are you sure you the best match for <b> "{{=location_description}}" </b>  is:
 
- </div>
+  </strong> Are you sure you the best match for <b> "{{=location_description}}" </b>  is: </div>
+ <br>
+    <br>
 
 
             <div class="container-fluid">
-<table class="table table-striped col-md-2">
+  <table class="table table-striped">
+    <thead>
   <tr>
     <th>Country</th>
     <th>Administrative Division 1</th>
       <th>Administrative Division 2</th>
-
   </tr>
+    </thead>
+     <tbody>
   <tr>
     <td>{{=adm0_name}}</td>
     <td>{{=adm1_name}}</td>
     <td>{{=adm2_name}}</td>
-
+</tbody>
   </tr>
 </table>
- </div>
+
+                 </div>
 
  <br>
         {{=BEAUTIFY(form)}}
     </div>
+

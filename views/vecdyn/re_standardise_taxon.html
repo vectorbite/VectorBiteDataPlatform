@@ -16,24 +16,21 @@
   <table class="table table-striped">
     <thead>
       <tr>
-       <th>Original Name </th>
-        <th>Country</th>
-        <th>Administrative Division 1</th>
-        <th>Administrative Division 2</th>
-        <th>Re-standardise Entry</th>
+        <th>Original Taxon Name</th>
+        <th>Replacment Name</th>
       </tr>
     </thead>
 
     <tbody> {{for row in rows:}}
       <tr>
-          <td>{{=row.study_meta_data.location_description}}</td>
-          <td>{{=row.gaul_admin_layers.adm0_name}}</td>
-          <td>{{=row.gaul_admin_layers.adm1_name}}</td>
-          <td>{{=row.gaul_admin_layers.adm2_name}}</td>
-          <td>{{=A('Standardise geo information',_href=URL("vecdyn", "location_select", vars={'study_meta_data_id': row.study_meta_data.id, 'location_description': row.study_meta_data.location_description,
+          <td>{{=row.study_meta_data.taxon}}</td>
+          <td>{{=row.gbif_taxon.canonical_name}}</td>
+          <td>{{=A('Re-standardise taxonomic information',_href=URL("vecdyn", "taxon_select", vars={'study_meta_data_id': row.study_meta_data.id, 'taxon': row.study_meta_data.taxon,'page': page,
                                            'publication_info_id': publication_info_id}),_class="btn btn-primary")}} </td>
       </tr>      {{pass}}
     </tbody>
   </table>
 
 </div>
+
+

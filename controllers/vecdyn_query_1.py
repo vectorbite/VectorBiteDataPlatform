@@ -29,7 +29,7 @@ def vecdyn_taxon_location_query():
     today = datetime.date.today()
 
     # control which fields available
-    [setattr(f, 'readable', False) for f in db.taxon
+    [setattr(f, 'readable', False) for f in db.gbif_taxon
         if f.name not in ('db.gbif_taxon.canonical_name,db.gbif_taxon.genus_or_above,'
                           'db.gbif_taxon.taxonomic_rank')]
     [setattr(f, 'readable', False) for f in db.publication_info
