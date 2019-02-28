@@ -17,25 +17,6 @@
 ####still need to restructure data set so only one specific line i.e. order, kingdom can be selected. Also need to included specificEpithet & infraspecificEpithet in search
 
 
-db.define_table('taxon',
-                Field('taxon_id'),
-                Field('tax_scientificName'),
-                Field('tax_kingdom'),
-                Field('tax_phylum'),
-                Field('tax_class'),
-                Field('tax_order'),
-                Field('tax_superfamily'),
-                Field('tax_family'),
-                Field('tax_genus'),
-                Field('tax_subgenus'),
-                Field('tax_specificEpithet'),
-                Field('tax_infraspecificEpithet'),
-                Field('tax_species'),
-                #lazy_tables = True,
-                primarykey=['taxon_id'],
-                format='%(tax_species)s')
-
-
 #if db(db.gbif_taxon.taxon_id>0).count() == 0:
  #   db.taxon.truncate()
 
@@ -44,7 +25,7 @@ db.define_table('taxon',
 
 
 db.define_table('gbif_taxon',
-                Field('taxon_id'),###change in db file
+                Field('taxon_id', type = 'id'),###change in db file
                 Field('parent_key'),
                 Field('basionym_key'),
                 Field('status'),
@@ -65,7 +46,6 @@ db.define_table('gbif_taxon',
                 Field('specific_epithet'),
                 Field('infra_specific_epithet'),
                 #lazy_tables = True,
-                primarykey=['taxon_id'],
                 format='%(canonical_name)s'
                 )
 

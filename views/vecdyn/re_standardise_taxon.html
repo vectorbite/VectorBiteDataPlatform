@@ -1,13 +1,36 @@
-
 {{extend 'layout.html'}}
 
         <div class="btn-group">
-           {{=A('Finish',_href=URL('view_data',vars={'publication_info_id':publication_info_id}),_class="btn btn-primary")}}
+             {{=A('Finish',_href=URL('view_data',vars={'publication_info_id':publication_info_id}),_class="btn btn-primary")}}</div>
 
 
-  </div>
-           <div style="background: linear-gradient(240deg, lightgrey, whitesmoke)" class="jumbotron">
+<div style="background: linear-gradient(240deg, lightgrey, whitesmoke)" class="jumbotron">
+
+    <div class="alert alert-warning" role="alert">
+  <strong>Warning!</strong> Select the entry you want to re-standardise!
+</div>
+
+<div class="container-fluid">
 
 
-{{=BEAUTIFY(form)}}
-    </div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Original Taxon Name</th>
+        <th>Replacment Name</th>
+      </tr>
+    </thead>
+
+    <tbody> {{for row in rows:}}
+      <tr>
+          <td>{{=row.study_meta_data.taxon}}</td>
+          <td>{{=row.gbif_taxon.canonical_name}}</td>
+          <td>{{=A('Re-standardise taxonomic information',_href=URL("vecdyn", "taxon_select", vars={'study_meta_data_id': row.study_meta_data.id, 'taxon': row.study_meta_data.taxon,'page': page,
+                                           'publication_info_id': publication_info_id}),_class="btn btn-primary")}} </td>
+      </tr>      {{pass}}
+    </tbody>
+  </table>
+
+</div>
+
+

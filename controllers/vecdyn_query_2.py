@@ -137,7 +137,7 @@ def _get_data_csv(ids):
               (db.publication_info.collection_author == db.collection_author.id) &
               (db.study_meta_data.publication_info_id == db.publication_info.id) &
               (db.gbif_taxon.taxon_id == db.study_meta_data.taxon_id) &
-              (db.gadm_admin_areas.geo_id == db.study_meta_data.geo_id) &
+              (db.gaul_admin_layers.geo_id == db.study_meta_data.geo_id) &
               (db.time_series_data.study_meta_data_id == db.study_meta_data.id)).select(
                     db.study_meta_data.title,
                     db.gbif_taxon.canonical_name,
@@ -168,12 +168,9 @@ def _get_data_csv(ids):
                     db.study_meta_data.measurement_unit,
                     db.study_meta_data.value_transform,
                     db.study_meta_data.location_description,
-                    db.gadm_admin_areas.name_5,
-                    db.gadm_admin_areas.name_4,
-                    db.gadm_admin_areas.name_3,
-                    db.gadm_admin_areas.name_2,
-                    db.gadm_admin_areas.name_1,
-                    db.gadm_admin_areas.name_0,
+                    db.gaul_admin_layers.adm2_name,
+                    db.gaul_admin_layers.adm1_name,
+                    db.gaul_admin_layers.adm0_name,
                     db.study_meta_data.geo_datum,
                     db.study_meta_data.gps_obfuscation_info,
                     db.publication_info.title,

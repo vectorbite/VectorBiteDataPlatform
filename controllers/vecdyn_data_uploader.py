@@ -61,7 +61,7 @@ def vecdyn_importer():
     return dict(form=form, publication_info_id=publication_info_id)
 
 
-# The next controller checks to see if taxon names are already in a standardized format
+
 # If so then it will add them to the dataset, standardizing it
 def taxon_checker():
     publication_info_id = request.get_vars.publication_info_id
