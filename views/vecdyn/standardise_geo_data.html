@@ -10,5 +10,22 @@
   <strong>Warning!</strong> You currently have {{=count}} entries that need to be standardised.
 </div>
 
-{{=BEAUTIFY(form)}}
+               <div class="container-fluid">
+
+{{for row in geo_entries:}}
+
+<table class="table table-striped col-md-2"">
+    <tbody>
+      <tr>
+        <td class="col-md-5">{{=row.location_description}}</td>
+        <td>{{=A('Standardise geo information',_href=URL("vecdyn", "location_select", vars={'study_meta_data_id': row.id, 'location_description': row.location_description,
+                                           'publication_info_id': publication_info_id}),_class="btn btn-primary")}} </td>
+      </tr>
+    </tbody>
+  </table>
+
+  {{pass}}
+</div>
     </div>
+
+

@@ -1,12 +1,17 @@
 {{extend 'layout.html'}}
 
         <div class="btn-group">
-             {{=A('Finish',_href=URL('view_data',vars={'publication_info_id':publication_info_id}),_class="btn btn-primary")}}
+             {{=A('Finish',_href=URL('view_data',vars={'publication_info_id':publication_info_id}),_class="btn btn-primary")}}</div>
 
 
-  </div>
-           <div style="background: linear-gradient(240deg, lightgrey, whitesmoke)" class="jumbotron">
+<div style="background: linear-gradient(240deg, lightgrey, whitesmoke)" class="jumbotron">
 
 
-{{=BEAUTIFY(form)}}
-    </div>
+               <div class="container-fluid">
+
+
+{{for row in rows:}}
+{{=row.geo_id.geo_id}}
+        {{pass}}
+
+</div>

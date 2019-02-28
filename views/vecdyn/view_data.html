@@ -51,14 +51,15 @@
 
   </div>
 </div>
+
            <div style="background: linear-gradient(240deg, lightgrey, whitesmoke)" class="jumbotron">
 
 
-                                 <h5><center> {{for row in publication_info_query:}}
- <center>Dataset: {{=row.title}}</center>
-                      {{pass}}
-                  </center>
-                  </h5>
+
+                                        <h5><center> {{for row in publication_info_query:}} <center>Dataset: {{=row.title}}</center> {{pass}} </center> </h5>
+
+
+
 <br>
                <div class="pagination">
     {{=A('View Standardised',_href=URL('vecdyn','view_data',vars={'publication_info_id':publication_info_id}),_class="active")}}
@@ -67,7 +68,6 @@
  <br>
 
 <hr>
-
 <div class="container-fluid">
   <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#pub_info">View Publication Information</button> <a class="btn btn-link" href="{{=URL('vecdyn','edit_dataset_general_info',vars={'publication_info_id':publication_info_id})}}">{{=T("(Edit)")}}</a>
 
@@ -110,7 +110,6 @@
        </div>
 
 
-
       <div class="container-fluid">
   <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#contact_info">View  Contact Information&#8205; &#8205;  &#8205; &#8205; &#8205; </button></button> <a class="btn btn-link" href="{{=URL('vecdyn','edit_dataset_general_info',vars={'publication_info_id':publication_info_id})}}">{{=T("(Edit)")}}</a>
 
@@ -143,7 +142,7 @@
    </div>
        </div>
 
-                {{if count >=1:}}
+               {{if count == 0 & count2 == 0:}}
 
             <div class="container-fluid">
   <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#rights_info">Dataset Rights & Access&#8205; &#8205;&#8205;  &#8205; &#8205;  &#8205;&#8205; &#8205; &#8205; </button><a class="btn btn-link" <a class="btn btn-link" href="{{=URL('vecdyn','edit_data_rights',vars={'publication_info_id':publication_info_id})}}">{{=T("(Edit)")}}</a>
@@ -167,19 +166,22 @@
       </tr>
     </tbody>
   </table>
+
     {{pass}}
   {{else:}}
             {{pass}}
 
 
       <hr>
+
+
 </div>
+                 {{=BEAUTIFY(form)}}
              </div>
-               <br>
-{{=BEAUTIFY(form)}}
-
-                  </div>
-                </div>
 
 
-</body>
+
+
+
+  </div>
+
