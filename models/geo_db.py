@@ -4,6 +4,24 @@
 
 
 
+
+db.define_table('gaul_admin_layers',
+                Field('geo_id', type = 'id'),
+                Field('adm0_name'),
+                Field('adm1_name'),
+                Field('adm2_name', default=None),
+                Field('centroid_latitude', 'double'),
+                Field('centroid_longitude', 'double'),
+                #lazy_tables = True,
+                format='%(adm0_name)s')
+#if db(db.gaul_admin_layers.ADM_CODE>0).count() == 0:
+ #   db.gaul_admin_layers.truncate()
+
+
+#db.gaul_admin_layers.drop()
+
+
+
 db.define_table('gadm_admin_areas',
                 Field('geo_id', type = 'string'),
                 Field('gid_0'),
@@ -30,15 +48,12 @@ db.define_table('gadm_admin_areas',
                 Field('gid_5'),
                 Field('name_5'),
                 Field('engtype_5'),
-                primarykey=['geo_id'])
+                primarykey = ['geo_id'])
 
 
 #db.gadm_admin_areas.drop()
 
 #db.gadm_admin_areas.truncate()
 #db.commit()
-#if db(db.gadm_admin_areas.geo_id>0).count() == 0:
- #   db.gadm_admin_areas.truncate()
-
-
-
+# if db(db.gadm_admin_areas.geo_id>0).count() == 0:
+#     db.gadm_admin_areas.truncate()

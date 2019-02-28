@@ -29,7 +29,7 @@ def vecdyn_taxon_location_query():
     today = datetime.date.today()
 
     # control which fields available
-    [setattr(f, 'readable', False) for f in db.taxon
+    [setattr(f, 'readable', False) for f in db.gbif_taxon
         if f.name not in ('db.gbif_taxon.canonical_name,db.gbif_taxon.genus_or_above,'
                           'db.gbif_taxon.taxonomic_rank')]
     [setattr(f, 'readable', False) for f in db.publication_info
@@ -39,10 +39,8 @@ def vecdyn_taxon_location_query():
     # MainID is not made unreadable, so that it can be accessed by the export controller
     [setattr(f, 'readable', False) for f in db.study_meta_data
         if f.name not in ('db.study_meta_data.id, db.study_meta_data.location_description,')]
-    [setattr(f, 'readable', False) for f in db.gadm_admin_areas
-     if f.name not in ('db.gadm_admin_areas.name_5, db.gadm_admin_areas.name_4,'
-                       'db.gadm_admin_areas.name_3, db.gadm_admin_areas.name_2,'
-                       'db.gadm_admin_areas.name_0, db.gadm_admin_areas.name_0')]
+    [setattr(f, 'readable', False) for f in db.gaul_admin_layers
+     if f.name not in ('db.gaul_admin_layers.adm2_name, db.gaul_admin_layers.adm1_name, db.gaul_admin_layers.adm0_name')]
 
     # Add selectability checkboxes
     select = [('Download selected',
@@ -63,7 +61,7 @@ def vecdyn_taxon_location_query():
                         & (db.publication_info.collection_author == db.collection_author.id)
                         & (db.gbif_taxon.taxon_id == db.study_meta_data.taxon_id)
                         & (db.publication_info.data_rights == 'open')
-                        & (db.gadm_admin_areas.geo_id == db.study_meta_data.geo_id),
+                        & (db.gaul_admin_layers.geo_id == db.study_meta_data.geo_id),
                         field_id=db.study_meta_data.id,
                         fields=[db.publication_info.title,
                                 db.collection_author.name,
@@ -71,24 +69,18 @@ def vecdyn_taxon_location_query():
                                 db.gbif_taxon.genus_or_above,
                                 db.gbif_taxon.taxonomic_rank,
                                 db.study_meta_data.location_description,
-                                db.gadm_admin_areas.name_5,
-                                db.gadm_admin_areas.name_4,
-                                db.gadm_admin_areas.name_3,
-                                db.gadm_admin_areas.name_2,
-                                db.gadm_admin_areas.name_1,
-                                db.gadm_admin_areas.name_0],
+                                db.gaul_admin_layers.adm0_name,
+                                db.gaul_admin_layers.adm1_name,
+                                db.gaul_admin_layers.adm2_name],
 
                         headers={'publication_info.title': 'Title',
                                  'collection_author.name': 'Author',
                                  'taxon.canonical_name': 'Taxon',
                                  'taxon.genus_or_above': 'genus_or_above',
                                  'taxon.taxonomic_rank': 'taxonomic_rank',
-                                 'gadm_admin_areas.name_5': 'Administrative Division 5',
-                                 'gadm_admin_areas.name_4': 'Administrative Division 4',
-                                 'gadm_admin_areas.name_3': 'Administrative Division 3',
-                                 'gadm_admin_areas.name_2': 'Administrative Division 2',
-                                 'gadm_admin_areas.name_1': 'Administrative Division 1',
-                                 'gadm_admin_areas.name_0': 'Country Name',
+                                 'gaul_admin_layers.adm2_name': 'Administrative Division 2',
+                                 'gaul_admin_layers.adm1_name': 'Administrative Division 1',
+                                 'gaul_admin_layers.adm0_name': 'Country Name',
                                  'study_meta_data.id': 'Dataset ID'},
                         maxtextlength=200,
                         selectable=select,
@@ -159,7 +151,7 @@ def _get_data_csv(ids):
 
     rows = db((db.study_meta_data.id.belongs(ids)) &
               (db.gbif_taxon.taxon_id == db.study_meta_data.taxon_id) &
-              (db.gadm_admin_areas.geo_id == db.study_meta_data.geo_id) &
+              (db.gaul_admin_layers.geo_id == db.study_meta_data.geo_id) &
               (db.publication_info.id == db.study_meta_data.publication_info_id) &
               (db.time_series_data.study_meta_data_id == db.study_meta_data.id)).select(
                     db.study_meta_data.title,
@@ -191,12 +183,10 @@ def _get_data_csv(ids):
                     db.study_meta_data.measurement_unit,
                     db.study_meta_data.value_transform,
                     db.study_meta_data.location_description,
-                    db.gadm_admin_areas.name_5,
-                    db.gadm_admin_areas.name_4,
-                    db.gadm_admin_areas.name_3,
-                    db.gadm_admin_areas.name_2,
-                    db.gadm_admin_areas.name_1,
-                    db.gadm_admin_areas.name_0,
+                    db.gaul_admin_layers.adm2_name,
+                    db.gaul_admin_layers.adm1_name,
+                    db.gaul_admin_layers.adm0_name,
+                    db.gaul_admin_layers.geo_id,
                     db.study_meta_data.geo_datum,
                     db.study_meta_data.gps_obfuscation_info,
                     db.publication_info.title,

@@ -176,6 +176,7 @@ def edit_data_rights():
     return locals()
 
 
+
 @auth.requires_membership('VectorbiteAdmin')
 def view_data():
     # Query for publication info pages, found at the top of the view data pages
@@ -184,15 +185,15 @@ def view_data():
 
     # Following queries count to see how many unstandardised entries are in the collection, unstandardised dates are
     # recognised by the absence of either a no taxon_id (None) or no geo_id (None) supplies user with a message
-    ds_check = db(db.study_meta_data.publication_info_id == publication_info_id).select(groupby=db.study_meta_data.publication_info_id)
+    ds_check = db(db.study_meta_data.publication_info_id == publication_info_id).select(distinct=db.study_meta_data.publication_info_id)
     ds_count = len(ds_check)
     ds_count = int(ds_count)
     b = db((db.study_meta_data.publication_info_id == publication_info_id) & (db.study_meta_data.taxon_id == None)).select(
-        groupby=db.study_meta_data.taxon)
+        distinct=db.study_meta_data.taxon)
     count = len(b)
     count = int(count)
     a = db((db.study_meta_data.publication_info_id == publication_info_id) & (db.study_meta_data.geo_id == None)).select(
-        groupby=db.study_meta_data.location_description)
+        distinct=db.study_meta_data.location_description)
     count2 = len(a)
     count2 = int(count2)
     message = ()
@@ -236,28 +237,22 @@ def view_data():
              ]
 
     query = ((db.study_meta_data.publication_info_id == publication_info_id) &
-             (db.study_meta_data.geo_id == db.gadm_admin_areas.geo_id) &
+             (db.study_meta_data.geo_id == db.gaul_admin_layers.geo_id) &
              (db.gbif_taxon.taxon_id == db.study_meta_data.taxon_id))
 
     form = SQLFORM.grid(query, field_id=db.study_meta_data.id,
                         fields=[db.gbif_taxon.canonical_name,
-                                db.gadm_admin_areas.name_5,
-                                db.gadm_admin_areas.name_4,
-                                db.gadm_admin_areas.name_3,
-                                db.gadm_admin_areas.name_2,
-                                db.gadm_admin_areas.name_1,
-                                db.gadm_admin_areas.name_0,
+                                db.gaul_admin_layers.adm2_name,
+                                db.gaul_admin_layers.adm1_name,
+                                db.gaul_admin_layers.adm0_name,
                                 db.study_meta_data.study_design,
                                 db.study_meta_data.sampling_method,
                                 db.study_meta_data.measurement_unit,
                                 db.study_meta_data.value_transform],
                         headers={'gbif_taxon.canonical_name': 'Taxon',
-                                 'gadm_admin_areas.name_5': 'Administrative Division 5',
-                                 'gadm_admin_areas.name_4': 'Administrative Division 4',
-                                 'gadm_admin_areas.name_3': 'Administrative Division 3',
-                                 'gadm_admin_areas.name_2': 'Administrative Division 2',
-                                 'gadm_admin_areas.name_1': 'Administrative Division 1',
-                                 'gadm_admin_areas.name_0': 'Country Name',
+                                 'gaul_admin_layers.adm2_name': 'Administrative Division 2',
+                                 'gaul_admin_layers.adm1_name': 'Administrative Division 1',
+                                 'gaul_admin_layers.adm0_name': 'Country Name',
                                  'study_meta_data.study_design': 'Study Design',
                                  'study_meta_data.sampling_method': 'Sampling Method',
                                  'study_meta_data.measurement_unit': 'Measurement Unit',
@@ -280,7 +275,7 @@ def view_unstandardised_data():
 
         # Checks to see if there are understadnardised data sets in the data collection
         ds_check = db(db.study_meta_data.publication_info_id == publication_info_id).select(
-            groupby=db.study_meta_data.publication_info_id)
+            distinct=db.study_meta_data.publication_info_id)
         ds_count = len(ds_check)
         ds_count = int(ds_count)
 
@@ -288,12 +283,12 @@ def view_unstandardised_data():
         # supplies user with a message
         b = db((db.study_meta_data.publication_info_id == publication_info_id) & (
                     db.study_meta_data.taxon_id == None)).select(
-            groupby=db.study_meta_data.taxon)
+            distinct=db.study_meta_data.taxon)
         count = len(b)
         count = int(count)
         a = db((db.study_meta_data.publication_info_id == publication_info_id) & (
                     db.study_meta_data.geo_id == None)).select(
-            groupby=db.study_meta_data.location_description)
+            distinct=db.study_meta_data.location_description)
         count2 = len(a)
         count2 = int(count2)
         message = ()
@@ -347,7 +342,7 @@ def edit_meta_data():
     publication_info_id = request.get_vars.publication_info_id
     study_meta_data_id = request.get_vars.study_meta_data_id
     rows = db((db.study_meta_data.id == study_meta_data_id) & (db.study_meta_data.taxon_id == db.gbif_taxon.taxon_id)
-              & (db.study_meta_data.geo_id == db.gadm_admin_areas.geo_id)).select()
+              & (db.study_meta_data.geo_id == db.gaul_admin_layers.geo_id)).select()
     response.flash = 'Edit meta-data entry!'
     db.study_meta_data.title.writable = False
     db.study_meta_data.title.readable = False
@@ -377,37 +372,19 @@ def standardise_taxon():
     # Page variable used in redirection to various standardization pages
     page = 'standardise_taxon'
     rows = db(db.study_meta_data.publication_info_id == publication_info_id).select(orderby=db.study_meta_data.taxon_id)
-    a = db((db.study_meta_data.publication_info_id == publication_info_id) & (db.study_meta_data.taxon_id == None)).select(
-        groupby=db.study_meta_data.taxon)
-    count = len(a)
-    taxon_entries = db((db.study_meta_data.publication_info_id == publication_info_id) & (db.study_meta_data.geo_id == None)).select(
-        groupby=db.study_meta_data.location_description)
-    taxon_entries_count = len(taxon_entries)
-    taxon_entries_count = int(taxon_entries_count)
+    taxon_entries = db((db.study_meta_data.publication_info_id == publication_info_id) & (db.study_meta_data.taxon_id == None)).select(
+        distinct=db.study_meta_data.taxon)
+    count = len(taxon_entries)
+    geo_entries = db((db.study_meta_data.publication_info_id == publication_info_id) & (db.study_meta_data.geo_id == None)).select(
+        distinct=db.study_meta_data.location_description)
+    geo_entries_count = len(geo_entries)
+    geo_entries_count = int(geo_entries_count)
     first_row = rows.first()
-    if first_row.taxon_id is None:
+    if first_row.taxon_id < 1:
         pass
     else:
         response.flash = 'Now standardise geo data'
         redirect(URL("vecdyn", "standardise_geo_data", vars={'publication_info_id': publication_info_id}))
-
-    links = [lambda row: A('Standardise taxon',
-                           _href=URL("vecdyn", "taxon_select",
-                                     vars={'study_meta_data_id': row.id, 'taxon': row.taxon, 'page': page,
-                                           'publication_info_id': publication_info_id}), _class="btn btn-primary")]
-
-    [setattr(f, 'readable', False)
-     for f in db.study_meta_data
-     if f.name not in ('study_meta_data.taxon')]
-
-    form = SQLFORM.grid((db.study_meta_data.publication_info_id == publication_info_id) & (db.study_meta_data.taxon_id == None),
-                        groupby=db.study_meta_data.taxon,
-                        links=links, maxtextlength=200, searchable=True, advanced_search=False,
-                        headers={'study_meta_data.taxon': 'Original Taxon Name',
-                                 'study_meta_data.taxon_id': 'Replacement'},
-                        deletable=False, editable=False,
-                        details=False, create=False, csv=False
-                        )
     return locals()
 
 
@@ -418,32 +395,7 @@ def re_standardise_taxon():
     page = 're_standardise_taxon'
     publication_info_id = request.get_vars.publication_info_id
     study_meta_data_id = request.get_vars.id
-    links = [lambda row: A('Standardise taxon',
-                           _href=URL("vecdyn", "taxon_select",
-                                     vars={'study_meta_data_id': row.id,
-                                           'taxon': row.taxon,
-                                           'page': page,
-                                           'publication_info_id': publication_info_id}),
-                           _class="btn btn-primary")]
-
-    [setattr(f, 'readable', False)
-     for f in db.study_meta_data
-     if f.name not in ('study_meta_data.taxon, study_meta_data.taxon_id')]
-
-    query = ((db.study_meta_data.publication_info_id == publication_info_id) &
-             (db.gbif_taxon.taxon_id == db.study_meta_data.taxon_id))
-
-    form = SQLFORM.grid(query,
-                        field_id=db.study_meta_data.id,
-                        groupby=db.study_meta_data.taxon,
-                        fields=[db.study_meta_data.taxon,
-                                db.study_meta_data.taxon_id],
-                        headers={'study_meta_data.taxon': 'Original Taxon Name',
-                                 'study_meta_data.taxon_id': 'Replacement Taxon Name'},
-                        links=links, maxtextlength=200, searchable=True, advanced_search=False,
-                        deletable=False, editable=False,
-                        details=False, create=False, csv=False
-                        )
+    rows = db((db.study_meta_data.publication_info_id == publication_info_id) & (db.study_meta_data.taxon_id == db.gbif_taxon.taxon_id)).select(distinct=db.study_meta_data.taxon_id)
     return locals()
 
 
@@ -476,7 +428,6 @@ def taxon_select():
     search_input = grid.element('#w2p_keywords')
     if search_input:
         search_input['_value'] = taxon
-    # grid.search.default = request.get_vars.get_vars.taxon
     return locals()
 
 
@@ -538,29 +489,14 @@ def standardise_geo_data():
     publication_info_id = request.get_vars.publication_info_id
     study_meta_data_id = request.get_vars.id
     rows = db(db.study_meta_data.publication_info_id == publication_info_id).select(orderby=db.study_meta_data.geo_id)
-    a = db((db.study_meta_data.publication_info_id == publication_info_id) & (db.study_meta_data.geo_id == None)).select(groupby=db.study_meta_data.location_description)
-    count = len(a)
+    geo_entries = db((db.study_meta_data.publication_info_id == publication_info_id) & (db.study_meta_data.geo_id == None)).select(distinct=db.study_meta_data.location_description)
+    count = len(geo_entries)
     first_row = rows.first()
-
-    if first_row.geo_id is None:
+    if first_row.geo_id < 1:
         pass
     else:
-        response.flash = 'All data attached to this data set has been standardised standardise'
+        response.flash = 'All data attached to this data set has been standardised'
         redirect(URL("vecdyn", "view_data", vars={'publication_info_id': publication_info_id}))
-
-    links = [lambda row: A('Standardise geo information',_class="btn btn-primary",_href=URL("vecdyn", "location_select", vars={'study_meta_data_id': row.id, \
-                                                                                                       'location_description': row.location_description,
-                                                                                                            'publication_info_id': publication_info_id}))]
-
-    [setattr(f, 'readable', False)
-    for f in db.study_meta_data
-    if f.name not in ('db.study_meta_data.location_description')]
-
-    form = SQLFORM.grid((db.study_meta_data.publication_info_id == publication_info_id) & (db.study_meta_data.geo_id == None),
-                        groupby=db.study_meta_data.location_description,
-                        links=links, maxtextlength=200, searchable=True, advanced_search=False,
-                        deletable=False, editable=False,
-                        details=False, create=False, csv=False)
     return locals()
 
 
@@ -568,46 +504,11 @@ def standardise_geo_data():
 def re_standardise_geo_data():
     # Page variable used in redirection to various standardization pages
     page = 're_standardise_geo_data'
-    response.flash = 'Please standardise geo data. ' \
-                     'Click on the link next to each geo description name to search for equivalent geo names!'
     publication_info_id = request.get_vars.publication_info_id
     study_meta_data_id = request.get_vars.id
-
-    links = [lambda row: A('Standardise geo information',
-                           _href=URL("vecdyn", "location_select",
-                                     vars={'study_meta_data_id': row.study_meta_data.id,
-                                           'location_description': row.study_meta_data.location_description,
-                                           'page':page,
-                                           'publication_info_id': publication_info_id}),
-                           _class="btn btn-primary")]
-
-    query = ((db.study_meta_data.publication_info_id == publication_info_id) &
-             (db.study_meta_data.geo_id == db.gadm_admin_areas.geo_id))
-
-    form = SQLFORM.grid(query, field_id=db.study_meta_data.id,
-                        fields=[db.study_meta_data.location_description,
-                                db.study_meta_data.geo_id,
-                                db.gadm_admin_areas.name_5,
-                                db.gadm_admin_areas.name_4,
-                                db.gadm_admin_areas.name_3,
-                                db.gadm_admin_areas.name_2,
-                                db.gadm_admin_areas.name_1,
-                                db.gadm_admin_areas.name_0,
-                                ],
-                        headers={'gadm_admin_areas.name_5': 'Administrative Division 5',
-                                 'gadm_admin_areas.name_4': 'Administrative Division 4',
-                                 'gadm_admin_areas.name_3': 'Administrative Division 3',
-                                 'gadm_admin_areas.name_2': 'Administrative Division 2',
-                                 'gadm_admin_areas.name_1': 'Administrative Division 1',
-                                 'gadm_admin_areas.name_0': 'Country Name',
-                                 'study_meta_data.location_description': 'Original Location Description',
-                                 'study_meta_data.geo_id': 'Geo ID'},
-                        groupby=db.study_meta_data.location_description,
-                        links=links,
-                        maxtextlength=200,
-                        searchable=True, advanced_search=False, deletable=False,
-                        editable=False, details=False, create=False, csv=False)
+    rows = db((db.study_meta_data.publication_info_id == publication_info_id) & ( db.study_meta_data.geo_id == db.gaul_admin_layers.geo_id)).select(distinct=db.study_meta_data.location_description)
     return locals()
+
 
 @auth.requires_membership('VectorbiteAdmin')
 def location_select():
@@ -616,33 +517,25 @@ def location_select():
     publication_info_id = request.get_vars.publication_info_id
     study_meta_data_id = request.get_vars.study_meta_data_id
     location_description = request.get_vars.location_description
-    db.gadm_admin_areas.geo_id.readable = False
+    db.gaul_admin_layers.geo_id.readable = False
     [setattr(f, 'readable', False)
-     for f in db.gadm_admin_areas
-     if f.name not in ('db.gadm_admin_areas.name_0, db.gadm_admin_areas.name_1,'
-                       'db.gadm_admin_areas.name_2, db.gadm_admin_areas.name_3,'
-                       'db.gadm_admin_areas.name_4, db.gadm_admin_areas.name_5')]
+     for f in db.gaul_admin_layers
+     if f.name not in ('db.gaul_admin_layers.adm0_name, db.gaul_admin_layers.adm1_name, db.gaul_admin_layers.adm2_name')]
     links = [lambda row: A('Select', _class="btn btn-primary",_href=URL("vecdyn", "geo_confirm",
                                                                          vars={'geo_id': row.geo_id,
                                                                                 'page': page,
                                                                                'study_meta_data_id': study_meta_data_id,
-                                                                               'name_0': row.name_0,
-                                                                               'name_1': row.name_1,
-                                                                               'name_2': row.name_2,
-                                                                               'name_3': row.name_3,
-                                                                               'name_4': row.name_4,
-                                                                               'name_5': row.name_5,
+                                                                               'adm0_name': row.adm0_name,
+                                                                               'adm1_name': row.adm1_name,
+                                                                               'adm2_name': row.adm2_name,
                                                                                'location_description': location_description,
                                                                                'publication_info_id': publication_info_id}))]
     response.flash = 'Now select a geographical location which best describes the study location'
-    grid = SQLFORM.grid(db.gadm_admin_areas, orderby=db.gadm_admin_areas.name_0|db.gadm_admin_areas.name_1|db.gadm_admin_areas.name_2,
+    grid = SQLFORM.grid(db.gaul_admin_layers, orderby=db.gaul_admin_layers.adm0_name|db.gaul_admin_layers.adm1_name|db.gaul_admin_layers.adm2_name,
                         headers=
-                        {'gadm_admin_areas.name_0': 'Country Name',
-                        'gadm_admin_areas.name_1': 'Administrative Division 1',
-                        'gadm_admin_areas.name_2': 'Administrative Division 2',
-                        'gadm_admin_areas.name_3': 'Administrative Division 3',
-                        'gadm_admin_areas.name_4': 'Administrative Division 4',
-                        'gadm_admin_areas.name_5': 'Administrative Division 5'},
+                        {'gaul_admin_layers.adm0_name': 'Country Name',
+                        'gaul_admin_layers.adm1_name': 'Administrative Division 1',
+                        'gaul_admin_layers.adm2_name': 'Administrative Division 2'},
                         links=links, searchable=True, advanced_search=False,
                         deletable=False, editable=False, details=False, create=False, csv=False)
     search_input = grid.element('#w2p_keywords')
@@ -658,12 +551,9 @@ def geo_confirm():
     # Page variable used in redirection to various standardization pages
     page = request.get_vars.page
     geo_id = request.get_vars.geo_id
-    name_0 = request.get_vars.name_0
-    name_1 = request.get_vars.name_1
-    name_2 = request.get_vars.name_2
-    name_3 = request.get_vars.name_3
-    name_4 = request.get_vars.name_4
-    name_5 = request.get_vars.name_5
+    adm0_name = request.get_vars.adm0_name
+    adm1_name = request.get_vars.adm1_name
+    adm2_name = request.get_vars.adm2_name
     location_description = request.get_vars.location_description
     form = FORM(INPUT(_type='submit', _value='Confirm', _class="btn btn-primary"))
     if form.process().accepted:

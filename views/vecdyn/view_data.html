@@ -51,15 +51,12 @@
 
   </div>
 </div>
+
            <div style="background: linear-gradient(240deg, lightgrey, whitesmoke)" class="jumbotron">
 
 
-                                 <h5><center> {{for row in publication_info_query:}}
- <center>Dataset: {{=row.title}}</center>
-                      {{pass}}
-                  </center>
-                  </h5>
-<br>
+
+                                        <h5><center> {{for row in publication_info_query:}} <center>Dataset: {{=row.title}}</center> {{pass}} </center> </h5>
                <div class="pagination">
     {{=A('View Standardised',_href=URL('vecdyn','view_data',vars={'publication_info_id':publication_info_id}),_class="active")}}
   {{=A('View Un-standardised',_href=URL('vecdyn','view_unstandardised_data',vars={'publication_info_id':publication_info_id}))}}
@@ -67,13 +64,12 @@
  <br>
 
 <hr>
-
 <div class="container-fluid">
   <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#pub_info">View Publication Information</button> <a class="btn btn-link" href="{{=URL('vecdyn','edit_dataset_general_info',vars={'publication_info_id':publication_info_id})}}">{{=T("(Edit)")}}</a>
 
   <div id="pub_info" class="collapse">
 
-    <table class="table table-condensed" cellspacing="1px">
+  <table class="table table-striped" cellspacing="1px">
       {{for row in publication_info_query:}}
   <thead>
     </thead>
@@ -110,13 +106,12 @@
        </div>
 
 
-
       <div class="container-fluid">
   <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#contact_info">View  Contact Information&#8205; &#8205;  &#8205; &#8205; &#8205; </button></button> <a class="btn btn-link" href="{{=URL('vecdyn','edit_dataset_general_info',vars={'publication_info_id':publication_info_id})}}">{{=T("(Edit)")}}</a>
 
   <div id="contact_info" class="collapse">
 
-    <table class="table table-condensed" cellspacing="1px">
+  <table class="table table-striped" cellspacing="1px">
       {{for row in publication_info_query:}}
           <!-- Need to create a controller for edit data set contacts  -->
     <tbody>
@@ -143,14 +138,15 @@
    </div>
        </div>
 
-                {{if count >=1:}}
+               {{if count == 0 | count2 == 0:}}
 
             <div class="container-fluid">
   <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#rights_info">Dataset Rights & Access&#8205; &#8205;&#8205;  &#8205; &#8205;  &#8205;&#8205; &#8205; &#8205; </button><a class="btn btn-link" <a class="btn btn-link" href="{{=URL('vecdyn','edit_data_rights',vars={'publication_info_id':publication_info_id})}}">{{=T("(Edit)")}}</a>
 
   <div id="rights_info" class="collapse">
 
-    <table class="table table-condensed" cellspacing="1px">
+  <table class="table table-striped" cellspacing="1px">
+
       {{for row in publication_info_query:}}
     <tbody>
     <tr>
@@ -167,19 +163,29 @@
       </tr>
     </tbody>
   </table>
+
     {{pass}}
   {{else:}}
             {{pass}}
 
 
       <hr>
-</div>
-             </div>
-               <br>
-{{=BEAUTIFY(form)}}
 
-                  </div>
+
+</div>
+                <br>
+                <div>
+                     {{if (count < 1) | (count2 < 1):}}
+                      {{=BEAUTIFY(form)}}
+                     {{else:}}
+                    {{pass}}
                 </div>
 
+             </div>
 
-</body>
+
+
+
+
+  </div>
+
