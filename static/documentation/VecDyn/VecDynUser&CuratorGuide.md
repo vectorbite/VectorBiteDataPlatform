@@ -356,15 +356,15 @@ The FAO’s GUAL data set has been restructured for VecDyn. A new column was cre
 | ADM_CODE   | ADM2_NAME                         | ADM1_NAME | ADM0_NAME                   |
 | ---------- | --------------------------------- | --------- | --------------------------- |
 | 48472      | Administrative unit not available | Rukwa     | United Republic of Tanzania |
-| 48472**b** | Administrative unit not available | Mwanza    | United Republic of Tanzania |
+| 484722 | Administrative unit not available | Mwanza    | United Republic of Tanzania |
 | 22917      | Ifelodun                          | Kwara     | Nigeria                     |
 | 23036      | Surulere                          | Oyo       | Nigeria                     |
-| 22917**b** | Ifelodun                          | Osun      | Nigeria                     |
-| 23036b     | Surulere                          | Lagos     | Nigeria                     |
+| 229177 | Ifelodun                          | Osun      | Nigeria                     |
+| 230366     | Surulere                          | Lagos     | Nigeria                     |
 | 22602      | Osisioma Ngwa                     | Abia      | Nigeria                     |
-| 22602**b** | Ukwa West                         | Abia      | Nigeria                     |
+| 226022 | Ukwa West                         | Abia      | Nigeria                     |
 | 15426      | Gnral. Antonio Elizalde           | Guayas    | Ecuador                     |
-| 15426**b** | Milagro                           | Guayas    | Ecuador                     |
+| 154266 | Milagro                           | Guayas    | Ecuador                     |
 
 
 

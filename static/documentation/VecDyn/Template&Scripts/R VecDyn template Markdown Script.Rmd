@@ -5,18 +5,24 @@ date: "21 February 2018"
 output: html_document
 ---
 
+
+
+
 ```{r}
-Data_Series_Information_template <-data.frame(title=character(), 
+publication_information_template <-data.frame(title=character(), 
                  collection_author=character(),
-                 DOI=character(),
-                 publication_date = as.Date(character()),
+                 dataset_doi=character(),
+                 publication_doi = character(),
                  description = character(),
-                 URL = character(),
+                 url = character(),
                  contact_name=character(),
                  contact_affiliation=character(),
                  email=character(),
                  orcid=character(),
-                 keywords=character(),
+                 dataset_license=character(),
+                 data_rights=character(),
+                 embargo_release_date=character(),
+                 data_set_type=character(),
                  stringsAsFactors=FALSE)
 write.csv(Data_Series_Information_template, file = "Data_Series_Information_template.csv", row.names = FALSE)
 ```
@@ -24,34 +30,34 @@ write.csv(Data_Series_Information_template, file = "Data_Series_Information_temp
 
 ```{r}
 
-VecDyn_template <-data.frame(title = character(),
+vecdyn_template  <- data.frame(title = character(),
                              taxon = character(),
-                             sample_start_date = character(),
-                             sample_start_time = character(),
-                             sample_end_date =  character(),
-                             sample_end_time = character(),
-                             value = character(),
-                             sample_location_info = character(),
-                             sample_lat_DD = character(),
-                             sample_long_DD = character(),
-                             sample_info = character(),
-                             sample_name = character(),
-                             sample_sex = character(),
                              location_description = character(),
-                             location_environment = character(),
-                             study_lat_DD = character(),
-                             study_long_DD = character(),
-                             spatial_accuracy = character(),
-                             location_extent = character(),
+                             study_collection_area = character(),
                              geo_datum = character(),
+                             gps_obfuscation_info = character(),
                              species_id_method = character(),
                              study_design = character(),
                              sampling_strategy = character(),
                              sampling_method = character(),
                              sampling_protocol = character(),
                              measurement_unit = character(),
-                             study_collection_area = character(),
                              value_transform = character(),
+                             sample_start_date = character(),
+                             sample_start_time = character(),
+                             sample_end_date =  character(),
+                             sample_end_time = character(),
+                             sample_value = numeric(),
+                             sample_sex = character(),
+                             sample_stage = character(),
+                             sample_location = character(),
+                             sample_collection_area = character(),
+                             sample_lat_dd = character(),
+                             sample_long_dd = character(),
+                             sample_environment = character(),
+                             additional_location_info = character(),
+                             additional_sample_info = character(),
+                             sample_name = character(),
                              stringsAsFactors=FALSE)
 write.csv(VecDyn_template, file = "VecDyn_template.csv", row.names = FALSE)
                              
