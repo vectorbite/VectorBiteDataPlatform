@@ -42,7 +42,7 @@ def vecdyn_importer():
 
                 study_meta_data_id = record.id if record else db.study_meta_data.insert(publication_info_id=publication_info_id, **study)
                 samples = dict(zip(('sample_start_date', 'sample_start_time',
-                                    'sample_end_date', 'sample_end_time', 'value', 'sample_sex',
+                                    'sample_end_date', 'sample_end_time', 'sample_value', 'sample_sex',
                                     'sample_stage', 'sample_location', 'sample_collection_area', 'sample_lat_DD',
                                     'sample_long_DD', 'sample_environment', 'additional_location_info',
                                     'additional_sample_info', 'sample_name'), row[13:27]))
@@ -61,14 +61,15 @@ def vecdyn_importer():
     return dict(form=form, publication_info_id=publication_info_id)
 
 
-# The next controller checks to see if taxon names are already in a standardized format
+
 # If so then it will add them to the dataset, standardizing it
 def taxon_checker():
     publication_info_id = request.get_vars.publication_info_id
     rows = db(db.study_meta_data.publication_info_id == publication_info_id).select()
     for row in rows:
-        tax_match = db(db.taxon.tax_species == row.taxon).select()
+        tax_match = db(db.gbif_taxon.canonical_name == row.taxon).select()
         for match in tax_match:
-            row.update_record(taxonID=match.taxonID)
+            row.update_record(taxon_id=match.taxon_id)
     redirect(URL("vecdyn", "standardise_taxon", vars={'publication_info_id': publication_info_id}))
     return locals()
+

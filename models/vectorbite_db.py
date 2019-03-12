@@ -18,10 +18,6 @@ db.define_table('index_page_updates',
 the the vecdyn publication info table, both tables and functions use the SelectOrAdd function so user can add a collection 
 author when submitting or setting up a new vecdy dataset'''
 
-db.define_table('collection_author',
-    Field('name', 'string', notnull=True, unique=True),
-    Field('description', 'text'),
-                format='%(name)s')
 
 # assigns a status to a task -
 STATUSES = ('assigned','accepted','rejected','reassigned','completed')

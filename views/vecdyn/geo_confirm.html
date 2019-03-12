@@ -1,21 +1,39 @@
 {{extend 'layout.html'}}
 
 
-
         <div class="btn-group">
          {{=A('Cancel',_href=URL('view_data', vars={'publication_info_id':publication_info_id}),_class="btn btn-primary")}}
   </div>
         <div style="background: linear-gradient(240deg, lightgrey, whitesmoke)" class="jumbotron">
 
 
-
-
-
-
             <div class="alert alert-warning" role="alert">
-  <strong>Warning!</strong> Are you sure you the best match for <b> "{{=location_description}}" </b>  is  <b> "{{=ADM2_NAME}}, {{=ADM1_NAME}}, {{=ADM0_NAME}}" </b> ?
-</div>
+  <strong>Warning!
 
+  </strong> Are you sure the best match for <b> "{{=location_description}}" </b>  is: </div>
+
+
+            <div class="container-fluid">
+  <table class="table table-striped">
+    <thead>
+  <tr>
+    <th>Country</th>
+    <th>Administrative Division 1</th>
+      <th>Administrative Division 2</th>
+  </tr>
+    </thead>
+     <tbody>
+  <tr>
+    <td>{{=adm0_name}}</td>
+    <td>{{=adm1_name}}</td>
+    <td>{{=adm2_name}}</td>
+</tbody>
+  </tr>
+</table>
+
+                 </div>
+
+ <br>
         {{=BEAUTIFY(form)}}
     </div>
 

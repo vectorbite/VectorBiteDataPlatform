@@ -1,6 +1,20 @@
 # -*- coding: utf-8 -*-
 
 
+import datetime
+
+from gluon.tools import prettydate
+
+week = datetime.timedelta(days=7)
+
+
+
+db.define_table('collection_author',
+    Field('name', 'string', notnull=True, unique=True),
+    Field('description', 'text'),
+                format='%(name)s')
+
+
 # VecDyn
 
 '''all datasets submitted thorugh the website will go into this folder'''
@@ -62,11 +76,13 @@ db.define_table('study_meta_data',
                 Field('sampling_protocol', type = 'string', comment='How entities were sampled'), #9
                 Field('measurement_unit', type = 'string', required=True, comment='Unit of measurement'), #10
                 Field('value_transform', type = 'string', comment='Note if the original values have been transformed'), #11
-                Field('taxonID',  'reference taxon', default=None), #12
-                Field('ADM_CODE', 'reference gaul_admin_layers', default=None), #13
+                Field('taxon_id', 'reference gbif_taxon', default=None),
+                Field('geo_id', 'reference gaul_admin_layers', default=None),
                 Field('publication_info_id', 'reference publication_info')) #14
 
 #db.study_meta_data.publication_info_id.requires = IS_IN_DB(db, db.publication_info.id)#, '%(title)s')
+
+#db.study_meta_data.drop()
 
 
 
@@ -75,7 +91,7 @@ db.define_table('time_series_data',
                 Field('sample_start_time', type = 'time', required=False, comment='time of sample was set, leave blank if not applicable to the study'),
                 Field('sample_end_date', type = 'date', requires=IS_DATE(), comment='Date of sample collection'),
                 Field('sample_end_time', type = 'time', required=False, comment='time of sample collection'),
-                Field('value'),#type = 'integer', comment='The numerical amount or result from the sample collection'),
+                Field('sample_value'),#type = 'integer', comment='The numerical amount or result from the sample collection'),
                 Field('sample_sex', type = 'string', comment='sex of sample if applicable'),
                 Field('sample_stage', type = 'string', comment='life stage of sample if applicable'),
                 Field('sample_location', type = 'string', comment='Additional sample information'),
@@ -86,7 +102,7 @@ db.define_table('time_series_data',
                 Field('additional_location_info', type = 'string', comment='Additional sample information'),
                 Field('additional_sample_info', type = 'string', comment='Additional sample information'),
                 Field('sample_name', type = 'string', comment ='A human readable sample name'),
-                Field('study_meta_data_id'))
+                Field('study_meta_data_id', 'reference study_meta_data'))
 
 '''this adds the select or add widget to the'''
 
@@ -97,4 +113,3 @@ add_option = SelectOrAdd(form_title=T("Add a new something"),
                                               dialog_width=600)
 
 db.publication_info.collection_author.widget = add_option.widget
-
