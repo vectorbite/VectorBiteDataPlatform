@@ -2,6 +2,9 @@
 Current version: v0.1.0
 ## Release Notes
 
+## v0.1.1
+- Modified vectraits models to correctly handle integer data
+
 ## v0.1
 - Resructured vecdyn database files
 - Fixed vecdyn data downloader bug
