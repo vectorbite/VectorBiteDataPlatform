@@ -3,7 +3,6 @@ import logging
 import vtfuncs
 
 logger = logging.getLogger("web2py.app.vbdp")
-logger.setLevel(logging.DEBUG)
 
 
 def view_vectraits():
@@ -70,7 +69,10 @@ def validate_test():
             logger.debug("File length: {}".format(len(candidate) - 1))
             logger.debug("Header row length: {}".format(len(candidate[0])))
             logger.info("Verifying integrity of {}".format(origin_filename))
+            logger.setLevel(logging.INFO)
+            vtfuncs.validate_vectraits(candidate, origin_filename)
             # logger.debug(IS_INT_IN_RANGE(minimum=0)(-1))
+            # logger.info(IS_LENGTH(5)('1234567'))
 
         # Create class for a vectraits row
         #     This can go in the modules folder
