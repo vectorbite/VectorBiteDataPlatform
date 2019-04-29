@@ -10,9 +10,9 @@ Docstr: This file contains many generic VecTraits functions with which to perfor
 
 import logging
 from cStringIO import StringIO
-import shutil
 from gluon.validators import *
 import datetime
+from distutils.util import strtobool
 moduledebug = False
 
 if moduledebug:
@@ -22,6 +22,7 @@ if moduledebug:
                                   )
 else:
     logger = logging.getLogger("web2py.app.vbdp")
+
 
 def list_to_dict(h, l):
     """
@@ -57,12 +58,59 @@ def placeholder(x):
     return ph2
 
 
+class IS_BOOL():
+    """
+    Determines that the argument is (or can be represented as) an bool.
+
+    True values are y, yes, t, true, on and 1.
+    False values are "", n, no, f, false, off and 0.
+    (Values are case-insensitive)
+
+    Example:
+        Used as::
+
+            INPUT(_type='text', _name='name', requires=IS_BOOL())
+
+            >>> IS_BOOL()(True)
+            (True, None)
+            >>> IS_BOOL()(False)
+            (False, None)
+            >>> IS_BOOL()("True")
+            (True, None)
+            >>> IS_BOOL()("False")
+            (False, None)
+            >>> IS_BOOL()("Yes")
+            (True, None)
+            >>> IS_BOOL()(100)
+            (100, 'enter a boolean')
+
+
+    """
+
+    def __init__(
+        self,
+        error_message=None,
+    ):
+        if not error_message:
+            self.error_message = "enter a boolean"
+        else:
+            self.error_message = error_message
+
+    def __call__(self, value):
+        # If value converts nicely to a bool
+        try:
+            v = bool(strtobool(str(value).lower()))
+            return (v, None)
+        except ValueError:
+            pass
+        return (value, self.error_message)
+
+
 def validate_vectraits_rowdict(rowdict, buf):
     """
 
     :param rowdict:
     :param buf:
-    :param failcounter:
     :return:
 
     >>> validate_vectraits_rowdict({'originaltraitname': 'test'}, StringIO())
@@ -77,176 +125,263 @@ def validate_vectraits_rowdict(rowdict, buf):
     >>> validate_vectraits_rowdict({'fail': 1, 'fail2': 2}, StringIO())
     (set(['fail', 'fail2']), 2)
 
+    >>> validate_vectraits_rowdict({'originaltraitunit': "x"*256}, StringIO())
+    (set(['originaltraitunit']), 1)
+
+    >>> validate_vectraits_rowdict({'originaltraitvalue': "x"}, StringIO())
+    (set(['originaltraitvalue']), 1)
+
+    >>> validate_vectraits_rowdict({'originaltraitvalue': None}, StringIO())
+    (set(['originaltraitvalue']), 2)
+
+    >>> validate_vectraits_rowdict({'replicates': -1}, StringIO())
+    (set(['replicates']), 1)
+
+    >>> validate_vectraits_rowdict({'published': "1"}, StringIO())
+    (set([]), 0)
+
+    >>> validate_vectraits_rowdict({'published': "try again"}, StringIO())
+    (set(['published']), 1)
+
+    >>> validate_vectraits_rowdict({'contributoremail': ""}, StringIO())
+    (set(['contributoremail']), 2)
+
+    >>> validate_vectraits_rowdict({'contributoremail': "mrfrancis"}, StringIO())
+    (set(['contributoremail']), 1)
+
+    >>> validate_vectraits_rowdict({'locationdate': "04/08/1992"}, StringIO())
+    (set([]), 0)
+
+    >>> validate_vectraits_rowdict({'locationdate': "4 August 92"}, StringIO())
+    (set(['locationdate']), 1)
+
     """
 
     validator_dict = {
-        'uid': [placeholder(1)],
-        'individualid': [placeholder(1)],
-        'originalid': [placeholder(1)],
-        'originaltraitname': [placeholder(1)],  # IS_INT_IN_RANGE(minimum=0)],
-        'originaltraitdef': [placeholder(1)],
-        'standardisedtraitname': [placeholder(1)],
-        'standardisedtraitdef': [placeholder(1)],
-        'originaltraitvalue': [placeholder(1)],
-        'originaltraitunit': [placeholder(1)],
-        'originalerrorpos': [placeholder(1)],
-        'originalerrorneg': [placeholder(1)],
-        'originalerrorunit': [placeholder(1)],
-        'standardisedtraitvalue': [placeholder(1)],
-        'standardisedtraitunit': [placeholder(1)],
-        'standardisederrorpos': [placeholder(1)],
-        'standardisederrorneg': [placeholder(1)],
-        'standardisederrorunit': [placeholder(1)],
-        'replicates': [placeholder(1)],
-        'habitat': [placeholder(1)],
-        'labfield': [placeholder(1)],
-        'arenavalue': [placeholder(1)],
-        'arenaunit': [placeholder(1)],
-        'arenavaluesi': [placeholder(1)],
-        'arenaunitsi': [placeholder(1)],
-        'ambienttemp': [placeholder(1)],
-        'ambienttempmethod': [placeholder(1)],
-        'ambienttempunit': [placeholder(1)],
-        'ambientlight': [placeholder(1)],
-        'ambientlightunit': [placeholder(1)],
-        'secondstressor': [placeholder(1)],
-        'secondstressordef': [placeholder(1)],
-        'secondstressorvalue': [placeholder(1)],
-        'secondstressorunit': [placeholder(1)],
-        'timestart': [placeholder(1)],
-        'timeend': [placeholder(1)],
-        'totalobstimevalue': [placeholder(1)],
-        'totalobstimeunit': [placeholder(1)],
-        'totalobstimevaluesi': [placeholder(1)],
-        'totalobstimeunitsi': [placeholder(1)],
-        'totalobstimenotes': [placeholder(1)],
-        'resrepvalue': [placeholder(1)],
-        'resrepunit': [placeholder(1)],
-        'resrepvaluesi': [placeholder(1)],
-        'resrepunitsi': [placeholder(1)],
-        'climate': [placeholder(1)],
-        'location': [placeholder(1)],
-        'locationtype': [placeholder(1)],
-        'originallocationdate': [placeholder(1)],
-        'locationdate': [placeholder(1)],
-        'locationdateprecision': [placeholder(1)],
-        'coordinatetype': [placeholder(1)],
-        'latitude': [placeholder(1)],
-        'longitude': [placeholder(1)],
-        'interactiontype': [placeholder(1)],
-        'interactor1': [placeholder(1)],
-        'interactor1common': [placeholder(1)],
-        'interactor1wholepart': [placeholder(1)],
-        'interactor1wholeparttype': [placeholder(1)],
-        'interactor1number': [placeholder(1)],
-        'interactor1kingdom': [placeholder(1)],
-        'interactor1phylum': [placeholder(1)],
-        'interactor1class': [placeholder(1)],
-        'interactor1order': [placeholder(1)],
-        'interactor1family': [placeholder(1)],
-        'interactor1genus': [placeholder(1)],
-        'interactor1species': [placeholder(1)],
-        'interactor1stage': [placeholder(1)],
-        'interactor1temp': [placeholder(1)],
-        'interactor1tempunit': [placeholder(1)],
-        'interactor1tempmethod': [placeholder(1)],
-        'interactor1growthtemp': [placeholder(1)],
-        'interactor1growthtempunit': [placeholder(1)],
-        'interactor1growthdur': [placeholder(1)],
-        'interactor1growthdurunit': [placeholder(1)],
-        'interactor1growthtype': [placeholder(1)],
-        'interactor1acc': [placeholder(1)],
-        'interactor1acctemp': [placeholder(1)],
-        'interactor1acctempnotes': [placeholder(1)],
-        'interactor1acctime': [placeholder(1)],
-        'interactor1acctimenotes': [placeholder(1)],
-        'interactor1acctimeunit': [placeholder(1)],
-        'interactor1origtemp': [placeholder(1)],
-        'interactor1origtempnotes': [placeholder(1)],
-        'interactor1origtime': [placeholder(1)],
-        'interactor1origtimenotes': [placeholder(1)],
-        'interactor1origtimeunit': [placeholder(1)],
-        'interactor1equilibtimevalue': [placeholder(1)],
-        'interactor1equilibtimeunit': [placeholder(1)],
-        'interactor1size': [placeholder(1)],
-        'interactor1sizeunit': [placeholder(1)],
-        'interactor1sizetype': [placeholder(1)],
-        'interactor1sizesi': [placeholder(1)],
-        'interactor1sizeunitsi': [placeholder(1)],
-        'interactor1denvalue': [placeholder(1)],
-        'interactor1denunit': [placeholder(1)],
-        'interactor1dentypesi': [placeholder(1)],
-        'interactor1denvaluesi': [placeholder(1)],
-        'interactor1denunitsi': [placeholder(1)],
-        'interactor1massvaluesi': [placeholder(1)],
-        'interactor1massunitsi': [placeholder(1)],
-        'interactor2': [placeholder(1)],
-        'interactor2common': [placeholder(1)],
-        'interactor2kingdom': [placeholder(1)],
-        'interactor2phylum': [placeholder(1)],
-        'interactor2class': [placeholder(1)],
-        'interactor2order': [placeholder(1)],
-        'interactor2family': [placeholder(1)],
-        'interactor2genus': [placeholder(1)],
-        'interactor2species': [placeholder(1)],
-        'interactor2stage': [placeholder(1)],
-        'interactor2temp': [placeholder(1)],
-        'interactor2tempunit': [placeholder(1)],
-        'interactor2tempmethod': [placeholder(1)],
-        'interactor2growthtemp': [placeholder(1)],
-        'interactor2growthtempunit': [placeholder(1)],
-        'interactor2growthdur': [placeholder(1)],
-        'interactor2growthdurunit': [placeholder(1)],
-        'interactor2growthtype': [placeholder(1)],
-        'interactor2acc': [placeholder(1)],
-        'interactor2acctemp': [placeholder(1)],
-        'interactor2acctempnotes': [placeholder(1)],
-        'interactor2acctime': [placeholder(1)],
-        'interactor2acctimenotes': [placeholder(1)],
-        'interactor2acctimeunit': [placeholder(1)],
-        'interactor2origtemp': [placeholder(1)],
-        'interactor2origtempnotes': [placeholder(1)],
-        'interactor2origtime': [placeholder(1)],
-        'interactor2origtimenotes': [placeholder(1)],
-        'interactor2origtimeunit': [placeholder(1)],
-        'interactor2equilibtimevalue': [placeholder(1)],
-        'interactor2equilibtimeunit': [placeholder(1)],
-        'interactor2size': [placeholder(1)],
-        'interactor2sizeunit': [placeholder(1)],
-        'interactor2sizetype': [placeholder(1)],
-        'interactor2sizesi': [placeholder(1)],
-        'interactor2sizeunitsi': [placeholder(1)],
-        'interactor2denvalue': [placeholder(1)],
-        'interactor2denunit': [placeholder(1)],
-        'interactor2dentypesi': [placeholder(1)],
-        'interactor2denvaluesi': [placeholder(1)],
-        'interactor2denunitsi': [placeholder(1)],
-        'interactor2massvaluesi': [placeholder(1)],
-        'interactor2massunitsi': [placeholder(1)],
-        'physicalprocess': [placeholder(1)],
-        'physicalprocess_1': [placeholder(1)],
-        'physicalprocess_2': [placeholder(1)],
-        'citation': [placeholder(1)],
-        'doi': [placeholder(1)],
-        'published': [placeholder(1)],
-        'embargorelease': [placeholder(1)],
-        'figuretable': [placeholder(1)],
-        'notes': [placeholder(1)],
-        'submittedby': [placeholder(1)],
-        'contributoremail': [placeholder(1)]
+        'originalid': [IS_NOT_EMPTY(), IS_LENGTH(20)],
+        'originaltraitname': [IS_LENGTH(255)],
+        'originaltraitdef': [],
+        'standardisedtraitname': [IS_LENGTH(255)],
+        'standardisedtraitdef': [],
+        'originaltraitvalue': [IS_NOT_EMPTY(), IS_FLOAT_IN_RANGE(-1e100, 1e100)],
+        'originaltraitunit': [IS_NOT_EMPTY(), IS_LENGTH(255)],
+        'originalerrorpos': [IS_FLOAT_IN_RANGE(-1e100, 1e100)],
+        'originalerrorneg': [IS_FLOAT_IN_RANGE(-1e100, 1e100)],
+        'originalerrorunit': [IS_LENGTH(255)],
+        'standardisedtraitvalue': [IS_FLOAT_IN_RANGE(-1e100, 1e100)],
+        'standardisedtraitunit': [IS_LENGTH(255)],
+        'standardisederrorpos': [IS_FLOAT_IN_RANGE(-1e100, 1e100)],
+        'standardisederrorneg': [IS_FLOAT_IN_RANGE(-1e100, 1e100)],
+        'standardisederrorunit': [IS_LENGTH(255)],
+        'replicates': [IS_INT_IN_RANGE(1, 2**31)],
+        'habitat': [IS_LENGTH(20)],
+        'labfield': [IS_LENGTH(11)],
+        'arenavalue': [IS_FLOAT_IN_RANGE(-1e100, 1e100)],
+        'arenaunit': [IS_LENGTH(255)],
+        'arenavaluesi': [IS_FLOAT_IN_RANGE(-1e100, 1e100)],
+        'arenaunitsi': [IS_LENGTH(255)],
+        'ambienttemp': [IS_FLOAT_IN_RANGE(-1e100, 1e100)],
+        'ambienttempmethod': [IS_LENGTH(255)],
+        'ambienttempunit': [IS_LENGTH(255)],
+        'ambientlight': [IS_LENGTH(255)],
+        'ambientlightunit': [IS_LENGTH(255)],
+        'secondstressor': [IS_LENGTH(255)],
+        'secondstressordef': [IS_LENGTH(255)],
+        'secondstressorvalue': [IS_FLOAT_IN_RANGE(-1e100, 1e100)],
+        'secondstressorunit': [IS_LENGTH(255)],
+        'timestart': [IS_LENGTH(255)],
+        'timeend': [IS_LENGTH(255)],
+        'totalobstimevalue': [IS_FLOAT_IN_RANGE(-1e100, 1e100)],
+        'totalobstimeunit': [IS_LENGTH(255)],
+        'totalobstimevaluesi': [IS_FLOAT_IN_RANGE(-1e100, 1e100)],
+        'totalobstimeunitsi': [IS_LENGTH(255)],
+        'totalobstimenotes': [IS_LENGTH(255)],
+        'resrepvalue': [IS_INT_IN_RANGE(-2**31, 2**31)],
+        'resrepunit': [IS_LENGTH(255)],
+        'resrepvaluesi': [IS_FLOAT_IN_RANGE(-1e100, 1e100)],
+        'resrepunitsi': [IS_LENGTH(255)],
+        'location': [IS_NOT_EMPTY()],
+        'locationtype': [IS_LENGTH(255)],
+        'originallocationdate': [IS_LENGTH(255)],
+        'locationdate': [IS_DATE(format='%d/%m/%Y', error_message='must be DD/MM/YYYY!')],
+        'locationdateprecision': [IS_NOT_EMPTY(), IS_INT_IN_RANGE(0,6)],
+        'coordinatetype': [IS_LENGTH(255)],
+        'latitude': [IS_FLOAT_IN_RANGE(-1e100, 1e100)],
+        'longitude': [IS_FLOAT_IN_RANGE(-1e100, 1e100)],
+        'interactor1': [IS_LENGTH(255)],     #, Custom Validator, at least one filled:],
+        'interactor1common': [IS_LENGTH(255)],     #, Custom Validator, at least one filled:],
+        'interactor1wholepart': [IS_LENGTH(255)],
+        'interactor1wholeparttype': [IS_LENGTH(255)],
+        'interactor1number': [IS_LENGTH(255)],
+        'interactor1kingdom': [IS_LENGTH(50)],
+        'interactor1phylum': [IS_LENGTH(50)],
+        'interactor1class': [IS_LENGTH(50)],
+        'interactor1order': [IS_LENGTH(50)],
+        'interactor1family': [IS_LENGTH(50)],
+        'interactor1genus': [IS_LENGTH(50)],
+        'interactor1species': [IS_LENGTH(255)],
+        'interactor1stage': [IS_LENGTH(255)],
+        'interactor1temp': [IS_FLOAT_IN_RANGE(-1e100, 1e100)],
+        'interactor1tempunit': [IS_LENGTH(255)],
+        'interactor1tempmethod': [IS_LENGTH(255)],
+        'interactor1growthtemp': [IS_FLOAT_IN_RANGE(-1e100, 1e100)],
+        'interactor1growthtempunit': [IS_LENGTH(255)],
+        'interactor1growthdur': [IS_FLOAT_IN_RANGE(-1e100, 1e100)],
+        'interactor1growthdurunit': [IS_LENGTH(255)],
+        'interactor1growthtype': [IS_LENGTH(255)],
+        'interactor1acc': [IS_LENGTH(255)],
+        'interactor1acctemp': [IS_FLOAT_IN_RANGE(-1e100, 1e100)],
+        'interactor1acctempnotes': [IS_LENGTH(255)],
+        'interactor1acctime': [IS_FLOAT_IN_RANGE(-1e100, 1e100)],
+        'interactor1acctimenotes': [IS_LENGTH(255)],
+        'interactor1acctimeunit': [IS_LENGTH(255)],
+        'interactor1origtemp': [IS_FLOAT_IN_RANGE(-1e100, 1e100)],
+        'interactor1origtempnotes': [IS_LENGTH(255)],
+        'interactor1origtime': [IS_FLOAT_IN_RANGE(-1e100, 1e100)],
+        'interactor1origtimenotes': [IS_LENGTH(255)],
+        'interactor1origtimeunit': [IS_LENGTH(255)],
+        'interactor1equilibtimevalue': [IS_FLOAT_IN_RANGE(-1e100, 1e100)],
+        'interactor1equilibtimeunit': [IS_LENGTH(255)],
+        'interactor1size': [IS_FLOAT_IN_RANGE(-1e100, 1e100)],
+        'interactor1sizeunit': [IS_LENGTH(255)],
+        'interactor1sizetype': [IS_LENGTH(255)],
+        'interactor1sizesi': [IS_FLOAT_IN_RANGE(-1e100, 1e100)],
+        'interactor1sizeunitsi': [IS_LENGTH(255)],
+        'interactor1denvalue': [IS_FLOAT_IN_RANGE(-1e100, 1e100)],
+        'interactor1denunit': [IS_LENGTH(255)],
+        'interactor1dentypesi': [IS_LENGTH(255)],
+        'interactor1denvaluesi': [IS_FLOAT_IN_RANGE(-1e100, 1e100)],
+        'interactor1denunitsi': [IS_LENGTH(255)],
+        'interactor1massvaluesi': [IS_FLOAT_IN_RANGE(-1e100, 1e100)],
+        'interactor1massunitsi': [IS_LENGTH(255)],
+        'interactor2': [IS_LENGTH(255)],
+        'interactor2common': [IS_LENGTH(255)],
+        'interactor2kingdom': [IS_LENGTH(50)],
+        'interactor2phylum': [IS_LENGTH(50)],
+        'interactor2class': [IS_LENGTH(50)],
+        'interactor2order': [IS_LENGTH(50)],
+        'interactor2family': [IS_LENGTH(50)],
+        'interactor2genus': [IS_LENGTH(50)],
+        'interactor2species': [IS_LENGTH(255)],
+        'interactor2stage': [IS_LENGTH(255)],
+        'interactor2temp': [IS_FLOAT_IN_RANGE(-1e100, 1e100)],
+        'interactor2tempunit': [IS_LENGTH(255)],
+        'interactor2tempmethod': [IS_LENGTH(255)],
+        'interactor2growthtemp': [IS_FLOAT_IN_RANGE(-1e100, 1e100)],
+        'interactor2growthtempunit': [IS_LENGTH(255)],
+        'interactor2growthdur': [IS_FLOAT_IN_RANGE(-1e100, 1e100)],
+        'interactor2growthdurunit': [IS_LENGTH(255)],
+        'interactor2growthtype': [IS_LENGTH(255)],
+        'interactor2acc': [IS_LENGTH(255)],
+        'interactor2acctemp': [IS_FLOAT_IN_RANGE(-1e100, 1e100)],
+        'interactor2acctempnotes': [IS_LENGTH(255)],
+        'interactor2acctime': [IS_FLOAT_IN_RANGE(-1e100, 1e100)],
+        'interactor2acctimenotes': [IS_LENGTH(255)],
+        'interactor2acctimeunit': [IS_LENGTH(255)],
+        'interactor2origtemp': [IS_FLOAT_IN_RANGE(-1e100, 1e100)],
+        'interactor2origtempnotes': [IS_LENGTH(255)],
+        'interactor2origtime': [IS_FLOAT_IN_RANGE(-1e100, 1e100)],
+        'interactor2origtimenotes': [IS_LENGTH(255)],
+        'interactor2origtimeunit': [IS_LENGTH(255)],
+        'interactor2equilibtimevalue': [IS_FLOAT_IN_RANGE(-1e100, 1e100)],
+        'interactor2equilibtimeunit': [IS_LENGTH(255)],
+        'interactor2size': [IS_FLOAT_IN_RANGE(-1e100, 1e100)],
+        'interactor2sizeunit': [IS_LENGTH(255)],
+        'interactor2sizetype': [IS_LENGTH(255)],
+        'interactor2sizesi': [IS_FLOAT_IN_RANGE(-1e100, 1e100)],
+        'interactor2sizeunitsi': [IS_LENGTH(255)],
+        'interactor2denvalue': [IS_FLOAT_IN_RANGE(-1e100, 1e100)],
+        'interactor2denunit': [IS_LENGTH(255)],
+        'interactor2dentypesi': [IS_LENGTH(255)],
+        'interactor2denvaluesi': [IS_FLOAT_IN_RANGE(-1e100, 1e100)],
+        'interactor2denunitsi': [IS_LENGTH(255)],
+        'interactor2massvaluesi': [IS_FLOAT_IN_RANGE(-1e100, 1e100)],
+        'interactor2massunitsi': [IS_LENGTH(255)],
+        'physicalprocess': [IS_LENGTH(255)],
+        'physicalprocess_1': [IS_LENGTH(255)],
+        'physicalprocess_2': [IS_LENGTH(255)],
+        'citation': [IS_NOT_EMPTY(), IS_LENGTH(1500)],
+        'doi': [IS_LENGTH(255)],
+        'published': [IS_NOT_EMPTY(), IS_BOOL()],
+        'embargorelease': [IS_NOT_EMPTY(), IS_DATE(format='%d/%m/%Y', error_message='must be DD/MM/YYYY!')],
+        'figuretable': [IS_LENGTH(255)],
+        'notes': [IS_LENGTH(2055)],
+        'submittedby': [IS_NOT_EMPTY(), IS_LENGTH(255)],
+        'contributoremail': [IS_NOT_EMPTY(), IS_EMAIL(), IS_LENGTH(255)],
+    }
+
+    notnull_cols = {
+        "originalid",
+        "originaltraitvalue",
+        "originaltraitunit",
+        "location",
+        "locationdateprecision",
+        "citation",
+        "published",
+        "embargorelease",
+        "submittedby",
+        "contributoremail",
+    }
+
+    numericset = {
+        "originalerrorpos",
+        "originalerrorneg",
+        "standardisedtraitvalue",
+        "standardisederrorpos",
+        "standardisederrorneg",
+        "replicates",
+        "arenavalue",
+        "arenavaluesi",
+        "ambienttemp",
+        "secondstressorvalue",
+        "totalobstimevalue",
+        "totalobstimevaluesi",
+        "resrepvalue",
+        "resrepvaluesi",
+        "latitude",
+        "longitude",
+        "interactor1temp",
+        "interactor1growthtemp",
+        "interactor1growthdur",
+        "interactor1acctemp",
+        "interactor1acctime",
+        "interactor1origtemp",
+        "interactor1origtime",
+        "interactor1equilibtimevalue",
+        "interactor1size",
+        "interactor1sizesi",
+        "interactor1denvalue",
+        "interactor1denvaluesi",
+        "interactor1massvaluesi",
+        "interactor2temp",
+        "interactor2growthtemp",
+        "interactor2growthdur",
+        "interactor2acctemp",
+        "interactor2acctime",
+        "interactor2origtemp",
+        "interactor2origtime",
+        "interactor2equilibtimevalue",
+        "interactor2size",
+        "interactor2sizesi",
+        "interactor2denvalue",
+        "interactor2denvaluesi",
+        "interactor2massvaluesi",
     }
 
     failcounter = 0
     failed_columns = set()
     for column in rowdict.keys():
+        if column not in notnull_cols and rowdict[column] == "":
+            # Don't fail empty strings if they are not required columns
+            continue
         try:
             for v in validator_dict[column]:    # Get validator from validator list
                 if v(rowdict[column])[1]:           # If it fails...
                     failed_columns.add(column)   # Append to failed column set
                     failcounter += 1
                     # Write to log and report
-                    logger.info('Column "{}" failed validator "{}"'.format(column, v.__class__.__name__))
-                    buf.write('    Column "{}" failed validator "{}"\n'.format(column, v.__class__.__name__))
+                    logger.info('Column "{}" failed validator "{}, value:"{}"'.format(column, v.__class__.__name__, rowdict[column]))
+                    buf.write('    Column "{}" failed validator "{}, value:"{}"\n'.format(column, v.__class__.__name__, rowdict[column]))
                 else:
                     logger.debug('Column "{}" passed validator "{}"'.format(column, v.__class__.__name__))
 
@@ -256,6 +391,7 @@ def validate_vectraits_rowdict(rowdict, buf):
             # Write to log and report
             logger.info('Invalid column name: "{}"'.format(column))
             buf.write('    Invalid column name: "{}"\n'.format(column))
+    # Validate that either interactor1 or interactor1common is filled.
     return failed_columns, failcounter
 
 
@@ -343,11 +479,20 @@ def validate_vectraits(data, filename='test.csv'):
     report.write('        Errors: {}\n'.format(errcounter))
     report.write('  Failed lines: {}\n'.format(errlinecounter))
     report.write('  Time elapsed: {}\n'.format(time_elapsed))
-    report.write('{}\n'.format('-' * (17 + len(filename))))
-
+    report.write('{}\n\n'.format('-' * (17 + len(filename))))
+    report.write('  COLUMN REPORT  \n\n')
     logger.info(failed_dict)    # TODO: return this dict in the correct format.
     # TODO: convert this dict to a nice report and put into report buffer.
+    for x, y in failed_dict.iteritems():
+        if len(y) == 1:
+            report.write('"{}" failed on row: {}\n'.format(x, y))
+        else:
+            report.write('"{}" failed on rows: {}\n'.format(x, y))
+    report_str = report.getvalue()
     if not long_dataset:
-        logger.info(report.getvalue())
-    report.close()  # TODO: Just for now
-    return None
+        logger.info(report_str)
+    try:
+        report.close()  # TODO: Just for now
+    except ValueError:
+        pass
+    return report_str

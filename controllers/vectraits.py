@@ -40,6 +40,7 @@ def view_citations():
 
 
 def validate_test():
+    report = ""
     form = SQLFORM.factory(
         Field('csvfile', 'upload'), table_name="dataset_upload")
     if form.validate():
@@ -70,7 +71,7 @@ def validate_test():
             logger.debug("Header row length: {}".format(len(candidate[0])))
             logger.info("Verifying integrity of {}".format(origin_filename))
             logger.setLevel(logging.INFO)
-            vtfuncs.validate_vectraits(candidate, origin_filename)
+            report = vtfuncs.validate_vectraits(candidate, origin_filename)
             # logger.debug(IS_INT_IN_RANGE(minimum=0)(-1))
             # logger.info(IS_LENGTH(5)('1234567'))
 
@@ -88,4 +89,4 @@ def validate_test():
         response.flash = 'form accepted'
     elif form.errors:
         response.flash = 'form has errors'
-    return dict(form=form)
+    return dict(form=form, report=report)
