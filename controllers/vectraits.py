@@ -5,6 +5,11 @@ import vtfuncs
 logger = logging.getLogger("web2py.app.vbdp")
 
 
+def index():
+    rows = db(db.index_page_updates).select(orderby=~db.index_page_updates.created_on)
+    return locals()
+
+@auth.requires_login()
 def view_vectraits():
     # A simple demonstration of an interface to explore the published vectraits dataset.
     db2.maintable.uid.readable = False

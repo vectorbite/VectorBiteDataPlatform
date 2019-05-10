@@ -2,127 +2,175 @@
 
 
 <head>
-
     <style>
-h1 {
-    text-shadow: 1px 1px 1px black;
-}
+        h1 {
+            text-shadow: 1px 1px 1px black;
+        }
 
-p.outset {border-style: groove;}
+        p.outset {
+            border-style: groove;
+        }
 
-p {
-text-shadow: 1px 1px 1px black;
-    font-size: large;
-}
-hr {
-    display: block;
-    height: 1px;
-    border: 0;
-    border-top: 1px solid #ccc;
-    margin: 1em 0;
-    padding: 0;
-}
+        p {
+            text-shadow: 1px 1px 1px black;
+            font-size: large;
+        }
 
-       img {
-           size: auto;
-    opacity: .20;
+        hr {
+            display: block;
+            height: 1px;
+            border: 0;
+            border-top: 1px solid #ccc;
+            margin: 1em 0;
+            padding: 0;
+        }
+
+        img {
+            size: auto;
+            opacity: .20;
             width: 100%;
-    height: 10%;
+            height: 10%;
             margin-left: auto;
-    margin-right: auto;
+            margin-right: auto;
             margin-bottom: auto;
-           margin-top: auto;
+            margin-top: auto;
 
-    filter: alpha(opacity=50); /* For IE8 and earlier */
-}
+            filter: alpha(opacity=50); /* For IE8 and earlier */
+        }
 
         /* Container holding the image and the text */
-.container {
-    position: relative;
-    text-align: center;
-    color: white;
-}
+        .container {
+            position: relative;
+            text-align: center;
+            color: white;
+        }
 
-/* Bottom left text */
-.bottom-left {
-    position: absolute;
-    bottom: 8px;
-    left: 16px;
-}
+        /* Bottom left text */
+        .bottom-left {
+            position: absolute;
+            bottom: 8px;
+            left: 16px;
+        }
 
-/* Top left text */
-.top-left {
-    position: absolute;
-    top: 8px;
-    left: 16px;
-}
+        /* Top left text */
+        .top-left {
+            position: absolute;
+            top: 8px;
+            left: 16px;
+        }
 
-/* Top right text */
-.top-right {
-    position: absolute;
-    top: 8px;
-    right: 16px;
-}
+        /* Top right text */
+        .top-right {
+            position: absolute;
+            top: 8px;
+            right: 16px;
+        }
 
-/* Bottom right text */
-.bottom-right {
-    position: absolute;
-    bottom: 8px;
-    right: 16px;
-}
+        /* Bottom right text */
+        .bottom-right {
+            position: absolute;
+            bottom: 8px;
+            right: 16px;
+        }
 
-/* Centered text */
-.centered {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
+        /* Centered text */
+        .centered {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
 
-</style>
+        /* VB Base Box */
+        .vbbasebox {
+            width: 27.5vw;
+            border: 5px solid rgba(0,0,0,0.2);
+            -webkit-border-radius: 20px;
+            height: 200px;
+            color: rgba(0,0,0,0.6);
+            font-size: 4vw;
+            text-align: center;
+            line-height: 175px;
+            margin: 10px;
+            cursor: pointer;
+        }
+        .vbbasebox:active{
+            position: relative;
+            top: 1px;
+        }
+        .vbbasebox:hover{
+            border: 5px solid rgba(255,255,255,0.2);
+        }
+        .vd{
+            float:left;
+            background:#96c6dc;
+        }
+        .vd:hover{
+            background: #5DA3B9;
+        }
+        .vt{
+            float:right;
+            background:#ffe47a;
+        }
+        .vt:hover {
+            background: #dcc26d;
+        }
+
+    </style>
 
     <!-- Required meta tags always come first -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
 
-  </head>
+</head>
 
-  <body>
+<body>
+<div class="container">
+    <img src='{{=URL('static/images','VB_logo_black.svg')}}'/>
 
-
-    <div class="container">
-        <img src='{{=URL('static/images','VB_logo_black.svg')}}'/>
-
-  <div class="top-left">
-      <h1>Welcome! </h1>
-              <div>
-                 <p> Welcome to VectorBiTE's new Eco-informatics Data Platform.
-                  We are in the final stages of developing the two database named VecDyn and Vectraits, which is a global database for spatially- and temporally- explicit
-                  presence-absence and abundance data. We will be up and running around January 2018, from then you'll be able to download and submit data to the database.
-                  We will accept and distribute data for both animal and plant disease vectors.
-                  <!--For further information please visit the VecDyn database guidelines on {{=A('GitHub', _href='https://github.com/vectorbite/VectorBiteDataPlatform/blob/master/static/Documentation/VecDyn/VecDynUserGuide.md')}}.
+    <div class="top-left">
+        <h1>Welcome! </h1>
+        <div>
+            <p> Welcome to VectorByte's new Eco-informatics Data Platform.
+                We are in the final stages of developing the two database named VecDyn and Vectraits, which is a
+                global database for spatially- and temporally- explicit
+                presence-absence and abundance data. We will be up and running around January 2018, from then you'll
+                be able to download and submit data to the database.
+                We will accept and distribute data for both animal and plant disease vectors.
+                <!--For further information please visit the VecDyn database guidelines on {{=A('GitHub', _href='https://github.com/vectorbite/VectorBiteDataPlatform/blob/master/static/Documentation/VecDyn/VecDynUserGuide.md')}}.
                   Pages on our GitHub site provide details and instructions on accessing and submitting data.
                   You can also access data collection templates and examples that will help you prepare data for submission.-->
-                  The GitHub page also hosts the development code for the database and web application which has been built using {{=A('Web2py (v2.16.1)', _href='http://www.web2py.com/')}} ,  a python based web development framework.
-<br>
+                The GitHub page also hosts the development code for the database and web application which has been
+                built using {{=A('Web2py (v2.16.1)', _href='http://www.web2py.com/')}} , a python based web
+                development framework.
+                <br>
+            </p>
+        </div>
+        <hr/>
+        <p>
+            To go to the sub-site for a particular database, please click one of the buttons below!
+        </p>
+        <a href="vecdyn">
+            <div class="vbbasebox vd">
+                VecDyn
+            </div>
+        </a>
+        <a href="vectraits">
+            <div class="vbbasebox vt">
+                VecTraits
+            </div>
+        </a>
 
-</p>
+    </div>
+
+
 </div>
-<hr/>
-<div></div>
+<div class="bottom-left"></div>
+<div class="top-right"></div>
+<div class="bottom-right"></div>
+<div class="centered"></div>
 
-</div>
-
-
-
-  </div>
-      <div class="bottom-left"></div>
-  <div class="top-right"></div>
-  <div class="bottom-right"></div>
-  <div class="centered"></div>
-</div>
-
-<body/>
+</body>
 
 

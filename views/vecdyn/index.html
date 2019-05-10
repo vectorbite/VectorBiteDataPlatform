@@ -1,0 +1,42 @@
+{{extend 'vdlayout.html'}}
+<!--
+Colour Palette:
+#FFE47A
+#DCC26D
+#DFF2D8
+#B4B8AB
+#153243
+-->
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+</head>
+<body>
+    <div class="container">
+        <img src='{{=URL('static/images','VB_logo_black.svg')}}'/>
+
+        <div class="top-left">
+            <h1>Welcome to VecDyn!</h1>
+            <div>
+                <p>
+                    VecDyn is an addressable database of vector population dynamics, incorporating data from years of vector
+                    research.
+                    It is actively maintained by a team from Imperial College London as a part of the larger VectorByte
+                    RCN.
+                    <br><br>
+                    Please use the navigation bar above to find your way around VecDyn, or click the button below to
+                    start exploring the publicly-available data.
+                    <br>
+                <hr>
+                <a href="vecdyn_query_1/vecdyn_taxon_location_query.html">
+                    <div class="vbbasebox vd">
+                        Explore VecDyn
+                    </div>
+                </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
