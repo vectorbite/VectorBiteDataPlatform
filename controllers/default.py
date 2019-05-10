@@ -6,7 +6,7 @@ logger.setLevel(logging.DEBUG)
 
 
 # Index page text not yet implemented in the corresponding view
-@auth.requires_login()
+# @auth.requires_login()
 def index():
     rows = db(db.index_page_updates).select(orderby=~db.index_page_updates.created_on)
     return locals()
