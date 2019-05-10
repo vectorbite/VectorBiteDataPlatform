@@ -20,6 +20,10 @@ me = auth.user_id
 # Ignore_common_filters are applied so only the users who have created a dataset can access them
 # ----------------------------------------------------------------------------------------------------------------------
 
+def index():
+    rows = db(db.index_page_updates).select(orderby=~db.index_page_updates.created_on)
+    return locals()
+
 
 @auth.requires_membership('VectorbiteAdmin')
 def dataset_registration():

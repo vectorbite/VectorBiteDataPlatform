@@ -1,0 +1,148 @@
+:root {
+    --vt_lightcol: #fffba7;
+    --vt_darkcol: #FFE47A;
+    --vt_vdarkcol: #dcc26d;
+    --vt_offwhite: #DFF2D8;
+    --vt_grey: #B4B8AB;
+    --vt_offblack: #153243;
+
+    --vd_lightcol: #b0e7ff;
+    --vd_darkcol: #96c6dc;
+    --vd_offwhite: #DFF2D8;
+    --vd_grey: #605C4E;
+    --vd_offblack: #363020;
+}
+
+h1 {
+    color: var(--vd_offblack);
+}
+
+p.outset {
+    border-style: groove;
+}
+
+p {
+
+    font-size: large;
+    color: var(--vd_offblack);
+}
+
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 1em 0;
+    padding: 0;
+}
+
+a {
+    color: rgba(0,0,0,.5)
+}
+
+a:hover {
+    color: rgba(0,0,0,.7);
+    text-decoration: none;
+}
+
+img {
+    size: auto;
+    opacity: .025;
+    width: 100%;
+    height: 10%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: auto;
+    margin-top: auto;
+
+    filter: alpha(opacity=50); /* For IE8 and earlier */
+}
+
+body {
+    background: linear-gradient(70deg, #f7f7f7, #f7f7f7);
+}
+
+/* Container holding the image and the text */
+.container {
+    position: relative;
+    text-align: center;
+    color: white;
+}
+
+.bg-faded {
+    background: linear-gradient(70deg, var(--vd_darkcol), var(--vd_lightcol));
+}
+
+/* Bottom left text */
+.bottom-left {
+    position: absolute;
+    bottom: 8px;
+    left: 16px;
+}
+
+/* Top left text */
+.top-left {
+    position: absolute;
+    top: 8px;
+    left: 16px;
+}
+
+/* Top right text */
+.top-right {
+    position: absolute;
+    top: 8px;
+    right: 16px;
+}
+
+/* Bottom right text */
+.bottom-right {
+    position: absolute;
+    bottom: 8px;
+    right: 16px;
+}
+
+/* Centered text */
+.centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* VB Base Box */
+.vbbasebox {
+    width: 25vw;
+    border: 5px solid rgba(0, 0, 0, 0.2);
+    -webkit-border-radius: 20px;
+    height: 100px;
+    color: rgba(0, 0, 0, 0.6);
+    font-size: 2vw;
+    text-align: center;
+    line-height: 82.5px;
+    margin: 10px;
+    cursor: pointer;
+}
+
+.vbbasebox:active {
+    position: relative;
+    top: 1px;
+}
+
+.vbbasebox:hover {
+    border: 5px solid rgba(255, 255, 255, 0.2);
+}
+
+.vd {
+    margin: 0 auto;
+    background: var(--vd_darkcol);
+    color: var(--vd_offblack);
+    horiz-align: center;
+}
+
+.vd:hover {
+    background: #5DA3B9;
+}
+
+.web2py_grid thead th {
+    background-color: var(--vd_darkcol);
+}
