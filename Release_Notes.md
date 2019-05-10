@@ -1,6 +1,9 @@
 # VectorBiTE Data Platform Release Notes
-Current version: v0.1.0
+Current version: v0.2.0
 ## Release Notes
+
+## v0.2.0
+- Rethemed the entire site and reorganised to a subsite structure
 
 ## v0.1.1
 - Modified vectraits models to correctly handle integer data

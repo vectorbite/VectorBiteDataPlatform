@@ -367,3 +367,6 @@ db2.define_table('published_data',
                  Field('contributoremail', type='string', length=255),
                  Field('notes', type='string', length=2055),
                  migrate=migrate)
+
+# db2.define_table('dataset_upload',
+#                  Field('csvfile', 'upload', requires=IS_UPLOAD_FILENAME(extension='csv')), migrate=migrate)
