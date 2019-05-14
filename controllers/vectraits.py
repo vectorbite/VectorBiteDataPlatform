@@ -6,7 +6,14 @@ logger = logging.getLogger("web2py.app.vbdp")
 
 
 def index():
-    rows = db(db.index_page_updates).select(orderby=~db.index_page_updates.created_on)
+    # rows = db(db.index_page_updates).select(orderby=~db.index_page_updates.created_on)
+    rows = B(db2(db2.published_data).count())
+    taxa = B(db2(db2.taxonomy).count())
+    pubs = B(db2(db2.citation).count())
+    locs = B(db2(db2.studylocation).count())
+    return dict(rows=rows, taxa=taxa, pubs=pubs, locs=locs)
+
+
 def about():
     # rows = db(db.index_page_updates).select(orderby=~db.index_page_updates.created_on)
     return locals()
