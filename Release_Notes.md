@@ -1,6 +1,10 @@
 # VectorBiTE Data Platform Release Notes
-Current version: v0.2.0
+Current version: v0.2.1
 ## Release Notes
+
+## v0.2.1
+- Added about pages for all subsites
+- Added vital db statistics for VecTraits
 
 ## v0.2.0
 - Rethemed the entire site and reorganised to a subsite structure
