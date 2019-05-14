@@ -25,6 +25,11 @@ def index():
     return locals()
 
 
+def about():
+    # rows = db(db.index_page_updates).select(orderby=~db.index_page_updates.created_on)
+    return locals()
+
+
 @auth.requires_membership('VectorbiteAdmin')
 def dataset_registration():
     task_id = request.get_vars.task_id
