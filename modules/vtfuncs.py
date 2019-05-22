@@ -323,51 +323,6 @@ def validate_vectraits_rowdict(rowdict, buf):
         "contributoremail",
     }
 
-    numericset = {
-        "originalerrorpos",
-        "originalerrorneg",
-        "standardisedtraitvalue",
-        "standardisederrorpos",
-        "standardisederrorneg",
-        "replicates",
-        "arenavalue",
-        "arenavaluesi",
-        "ambienttemp",
-        "secondstressorvalue",
-        "totalobstimevalue",
-        "totalobstimevaluesi",
-        "resrepvalue",
-        "resrepvaluesi",
-        "latitude",
-        "longitude",
-        "interactor1temp",
-        "interactor1growthtemp",
-        "interactor1growthdur",
-        "interactor1acctemp",
-        "interactor1acctime",
-        "interactor1origtemp",
-        "interactor1origtime",
-        "interactor1equilibtimevalue",
-        "interactor1size",
-        "interactor1sizesi",
-        "interactor1denvalue",
-        "interactor1denvaluesi",
-        "interactor1massvaluesi",
-        "interactor2temp",
-        "interactor2growthtemp",
-        "interactor2growthdur",
-        "interactor2acctemp",
-        "interactor2acctime",
-        "interactor2origtemp",
-        "interactor2origtime",
-        "interactor2equilibtimevalue",
-        "interactor2size",
-        "interactor2sizesi",
-        "interactor2denvalue",
-        "interactor2denvaluesi",
-        "interactor2massvaluesi",
-    }
-
     failcounter = 0
     failed_columns = set()
     for column in rowdict.keys():
@@ -426,6 +381,7 @@ def validate_vectraits(data, filename='test.csv'):
 
     errcounter = 0
     errlinecounter = 0
+    failed = False
 
     # Validate header to make sure all columns are present, and reject if so.
 
@@ -443,7 +399,6 @@ def validate_vectraits(data, filename='test.csv'):
 
     # Validate rows against validators using validate_vectraits_rows
     for i, item in enumerate(output):
-        # TODO: if length of dataset is over 100, output to system log every 10% of progress...
         if long_dataset:
             if i in log_triggers.keys():
                 logger.info('Validating row {}/{} ({}%)...'.format(i + 1, len(output), log_triggers[i]))
@@ -495,4 +450,21 @@ def validate_vectraits(data, filename='test.csv'):
         report.close()  # TODO: Just for now
     except ValueError:
         pass
-    return report_str
+    if errcounter:
+        failed = True
+    return report_str, failed
+
+
+def upload_vectraits_dataset():
+    # Load csv
+    # Convert to pd df for processing
+    # Extract unique locations
+    # Extract unique Taxonomy entries
+    # Extract unique trait descriptions
+    # Extract contributor
+    # Extract citation
+    # Extract source info (incl. contrib & citation ids)
+    # Extract experimental conditions
+    # Make maintable (incl ids for all other tables)
+    # Upload to db
+    return True

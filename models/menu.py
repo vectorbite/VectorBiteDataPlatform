@@ -18,7 +18,8 @@ if request.controller == 'vectraits':
             (T('Database'), False, None, [
                 ('Submit', False, URL('vectraits', 'index')),   # TODO: change to submit link
                 ('Explore', False, URL('vectraits', 'view_vectraits')),
-                ('Validate', False, URL('vectraits', 'validate_test')),
+                ('Validate', False, URL('vectraits', 'validate_vectraits')),
+                # ('Download Template', False, URL('vectraits', 'vectraits_template')), # TODO: Uncomment when live
             ])
         )
     response.menu.append(('About VecTraits', False, URL('vectraits', 'about')))
