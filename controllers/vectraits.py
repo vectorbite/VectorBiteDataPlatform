@@ -6,7 +6,6 @@ logger = logging.getLogger("web2py.app.vbdp")
 
 
 def index():
-    # rows = db(db.index_page_updates).select(orderby=~db.index_page_updates.created_on)
     rows = B(db2(db2.published_data).count())
     taxa = B(db2(db2.taxonomy).count())
     pubs = B(db2(db2.citation).count())
@@ -15,7 +14,9 @@ def index():
 
 
 def about():
-    # rows = db(db.index_page_updates).select(orderby=~db.index_page_updates.created_on)
+    """
+    Controller for about page
+    """
     return locals()
 
 
@@ -25,7 +26,6 @@ def view_vectraits():
     db2.maintable.uid.readable = False
 
     grid = SQLFORM.smartgrid(db2.published_data,
-                             # linked_tables=['experimentalconditions', 'taxonomy', 'studylocation', 'sourceinfo', 'traitdescription'],
                              csv=True,
                              deletable=False,
                              create=False,
@@ -54,18 +54,20 @@ def view_citations():
     return dict(form=grid)
 
 
-def validate_test():
+def validate_vectraits():
     report = ""
+    failed = False
+    validated = False
     form = SQLFORM.factory(
-        Field('csvfile', 'upload'), table_name="dataset_upload")
+        Field('dataset_upload', 'upload'), table_name="dataset_upload")
     if form.validate():
-        origin_filename = request.vars.csvfile.filename
-        temp_filename = form.vars.csvfile
+        origin_filename = request.vars.dataset_upload.filename
+        temp_filename = form.vars.dataset_upload
         logger.info("Validating {}...".format(origin_filename))
         logger.debug("(stored at {})".format(temp_filename))
-        # Hacky method to open and read in whole file without actually using request.vars.csvfile.file.read()
+        # Hacky method to open and read in whole file without actually using request.vars.dataset_upload.file.read()
         # Don't know why that method was giving inconsistent results, but this seems to work.
-        with open(request.folder + "uploads/" + form.vars.csvfile) as candidate_src:
+        with open(request.folder + "uploads/" + form.vars.dataset_upload) as candidate_src:
             candidate_reader = csv.reader(candidate_src, quotechar='"')
             candidate = [x for x in candidate_reader]
         if len(candidate) < 1:
@@ -73,35 +75,113 @@ def validate_test():
                 "Uploaded file {} (stored at {}) does not contain any information".format(
                     origin_filename,
                     temp_filename))
-            # TODO: Throw error back to user
+            report = "Uploaded file {} does not contain any information".format(origin_filename)
+            failed = True
+            validated = True
         elif len(candidate) == 1:
             logger.warning(
                 "Uploaded file {} (stored at {}) does not contain both headers and values".format(
                     origin_filename,
                     temp_filename))
-            # TODO: Throw error back to user
+            report = "Uploaded file {} does not contain both headers and values".format(origin_filename)
+            failed = True
+            validated = True
         else:
             # Process
-            logger.debug("File length: {}".format(len(candidate) - 1))
+            candidate_len = len(candidate) - 1
+            logger.debug("File length: {}".format(candidate_len))
             logger.debug("Header row length: {}".format(len(candidate[0])))
             logger.info("Verifying integrity of {}".format(origin_filename))
             logger.setLevel(logging.INFO)
-            report = vtfuncs.validate_vectraits(candidate, origin_filename)
-            # logger.debug(IS_INT_IN_RANGE(minimum=0)(-1))
-            # logger.info(IS_LENGTH(5)('1234567'))
+            report, failed = vtfuncs.validate_vectraits(candidate, origin_filename)
+            validated = True
 
-        # Create class for a vectraits row
-        #     This can go in the modules folder
-        # Class can have validators for each variable within it
-        # Convert each entry in a row into a dict
-        #     Could do this by using the header row as keys
-        #     Might need to zip the header and current row together or something?
-        # pass keyword to class constructor as follows: vt_row = vt_row_class(**row)
-        # Could also do this as a list ie vt_row = vt_row_class(*row)
-        #     This would also not require the dictionary conversion step
-
-    if form.process().accepted:
-        response.flash = 'form accepted'
-    elif form.errors:
-        response.flash = 'form has errors'
+    # if form.process().accepted:
+    #     session.flash = 'form accepted'
+    # elif form.errors:
+    #     session.flash = 'form has errors'
+    if validated and not failed:   # If report has been processed but did not fail
+        session.flash = T("Dataset validated successfully.")
+        session.current_origin_filename = origin_filename
+        session.current_temp_filename = temp_filename
+        session.current_file_length = candidate_len
+        redirect(URL('vectraits', 'validation_successful'))
+    elif validated and failed:
+        import os
+        logger.debug("Validation failed, removing temp file {}".format(temp_filename))
+        try:
+            os.remove(os.path.join(request.folder, "uploads", temp_filename))
+        except OSError:
+            logger.exception("Temp file not present upon post-validation delete")
     return dict(form=form, report=report)
+
+
+def validation_successful():
+    origin_filename = None
+    temp_filename = None
+    origin_filename = session.current_origin_filename
+    temp_filename = session.current_temp_filename
+    file_length = session.current_file_length
+    if origin_filename and temp_filename:
+        return dict(filename=B(origin_filename), tempname=B(temp_filename), file_length=B(file_length))
+    else:
+        logger.info("No origin or temp file found. Redirecting.")
+        session.flash = CENTER(
+            "Dataset not verified due to internal error. Please try again or contact the site administrators.",
+            _style='color: red')
+        redirect(URL('vectraits', 'index'))
+
+
+@auth.requires_login()
+def submit_dataset_for_upload():
+    import os
+    import shutil
+    failed = False
+    # Move file
+    try:
+        shutil.copy(
+            os.path.join(request.folder, "uploads", session.current_temp_filename),
+            os.path.join(request.folder, "uploads", "validated", session.current_temp_filename)
+        )
+        logger.debug("Dataset moved to submission file: {} -> {}".format(
+            os.path.join(request.folder, "uploads", session.current_temp_filename),
+            os.path.join(request.folder, "uploads", "validated", session.current_temp_filename)))
+        os.remove(os.path.join(request.folder, "uploads", session.current_temp_filename))
+        logger.debug("Deleting temp file {} from uploads".format(session.current_temp_filename))
+
+    except IOError:
+        logger.exception("Temp file not present upon post-validation copy")
+        failed = True
+    logger.debug("Resetting session filenames to None")
+    # TODO: Don't actually want to do this resetting once dataset uploader is in place
+    session.current_origin_filename = None
+    session.current_temp_filename = None
+    session.current_file_length = None
+    if failed:
+        session.flash = CENTER("Dataset not submitted due to internal error. Please try again or contact the site administrators.", _style='color: red')
+    else:
+        session.flash = T("Dataset submitted for upload.")
+    redirect(URL('vectraits', 'index'))
+    return True
+
+
+def cancel_dataset_upload():
+    import os
+    logger.debug("Deleting temp file {}".format(session.current_temp_filename))
+    try:
+        os.remove(os.path.join(request.folder, "uploads", session.current_temp_filename))
+    except OSError:
+        logger.exception("Temp file not present upon post-validation delete")
+    logger.debug("Resetting session filenames to None")
+    session.current_origin_filename = None
+    session.current_temp_filename = None
+    session.current_file_length = None
+    session.flash = T("Dataset upload cancelled.")
+    redirect(URL('vectraits', 'index'))
+    return True
+
+
+def upload_vectraits():
+    report = ""
+    vtfuncs.upload_vectraits_dataset()
+    return dict(report=report)

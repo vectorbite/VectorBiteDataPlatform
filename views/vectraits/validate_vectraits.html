@@ -1,0 +1,13 @@
+{{extend 'vtlayout.html'}}
+
+<div style="background: linear-gradient(240deg, lightgrey, whitesmoke)" class="jumbotron">
+    <p>
+        <h2>Welcome to the VecTraits data validator.</h2>
+        Upload your csv file below and we will check to make sure it passes validation and provide a report detailing any validation failures.<br>
+        If your validation was successful you will be redirected to a page asking you to confirm whether you want to submit the dataset to the curators.
+    </p>
+    <br>
+    <br>
+    {{=form}}
+    <pre>{{=report}}</pre>
+</div>
