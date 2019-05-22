@@ -20,6 +20,13 @@ def about():
     return locals()
 
 
+def vectraits_template():
+    """
+    Controller to allow VecTraits template download
+    """
+    return locals()
+
+
 @auth.requires_login()
 def view_vectraits():
     # A simple demonstration of an interface to explore the published vectraits dataset.
