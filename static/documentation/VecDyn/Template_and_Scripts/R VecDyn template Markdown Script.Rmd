@@ -11,8 +11,8 @@ output: html_document
 ```{r}
 publication_information_template <-data.frame(title=character(), 
                  collection_author=character(),
-                 dataset_doi=character(),
-                 publication_doi = character(),
+                 dataset_citation=character(),
+                 publication_citation = character(),
                  description = character(),
                  url = character(),
                  contact_name=character(),

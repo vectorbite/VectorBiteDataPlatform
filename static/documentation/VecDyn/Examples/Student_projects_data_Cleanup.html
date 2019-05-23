@@ -244,8 +244,8 @@ $(document).ready(function () {
 <p>You can use this data frame as a guide to help you convert your dataset to the vecdyn format. You can either import data into this data frame or rename the field names of the dataset you are processing. However, make sure all the colums are in the correct as the two data frames below, even if you cannot fill certain fields.</p>
 <pre class="r"><code>publication_information_template  &lt;-data.frame(title=character(), 
                  collection_author=character(),
-                 dataset_doi=character(),
-                 publication_doi = character(),
+                 dataset_citation=character(),
+                 publication_citation = character(),
                  description = character(),
                  url = character(),
                  contact_name=character(),
@@ -331,7 +331,7 @@ $(document).ready(function () {
 <td align="center">Publication Information</td>
 </tr>
 <tr class="odd">
-<td>dataset_doi</td>
+<td>dataset_citation</td>
 <td>No</td>
 <td>String</td>
 <td>Digital Object Identifier (DOI) of the the dataset</td>
@@ -339,7 +339,7 @@ $(document).ready(function () {
 <td align="center">Publication Information</td>
 </tr>
 <tr class="even">
-<td>publication_doi</td>
+<td>publication_citation</td>
 <td>No</td>
 <td>String</td>
 <td>Second Digital Object Identifier (DOI)</td>
