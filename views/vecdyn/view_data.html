@@ -31,7 +31,7 @@
 
 <div class="btn-group.btn-group-justified" role="group" aria-label="...">
             {{=A('Back to Data Collections Page',_href=URL('dataset_registrations'),_class="btn btn-primary")}}
-            {{=A('Upload Data',_href=URL('vecdyn_data_uploader','vecdyn_importer',vars={'publication_info_id':publication_info_id}),_class="btn btn-primary")}}
+            {{=A('Upload Data',_href=URL('vecdyn','vecdyn_csv_uploader',vars={'publication_info_id':publication_info_id}),_class="btn btn-primary")}}
 
     <div class="btn-group">
     <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
@@ -56,7 +56,19 @@
 
 
 
-                                        <h5><center> {{for row in publication_info_query:}} <center>Dataset: {{=row.title}}</center> {{pass}} </center> </h5>
+                                        <h3><center> {{for row in publication_info_query:}} <center>Dataset: {{=row.title}}</center> {{pass}} </center> </h3>
+
+<br>
+
+
+
+
+               <dl>
+  <p><strong>Dataset stats - </strong>  Total observations in this dataset: {{=observations}}; Total taxonomic entries in this dataset: {{=taxon_entries}}; Total regions in this dataset: {{=regions}}</p>
+      <p><strong>Number of entries left to standardise - </strong> Taxonomic: {{=count}}; Regions: {{=count2}} </p>
+<p><strong>Dataset status:</strong> {{=data_set_status.data_rights}} </p>
+
+
                <div class="pagination">
     {{=A('View Standardised',_href=URL('vecdyn','view_data',vars={'publication_info_id':publication_info_id}),_class="active")}}
   {{=A('View Un-standardised',_href=URL('vecdyn','view_unstandardised_data',vars={'publication_info_id':publication_info_id}))}}
@@ -84,11 +96,11 @@
       </tr>
       <tr>
         <td>Dataset DOI: </td>
-        <td>{{=row.dataset_doi}}</td>
+        <td>{{=row.dataset_citation}}</td>
       </tr>
       <tr>
         <td>Publication DOI: </td>
-        <td>{{=row.publication_doi}}</td>
+        <td>{{=row.publication_citation}}</td>
       </tr>
       <tr>
         <td>Description: </td>
@@ -138,6 +150,7 @@
    </div>
        </div>
 
+                   <div>
                {{if count == 0 | count2 == 0:}}
 
             <div class="container-fluid">
@@ -170,22 +183,14 @@
 
 
       <hr>
+</div>
 
+{{=BEAUTIFY(form)}}
 
 </div>
+
                 <br>
-                <div>
-                     {{if (count < 1) | (count2 < 1):}}
-                      {{=BEAUTIFY(form)}}
-                     {{else:}}
-                    {{pass}}
+
+
+
                 </div>
-
-             </div>
-
-
-
-
-
-  </div>
-
