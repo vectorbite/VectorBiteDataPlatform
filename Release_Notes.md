@@ -1,6 +1,10 @@
 # VectorBiTE Data Platform Release Notes
-Current version: v0.2.2
+Current version: v0.3.0
 ## Release Notes
+
+## v0.3.0
+- Moved vd data submission to scheduler
+- Refactored vecdyn to one controller
 
 ## v0.2.2
 - Added vectraits validation -> submission workflow
