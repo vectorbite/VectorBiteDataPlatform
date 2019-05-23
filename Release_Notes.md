@@ -1,9 +1,12 @@
 # VectorBiTE Data Platform Release Notes
-Current version: v0.3.0
+Current version: v0.3.1
 ## Release Notes
 
+## v0.3.1
+- Fixed VecDyn index page button
+
 ## v0.3.0
-- Moved vd data submission to scheduler
+- Moved VecDyn data submission to scheduler
 - Refactored vecdyn to one controller
 
 ## v0.2.2
