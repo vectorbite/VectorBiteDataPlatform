@@ -67,8 +67,8 @@ You can use this data frame as a guide to help you convert your dataset to the v
 ```{r}
 publication_information_template  <-data.frame(title=character(), 
                  collection_author=character(),
-                 dataset_doi=character(),
-                 publication_doi = character(),
+                 dataset_citation=character(),
+                 publication_citation = character(),
                  description = character(),
                  url = character(),
                  contact_name=character(),
@@ -131,8 +131,8 @@ Meta-data entered into this table should be entered into the VectorBiTE web app 
 | --------------------- | ------------ | ----------- | ------------------------------------------------------------ | ------------------------------------------------------------ | :---------------------: |
 | title                 | Yes          | String      | Short title identifying the data set                         | E.g. “Mosquito Surveillance in Iowa”                         | Publication Information |
 | collection_author     | Yes          | String      | Name of collection author                                    | E.g. name of a government authority, university department or individual researcher. | Publication Information |
-| dataset_doi    | No           | String      | Digital Object Identifier (DOI) of the the dataset           | If the data set was already published                        | Publication Information |
-| publication_doi    | No           | String      | Second Digital Object Identifier (DOI)                       | If connected to a published article                          | Publication Information |
+| dataset_citation    | No           | String      | Digital Object Identifier (DOI) of the the dataset           | If the data set was already published                        | Publication Information |
+| publication_citation    | No           | String      | Second Digital Object Identifier (DOI)                       | If connected to a published article                          | Publication Information |
 | description           | Yes          | String      | A short description about the dataset and the study  objectives | E.g. ‘Long term municipal surveillance of West Nile vector population in Athens, Greece (2000-2010)” | Publication Information |
 | url | No | String (URL) | web link to dataset source |  |  |
 | contact_name          | Yes          | String      | Name of person that may be contacted with inquiries about the data | E.g. name  of the person who may be contacted with enquiries about the dataset. | Publication Information |
