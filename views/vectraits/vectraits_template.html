@@ -1,0 +1,21 @@
+{{extend 'vtlayout.html'}}
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+</head>
+<body>
+    <div class="container">
+        <img src='{{=URL('static/images','VB_logo_black.svg')}}'/>
+
+        <div class="top-center">
+            <h1>VecTraits Template</h1>
+            <div>
+                <p>
+                    Click {{=A('here', _href=URL('static/templates', 'vectraits_template.csv'))}} to download the latest vectraits template.
+                </p>
+            </div>
+        </div>
+    </div>
+</body>

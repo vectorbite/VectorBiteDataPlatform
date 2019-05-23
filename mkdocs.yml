@@ -1,0 +1,4 @@
+site_name: VectorBite Data Platform
+docs_dir: static/docs
+site_dir: static/site
+theme: readthedocs

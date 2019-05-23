@@ -1,6 +1,10 @@
 # VectorBiTE Data Platform Release Notes
-Current version: v0.2.1
+Current version: v0.2.2
 ## Release Notes
+
+## v0.2.2
+- Added vectraits validation -> submission workflow
+- Added skeleton for automatic documentation via readthedocs
 
 ## v0.2.1
 - Added about pages for all subsites
