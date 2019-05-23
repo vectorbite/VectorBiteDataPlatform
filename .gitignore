@@ -9,4 +9,4 @@ private/
 .idea/
 databases.zip
 *.Rhistory
-
+static/site/

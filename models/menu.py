@@ -23,14 +23,14 @@ if request.controller == 'vectraits':
             ])
         )
     response.menu.append(('About VecTraits', False, URL('vectraits', 'about')))
-elif request.controller in ('vecdyn', 'vecdyn_data_uploader', 'vecdyn_query_1', 'vecdyn_query_2'):
+elif request.controller == 'vecdyn':
     # VD-specific navbar
     response.menu.append(('VecDyn', False, URL('vecdyn', 'index')))
     if auth.is_logged_in():
         response.menu.append(
             (T('Database'), False, None, [
                 ('Submit', False, URL('default', 'submit_vecdyn_data')),  # TODO: move to vecdyn controller
-                ('Explore', False, URL('vecdyn_query_1', 'vecdyn_taxon_location_query')),
+                ('Explore', False, URL('vecdyn', 'vecdyn_taxon_location_query')),
             ])
         )
     response.menu.append(('About VecDyn', False, URL('vecdyn', 'about')))
