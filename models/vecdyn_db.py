@@ -8,6 +8,7 @@ from gluon.tools import prettydate
 week = datetime.timedelta(days=7)
 
 
+
 db.define_table('collection_author',
     Field('name', 'string', notnull=True, unique=True),
     Field('description', 'text'),
@@ -61,6 +62,8 @@ db.define_table('publication_info',
                 Field('collection_author',db.collection_author, requires=IS_EMPTY_OR(IS_IN_DB(db, 'collection_author.id', 'collection_author.name'))),
                 auth.signature)
                 #format='%(id)s')
+
+                #  TODO publications_status to above table
 
                 # TODO but specific place for project reference if any
 
