@@ -1,6 +1,12 @@
 # VectorBiTE Data Platform Release Notes
-Current version: v0.3.1
+Current version: v0.3.2
 ## Release Notes
+
+## v0.3.2
+- Fixed VecDyn index page links, text updates. 
+- Moved submit vecdyn data to vecdyn controller. 
+- Added key database statistics to vecdyn index & admin pages. 
+
 
 ## v0.3.1
 - Fixed VecDyn index page button
