@@ -65,8 +65,8 @@ def vecdyn_bulk_importer():
                 # 'dict(zip' creates a dictionary from three lists i.e. field names and one data row from the csv
                 pubinfo = dict(zip(('title', 'dataset_citation', 'publication_citation',
                                   'description', 'url', 'contact_name', 'contact_affiliation',
-                                  'email', 'orcid', 'dataset_license'),
-                                 row[:10]))
+                                  'email', 'orcid', 'dataset_license', 'project_identifier', 'publication_status'),
+                                 row[:12]))
 
                 # check to see if there is a collection author name in the db.collection_author table, if not insert it
                 # if pubinfo.collection_author != None:
@@ -80,7 +80,7 @@ def vecdyn_bulk_importer():
                 study = dict(zip(('taxon', 'location_description', 'study_collection_area', 'geo_datum',
                                   'gps_obfuscation_info', 'species_id_method', 'study_design', 'sampling_strategy',
                                   'sampling_method', 'sampling_protocol', 'measurement_unit', 'value_transform'),
-                                 row[10:22]))
+                                 row[12:24]))
 
                 # Check for a match in the db against the 'study' dict
                 record_2 = db.study_meta_data(**study)
@@ -89,7 +89,7 @@ def vecdyn_bulk_importer():
                                     'sample_end_date', 'sample_end_time', 'sample_value', 'sample_sex',
                                     'sample_stage', 'sample_location', 'sample_collection_area', 'sample_lat_dd',
                                     'sample_long_dd', 'sample_environment', 'additional_location_info',
-                                    'additional_sample_info', 'sample_name'), row[22:38]))
+                                    'additional_sample_info', 'sample_name'), row[24:40]))
                 time_series_data = db.time_series_data.insert(study_meta_data_id=study_meta_data_id, publication_info_id=publication_info_id, **samples)
 
 
