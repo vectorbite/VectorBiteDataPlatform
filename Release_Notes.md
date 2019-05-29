@@ -1,6 +1,9 @@
 # VectorBiTE Data Platform Release Notes
-Current version: v0.3.2
+Current version: v0.3.3
 ## Release Notes
+
+## v0.3.3
+- Added two new fields to vecdyn publication info db.
 
 ## v0.3.2
 - Fixed VecDyn index page links, text updates. 
