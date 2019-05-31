@@ -12,6 +12,12 @@ def index():
     return locals()
 
 
+def about_us():
+    """
+    Controller for about page
+    """
+    return locals()
+
 # Used to indicated if specific databases have been set up by a specific user
 # (can used to delete dor edit database entries)
 me = auth.user_id
