@@ -1,9 +1,13 @@
 ## Release Notes
-Current version: **0.3.3**
+Current version: **0.3.4**
 
 ---
 
 ### 0.3
+#### 0.3.4
+- Moved documentation in preparation for readthedocs
+- Added new VecTraits template
+
 #### 0.3.3
 - Added two new fields to vecdyn publication info db.
 
