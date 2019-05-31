@@ -10,3 +10,4 @@ private/
 databases.zip
 *.Rhistory
 static/site/
+notebooks/
