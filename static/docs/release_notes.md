@@ -1,9 +1,12 @@
 ## Release Notes
-Current version: **0.3.4**
+Current version: **0.3.5**
 
 ---
 
 ### 0.3
+#### 0.3.5
+- Fixed "Explore Vectraits" button
+
 #### 0.3.4
 - Moved documentation in preparation for readthedocs
 - Added new VecTraits template
