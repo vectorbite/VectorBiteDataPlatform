@@ -13,6 +13,7 @@ from cStringIO import StringIO
 from gluon.validators import *
 import datetime
 from distutils.util import strtobool
+import csv
 moduledebug = False
 
 if moduledebug:
@@ -455,10 +456,22 @@ def validate_vectraits(data, filename='test.csv'):
     return report_str, failed
 
 
-def upload_vectraits_dataset():
+def upload_vectraits_dataset(csvpath):
+    logger.info("Starting data upload from {}".format(csvpath))
+    import pandas as pd
+
     # Load csv
-    # Convert to pd df for processing
+    logger.debug("Opening data file")
+    try:
+        datafile = pd.read_csv(csvpath)
+    except IOError:
+        logger.exception("Error opening data file")
+        return False
+
     # Extract unique locations
+    logger.info("Extracting unique locations")
+
+
     # Extract unique Taxonomy entries
     # Extract unique trait descriptions
     # Extract contributor
