@@ -6,16 +6,13 @@
         h1 {
             text-shadow: 1px 1px 1px black;
         }
-
         p.outset {
             border-style: groove;
         }
-
         p {
             text-shadow: 1px 1px 1px black;
             font-size: large;
         }
-
         hr {
             display: block;
             height: 1px;
@@ -24,7 +21,6 @@
             margin: 1em 0;
             padding: 0;
         }
-
         img {
             size: auto;
             opacity: .20;
@@ -34,45 +30,38 @@
             margin-right: auto;
             margin-bottom: auto;
             margin-top: auto;
-
             filter: alpha(opacity=50); /* For IE8 and earlier */
         }
-
         /* Container holding the image and the text */
         .container {
             position: relative;
             text-align: center;
             color: white;
         }
-
         /* Bottom left text */
         .bottom-left {
             position: absolute;
             bottom: 8px;
             left: 16px;
         }
-
         /* Top left text */
         .top-left {
             position: absolute;
             top: 8px;
             left: 16px;
         }
-
         /* Top right text */
         .top-right {
             position: absolute;
             top: 8px;
             right: 16px;
         }
-
         /* Bottom right text */
         .bottom-right {
             position: absolute;
             bottom: 8px;
             right: 16px;
         }
-
         /* Centered text */
         .centered {
             position: absolute;
@@ -80,7 +69,6 @@
             left: 50%;
             transform: translate(-50%, -50%);
         }
-
         /* VB Base Box */
         .vbbasebox {
             width: 27.5vw;
@@ -115,7 +103,6 @@
         .vt:hover {
             background: #dcc26d;
         }
-
     </style>
 
     <!-- Required meta tags always come first -->
@@ -132,31 +119,39 @@
     <div class="top-left">
         <h1>Welcome! </h1>
         <div>
-            <p> Welcome to VectorByte's new Eco-informatics Data Platform.
-                We are in the final stages of developing the two database named VecDyn and Vectraits, which is a
-                global database for spatially- and temporally- explicit
-                presence-absence and abundance data. We will be up and running around January 2018, from then you'll
-                be able to download and submit data to the database.
-                We will accept and distribute data for both animal and plant disease vectors.
-                <!--For further information please visit the VecDyn database guidelines on {{=A('GitHub', _href='https://github.com/vectorbite/VectorBiteDataPlatform/blob/master/static/Documentation/VecDyn/VecDynUserGuide.md')}}.
-                  Pages on our GitHub site provide details and instructions on accessing and submitting data.
-                  You can also access data collection templates and examples that will help you prepare data for submission.-->
-                The GitHub page also hosts the development code for the database and web application which has been
-                built using {{=A('Web2py (v2.16.1)', _href='http://www.web2py.com/')}} , a python based web
-                development framework.
-                <br>
+            <p> Welcome to VectorBiTE's Eco-informatics Data Platform, brought to you by the Vector Behaviour in
+                Transmission Ecology Research Coordination Network (VectorBiTE RCN).
+<br><br>
+                VectorBiTE RCN seeks to build a collaborative network of researchers working on VBDs and to provide them with
+                tools to better understand and explore how variation in vector behaviour and life history drive
+                transmission dynamics. To help the network achieve this, we have been busy developing the VectorBite
+                Data Platform web application, which consists of two databases, VecDyn and VecTraits, and a range of
+                features which will help users explore, download and submit data-sets.
+                <br><br>
+                The VecDyn database specialises in capturing population and presence/absence data for a range of plant and animal disease vectors. The VecTraits database focusses on capturing trait (including behaviour and life history) variation data.
+For further information about the research network please visit our main website vectorbite.org.
+
+                <br><br>This site provides
+                instructions on how to become a member of the research network and also provides info on our events and developments regarding work by members of the network.
+Over the coming weeks we will be gradually updating this website and providing access to new data-sets.
+                For further information on VecDyn please visit the VecDyn database guidelines on GitHub.
+                Pages on our GitHub site provide details and instructions on accessing and submitting data.
+                You can also access data collection templates and examples that will help you prepare data for
+                submission.--> The GitHub page also hosts the development code for the database and web application
+                which has been built using Web2py (v2.16.1) , a python based web development framework.
+                <br><br>
             </p>
         </div>
         <hr/>
         <p>
             To go to the sub-site for a particular database, please click one of the buttons below!
         </p>
-        <a href="vecdyn">
+        <a href="{{=URL('vecdyn','index')}}">
             <div class="vbbasebox vd">
                 VecDyn
             </div>
         </a>
-        <a href="vectraits">
+        <a href="{{=URL('vectraits','index')}}">
             <div class="vbbasebox vt">
                 VecTraits
             </div>

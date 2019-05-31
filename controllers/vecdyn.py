@@ -8,8 +8,29 @@ me = auth.user_id
 # ----------------------------------------------------------------------------------------------------------------------
 
 def index():
-    rows = db(db.index_page_updates).select(orderby=~db.index_page_updates.created_on)
-    return locals()
+    dsets = db(db.publication_info).count()
+    obs =  db(db.time_series_data).count()
+    taxa = db(db.study_meta_data.taxon).select(distinct=db.study_meta_data.taxon)
+    taxa = len(taxa)
+    countries = db(db.study_meta_data.geo_id == db.gaul_admin_layers.id).select(
+        distinct=db.gaul_admin_layers.adm0_name)
+    countries = len(countries)
+    regions = db(db.study_meta_data.geo_id == db.gaul_admin_layers.id).select(
+        distinct=db.gaul_admin_layers.adm1_name)
+    regions = len(regions)
+    counties = db(db.study_meta_data.geo_id == db.gaul_admin_layers.id).select(
+        distinct=db.gaul_admin_layers.adm2_name)
+    counties = len(counties)
+    trap_locs = {}
+    trap_locs = db(db.time_series_data).select(db.time_series_data.sample_lat_dd, db.time_series_data.sample_long_dd)
+    coords = []
+    for i in trap_locs:
+        b = i.sample_lat_dd + ', ' + i.sample_long_dd
+        if b not in coords:
+            coords.append(b)
+    coords = len(coords)
+    return dict(dsets=dsets,obs=obs,taxa=taxa,countries=countries,regions=regions,counties=counties,coords=coords)
+
 
 
 def about():
@@ -41,6 +62,60 @@ def vecdyn_csv_uploader():
         redirect(URL("vecdyn", "view_data", vars={'publication_info_id': publication_info_id}))
     return locals()
 
+
+# The following function imports a vecdyn csv
+@auth.requires_membership('VectorbiteAdmin')
+def vecdyn_csv_bulk_uploader():
+    db.data_set_bulk_upload.status.default = 'pending'
+    db.data_set_bulk_upload.readable = False
+    response.flash = 'Now upload your data set, make sure this is in csv format'
+    # Get the publicaton infor id from the previous page
+    form = SQLFORM(db.data_set_bulk_upload, comments=False, fields=['csvfile'],
+                   labels={'csvfile': 'Click to search and select a file:'})
+    if form.process().accepted:
+        response.flash = 'Thanks data submitted for upload, you will recieve an email once data has been uploaded into the db'
+        redirect(URL("vecdyn", "dataset_registrations"))
+    return locals()
+
+
+@auth.requires_membership('VectorbiteAdmin')
+def submit_vecdyn_data():
+    """function set up to Submit vecdyn  data through the website"""
+    db.task.task_type.default = 'vecdyn data submission'
+    db.task.task_type.readable = False
+    db.task.task_type.writable = False
+    db.task.status.readable = False
+    db.task.status.writable = False
+    db.task.assigned_to.writable = False
+    db.task.assigned_to.readable = False
+    db.task.deadline.writable = False
+    db.task.deadline.readable = False
+    db.task.file.requires = IS_UPLOAD_FILENAME(extension='csv')
+    add_option_2 = SelectOrAdd(form_title="Add new collection author",
+                               controller="default",
+                               function="add_collection_author",
+                               button_text="Add New")
+    # assign widget to field
+    db.task.collection_author.widget = add_option.widget
+    form = SQLFORM(db.task, labels={'task_type': 'Data set category'}).process()
+
+    # Here we would like to know if the DB is written to, and also whether people are having problems with the form
+    # (Hence logging on errors)
+    if form.accepted:
+        logger.info("VD dataset submitted: task ID {} - {}".format(form.vars["id"], form.vars["title"]))
+        redirect(URL('index'))
+    elif form.errors:
+        logger.debug("VD data submission errors: {}".format(len(form.errors)))
+        logger.debug("in the following fields: {}".format(form.errors.keys()))
+
+        # response.flash = CENTER(B('Problems with the form in the following fields: {}'
+        #                           .format(form.errors.keys())), _style='color: red')
+    else:
+        response.flash = 'please fill out the form in full and attach a csv file'
+
+    response.files.append(URL('static', 'jquery-ui-1.12.1/jquery-ui.js'))
+    response.files.append(URL('static', 'jquery-ui-1.12.1/jquery-ui.theme.css'))
+    return locals()
 
 
 @auth.requires_membership('VectorbiteAdmin')

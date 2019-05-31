@@ -8,6 +8,7 @@ from gluon.tools import prettydate
 week = datetime.timedelta(days=7)
 
 
+
 db.define_table('collection_author',
     Field('name', 'string', notnull=True, unique=True),
     Field('description', 'text'),
@@ -54,15 +55,15 @@ db.define_table('publication_info',
                 Field('email', requires=IS_EMPTY_OR(IS_EMAIL())),
                 Field('orcid', type='string', comment = 'Enter for name of main contact, ORCID is a digital identifier which provides researchers with a unique ID, see www.orcid.org'),
                 Field('dataset_license', type='string', comment = 'e.g. Creative Commons license CC0 “No Rights Reserved”'),
+                Field('project_identifier', type='string', comment = 'If linked to a special project identifier'),
+                Field('publication_status', type='string', comment = 'state the publication status e.g. submitted, not published, published'),
                 Field('data_rights', requires=IS_IN_SET(DATARIGHTS), default=DATARIGHTS[2]),
                 Field('embargo_release_date', type ='date', requires=IS_EMPTY_OR(IS_DATE()), comment = 'If dataset is under embargo for a period of time please add its release date'),
                 Field('data_set_type', requires=IS_IN_SET(DATATYPE), default=DATATYPE[0]),
-                Field('project_identifier', type='string', comment = 'If linked to a special project identifier'),
                 Field('collection_author',db.collection_author, requires=IS_EMPTY_OR(IS_IN_DB(db, 'collection_author.id', 'collection_author.name'))),
                 auth.signature)
                 #format='%(id)s')
 
-                # TODO but specific place for project reference if any
 
 
 '''the following code updates the DATARIGHTS status,  once the  embargo date is reached it sets the dataset to open'''

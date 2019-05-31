@@ -23,17 +23,18 @@ if request.controller == 'vectraits':
             ])
         )
     response.menu.append(('About VecTraits', False, URL('vectraits', 'about')))
+
+
 elif request.controller == 'vecdyn':
     # VD-specific navbar
-    response.menu.append(('VecDyn', False, URL('vecdyn', 'index')))
+    #response.menu.append(('VecDyn', False, URL('vecdyn', 'index')))
     if auth.is_logged_in():
         response.menu.append(
             (T('Database'), False, None, [
-                ('Submit', False, URL('default', 'submit_vecdyn_data')),  # TODO: move to vecdyn controller
-                ('Explore', False, URL('vecdyn', 'vecdyn_taxon_location_query')),
+                ('Submit vecdyn data', False, URL('vecdyn', 'submit_vecdyn_data')),  # TODO: move to vecdyn controller
+                ('Explore vecdyn datasets', False, URL('vecdyn', 'vecdyn_taxon_location_query')),
             ])
         )
-    response.menu.append(('About VecDyn', False, URL('vecdyn', 'about')))
 else:
     # Default/all else navbar
     response.menu.extend([
@@ -56,18 +57,6 @@ if auth.has_membership('VectorbiteAdmin'):
         ('Task Manager', False, URL('default', 'tasks')),
         ('Group Membership', False, URL('default', 'group_membership'))]))
 
-# TODO: Work out whether the below is still needed
-#if auth.has_membership('VectorbiteManagers'):
- #   response.menu.append((T('Management'), False, None,[
-                #('Manage Collections', False, URL('vecdyn', 'manage_collections')),
-                #('Register New Data Collection', False, URL('vecdyn', 'user_dataset_registration')),
-  #              ('Messages', False, URL('default', 'messages')),
-   #             ('Task Manager', False, URL('default', 'tasks'))]))
-                #('Manage db files & docs', False, URL('default','manage_db_documents')),
-                #('Manage index page updates', False, URL('default','manage_index_page_updates'))]))
-
-
-##### will add an ecological informatics working group area - i.e. links to git hub etc,  - community group
 
 
 # ----------------------------------------------------------------------------------------------------------------------
