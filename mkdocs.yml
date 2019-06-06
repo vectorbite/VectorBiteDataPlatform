@@ -2,3 +2,10 @@ site_name: VectorBite Data Platform
 docs_dir: static/docs
 site_dir: static/site
 theme: readthedocs
+nav:
+    - Home: index.md
+    - Release Notes: release_notes.md
+    - VecTraits:
+        - VecTraits Home: vectraits/index.md
+        - How to Download: vectraits/downloading.md
+        - Field Definitions: vectraits/field_definition_overview.md
