@@ -1,0 +1,5 @@
+name,descrip,required,example,restriction1,restriction2,restriction3,restriction4,restriction5
+test1,This is a test. It contains *some* **markdown** [formatting](../../field_definition_overview),TRUE,example/g/L,Valid email address,,,,
+test2,Another test,FALSE,yip,,,,,
+test3,A third test,TRUE,yus,,,,,
+test4,This is a better test,FALSE,yaaas,Integer between 1 – 4,Valid email address,Not null,,
