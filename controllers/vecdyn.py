@@ -45,6 +45,10 @@ def queue_task():
 def queue_task_2():
         scheduler.queue_task('vecdyn_bulk_importer', prevent_drift=False, repeats=0, period=5)
 
+# updates all vecdyn data base tables
+def queue_task_3():
+        scheduler.queue_task('vecdyn_taxon_standardiser', prevent_drift=False, repeats=0, period=6)
+
 
 # The following function imports a vecdyn csv
 @auth.requires_membership('VectorbiteAdmin')
