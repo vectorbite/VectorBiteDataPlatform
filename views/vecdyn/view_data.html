@@ -38,12 +38,7 @@
     Standardisation<span class="caret"></span></button>
 
     <ul class="dropdown-menu" role="menu">
-             {{if count >=1:}}
            <li> {{=A('Standardise Outstanding',_href=URL('standardise_taxon',vars={'publication_info_id':publication_info_id}))}}</li>
-            {{elif count2 >=1:}}
-            <li>{{=A('Standardise Outstanding',_href=URL('standardise_taxon',vars={'publication_info_id':publication_info_id}))}}</li>
-            {{else:}}
-            {{pass}}
         <li>{{=A('Re-standardize Taxonomic Entries',_href=URL('vecdyn','re_standardise_taxon',vars={'publication_info_id':publication_info_id}))}}</li>
             <li>{{=A('Re-standardize Geographic Entries',_href=URL('vecdyn','re_standardise_geo_data',vars={'publication_info_id':publication_info_id}))}}</li>
 
@@ -64,9 +59,7 @@
 
 
                <dl>
-  <p><strong>Dataset stats - </strong>  Total observations in this dataset: {{=observations}}; Total taxonomic entries in this dataset: {{=taxon_entries}}; Total regions in this dataset: {{=regions}}</p>
-      <p><strong>Number of entries left to standardise - </strong> Taxonomic: {{=count}}; Regions: {{=count2}} </p>
-<p><strong>Dataset status:</strong> {{=data_set_status.data_rights}} </p>
+  <p><strong>Dataset stats - </strong>
 
 
                <div class="pagination">
@@ -151,7 +144,6 @@
        </div>
 
                    <div>
-               {{if count == 0 | count2 == 0:}}
 
             <div class="container-fluid">
   <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#rights_info">Dataset Rights & Access&#8205; &#8205;&#8205;  &#8205; &#8205;  &#8205;&#8205; &#8205; &#8205; </button><a class="btn btn-link" <a class="btn btn-link" href="{{=URL('vecdyn','edit_data_rights',vars={'publication_info_id':publication_info_id})}}">{{=T("(Edit)")}}</a>
@@ -178,16 +170,18 @@
   </table>
 
     {{pass}}
-  {{else:}}
-            {{pass}}
 
 
-      <hr>
+
+
 </div>
+</div>
+                           <hr>
 
+                       <br>
 {{=BEAUTIFY(form)}}
 
-</div>
+
 
                 <br>
 

@@ -2,7 +2,6 @@ from gluon.scheduler import Scheduler
 import csv
 
 
-
 def vecdyn_importer():
     # reverse select by date to be set to select by oldest
     dataset = db(db.data_set_upload.status == 'pending').select(orderby=~db.data_set_upload.submit_datetime).first()
@@ -33,7 +32,7 @@ def vecdyn_importer():
                                     'additional_sample_info', 'sample_name'), row[13:27]))
                 time_series_data = db.time_series_data.insert(study_meta_data_id=study_meta_data_id, publication_info_id=publication_info_id, **samples)
             rows = db(db.study_meta_data.publication_info_id == publication_info_id).select()
-            for row in rows:
+            for row in rows: # add the iterselect function to this loop as below
                 tax_match = db(db.gbif_taxon.canonical_name == row.taxon).select()
                 for match in tax_match:
                     row.update_record(taxon_id=match.taxon_id)
@@ -44,19 +43,15 @@ def vecdyn_importer():
             db.rollback()
             dataset.update_record(status='failed')
             db.commit()
-    else:
-        pass
+        finally:
+            csvfile.close()
+
 
 def vecdyn_bulk_importer():
     # reverse select by date to be set to select by oldest
     dataset = db(db.data_set_bulk_upload.status == 'pending').select(orderby=~db.data_set_bulk_upload.submit_datetime).first()
     if dataset != None:
         try:
-            # When uploaded files are stored on filesystem, retrieves the original file name (filename) /
-            # as seen by the user at upload time and the name of stored file (fullname, with path relative to application folder). /
-            # retrieves the original file name (filename) and a file-like object ready to access uploaded file data (stream).
-            # Notice that the stream returned by retrieve is a real file object in the case that uploaded files are stored on filesystem./
-            # In that case remember to close the file when you have done calling stream.close().
             filename, csvfile = db.data_set_bulk_upload.csvfile.retrieve(dataset.csvfile)
             readCSV = csv.reader(csvfile, delimiter=',')
             next(readCSV, None)
@@ -91,13 +86,6 @@ def vecdyn_bulk_importer():
                                     'sample_long_dd', 'sample_environment', 'additional_location_info',
                                     'additional_sample_info', 'sample_name'), row[24:40]))
                 time_series_data = db.time_series_data.insert(study_meta_data_id=study_meta_data_id, publication_info_id=publication_info_id, **samples)
-
-
-            rows = db(db.study_meta_data.publication_info_id == publication_info_id).select()
-            for row in rows:
-                tax_match = db(db.gbif_taxon.canonical_name == row.taxon).select()
-                for match in tax_match:
-                    row.update_record(taxon_id=match.taxon_id)
             dataset.update_record(status='complete')
             db.commit()
             #add a send mailto here
@@ -105,18 +93,12 @@ def vecdyn_bulk_importer():
             db.rollback()
             dataset.update_record(status='failed')
             db.commit()
-    else:
-        pass
-    return locals()
+        finally:
+            csvfile.close()
 
-# Here is an example of safe usage of retrieve:
 
-# from contextlib import closing
-# import shutil
-# row = db(db.myfile).select().first()
-# (filename, stream) = db.myfile.image.retrieve(row.image)
-# with closing(stream) as src, closing(open(filename, 'wb')) as dest:
-#     shutil.copyfileobj(src, dest)
+
+
 
 scheduler = Scheduler(db, tasks=dict(vecdyn_importer=vecdyn_importer, vecdyn_bulk_importer=vecdyn_bulk_importer))
 
