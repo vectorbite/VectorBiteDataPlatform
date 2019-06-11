@@ -51,7 +51,8 @@
 
 
 
-                                        <h3><center> {{for row in publication_info_query:}} <center>Dataset: {{=row.title}}</center> {{pass}} </center> </h3>
+                                        <h3><center> <center>Dataset: {{=publication_info_query.title}}</center>  </center> </h3>
+
 
 <br>
 
@@ -59,7 +60,14 @@
 
 
                <dl>
-  <p><strong>Dataset stats - </strong>
+
+ <p><strong>Dataset stats - </strong>  Total observations in this dataset: {{=observations}}; Total taxonomic entries in this dataset: {{=taxon_entries}}; Total regions {{=regions}}; Unique trap locations: {{=coords}}</p>
+
+                   <p><strong>Number of entries left to standardise - </strong> Taxonomic:   {{=unstan_tax}}; Regions:   {{=unstan_geo}} </p>
+
+<p><strong>Dataset status:</strong> {{=publication_info_query.data_rights}} </p>
+
+
 
 
                <div class="pagination">
@@ -75,37 +83,36 @@
   <div id="pub_info" class="collapse">
 
   <table class="table table-striped" cellspacing="1px">
-      {{for row in publication_info_query:}}
   <thead>
     </thead>
     <tbody>
       <tr>
         <td>Title: </td>
-        <td>{{=row.title}}</td>
+        <td>{{=publication_info_query.title}}</td>
       </tr>
       <tr>
         <td>Collection Author: </td>
-        <td>{{=row.collection_author}}</td>
+        <td>{{=publication_info_query.collection_author}}</td>
       </tr>
       <tr>
         <td>Dataset DOI: </td>
-        <td>{{=row.dataset_citation}}</td>
+        <td>{{=publication_info_query.dataset_citation}}</td>
       </tr>
       <tr>
         <td>Publication DOI: </td>
-        <td>{{=row.publication_citation}}</td>
+        <td>{{=publication_info_query.publication_citation}}</td>
       </tr>
       <tr>
         <td>Description: </td>
-        <td>{{=row.description}}</td>
+        <td>{{=publication_info_query.description}}</td>
       </tr>
       <tr>
         <td>DataSet Type: </td>
-        <td>{{=row.data_set_type}}</td>
+        <td>{{=publication_info_query.data_set_type}}</td>
       </tr>
     </tbody>
   </table>
-    {{pass}}
+
 
    </div>
        </div>
@@ -117,28 +124,26 @@
   <div id="contact_info" class="collapse">
 
   <table class="table table-striped" cellspacing="1px">
-      {{for row in publication_info_query:}}
           <!-- Need to create a controller for edit data set contacts  -->
     <tbody>
       <tr>
         <td>Contact Name: </td>
-        <td>{{=row.contact_name}}</td>
+        <td>{{=publication_info_query.contact_name}}</td>
       </tr>
             <tr>
         <td>Contact Affiliation: </td>
-        <td>{{=row.contact_affiliation}}</td>
+        <td>{{=publication_info_query.contact_affiliation}}</td>
       </tr>
             <tr>
         <td>Email: </td>
-        <td>{{=row.email}}</td>
+        <td>{{=publication_info_query.email}}</td>
       </tr>
             <tr>
         <td>ORCID: </td>
-        <td>{{=row.orcid}}</td>
+        <td>{{=publication_info_query.orcid}}</td>
       </tr>
           </tbody>
   </table>
-    {{pass}}
 
    </div>
        </div>
@@ -152,24 +157,23 @@
 
   <table class="table table-striped" cellspacing="1px">
 
-      {{for row in publication_info_query:}}
     <tbody>
     <tr>
         <td>Dataset License: </td>
-        <td>{{=row.dataset_license}}</td>
+        <td>{{=publication_info_query.dataset_license}}</td>
       </tr>
     <tr>
         <td>Data Rights: </td>
-        <td>{{=row.data_rights}}</td>
+        <td>{{=publication_info_query.data_rights}}</td>
       </tr>
     <tr>
         <td>Embargo Release Date: </td>
-        <td>{{=row.embargo_release_date}}</td>
+        <td>{{=publication_info_query.embargo_release_date}}</td>
       </tr>
     </tbody>
   </table>
 
-    {{pass}}
+
 
 
 

@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
 
 me = auth.user_id
+import logging
+
+logger = logging.getLogger("web2py.app.vbdp")
+logger.setLevel(logging.DEBUG)
+
 
 # ----------------------------------------------------------------------------------------------------------------------
 # The following code is for USER upload and download of data
@@ -24,11 +29,10 @@ def index():
     trap_locs = {}
     # trap_locs = db(db.time_series_data).select(db.time_series_data.sample_lat_dd, db.time_series_data.sample_long_dd)
     coords = []
-    # for i in trap_locs:
-    #     b = i.sample_lat_dd + ', ' + i.sample_long_dd
-    #     if b not in coords:
-    #         coords.append(b)
-    # coords = len(coords)
+    for i in db(db.time_series_data).select(db.time_series_data.sample_lat_dd, db.time_series_data.sample_long_dd,
+                                            distinct=True):
+        coords.append(i)
+    coords = len(coords)
     return dict(dsets=dsets,obs=obs,taxa=taxa,countries=countries,regions=regions,counties=counties,coords=coords)
 
 
@@ -47,7 +51,7 @@ def queue_task_2():
 
 # updates all vecdyn data base tables
 def queue_task_3():
-        scheduler.queue_task('vecdyn_taxon_standardiser', prevent_drift=False, repeats=0, period=6)
+        scheduler.queue_task('vecdyn_taxon_standardiser', prevent_drift=False, repeats=0, period=4)
 
 
 # The following function imports a vecdyn csv
@@ -78,8 +82,7 @@ def vecdyn_csv_bulk_uploader():
     form = SQLFORM(db.data_set_bulk_upload, comments=False, fields=['csvfile'],
                    labels={'csvfile': 'Click to search and select a file:'})
     if form.process().accepted:
-        response.flash = 'Thanks data submitted for upload, you will recieve an email once data has been uploaded into the db'
-        redirect(URL("vecdyn", "dataset_registrations"))
+        response.flash = 'Data uploaded'
     return locals()
 
 
@@ -132,7 +135,7 @@ def dataset_registration():
         # collection_author = myrecord.collection_author
         # collection_author = db(db.collection_author.name == collection_author).select().first()
         db.publication_info.collection_author.default = myrecord.collection_author
-        db.publication_info.dataset_citation.default = myrecord.digital_object_identifier    # TODO: dataset doi missing
+        db.publication_info.dataset_citation.default = myrecord.dataset_citation    # TODO: dataset doi missing
         db.publication_info.publication_citation.default = myrecord.publication_citation
         db.publication_info.url.default = myrecord.url
         db.publication_info.contact_affiliation.default = myrecord.contact_affiliation
@@ -201,7 +204,7 @@ def dataset_registrations():
                           'db.publication_info.created_by')]
     # db.publication_info.data_rights.represent = lambda data_rights, row: A(data_rights, _href=URL('edit_data_rights', args=row.id))
     links = [lambda row: A('Enter Dataset Control Panel', _href=URL("vecdyn", "view_data", vars={'publication_info_id': row.id}), _class="btn btn-primary")]
-    form = SQLFORM.grid(db.publication_info, links=links, searchable=True, advanced_search=False, deletable=True,
+    form = SQLFORM.grid(db.publication_info, links=links, searchable=True, advanced_search=False, deletable=False,
                         editable=False, details=False, create=False, csv=False, maxtextlength=200,
                         fields=[
                             db.publication_info.title,
@@ -282,12 +285,35 @@ def edit_data_rights():
 def view_data():
     # Query for publication info pages, found at the top of the view data pages
     publication_info_id = request.get_vars.publication_info_id
-    publication_info_query = db(db.publication_info.id == publication_info_id).select()
+    publication_info_query = db(db.publication_info.id == publication_info_id).select().first()
+
+    observations = db(db.time_series_data.publication_info_id == publication_info_id).count()
+
+    taxon_entries = db(db.study_meta_data.publication_info_id == publication_info_id).count(
+        distinct=db.study_meta_data.taxon)
+    regions = db(db.study_meta_data.publication_info_id == publication_info_id).count(
+        distinct=db.study_meta_data.location_description)
+
+    unstan_tax = db((db.study_meta_data.publication_info_id == publication_info_id) & (db.study_meta_data.taxon_id == None)).count(distinct=db.study_meta_data.taxon)
+
+    unstan_geo = db((db.study_meta_data.publication_info_id == publication_info_id) & (db.study_meta_data.geo_id == None)).count(distinct=db.study_meta_data.location_description)
+
+    coords = []
+    for i in db(db.time_series_data.publication_info_id == publication_info_id).select(db.time_series_data.sample_lat_dd, db.time_series_data.sample_long_dd, distinct=True):
+        coords.append(i)
+    coords = len(coords)
     # Following queries count to see how many unstandardised entries are in the collection, unstandardised dates are
     # recognised by the absence of either a no taxon_id (None) or no geo_id (None) supplies user with a message
     # Code for grid
     # row.id isnt working in this function since we are joining multiple tables,
     # instead we need to specify the row.study_meta_data.id for the links in the table
+
+
+
+
+
+
+
     links = [lambda row: A('View/edit meta entry',
                            _href=URL("vecdyn", "edit_meta_data",
                                      vars={'study_meta_data_id': row.study_meta_data.id,
@@ -321,7 +347,7 @@ def view_data():
                         maxtextlength=200,
                         searchable=True, advanced_search=False, deletable=False,
                         editable=False, details=False, create=False, csv=False)
-    return dict(form=form, publication_info_query=publication_info_query,publication_info_id=publication_info_id)
+    return dict(form=form,  coords=coords, regions=regions,unstan_tax=unstan_tax,unstan_geo=unstan_geo,taxon_entries=taxon_entries,publication_info_query=publication_info_query,publication_info_id=publication_info_id, observations=observations)
 
 
 @auth.requires_membership('VectorbiteAdmin')

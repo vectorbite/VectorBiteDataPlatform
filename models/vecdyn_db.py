@@ -8,6 +8,12 @@ from gluon.tools import prettydate
 week = datetime.timedelta(days=7)
 
 
+db.define_table('data_set_upload_test',
+                Field('csvfile','upload',uploadfield=False, requires = IS_UPLOAD_FILENAME(extension='csv')))
+
+
+
+
 
 db.define_table('collection_author',
     Field('name', 'string', notnull=True, unique=True),
@@ -66,6 +72,7 @@ db.define_table('publication_info',
                 #format='%(id)s')
 
 
+
 '''the following code updates the DATARIGHTS status,  once the  embargo date is reached it sets the dataset to open'''
 today = datetime.date.today()
 embargo_status_updates = db((db.publication_info.data_rights == 'embargo') & (db.publication_info.embargo_release_date <= today)).select()
@@ -103,19 +110,17 @@ db.define_table('study_meta_data',
                 Field('publication_info_id', 'reference publication_info')) #14
 
 
-
 # if db(db.study_meta_data.id>0).count() == 0:
 #     db.study_meta_data.truncate()
 # else:
 #     pass
 
 
-
 db.define_table('time_series_data',
-                Field('sample_start_date', type = 'date', requires=IS_DATE(), comment='date of sample was set, leave blank if not applicable to the study'),
-                Field('sample_start_time', type = 'time', required=False, comment='time of sample was set, leave blank if not applicable to the study'),
+                Field('sample_start_date', type = 'date', requires=IS_EMPTY_OR(IS_DATE()), comment='date of sample was set, leave blank if not applicable to the study'),
+                Field('sample_start_time', type = 'time', requires=IS_EMPTY_OR(IS_TIME()), comment='time of sample was set, leave blank if not applicable to the study'),
                 Field('sample_end_date', type = 'date', requires=IS_DATE(), comment='Date of sample collection'),
-                Field('sample_end_time', type = 'time', required=False, comment='time of sample collection'),
+                Field('sample_end_time', type = 'time', requires=IS_EMPTY_OR(IS_TIME()), comment='time of sample collection'),
                 Field('sample_value'),#type = 'integer', comment='The numerical amount or result from the sample collection'),
                 Field('sample_sex', type = 'string', comment='sex of sample if applicable'),
                 Field('sample_stage', type = 'string', comment='life stage of sample if applicable'),
@@ -129,6 +134,7 @@ db.define_table('time_series_data',
                 Field('sample_name', type = 'string', comment ='A human readable sample name'),
                 Field('study_meta_data_id', 'reference study_meta_data'),
                 Field('publication_info_id', 'reference publication_info'))
+
 
 
 # if db(db.time_series_data.id>0).count() == 0:
