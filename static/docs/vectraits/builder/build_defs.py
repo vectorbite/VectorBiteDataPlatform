@@ -68,6 +68,6 @@ for definition in defsdata:
 with open("../field_definition_overview.md", "r") as f:
     field_def_overview = f.read()
 
-field_def_overview = field_def_overview[:field_def_overview.find("## Field Definitions")] + "## Field Definitions\n" + summary_str
+field_def_overview = field_def_overview[:field_def_overview.find("## Field Definitions")] + "## Field Definitions\nPlease click on any field name to find more details about the field.\n" + summary_str
 with open("../field_definition_overview.md", "w+") as f:
     f.write(field_def_overview)
