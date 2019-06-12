@@ -9,3 +9,11 @@ nav:
         - VecTraits Home: vectraits/index.md
         - How to Download: vectraits/downloading.md
         - Field Definitions: vectraits/field_definition_overview.md
+    - VecDyn:
+        - VecDyn Home: vecdyn/index.md
+        - introduction: vecdyn/introduction.md
+        - Download data: vecdyn/downloading.md
+        - Field definitions: vecdyn/field_definition_overview.md
+        - Submit data: vecdyn/submitting.md
+        - Curation: vecdyn/curation.md
+        - Data usage: vecdyn/data_usage.md
