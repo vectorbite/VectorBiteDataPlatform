@@ -30,10 +30,19 @@ def vectraits_template():
 @auth.requires_login()
 def view_vectraits():
     # A simple demonstration of an interface to explore the published vectraits dataset.
-    db2.maintable.uid.readable = False
 
+    # Rename dict
+    db2.published_data.uid.readable = False
+    db2.published_data.published.readable = False
     grid = SQLFORM.smartgrid(db2.published_data,
                              csv=True,
+                             # exportclasses=dict(csv=(vtfuncs.ExporterCSVlabel, 'CSV'),
+                             #                    csv_with_hidden_cols=False,
+                             #                    tsv=False,
+                             #                    tsv_with_hidden_cols=False,
+                             #                    xml=False,
+                             #                    html=False,
+                             #                    json=False),
                              deletable=False,
                              create=False,
                              details=False,
@@ -107,7 +116,7 @@ def validate_vectraits():
     #     session.flash = 'form accepted'
     # elif form.errors:
     #     session.flash = 'form has errors'
-    if validated and not failed:   # If report has been processed but did not fail
+    if validated and not failed:  # If report has been processed but did not fail
         session.flash = T("Dataset validated successfully.")
         session.current_origin_filename = origin_filename
         session.current_temp_filename = temp_filename
@@ -165,7 +174,9 @@ def submit_dataset_for_upload():
     session.current_temp_filename = None
     session.current_file_length = None
     if failed:
-        session.flash = CENTER("Dataset not submitted due to internal error. Please try again or contact the site administrators.", _style='color: red')
+        session.flash = CENTER(
+            "Dataset not submitted due to internal error. Please try again or contact the site administrators.",
+            _style='color: red')
     else:
         session.flash = T("Dataset submitted for upload.")
     redirect(URL('vectraits', 'index'))

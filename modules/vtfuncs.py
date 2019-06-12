@@ -11,8 +11,10 @@ Docstr: This file contains many generic VecTraits functions with which to perfor
 import logging
 from cStringIO import StringIO
 from gluon.validators import *
+from gluon.sqlhtml import ExportClass
 import datetime
 from distutils.util import strtobool
+
 import csv
 moduledebug = False
 
@@ -481,3 +483,50 @@ def upload_vectraits_dataset(csvpath):
     # Make maintable (incl ids for all other tables)
     # Upload to db
     return True
+
+
+class ExporterCSVlabel(ExportClass):
+    """
+    Custom CSV exporter using labels instead of field names as the column headers
+    Adapted from https://groups.google.com/forum/#!topic/web2py/MR_8JzzP9o4
+    """
+    label = 'CSV (real labels)'
+    file_ext = "csv"
+    content_type = "text/csv"
+
+    def __init__(self, rows):
+        ExportClass.__init__(self, rows)
+
+    def export(self):
+        out = StringIO()
+        final = StringIO()
+        import csv
+        writer = csv.writer(out)
+        if self.rows:
+            import codecs
+            final.write(codecs.BOM_UTF16)
+            header = list()
+            for col in self.rows.colnames:
+                (t, f) = col.split('.')
+                field = self.rows.db[t][f]
+                field_label = field.label   # Use the label name instead of database name
+                colname = unicode(field_label).encode("utf8")
+                header.append(colname)
+            writer.writerow(header)
+            data = out.getvalue().decode("utf8")
+            data = data.encode("utf-16")
+            data = data[2:]
+            final.write(data)
+            out.truncate(0)
+
+        records = self.represented()
+        for row in records:
+            writer.writerow(
+                [str(col).decode('utf8').encode("utf-8") for col in row])
+            data = out.getvalue().decode("utf8")
+            data = data.encode("utf-16")
+            data = data[2:]
+            final.write(data)
+
+            out.truncate(0)
+        return str(final.getvalue())

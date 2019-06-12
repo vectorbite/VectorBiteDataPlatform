@@ -38,12 +38,7 @@
     Standardisation<span class="caret"></span></button>
 
     <ul class="dropdown-menu" role="menu">
-             {{if count >=1:}}
            <li> {{=A('Standardise Outstanding',_href=URL('standardise_taxon',vars={'publication_info_id':publication_info_id}))}}</li>
-            {{elif count2 >=1:}}
-            <li>{{=A('Standardise Outstanding',_href=URL('standardise_taxon',vars={'publication_info_id':publication_info_id}))}}</li>
-            {{else:}}
-            {{pass}}
         <li>{{=A('Re-standardize Taxonomic Entries',_href=URL('vecdyn','re_standardise_taxon',vars={'publication_info_id':publication_info_id}))}}</li>
             <li>{{=A('Re-standardize Geographic Entries',_href=URL('vecdyn','re_standardise_geo_data',vars={'publication_info_id':publication_info_id}))}}</li>
 
@@ -56,7 +51,8 @@
 
 
 
-                                        <h3><center> {{for row in publication_info_query:}} <center>Dataset: {{=row.title}}</center> {{pass}} </center> </h3>
+                                        <h3><center> <center>Dataset: {{=publication_info_query.title}}</center>  </center> </h3>
+
 
 <br>
 
@@ -64,9 +60,14 @@
 
 
                <dl>
-  <p><strong>Dataset stats - </strong>  Total observations in this dataset: {{=observations}}; Total taxonomic entries in this dataset: {{=taxon_entries}}; Total regions in this dataset: {{=regions}}</p>
-      <p><strong>Number of entries left to standardise - </strong> Taxonomic: {{=count}}; Regions: {{=count2}} </p>
-<p><strong>Dataset status:</strong> {{=data_set_status.data_rights}} </p>
+
+ <p><strong>Dataset stats - </strong>  Total observations in this dataset: {{=observations}}; Total taxonomic entries in this dataset: {{=taxon_entries}}; Total regions {{=regions}}; Unique trap locations: {{=coords}}</p>
+
+                   <p><strong>Number of entries left to standardise - </strong> Taxonomic:   {{=unstan_tax}}; Regions:   {{=unstan_geo}} </p>
+
+<p><strong>Dataset status:</strong> {{=publication_info_query.data_rights}} </p>
+
+
 
 
                <div class="pagination">
@@ -82,37 +83,36 @@
   <div id="pub_info" class="collapse">
 
   <table class="table table-striped" cellspacing="1px">
-      {{for row in publication_info_query:}}
   <thead>
     </thead>
     <tbody>
       <tr>
         <td>Title: </td>
-        <td>{{=row.title}}</td>
+        <td>{{=publication_info_query.title}}</td>
       </tr>
       <tr>
         <td>Collection Author: </td>
-        <td>{{=row.collection_author}}</td>
+        <td>{{=publication_info_query.collection_author}}</td>
       </tr>
       <tr>
         <td>Dataset DOI: </td>
-        <td>{{=row.dataset_citation}}</td>
+        <td>{{=publication_info_query.dataset_citation}}</td>
       </tr>
       <tr>
         <td>Publication DOI: </td>
-        <td>{{=row.publication_citation}}</td>
+        <td>{{=publication_info_query.publication_citation}}</td>
       </tr>
       <tr>
         <td>Description: </td>
-        <td>{{=row.description}}</td>
+        <td>{{=publication_info_query.description}}</td>
       </tr>
       <tr>
         <td>DataSet Type: </td>
-        <td>{{=row.data_set_type}}</td>
+        <td>{{=publication_info_query.data_set_type}}</td>
       </tr>
     </tbody>
   </table>
-    {{pass}}
+
 
    </div>
        </div>
@@ -124,34 +124,31 @@
   <div id="contact_info" class="collapse">
 
   <table class="table table-striped" cellspacing="1px">
-      {{for row in publication_info_query:}}
           <!-- Need to create a controller for edit data set contacts  -->
     <tbody>
       <tr>
         <td>Contact Name: </td>
-        <td>{{=row.contact_name}}</td>
+        <td>{{=publication_info_query.contact_name}}</td>
       </tr>
             <tr>
         <td>Contact Affiliation: </td>
-        <td>{{=row.contact_affiliation}}</td>
+        <td>{{=publication_info_query.contact_affiliation}}</td>
       </tr>
             <tr>
         <td>Email: </td>
-        <td>{{=row.email}}</td>
+        <td>{{=publication_info_query.email}}</td>
       </tr>
             <tr>
         <td>ORCID: </td>
-        <td>{{=row.orcid}}</td>
+        <td>{{=publication_info_query.orcid}}</td>
       </tr>
           </tbody>
   </table>
-    {{pass}}
 
    </div>
        </div>
 
                    <div>
-               {{if count == 0 | count2 == 0:}}
 
             <div class="container-fluid">
   <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#rights_info">Dataset Rights & Access&#8205; &#8205;&#8205;  &#8205; &#8205;  &#8205;&#8205; &#8205; &#8205; </button><a class="btn btn-link" <a class="btn btn-link" href="{{=URL('vecdyn','edit_data_rights',vars={'publication_info_id':publication_info_id})}}">{{=T("(Edit)")}}</a>
@@ -160,34 +157,35 @@
 
   <table class="table table-striped" cellspacing="1px">
 
-      {{for row in publication_info_query:}}
     <tbody>
     <tr>
         <td>Dataset License: </td>
-        <td>{{=row.dataset_license}}</td>
+        <td>{{=publication_info_query.dataset_license}}</td>
       </tr>
     <tr>
         <td>Data Rights: </td>
-        <td>{{=row.data_rights}}</td>
+        <td>{{=publication_info_query.data_rights}}</td>
       </tr>
     <tr>
         <td>Embargo Release Date: </td>
-        <td>{{=row.embargo_release_date}}</td>
+        <td>{{=publication_info_query.embargo_release_date}}</td>
       </tr>
     </tbody>
   </table>
 
-    {{pass}}
-  {{else:}}
-            {{pass}}
 
 
-      <hr>
+
+
+
 </div>
+</div>
+                           <hr>
 
+                       <br>
 {{=BEAUTIFY(form)}}
 
-</div>
+
 
                 <br>
 

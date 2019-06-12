@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
 
 me = auth.user_id
+import logging
+
+logger = logging.getLogger("web2py.app.vbdp")
+logger.setLevel(logging.DEBUG)
+
 
 # ----------------------------------------------------------------------------------------------------------------------
 # The following code is for USER upload and download of data
@@ -22,12 +27,11 @@ def index():
         distinct=db.gaul_admin_layers.adm2_name)
     counties = len(counties)
     trap_locs = {}
-    trap_locs = db(db.time_series_data).select(db.time_series_data.sample_lat_dd, db.time_series_data.sample_long_dd)
+    # trap_locs = db(db.time_series_data).select(db.time_series_data.sample_lat_dd, db.time_series_data.sample_long_dd)
     coords = []
-    for i in trap_locs:
-        b = i.sample_lat_dd + ', ' + i.sample_long_dd
-        if b not in coords:
-            coords.append(b)
+    for i in db(db.time_series_data).select(db.time_series_data.sample_lat_dd, db.time_series_data.sample_long_dd,
+                                            distinct=True):
+        coords.append(i)
     coords = len(coords)
     return dict(dsets=dsets,obs=obs,taxa=taxa,countries=countries,regions=regions,counties=counties,coords=coords)
 
@@ -37,12 +41,17 @@ def about():
     # rows = db(db.index_page_updates).select(orderby=~db.index_page_updates.created_on)
     return locals()
 
-
+# imports data sets submitted by users - only meta data and sample data (time series)
 def queue_task():
     scheduler.queue_task('vecdyn_importer', prevent_drift=False, repeats=0, period=5)
 
+# updates all vecdyn data base tables
 def queue_task_2():
         scheduler.queue_task('vecdyn_bulk_importer', prevent_drift=False, repeats=0, period=5)
+
+# updates all vecdyn data base tables
+def queue_task_3():
+        scheduler.queue_task('vecdyn_taxon_standardiser', prevent_drift=False, repeats=0, period=4)
 
 
 # The following function imports a vecdyn csv
@@ -73,8 +82,7 @@ def vecdyn_csv_bulk_uploader():
     form = SQLFORM(db.data_set_bulk_upload, comments=False, fields=['csvfile'],
                    labels={'csvfile': 'Click to search and select a file:'})
     if form.process().accepted:
-        response.flash = 'Thanks data submitted for upload, you will recieve an email once data has been uploaded into the db'
-        redirect(URL("vecdyn", "dataset_registrations"))
+        response.flash = 'Data uploaded'
     return locals()
 
 
@@ -127,7 +135,7 @@ def dataset_registration():
         # collection_author = myrecord.collection_author
         # collection_author = db(db.collection_author.name == collection_author).select().first()
         db.publication_info.collection_author.default = myrecord.collection_author
-        db.publication_info.dataset_citation.default = myrecord.digital_object_identifier    # TODO: dataset doi missing
+        db.publication_info.dataset_citation.default = myrecord.dataset_citation    # TODO: dataset doi missing
         db.publication_info.publication_citation.default = myrecord.publication_citation
         db.publication_info.url.default = myrecord.url
         db.publication_info.contact_affiliation.default = myrecord.contact_affiliation
@@ -196,14 +204,13 @@ def dataset_registrations():
                           'db.publication_info.created_by')]
     # db.publication_info.data_rights.represent = lambda data_rights, row: A(data_rights, _href=URL('edit_data_rights', args=row.id))
     links = [lambda row: A('Enter Dataset Control Panel', _href=URL("vecdyn", "view_data", vars={'publication_info_id': row.id}), _class="btn btn-primary")]
-    form = SQLFORM.grid(db.publication_info, links=links, searchable=True, advanced_search=False, deletable=lambda row: (row.created_by == me),
+    form = SQLFORM.grid(db.publication_info, links=links, searchable=True, advanced_search=False, deletable=False,
                         editable=False, details=False, create=False, csv=False, maxtextlength=200,
                         fields=[
                             db.publication_info.title,
                             db.publication_info.collection_author,
                             db.publication_info.dataset_citation,
-                            db.publication_info.data_rights,
-                            db.publication_info.created_by],
+                            db.publication_info.data_rights],
                         # buttons_placement='left',
                         # links_placement='left'
                         )
@@ -278,58 +285,35 @@ def edit_data_rights():
 def view_data():
     # Query for publication info pages, found at the top of the view data pages
     publication_info_id = request.get_vars.publication_info_id
-    publication_info_query = db(db.publication_info.id == publication_info_id).select()
-    data_set_status = db(db.publication_info.id == publication_info_id).select().first()
+    publication_info_query = db(db.publication_info.id == publication_info_id).select().first()
+
+    observations = db(db.time_series_data.publication_info_id == publication_info_id).count()
+
+    taxon_entries = db(db.study_meta_data.publication_info_id == publication_info_id).count(
+        distinct=db.study_meta_data.taxon)
+    regions = db(db.study_meta_data.publication_info_id == publication_info_id).count(
+        distinct=db.study_meta_data.location_description)
+
+    unstan_tax = db((db.study_meta_data.publication_info_id == publication_info_id) & (db.study_meta_data.taxon_id == None)).count(distinct=db.study_meta_data.taxon)
+
+    unstan_geo = db((db.study_meta_data.publication_info_id == publication_info_id) & (db.study_meta_data.geo_id == None)).count(distinct=db.study_meta_data.location_description)
+
+    coords = []
+    for i in db(db.time_series_data.publication_info_id == publication_info_id).select(db.time_series_data.sample_lat_dd, db.time_series_data.sample_long_dd, distinct=True):
+        coords.append(i)
+    coords = len(coords)
     # Following queries count to see how many unstandardised entries are in the collection, unstandardised dates are
     # recognised by the absence of either a no taxon_id (None) or no geo_id (None) supplies user with a message
-    taxon_entries = db(db.study_meta_data.publication_info_id == publication_info_id).select(
-        distinct=db.study_meta_data.taxon)
-    taxon_entries = len(taxon_entries)
-    taxon_entries = int(taxon_entries)
-    regions = db(db.study_meta_data.publication_info_id == publication_info_id).select(
-        distinct=db.study_meta_data.location_description)
-    regions = len(regions)
-    regions = int(regions)
-    observations = db(db.time_series_data.publication_info_id == publication_info_id).select()
-    observations = len(observations)
-    observations = int(observations)
-
-    message = ()
-    # Checks to see if there are understadnardised data sets in the data collection
-    ds_check = db(db.study_meta_data.publication_info_id == publication_info_id).select(
-        distinct=db.study_meta_data.publication_info_id)
-    ds_count = len(ds_check)
-    ds_count = int(ds_count)
-
-    # Following queries count to see how many unstandardiesed data sets are in the collection,
-    # supplies user with a message
-    b = db((db.study_meta_data.publication_info_id == publication_info_id) & (
-            db.study_meta_data.taxon_id == None)).select(
-        distinct=db.study_meta_data.taxon)
-    count = len(b)
-    count = int(count)
-    a = db((db.study_meta_data.publication_info_id == publication_info_id) & (
-            db.study_meta_data.geo_id == None)).select(
-        distinct=db.study_meta_data.location_description)
-    count2 = len(a)
-    count2 = int(count2)
-    message = ()
-
-    if ds_count < 1:
-        message = "You have not uploaded any data yet"
-
-    query = db(db.study_meta_data.publication_info_id == publication_info_id).count()
-
-    if query == 0:
-        response.flash = "You have not yet submitted any data yet," \
-                         "click on 'Add time series data to add a data set'!"
-    elif (count >= 1) | (count2 >= 1):
-        response.flash = 'You still need to standardise entries!'
-    else:
-        response.flash = 'This is a list of all the standardised  time series data linked to this data set!'
     # Code for grid
     # row.id isnt working in this function since we are joining multiple tables,
     # instead we need to specify the row.study_meta_data.id for the links in the table
+
+
+
+
+
+
+
     links = [lambda row: A('View/edit meta entry',
                            _href=URL("vecdyn", "edit_meta_data",
                                      vars={'study_meta_data_id': row.study_meta_data.id,
@@ -341,10 +325,9 @@ def view_data():
                                      vars={'study_meta_data_id': row.study_meta_data.id,
                                            'publication_info_id': publication_info_id})),
              ]
-
-    query_2 = db((db.study_meta_data.publication_info_id == publication_info_id) & (db.study_meta_data.geo_id == db.gaul_admin_layers.geo_id) & (db.gbif_taxon.taxon_id == db.study_meta_data.taxon_id))
+    query_2 = db((db.study_meta_data.publication_info_id == publication_info_id) & (db.study_meta_data.canonical_name != None) & (db.study_meta_data.geo_id == db.gaul_admin_layers.geo_id))
     form = SQLFORM.grid(query_2, field_id=db.study_meta_data.id,
-                        fields=[db.gbif_taxon.canonical_name,
+                        fields=[db.study_meta_data.canonical_name,
                                 db.gaul_admin_layers.adm2_name,
                                 db.gaul_admin_layers.adm1_name,
                                 db.gaul_admin_layers.adm0_name,
@@ -352,7 +335,7 @@ def view_data():
                                 db.study_meta_data.sampling_method,
                                 db.study_meta_data.measurement_unit,
                                 db.study_meta_data.value_transform],
-                        headers={'gbif_taxon.canonical_name': 'Taxon',
+                        headers={'study_meta_data.canonical_name': 'Standardised taxon',
                                  'gaul_admin_layers.adm2_name': 'Administrative Division 2',
                                  'gaul_admin_layers.adm1_name': 'Administrative Division 1',
                                  'gaul_admin_layers.adm0_name': 'Country Name',
@@ -364,7 +347,7 @@ def view_data():
                         maxtextlength=200,
                         searchable=True, advanced_search=False, deletable=False,
                         editable=False, details=False, create=False, csv=False)
-    return locals()
+    return dict(form=form,  coords=coords, regions=regions,unstan_tax=unstan_tax,unstan_geo=unstan_geo,taxon_entries=taxon_entries,publication_info_query=publication_info_query,publication_info_id=publication_info_id, observations=observations)
 
 
 @auth.requires_membership('VectorbiteAdmin')
@@ -427,11 +410,11 @@ def view_unstandardised_data():
         my_select = db((db.study_meta_data.publication_info_id == publication_info_id) & ((db.study_meta_data.taxon_id == None) | (db.study_meta_data.geo_id == None)))
         form = SQLFORM.grid(my_select, field_id=db.study_meta_data.id,
                             fields=[db.study_meta_data.taxon,
-                                    db.study_meta_data.taxon_id,
+                                    db.study_meta_data.canonical_name,
                                     db.study_meta_data.location_description,
                                     db.study_meta_data.geo_id],
                             headers={'study_meta_data.taxon': 'Original Taxon',
-                                     'study_meta_data.taxon_id': 'Replacement Taxon Name',
+                                     'study_meta_data.canonical_name': 'Replacement Taxon Name',
                                      'study_meta_data.location_description': 'Original Location Description',
                                      'study_meta_data.geo_id': 'Replacement Location ID'},
                             maxtextlength=200, links=links,
@@ -525,6 +508,8 @@ def taxon_select():
                                            'page': page,
                                            'meta_edit': meta_edit,
                                            'canonical_name': row.canonical_name,
+                                           'genus_or_above': row.genus_or_above,
+                                           'taxonomic_rank': row.taxonomic_rank,
                                            'study_meta_data_id': study_meta_data_id}))]
     db.gbif_taxon.taxon_id.readable = False
     grid = SQLFORM.grid(db.gbif_taxon,links=links, searchable=True, advanced_search=False, deletable=False, editable=False, details=False,  create=False, csv=False, maxtextlength=50)
@@ -544,12 +529,17 @@ def taxon_confirm():
     taxon = request.get_vars.taxon
     taxon_id = request.get_vars.taxon_id
     meta_edit = request.get_vars.meta_edit
+    genus_or_above = request.get_vars.genus_or_above
+    taxonomic_rank = request.get_vars.taxonomic_rank
+    meta_edit = request.get_vars.meta_edit
     form = FORM(INPUT(_type='submit', _value='Confirm', _class="btn btn-primary"))
     if form.process().accepted:
             redirect(URL("vecdyn", "taxon_insert", vars={'publication_info_id': publication_info_id,
                                                          'study_meta_data_id': study_meta_data_id,
-                                                         'canonical_name': canonical_name,
                                                          'taxon_id': taxon_id,
+                                                         'canonical_name': canonical_name,
+                                                         'genus_or_above': genus_or_above,
+                                                         'taxonomic_rank': taxonomic_rank,
                                                          'taxon': taxon,
                                                          'page': page,
                                                          'meta_edit': meta_edit,
@@ -568,10 +558,14 @@ def taxon_insert():
     canonical_name = request.get_vars.canonical_name
     taxon_id = request.get_vars.taxon_id
     meta_edit = request.get_vars.meta_edit
-    rows = db(db.study_meta_data.publication_info_id == publication_info_id).select()
-    for row in rows:
+    genus_or_above = request.get_vars.genus_or_above
+    taxonomic_rank = request.get_vars.taxonomic_rank
+    for row in db(db.study_meta_data.publication_info_id == publication_info_id).iterselect():
         if taxon == row.taxon:
             row.update_record(taxon_id=taxon_id)
+            row.update_record(canonical_name=canonical_name)
+            row.update_record(genus_or_above=genus_or_above)
+            row.update_record(taxonomic_rank=taxonomic_rank)
         else:
             continue
     if page == 're_standardise_taxon':
@@ -738,16 +732,15 @@ def vecdyn_taxon_location_query():
     today = datetime.date.today()
 
     # control which fields available
-    [setattr(f, 'readable', False) for f in db.gbif_taxon
-        if f.name not in ('db.gbif_taxon.canonical_name,db.gbif_taxon.genus_or_above,'
-                          'db.gbif_taxon.taxonomic_rank')]
     [setattr(f, 'readable', False) for f in db.publication_info
         if f.name not in ('db.publication_info.title, db.publication_info.collection_author')]
     [setattr(f, 'readable', False) for f in db.collection_author
-     if f.name not in ('db.collection_author.id, db.collection_author.name')]
+     if f.name not in ('db.collection_author.name')]
     # MainID is not made unreadable, so that it can be accessed by the export controller
     [setattr(f, 'readable', False) for f in db.study_meta_data
-        if f.name not in ('db.study_meta_data.id, db.study_meta_data.location_description,')]
+        if f.name not in ('db.study_meta_data.canonical_name,db.study_meta_data.genus_or_above,'
+                          'db.study_meta_data.taxonomic_rank'
+                          'db.study_meta_data.location_description')]
     [setattr(f, 'readable', False) for f in db.gaul_admin_layers
      if f.name not in ('db.gaul_admin_layers.adm2_name, db.gaul_admin_layers.adm1_name, db.gaul_admin_layers.adm0_name')]
 
@@ -768,13 +761,14 @@ def vecdyn_taxon_location_query():
         A(name, _href=URL('vecdyn', 'vecdyn_author_query', vars={'collection_author': row.collection_author.name}))
     grid = SQLFORM.grid((db.study_meta_data.publication_info_id == db.publication_info.id)
                         & (db.publication_info.collection_author == db.collection_author.id)
-                        & (db.gbif_taxon.taxon_id == db.study_meta_data.taxon_id)
+                        & (db.study_meta_data.taxon_id != 'notfound') # not found added by scheduler function
+                        & (db.study_meta_data.canonical_name != None) #
                         & (db.publication_info.data_rights == 'open')
                         & (db.gaul_admin_layers.geo_id == db.study_meta_data.geo_id),
                         field_id=db.study_meta_data.id,
-                        fields=[db.gbif_taxon.canonical_name,
-                                db.gbif_taxon.genus_or_above,
-                                db.gbif_taxon.taxonomic_rank,
+                        fields=[db.study_meta_data.canonical_name,
+                                db.study_meta_data.genus_or_above,
+                                db.study_meta_data.taxonomic_rank,
                                 db.study_meta_data.location_description,
                                 db.gaul_admin_layers.adm0_name,
                                 db.gaul_admin_layers.adm1_name,
@@ -785,9 +779,9 @@ def vecdyn_taxon_location_query():
 
                         headers={'publication_info.title': 'Title',
                                  'collection_author.name': 'Author',
-                                 'taxon.canonical_name': 'Taxon',
-                                 'taxon.genus_or_above': 'genus_or_above',
-                                 'taxon.taxonomic_rank': 'taxonomic_rank',
+                                 'study_meta_data.canonical_name': 'Taxon',
+                                 'study_meta_data.genus_or_above': 'genus_or_above',
+                                 'study_meta_data.taxonomic_rank': 'taxonomic_rank',
                                  'gaul_admin_layers.adm2_name': 'Administrative Division 2',
                                  'gaul_admin_layers.adm1_name': 'Administrative Division 1',
                                  'gaul_admin_layers.adm0_name': 'Country Name',
@@ -860,14 +854,14 @@ def _get_data_csv_1(ids):
     """
 
     rows = db((db.study_meta_data.id.belongs(ids)) &
-              (db.gbif_taxon.taxon_id == db.study_meta_data.taxon_id) &
               (db.gaul_admin_layers.geo_id == db.study_meta_data.geo_id) &
               (db.publication_info.id == db.study_meta_data.publication_info_id) &
               (db.time_series_data.study_meta_data_id == db.study_meta_data.id)).select(
                     db.publication_info.title,
-                    db.gbif_taxon.canonical_name,
-                    db.gbif_taxon.genus_or_above,
-                    db.gbif_taxon.taxonomic_rank,
+                    db.study_meta_data.canonical_name,
+                    db.study_meta_data.genus_or_above,
+                    db.study_meta_data.taxonomic_rank,
+                    db.study_meta_data.taxon_id,
                     db.time_series_data.sample_start_date,
                     db.time_series_data.sample_start_time,
                     db.time_series_data.sample_end_date,
@@ -1078,13 +1072,13 @@ def _get_data_csv_2(ids):
     rows = db((db.publication_info.id.belongs(ids)) &
               (db.publication_info.collection_author == db.collection_author.id) &
               (db.study_meta_data.publication_info_id == db.publication_info.id) &
-              (db.gbif_taxon.taxon_id == db.study_meta_data.taxon_id) &
               (db.gaul_admin_layers.geo_id == db.study_meta_data.geo_id) &
               (db.time_series_data.study_meta_data_id == db.study_meta_data.id)).select(
                     db.publication_info.title,
-                    db.gbif_taxon.canonical_name,
-                    db.gbif_taxon.genus_or_above,
-                    db.gbif_taxon.taxonomic_rank,
+                    db.study_meta_data.canonical_name,
+                    db.study_meta_data.genus_or_above,
+                    db.study_meta_data.taxonomic_rank,
+                    db.study_meta_data.taxon_id,
                     db.time_series_data.sample_start_date,
                     db.time_series_data.sample_start_time,
                     db.time_series_data.sample_end_date,

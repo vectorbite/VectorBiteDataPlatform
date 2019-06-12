@@ -1,9 +1,17 @@
 ## Release Notes
-Current version: **0.3.6**
+Current version: **0.3.7**
 
 ---
 
-### 0.3
+### 0.3.7
+- Fixed contact pages
+- Fixed task manager
+- Implemented data bulk uploader and normal uploader via web2py scheduler.
+- Auto vecdyn-taxon standard implemented into scheduler
+- Small changes to vecdyn back end and scheduler set-up to reject duplicate data-sets.
+- Fixed site statistics queries.
+- Updated favicon
+
 #### 0.3.6
 - Fixed "About us" page
 

@@ -8,6 +8,12 @@ from gluon.tools import prettydate
 week = datetime.timedelta(days=7)
 
 
+db.define_table('data_set_upload_test',
+                Field('csvfile','upload',uploadfield=False, requires = IS_UPLOAD_FILENAME(extension='csv')))
+
+
+
+
 
 db.define_table('collection_author',
     Field('name', 'string', notnull=True, unique=True),
@@ -60,8 +66,9 @@ db.define_table('publication_info',
                 Field('data_rights', requires=IS_IN_SET(DATARIGHTS), default=DATARIGHTS[2]),
                 Field('embargo_release_date', type ='date', requires=IS_EMPTY_OR(IS_DATE()), comment = 'If dataset is under embargo for a period of time please add its release date'),
                 Field('data_set_type', requires=IS_IN_SET(DATATYPE), default=DATATYPE[0]),
-                Field('collection_author',db.collection_author, requires=IS_EMPTY_OR(IS_IN_DB(db, 'collection_author.id', 'collection_author.name'))),
-                auth.signature)
+                Field('collection_author',db.collection_author, requires=IS_EMPTY_OR(IS_IN_DB(db, 'collection_author.id', 'collection_author.name')))
+                )
+                #auth.signature) # drop auth sig from thsi table
                 #format='%(id)s')
 
 
@@ -95,8 +102,11 @@ db.define_table('study_meta_data',
                 Field('sampling_protocol', type = 'string', comment='How entities were sampled'), #9
                 Field('measurement_unit', type = 'string', required=True, comment='Unit of measurement'), #10
                 Field('value_transform', type = 'string', comment='Note if the original values have been transformed'), #11
-                Field('taxon_id', 'reference gbif_taxon', default=None),
-                Field('geo_id', 'reference gaul_admin_layers', default=None),
+                Field('taxon_id', default=None),
+                Field('canonical_name', type='string'),
+                Field('genus_or_above', type='string'),
+                Field('taxonomic_rank', type='string'),
+                Field('geo_id', default=None),
                 Field('publication_info_id', 'reference publication_info')) #14
 
 
@@ -106,12 +116,11 @@ db.define_table('study_meta_data',
 #     pass
 
 
-
 db.define_table('time_series_data',
-                Field('sample_start_date', type = 'date', requires=IS_DATE(), comment='date of sample was set, leave blank if not applicable to the study'),
-                Field('sample_start_time', type = 'time', required=False, comment='time of sample was set, leave blank if not applicable to the study'),
+                Field('sample_start_date', type = 'date', requires=IS_EMPTY_OR(IS_DATE()), comment='date of sample was set, leave blank if not applicable to the study'),
+                Field('sample_start_time', type = 'time', requires=IS_EMPTY_OR(IS_TIME()), comment='time of sample was set, leave blank if not applicable to the study'),
                 Field('sample_end_date', type = 'date', requires=IS_DATE(), comment='Date of sample collection'),
-                Field('sample_end_time', type = 'time', required=False, comment='time of sample collection'),
+                Field('sample_end_time', type = 'time', requires=IS_EMPTY_OR(IS_TIME()), comment='time of sample collection'),
                 Field('sample_value'),#type = 'integer', comment='The numerical amount or result from the sample collection'),
                 Field('sample_sex', type = 'string', comment='sex of sample if applicable'),
                 Field('sample_stage', type = 'string', comment='life stage of sample if applicable'),
@@ -125,6 +134,7 @@ db.define_table('time_series_data',
                 Field('sample_name', type = 'string', comment ='A human readable sample name'),
                 Field('study_meta_data_id', 'reference study_meta_data'),
                 Field('publication_info_id', 'reference publication_info'))
+
 
 
 # if db(db.time_series_data.id>0).count() == 0:
