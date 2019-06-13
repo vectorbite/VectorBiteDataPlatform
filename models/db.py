@@ -34,6 +34,7 @@ if not request.env.web2py_runtime_gae:
              pool_size=configuration.get('db.pool_size'),
              migrate_enabled=configuration.get('db.migrate'),
              lazy_tables=True,
+             #fake_migrate_all=True,
              check_reserved=['postgres', 'postgres_nonreserved'])
     
     db2 = DAL(configuration.get('db2.uri'),
