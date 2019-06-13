@@ -1,0 +1,63 @@
+
+# Publication Information Template
+
+Meta-data entered into this table should be entered into the VectorBiTE web app via the data submission forms. 
+
+| Field Name            | Required Y/N | Data format | Details                                                      | Additional Notes                                             |        Db table         |
+| --------------------- | ------------ | ----------- | ------------------------------------------------------------ | ------------------------------------------------------------ | :---------------------: |
+| title                 | Yes          | String      | Short title identifying the data set                         | E.g. “Mosquito Surveillance in Iowa”                         | Publication Information |
+| collection_author     | No          | String      | Name of collection author                                    | E.g. name of a government authority, university department or individual researcher. | Publication Information |
+| dataset_citation    | No           | String      | Digital Object Identifier (DOI) of the the dataset           | If the data set was already published                        | Publication Information |
+| publication_citation    | No           | String      | Second Digital Object Identifier (DOI)                       | If connected to a published article                          | Publication Information |
+| description           | Yes          | String      | A short description about the dataset and the study  objectives | E.g. ‘Long term municipal surveillance of West Nile vector population in Athens, Greece (2000-2010)” | Publication Information |
+| url | No | String (URL) | web link to dataset source |  |  |
+| contact_name          | Yes          | String      | Name of person that may be contacted with inquiries about the data | E.g. name  of the person who may be contacted with enquiries about the dataset. | Publication Information |
+| contact_affiliation   | No           | String      | Author/contact affiliation                                   | If different from collection author                          | Publication Information |
+| email                 | No           | String      | Contact email address                                        | Email address of the person who may be contacted with enquiries about the dataset. | Publication Information |
+| orchid              | No           | String      | Open Researcher and Contributor ID                           | A unique code used to identify scientific/academic authors and contributors | Publication Information |
+| project_identifier      | No           | String      | link to a unqiue project identifier       |  | Publication information |
+| publication_status       | No           | String      | Publication status e.g. submitted, not published, published       |  | Publication information |
+| dataset_license       | No           | String      | Creative commons license identification or equivalent.       | Where possible provide a creative commons license identification. See https://creativecommons.org  for more information. | Publication information |
+| data_rights | Yes | String | The data reuse policy  for the data set. | Write 'open' if available to the public, 'closed' If data is only available to certain groups or  'embargo' along with release date if under embargo. | Publication information |
+| embargo_release_date | No | Date | ISO 8601 date format (YYYY-MM-DD) | Date when the dataset will be freed from the embargo | Publication information |
+
+
+
+
+# Main Data Collection Template
+
+The latest [vecdyn data collection template](https://github.com/vectorbite/VectorBiteDataPlatform/blob/master/static/Documentation/VecDyn/Template%26Scripts/VecDyn_template.csv) is available here
+
+
+| Field Name            | Required Y/N | Data format | Details                                                      | Additional Notes                                             |        Db table         |
+| --------------------- | ------------ | ----------- | ------------------------------------------------------------ | ------------------------------------------------------------ | :---------------------: |
+| title                 | Yes          | String      | Short title identifying the data set                         | E.g. “Mosquito Surveillance in Iowa”                         | Publication Information |
+| taxon                 | Yes          | String      | Classification of sample collected                           |                                                              |     Study Metadata      |
+| location_description  | Yes          | String      | Description of study location                                | In order of smallest geographic subdivision e.g.  district, town, county, state, Country |     Study Metadata      |
+| study_collection_area | No           | String      | The spatial extent (area or volume) of the study.            | Information supplied here should represent the total study area. A study area could contain multiple sample sites. |     Study Metadata      |
+| geo_datum             | No           | String      | Geodetic datum                                               | E.g. WGS 84                                                  |     Study Metadata      |
+| gps_obfuscation_info     | No           | String                            | GPS obfuscation information                                  | If GPS data obfuscation (e.g. GPS points are intentionally offset from their actual locations) or de-resolution occurs (e.g. GPS precision is intentionally reduced) , a statement on the manner by which this occurred. “GPS locations have been truncated to 3 decimals”; “GPS locations obfuscated using N-Dispersion”;  ”No GPS de-resolution was performed” |Study Metadata |
+| species_id_method | No   | String | Species identification method | A description of the methods used to identify the species e.g. “Morphological”  or  "Genotype". | Study Metadata |
+| study_design             | No           | String                            | Study design methodology                                     | Indicate if observational study i.e. prospective, retrospective, or experimental etc |     Study Metadata      |
+| sampling_strategy        | No           | String                            | Sampling_strategy, indicate the strategy used to select the sample | E.g. Probability sampling techniques, such as simple random sampling, systematic random sampling and stratified random sampling. Non-probability sampling techniques , such as self-selection sampling, convenience sampling, snowball sampling and purposive sampling. |     Study Metadata      |
+| sampling_method          | No           | String                            | Sampling apparatus e.g.trap type, observation method used to sample the entities. | E.g.    “CDC light trap” ,      “Tick drag”,      “Quadrat count”,       “BG Sentinel Trap” ,      “Pitfall trap”,       “Larval dip”,      “Johnson suction trap”,        or “Lindgren Funnel Trap” |     Study Metadata      |
+| sampling_protocol        | No           | String                            | How entities were sample                                     | The sampling protocol can further describe any distinguishing procedures used during sample collection e.g. if traps were set at specific times of day, or under specific weather conditions. Furthermore, this field should be used to describe any attractants/lures used to attract entities to a trap or collection site. |     Study Metadata      |
+| measurement_unit         | Yes          | String                            | Description of exactly what was observed, the unit for “Value” | ‘Count’, ‘Count (millions)’, ‘Harvest’, ‘Index of abundance’, ‘Index of territories’, ‘Leaf area’, ‘Mean Count’, ‘Not Specified’, ‘Percent cover’ and ‘Sample’ |     Study Metadata      |
+| value_transform          | No           | String                            | Note if the original values have been transformed – list details of the reference value of any data transformation | E.g .Base Year, Log, Proportion                              |     Study Metadata      |
+| sample_start_date        | No           | ISO 8601 date format (YYYY-MM-DD) | Date the data collection started                             | Note this field is only required when samples /observations were made between specific time frames |    Time Series data     |
+| sample_start_time        | No           | ISO 8601 time format (hh:mm:ss)   | Time the data collection started                             | Note this field is only required when samples /observations were made between specific time frames |    Time Series data     |
+| sample_end_date          | Yes          | ISO 8601 date format (YYYY-MM-DD) | Date the data collection ended                               |                                                              |    Time Series data     |
+| sample_end_time          | No           | ISO 8601 time format (hh:mm:ss)   | Time the data collection ended                               |                                                              |    Time Series data     |
+| value                    | Yes          | Integer/float                     | The numerical amount or result from the sample collection    | If presence / absence data, then values should be provided as 1 = species present & 0 = species absent |    Time Series data     |
+| sample_sex               | No           | String                            | Information on the sex of the organism sampled               |                                                              |    Time Series data     |
+| sample_stage             | No           | String                            | Information on the life stage of the organism sampled        | E.g adult, egg, larva, pupa                                  |    Time Series data     |
+| sample_location          | No           | String                            | Name of specific sample location                             |                                                              |    Time Series data     |
+| sample_collection_area   | No           | string                            | Area of sample location                                      | If relevant (*e.g*., when collection method is transect or quadrat), in units of area or volume, the spatial coverage of the sampling unit |    Time Series data     |
+| sample_latitude_dd     | No           | Float                             | Latitude of sample area as a decimal degree Specific location of the sample | Ranges [-90,+90] for latitude (north-south measurement)      |    Time Series data     |
+| sample_longitude_dd    | No           | Float                             | Longitude of sample area as a decimal degree                 | Ranges [-180,180] for longitude (east-west measurement)      |    Time Series data     |
+| sample_environment | No | String | Additional c information relating to the environment | Should be used to describe specific information about the location / environment e.g.  forest, field , urban area; elevation. | Time Series data |
+| additional_location_info | No           | String                            | Additional geographic information                            | Should be used to describe specific information about the location e.g. near to house, near playing fields, Near to population of farm animals |    Time Series data     |
+| additional_sample_info   | No           | String                            | Additional sample information                                | Should be used to describe specific information about conditions at the time of sampling e.g. wind speeds, temperatures, weather. |    Time Series data     |
+| sample_name              | No           | String                            | A human readable sample name                                 | May exist solely for the benefit of the depositor in organizing their data, use their own internal naming conventions etc. Naming convention is not restricted, but any encoded metadata should be revealed in the other data fields. For example, you may name a sample named ‘Aphid1_StickyTrap_Jan4,’ but you will still have “Sticky Trap” listed in a Collection Method field, and “Jan 4, 2017” in the date field. |    Time Series data     |
+
+

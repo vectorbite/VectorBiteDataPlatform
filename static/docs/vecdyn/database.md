@@ -3,7 +3,7 @@ Data Storage and Data Collection Specifications
 
 The following section provides an overview of the database structure, describes all the fields in the VecDyn database and provides details on the rational for their requirement.
 
-### VecDyn Database structure (backend)
+# VecDyn Database structure (backend)
 
 The following image shows the database schema, this describes where the data is stored in the database, relationships between tables and the database structure.
 
@@ -24,7 +24,7 @@ The **Taxonomic Information Table**  is a database table which is used to standa
 The **Geographic Database Table** is used to standardize all geographic information that is stored in the database. [The Global Administrative Unit Layers (GAUL) 2014 dataset](http://www.fao.org/geonetwork/srv/en/metadata.show?id=12691) is a spatial database that systematizes global administrative regions with a unified coding system at country, first (e.g. departments) and second administrative levels (e.g. districts). Each Administrative unit is assigned a unique ID and is connected to a spatial polygon. Standardizing  geographic information will allow users to query data spatially or by using a structured keyword search facility.
 
 
-### Temporal referencing
+# Temporal referencing
 
 Temporal referencing in the VecDyn database has been kept as straightforward as possible.
 Collection fields are set up to gather information on the date-time a collection was started
@@ -32,7 +32,7 @@ and the date-time a collection ended.  Using this information it is easy to calc
 like the duration a trap was set or to calculate the duration of other relevant sampling methods
 like ecological belt transects or line transects.
 
-### Spatial referencing
+# Spatial referencing
 
 in order to facilitate mapping and geo-spatial analysis, spatial referencing has been set up to track general information about a study site e.g. country, region, municipality and also specific information about a sample site, where Global Positioning System (GPS) information can be inputted for each collection site. The following figure demonstrates the spatial information that can be captured per study. Such data will allow the user to make assessments about sampling effort and decide whether data it is representative of a region or can use it to overlay against environmental and demographic covariates.
 
@@ -42,3 +42,46 @@ in order to facilitate mapping and geo-spatial analysis, spatial referencing has
 
 
 ![](images/sample-site-2.png)
+
+
+
+# Data Standardization models / Data integrity
+
+# **Taxonomic Standardization Database**
+
+The original [The Catalogue of Life database](http://www.catalogueoflife.org) field names had to be renamed for issues concerning Python keywords, the main programming language that was used to build the Web app and control the database.
+
+| Original Field Name  | Field Name in VecDyn Db        |
+| -------------------- | ------------------------------ |
+| taxonID              | taxonomic_ID                   |
+| kingdom              | taxonomic_kingdom              |
+| phylum               | taxonomic_phylum               |
+| class                | taxonomic_class                |
+| order                | taxonomic_order                |
+| superfamily          | taxonomic_superfamily          |
+| genus                | taxonomic_genus                |
+| subgenus             | taxonomic_subgenus             |
+| specificEpithet      | taxonomic_specificEpithet      |
+| infraspecificEpithet | taxonomic_infraspecificEpithet |
+| species              | taxonomic_species              |
+
+
+
+# **Geographic Standardization Database **
+
+[The Global Administrative Unit Layers (GAUL) 2014 dataset](http://www.fao.org/geonetwork/srv/en/metadata.show?id=12691) has been restructured in order to provide one unique observation for each individual geographic entry  or row within the data table e.g. a specific country or specific region. Each specific geographic entity has as individual conde assigned to it and shape file.
+
+| Field name  in original dataset | Field name in VecDyn Db | Description                                                  |
+| ------------------------------- | ----------------------- | ------------------------------------------------------------ |
+| ------------------------------  | ADM_CODE                | unique code assigned to each administrative unit / shape file |
+| ADM0_NAME                       | ADM0_NAME               | country name                                                 |
+| ADM1_NAME                       | ADM1_NAME               | first administrative subdivision e.g. Florida                |
+| ADM2_NAME                       | ADM2_NAME               | first administrative subdivision e.g. Manatee County         |
+| ------------------------------  | centroid_latitude       | latitude of centroid representing centre of administrative unit |
+| ------------------------------  | centroid_longitude      | longitude centroid taking representing centre of administrative unit |
+
+![](Images/gual-world-map.png)
+
+![](Images/gaul-us-mex-map.png)
+
+
