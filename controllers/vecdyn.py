@@ -13,25 +13,31 @@ logger.setLevel(logging.DEBUG)
 # ----------------------------------------------------------------------------------------------------------------------
 
 def index():
-    dsets = db(db.publication_info).count()
-    obs =  db(db.time_series_data).count()
-    taxa = db(db.study_meta_data.taxon).select(distinct=db.study_meta_data.taxon)
-    taxa = len(taxa)
-    countries = db(db.study_meta_data.geo_id == db.gaul_admin_layers.id).select(
-        distinct=db.gaul_admin_layers.adm0_name)
-    countries = len(countries)
-    regions = db(db.study_meta_data.geo_id == db.gaul_admin_layers.id).select(
-        distinct=db.gaul_admin_layers.adm1_name)
-    regions = len(regions)
-    counties = db(db.study_meta_data.geo_id == db.gaul_admin_layers.id).select(
-        distinct=db.gaul_admin_layers.adm2_name)
-    counties = len(counties)
+    # dsets = db(db.publication_info).count()
+    # obs =  db(db.time_series_data).count()
+    # taxa = db(db.study_meta_data.taxon).select(distinct=db.study_meta_data.taxon)
+    # taxa = len(taxa)
+    # countries = db(db.study_meta_data.geo_id == db.gaul_admin_layers.id).select(
+    #     distinct=db.gaul_admin_layers.adm0_name)
+    # countries = len(countries)
+    # regions = db(db.study_meta_data.geo_id == db.gaul_admin_layers.id).select(
+    #     distinct=db.gaul_admin_layers.adm1_name)
+    # regions = len(regions)
+    # counties = db(db.study_meta_data.geo_id == db.gaul_admin_layers.id).select(
+    #     distinct=db.gaul_admin_layers.adm2_name)
+    # counties = len(counties)
+    dsets = 0
+    obs = 0
+    taxa = 0
+    countries = 0
+    regions = 0
+    counties = 0
     trap_locs = {}
     # trap_locs = db(db.time_series_data).select(db.time_series_data.sample_lat_dd, db.time_series_data.sample_long_dd)
     coords = []
-    for i in db(db.time_series_data).select(db.time_series_data.sample_lat_dd, db.time_series_data.sample_long_dd,
-                                            distinct=True):
-        coords.append(i)
+    # for i in db(db.time_series_data).select(db.time_series_data.sample_lat_dd, db.time_series_data.sample_long_dd,
+    #                                         distinct=True):
+    #     coords.append(i)
     coords = len(coords)
     return dict(dsets=dsets,obs=obs,taxa=taxa,countries=countries,regions=regions,counties=counties,coords=coords)
 
