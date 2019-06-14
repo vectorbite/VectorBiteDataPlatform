@@ -31,8 +31,8 @@ elif request.controller == 'vecdyn':
     if auth.is_logged_in():
         response.menu.append(
             (T('Database'), False, None, [
-                ('Submit vecdyn data', False, URL('vecdyn', 'submit_vecdyn_data')),  # TODO: move to vecdyn controller
-                ('Explore vecdyn datasets', False, URL('vecdyn', 'vecdyn_taxon_location_query')),
+                ('Explore vecdyn datasets', False, URL('vecdyn', 'vecdyn_taxon_location_query')),  # TODO: move to vecdyn controller
+                ('Submit vecdyn data', False, URL('vecdyn', 'submit_vecdyn_data')),
             ])
         )
 else:
