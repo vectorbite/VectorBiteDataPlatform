@@ -26,8 +26,6 @@ Meta-data entered into this table should be entered into the VectorBiTE web app 
 
 # Main Data Collection Template
 
-The latest [vecdyn data collection template](https://github.com/vectorbite/VectorBiteDataPlatform/blob/master/static/Documentation/VecDyn/Template%26Scripts/VecDyn_template.csv) is available here
-
 
 | Field Name            | Required Y/N | Data format | Details                                                      | Additional Notes                                             |        Db table         |
 | --------------------- | ------------ | ----------- | ------------------------------------------------------------ | ------------------------------------------------------------ | :---------------------: |

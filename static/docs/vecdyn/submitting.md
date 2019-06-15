@@ -1,10 +1,10 @@
 # Submitting data
 
-1. Download the latest template by right clicking on the following [link](https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Template%26Scripts/VecDyn_template.csv) and selecting ‘save.as’.  
-   A completed [example data set can be found here](https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Examples/ManateeCountyMosquitoMonitoring/vecdyn_manatee_county_aedes_aegypti.csv). This will help you to understand how to compile data in the VecDyn template format. You can also access an example [R Markdown recipe](https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/Documentation/VecDyn/Examples/ManateeCountyMosquitoMonitoring/ManateeCountryMosquitoMonitoring.Rmd) that provides an example of converting an existing data set into a VecDyn formatted dataset. Notice that all files are in plain text e.g. ‘.csv’ format, and not in Excel format or similar. This facilitates text parsing by scripts, prevents data loss/corruption, and allows for detailed comparisons of changes via version control
-   systems.
-2. You can refer to the [VecDyn template field descriptions](#vecdyn-template-field-descriptions) to guide you through the data collection and compilation process.
-3. To submit your dataset, upload and submit the dataset via the [upload page](http://vectorbyte.org/default/submit_data) on the VectorBiTE web app.
+1. Download the latest templates by right clicking on the following links   
+    - [vecdyn data template](https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/documentation/VecDyn/Template_and_Scripts/vecdyn_template.csv) and selecting ‘save.as’.  
+    - [vecdyn publication info template](https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/documentation/VecDyn/Template_and_Scripts/vecdyn_publication_information.csv) and selecting ‘save.as’.  
+2. You can refer to the 'Field definitions section' to guide you through the data collection and compilation process.
+3. To submit your dataset, upload and submit the dataset via the [upload page](https://www.vectorbyte.org/vecdyn/submit_vecdyn_data) on the VectorByTE web app.
 4. We’ll contact you regarding the outcome of your submission once we have had a look at it.
 
 
@@ -16,31 +16,35 @@ You may find that you can complete each table partially and you end up with miss
 
 # Templates
 
-Note that all data frame fields are created in character format,  you'll need to convert them to the correct formats at a later stage. You can use this data frame as a guide to help you convert your data-set to the VecDyn format. You can either import data into into the data frames below or just rename the field names of the data-set you are working on.  However,  you need to make sure all the columns are in the correct order as below,  even if your data set is missing certain fields. In this case you need to create them  and leave them blank.
+Note that all data frame fields are created in character format,  
+you'll need to convert them to the correct formats at a later stage. 
+You can use this data frame as a guide to help you convert your data-set to the VecDyn format. 
+You can either import data into into the data frames below or just rename the field names of the 
+data-set you are working on.  However,  you need to make sure all the columns are in the correct 
+order as below,  even if your data set is missing certain fields. In this case you need to create 
+them  and leave them blank.
+
+# Create vecdyn template in R Markdown
 
 ```{r}
-publication_information_template  <-data.frame(title=character(),
-                 collection_author=character(),
-                 dataset_doi=character(),
-                 publication_doi = character(),
-                 description = character(),
-                 url = character(),
-                 contact_name=character(),
-                 contact_affiliation=character(),
-                 email=character(),
-                 orcid=character(),
-                 dataset_license=character(),
-                 data_rights=character(),
-                 embargo_release_date=character(),
-                 data_set_type=character(),
+publication_information_template <-data.frame(title=character(), 
+                 cdataset_citation=character(),
+                             publication_citation = character(),
+                             description = character(),
+                             url = character(),
+                             contact_name=character(),
+                             contact_affiliation=character(),
+                             email=character(),
+                             orcid=character(),
+                             dataset_license=character(),
+                             project_identifier=character(),
+                             publication_status=character(),
                  stringsAsFactors=FALSE)
-
-#write.csv(publication_information_template, file = "publication_information_template.csv", row.names = FALSE)
-
+write.csv(publication_information_template, file = "vecdyn_publication_information.csv", row.names = FALSE)
 ```
+                
 
 ```{r}
-
 vecdyn_template  <- data.frame(title = character(),
                              taxon = character(),
                              location_description = character(),
@@ -54,7 +58,7 @@ vecdyn_template  <- data.frame(title = character(),
                              sampling_protocol = character(),
                              measurement_unit = character(),
                              value_transform = character(),
-                             sample_start_date = character(),
+                              sample_start_date = character(),
                              sample_start_time = character(),
                              sample_end_date =  character(),
                              sample_end_time = character(),
@@ -70,6 +74,6 @@ vecdyn_template  <- data.frame(title = character(),
                              additional_sample_info = character(),
                              sample_name = character(),
                              stringsAsFactors=FALSE)
-#write.csv(VecDyn_template, file = "VecDyn_template.csv", row.names = FALSE)
-
-```
+write.csv(vecdyn_template , file = "vecdyn_template .csv", row.names = FALSE)
+                             
+```              

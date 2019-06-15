@@ -1,11 +1,14 @@
 # Mapping Data to Vecdyn Template in R Tutorial (Rmarkdown)
 
-
-Your challenge will be to clean-up and process data-sets, mapping them to the vecdyn template. Try to map what you can, you might find that some data-sets provide more information than what is required for the vecdyn database (e.g. the GPDD data has many additional fields we do not need).  Work with R notebooks or r studio markdown so you can save all your code and we can go back to it at a later date and re-edit if necessary.
-
-You'll probably need to use a number of packages and techniques to achieve your goal. You should refer to the 'R for Data Science guide'(https://r4ds.had.co.nz/) or materials you have been provided by Imperial.
-
-You can find the R code which will help you build a vecdyn template under the 'Template' section below.
+Your challenge will be to clean-up and process data-sets, mapping them to the vecdyn template. 
+Try to map what you can, you might find that some data-sets provide more information than what is 
+required for the vecdyn database (e.g. the GPDD data has many additional fields we do not need).  
+Work with R notebooks or r studio markdown so you can save all your code and we can go back to it 
+at a later date and re-edit if necessary.
+You'll probably need to use a number of packages and techniques to achieve your goal. 
+You should refer to the 'R for Data Science guide'(https://r4ds.had.co.nz/). 
+You can find the R code which will help you build a vecdyn template under the 
+'Template' section below.
 
 # Mapping To The Vecdyn Template Example
 
