@@ -1,136 +1,12 @@
----
-title: "Student_VecDyn_Projects"
-output: html_document
----
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-# Intro
-
-VecDyn is a global database for spatially and temporally explicit presence-absence and abundance data. We accept and distribute data for animal and plant disease vectors. 
-
-## Database Usage
-
-- **Abundance data**: Tracking populations over time and space
-- **Presence absence data**: Tracking species presence / absence over time and space
-- **Point location data**: Tracking Geo-point locations of where a species was observed. 
-
-### Overview of data collection
-
-- **What** – description of the sample collected – (e.g. species, count)
-- **When** –  temporal information about time of collection. 
-- **Where** – geographical information about where the collection took place. 
-- **How** – operational information about how the collections were made. 
-- **Who**  – who has responsibility for the collection
-
-## Data Sources
-
-### Project 1: Crop Disease Vectors
-
-Data sets
-
-- GPDD
-
-  - Rothamsted Insect Survey Annual Report.	Hard Copy - Tabular	Taylor, L.R., Woiwod, I.P., MacCaulay, E.D.M., Dupuch, M.J. & Nicklen, J.	1990	None	502
-  
-- KBS049:Aphid Collection Tower Site at KBS
-  - https://lter.kbs.msu.edu/data sets/52
-  
-  - Alternation of bottom-up and top-down regulation in a natural population of an agromyzid leafminer, Chromatomyia suikazurae.	Hard Copy - Graphical	Kato, M.	1994	None	589
-  
-  -Patterns of density dependence in moths and aphids.	Hard Copy - Graphical	Woiwod, I. & Hanski, I.	1992	Read from graphs digitally.	749
-  
-  - Population dynamics and abundance of deciduous tree - dwelling aphids.	Electronic transfer	Dixon, A.F.G.	1990	None	448
-  
-  - Regular alternation of high and low population size of gall-forming aphids: analysis of ten years of data.	Hard Copy - Graphical	Wool, D.	1990	None	535
-
-
-### Project 2: Mosquito Borne Disease Vectors
-
-- Laura Harrington
-  - CulexCount_Temp_Rainfall
-
-- Anastasia Mosquito Control District entomological monitoring
-  - https://zenodo.org/communities/vb-popbio/search?page=1&size=20&q=Anastasia%20Mosquito%20Control%20District%20entomological%20monitoring
-
-
-## Mapping Data to Vecdyn Template
-
-VecDyn data is stored in two separate files, one dedicated for storing publication information and one dedicated to storing the time series data and the meta-data (data describing how the data was collected and so on)your.  Data sets will come in all shapes and forms, you may receive a data which contains all relevant data in one file or it may be split into several file or you may have to extract ifnromation from different sources i.e. publication from a web page and time series data from a file. You may only be able to fill out part of each form so you are likley to have many missing fields. Don't worry about this. We can decide if the dataset is complete, request information from the author at a later date before publishing it. 
-
-We first set up  our dataframe fields in character format, we'll convert them to the correct formats at a later time i.e. time and data formats.
-
-You can use this data frame as a guide to help you convert your dataset to the vecdyn format. You can either import data into this data frame or rename the field names of the dataset you are processing. However, make sure all the colums are in the correct as the two data frames below, even if you cannot fill certain fields.  
-
-
-```{r}
-publication_information_template  <-data.frame(title=character(), 
-                 collection_author=character(),
-                 dataset_citation=character(),
-                 publication_citation = character(),
-                 description = character(),
-                 url = character(),
-                 contact_name=character(),
-                 contact_affiliation=character(),
-                 email=character(),
-                 orcid=character(),
-                 dataset_license=character(),
-                 data_rights=character(),
-                 embargo_release_date=character(),
-                 data_set_type=character(),
-                 stringsAsFactors=FALSE)
-
-#write.csv(publication_information_template, file = "publication_information_template.csv", row.names = FALSE)
-
-```
-
-
-```{r}
-
-vecdyn_template  <- data.frame(title = character(),
-                             taxon = character(),
-                             location_description = character(),
-                             study_collection_area = character(),
-                             geo_datum = character(),
-                             gps_obfuscation_info = character(),
-                             species_id_method = character(),
-                             study_design = character(),
-                             sampling_strategy = character(),
-                             sampling_method = character(),
-                             sampling_protocol = character(),
-                             measurement_unit = character(),
-                             value_transform = character(),
-                             sample_start_date = character(),
-                             sample_start_time = character(),
-                             sample_end_date =  character(),
-                             sample_end_time = character(),
-                             sample_value = numeric(),
-                             sample_sex = character(),
-                             sample_stage = character(),
-                             sample_location = character(),
-                             sample_collection_area = character(),
-                             sample_lat_dd = character(),
-                             sample_long_dd = character(),
-                             sample_environment = character(),
-                             additional_location_info = character(),
-                             additional_sample_info = character(),
-                             sample_name = character(),
-                             stringsAsFactors=FALSE)
-#write.csv(VecDyn_template, file = "VecDyn_template.csv", row.names = FALSE)
-                             
-```              
-
-### Data collection models 
-
-#### Publication Information Template
+# Publication Information Template
 
 Meta-data entered into this table should be entered into the VectorBiTE web app via the data submission forms. 
 
 | Field Name            | Required Y/N | Data format | Details                                                      | Additional Notes                                             |        Db table         |
 | --------------------- | ------------ | ----------- | ------------------------------------------------------------ | ------------------------------------------------------------ | :---------------------: |
 | title                 | Yes          | String      | Short title identifying the data set                         | E.g. “Mosquito Surveillance in Iowa”                         | Publication Information |
-| collection_author     | Yes          | String      | Name of collection author                                    | E.g. name of a government authority, university department or individual researcher. | Publication Information |
+| collection_author     | No          | String      | Name of collection author                                    | E.g. name of a government authority, university department or individual researcher. | Publication Information |
 | dataset_citation    | No           | String      | Digital Object Identifier (DOI) of the the dataset           | If the data set was already published                        | Publication Information |
 | publication_citation    | No           | String      | Second Digital Object Identifier (DOI)                       | If connected to a published article                          | Publication Information |
 | description           | Yes          | String      | A short description about the dataset and the study  objectives | E.g. ‘Long term municipal surveillance of West Nile vector population in Athens, Greece (2000-2010)” | Publication Information |
@@ -139,6 +15,8 @@ Meta-data entered into this table should be entered into the VectorBiTE web app 
 | contact_affiliation   | No           | String      | Author/contact affiliation                                   | If different from collection author                          | Publication Information |
 | email                 | No           | String      | Contact email address                                        | Email address of the person who may be contacted with enquiries about the dataset. | Publication Information |
 | orchid              | No           | String      | Open Researcher and Contributor ID                           | A unique code used to identify scientific/academic authors and contributors | Publication Information |
+| project_identifier      | No           | String      | link to a unqiue project identifier       |  | Publication information |
+| publication_status       | No           | String      | Publication status e.g. submitted, not published, published       |  | Publication information |
 | dataset_license       | No           | String      | Creative commons license identification or equivalent.       | Where possible provide a creative commons license identification. See https://creativecommons.org  for more information. | Publication information |
 | data_rights | Yes | String | The data reuse policy  for the data set. | Write 'open' if available to the public, 'closed' If data is only available to certain groups or  'embargo' along with release date if under embargo. | Publication information |
 | embargo_release_date | No | Date | ISO 8601 date format (YYYY-MM-DD) | Date when the dataset will be freed from the embargo | Publication information |
@@ -146,9 +24,7 @@ Meta-data entered into this table should be entered into the VectorBiTE web app 
 
 
 
-#### Main Data Collection Template
-
-The latest [vecdyn data collection template](https://github.com/vectorbite/VectorBiteDataPlatform/blob/master/static/Documentation/VecDyn/Template%26Scripts/VecDyn_template.csv) is available here
+# Main Data Collection Template
 
 
 | Field Name            | Required Y/N | Data format | Details                                                      | Additional Notes                                             |        Db table         |
@@ -181,7 +57,5 @@ The latest [vecdyn data collection template](https://github.com/vectorbite/Vecto
 | additional_location_info | No           | String                            | Additional geographic information                            | Should be used to describe specific information about the location e.g. near to house, near playing fields, Near to population of farm animals |    Time Series data     |
 | additional_sample_info   | No           | String                            | Additional sample information                                | Should be used to describe specific information about conditions at the time of sampling e.g. wind speeds, temperatures, weather. |    Time Series data     |
 | sample_name              | No           | String                            | A human readable sample name                                 | May exist solely for the benefit of the depositor in organizing their data, use their own internal naming conventions etc. Naming convention is not restricted, but any encoded metadata should be revealed in the other data fields. For example, you may name a sample named ‘Aphid1_StickyTrap_Jan4,’ but you will still have “Sticky Trap” listed in a Collection Method field, and “Jan 4, 2017” in the date field. |    Time Series data     |
-
-
 
 
