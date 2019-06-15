@@ -1,5 +1,5 @@
-Data Storage and Data Collection Specifications
-------------------------------
+# Data Storage and Data Collection Specifications
+
 
 The following section provides an overview of the database structure, describes all the fields in the VecDyn database and provides details on the rational for their requirement.
 

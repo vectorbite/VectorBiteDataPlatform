@@ -1,64 +1,28 @@
 ---
 title: "R VecDyn template Markdown Script"
-author: "Matthew J Watts"
-date: "21 February 2018"
 output: html_document
 ---
 
-
-
-
-```{r}
-publication_information_template <-data.frame(title=character(), 
-                 collection_author=character(),
-                 dataset_citation=character(),
-                 publication_citation = character(),
-                 description = character(),
-                 url = character(),
-                 contact_name=character(),
-                 contact_affiliation=character(),
-                 email=character(),
-                 orcid=character(),
-                 dataset_license=character(),
-                 data_rights=character(),
-                 embargo_release_date=character(),
-                 data_set_type=character(),
-                 stringsAsFactors=FALSE)
-write.csv(Data_Series_Information_template, file = "Data_Series_Information_template.csv", row.names = FALSE)
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
 ```
-                
 
-```{r}
+## R Markdown
 
-vecdyn_template  <- data.frame(title = character(),
-                             taxon = character(),
-                             location_description = character(),
-                             study_collection_area = character(),
-                             geo_datum = character(),
-                             gps_obfuscation_info = character(),
-                             species_id_method = character(),
-                             study_design = character(),
-                             sampling_strategy = character(),
-                             sampling_method = character(),
-                             sampling_protocol = character(),
-                             measurement_unit = character(),
-                             value_transform = character(),
-                             sample_start_date = character(),
-                             sample_start_time = character(),
-                             sample_end_date =  character(),
-                             sample_end_time = character(),
-                             sample_value = numeric(),
-                             sample_sex = character(),
-                             sample_stage = character(),
-                             sample_location = character(),
-                             sample_collection_area = character(),
-                             sample_lat_dd = character(),
-                             sample_long_dd = character(),
-                             sample_environment = character(),
-                             additional_location_info = character(),
-                             additional_sample_info = character(),
-                             sample_name = character(),
-                             stringsAsFactors=FALSE)
-write.csv(VecDyn_template, file = "VecDyn_template.csv", row.names = FALSE)
-                             
-```              
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
