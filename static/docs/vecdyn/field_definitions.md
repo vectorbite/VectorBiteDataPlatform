@@ -1,7 +1,7 @@
 
-# Publication Information Template
+## Publication Information Template
 
-Meta-data entered into this table should be entered into the VectorBiTE web app via the data submission forms. 
+Meta-data entered into this table should be entered into the VectorBiTE web app via the data submission forms.
 
 | Field Name            | Required Y/N | Data format | Details                                                      | Additional Notes                                             |        Db table         |
 | --------------------- | ------------ | ----------- | ------------------------------------------------------------ | ------------------------------------------------------------ | :---------------------: |
@@ -24,7 +24,7 @@ Meta-data entered into this table should be entered into the VectorBiTE web app 
 
 
 
-# Main Data Collection Template
+## Main Data Collection Template
 
 
 | Field Name            | Required Y/N | Data format | Details                                                      | Additional Notes                                             |        Db table         |
@@ -57,5 +57,3 @@ Meta-data entered into this table should be entered into the VectorBiTE web app 
 | additional_location_info | No           | String                            | Additional geographic information                            | Should be used to describe specific information about the location e.g. near to house, near playing fields, Near to population of farm animals |    Time Series data     |
 | additional_sample_info   | No           | String                            | Additional sample information                                | Should be used to describe specific information about conditions at the time of sampling e.g. wind speeds, temperatures, weather. |    Time Series data     |
 | sample_name              | No           | String                            | A human readable sample name                                 | May exist solely for the benefit of the depositor in organizing their data, use their own internal naming conventions etc. Naming convention is not restricted, but any encoded metadata should be revealed in the other data fields. For example, you may name a sample named ‘Aphid1_StickyTrap_Jan4,’ but you will still have “Sticky Trap” listed in a Collection Method field, and “Jan 4, 2017” in the date field. |    Time Series data     |
-
-
