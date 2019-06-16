@@ -37,11 +37,11 @@ hr {
 }
 
 a {
-    color: rgba(0,0,0,.5)
+    color: royalblue;
 }
 
 a:hover {
-    color: rgba(0,0,0,.7);
+    color: cornflowerblue;
     text-decoration: none;
 }
 

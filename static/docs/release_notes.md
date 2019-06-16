@@ -1,7 +1,11 @@
 ## Release Notes
-Current version: **0.3.7**
+Current version: **0.3.8**
 
 ---
+
+### 0.3.8
+- Enhanced download pages
+- vecdyn docs updates
 
 ### 0.3.7
 - Fixed contact pages

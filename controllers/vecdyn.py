@@ -13,32 +13,32 @@ logger.setLevel(logging.DEBUG)
 # ----------------------------------------------------------------------------------------------------------------------
 
 def index():
-    # dsets = db(db.publication_info).count()
-    # obs =  db(db.time_series_data).count()
-    # taxa = db(db.study_meta_data.taxon).select(distinct=db.study_meta_data.taxon)
-    # taxa = len(taxa)
-    # countries = db(db.study_meta_data.geo_id == db.gaul_admin_layers.id).select(
-    #     distinct=db.gaul_admin_layers.adm0_name)
-    # countries = len(countries)
-    # regions = db(db.study_meta_data.geo_id == db.gaul_admin_layers.id).select(
-    #     distinct=db.gaul_admin_layers.adm1_name)
-    # regions = len(regions)
-    # counties = db(db.study_meta_data.geo_id == db.gaul_admin_layers.id).select(
-    #     distinct=db.gaul_admin_layers.adm2_name)
-    # counties = len(counties)
-    dsets = 0
-    obs = 0
-    taxa = 0
-    countries = 0
-    regions = 0
-    counties = 0
-    trap_locs = {}
+    dsets = db(db.publication_info).count()
+    obs =  db(db.time_series_data).count()
+    taxa = db(db.study_meta_data.taxon).select(distinct=db.study_meta_data.taxon, cache=(cache.ram, 3600), cacheable=True)
+    taxa = len(taxa)
+    countries = db(db.study_meta_data.geo_id == db.gaul_admin_layers.id).select(
+        distinct=db.gaul_admin_layers.adm0_name, cache=(cache.ram, 36000), cacheable=True)
+    countries = len(countries)
+    regions = db(db.study_meta_data.geo_id == db.gaul_admin_layers.id).select(
+        distinct=db.gaul_admin_layers.adm1_name, cache=(cache.ram, 36000), cacheable=True)
+    regions = len(regions)
+    counties = db(db.study_meta_data.geo_id == db.gaul_admin_layers.id).select(
+        distinct=db.gaul_admin_layers.adm2_name, cache=(cache.ram, 36000), cacheable=True)
+    counties = len(counties)
+    # dsets = 0
+    # obs = 0
+    # taxa = 0
+    # countries = 0
+    # regions = 0
+    # counties = 0
+    # trap_locs = {}
     # trap_locs = db(db.time_series_data).select(db.time_series_data.sample_lat_dd, db.time_series_data.sample_long_dd)
     coords = []
     # for i in db(db.time_series_data).select(db.time_series_data.sample_lat_dd, db.time_series_data.sample_long_dd,
     #                                         distinct=True):
     #     coords.append(i)
-    coords = len(coords)
+    # coords = len(coords)
     return dict(dsets=dsets,obs=obs,taxa=taxa,countries=countries,regions=regions,counties=counties,coords=coords)
 
 
@@ -305,19 +305,14 @@ def view_data():
     unstan_geo = db((db.study_meta_data.publication_info_id == publication_info_id) & (db.study_meta_data.geo_id == None)).count(distinct=db.study_meta_data.location_description)
 
     coords = []
-    for i in db(db.time_series_data.publication_info_id == publication_info_id).select(db.time_series_data.sample_lat_dd, db.time_series_data.sample_long_dd, distinct=True):
-        coords.append(i)
-    coords = len(coords)
+    # for i in db(db.time_series_data.publication_info_id == publication_info_id).select(db.time_series_data.sample_lat_dd, db.time_series_data.sample_long_dd, distinct=True, cache=(cache.ram, 36000), cacheable=True):
+    #     coords.append(i)
+    # coords = len(coords)
     # Following queries count to see how many unstandardised entries are in the collection, unstandardised dates are
     # recognised by the absence of either a no taxon_id (None) or no geo_id (None) supplies user with a message
     # Code for grid
     # row.id isnt working in this function since we are joining multiple tables,
     # instead we need to specify the row.study_meta_data.id for the links in the table
-
-
-
-
-
 
 
     links = [lambda row: A('View/edit meta entry',
@@ -595,11 +590,11 @@ def standardise_geo_data():
     geo_entries = db((db.study_meta_data.publication_info_id == publication_info_id) & (db.study_meta_data.geo_id == None)).select(distinct=db.study_meta_data.location_description)
     count = len(geo_entries)
     first_row = rows.first()
-    if first_row.geo_id < 1:
-        pass
-    else:
-        response.flash = 'All data attached to this data set has been standardised'
-        redirect(URL("vecdyn", "view_data", vars={'publication_info_id': publication_info_id}))
+    # if first_row.geo_id < 1:
+    #     pass
+    # else:
+    #     response.flash = 'All data attached to this data set has been standardised'
+    #     redirect(URL("vecdyn", "view_data", vars={'publication_info_id': publication_info_id}))
     return locals()
 
 
@@ -784,18 +779,22 @@ def vecdyn_taxon_location_query():
                                 ],
 
                         headers={'publication_info.title': 'Title',
-                                 'collection_author.name': 'Author',
+                                 'collection_author.name': 'Collector',
                                  'study_meta_data.canonical_name': 'Taxon',
-                                 'study_meta_data.genus_or_above': 'genus_or_above',
+                                 'study_meta_data.genus_or_above': 'Genus_or_above',
                                  'study_meta_data.taxonomic_rank': 'taxonomic_rank',
                                  'gaul_admin_layers.adm2_name': 'Administrative Division 2',
                                  'gaul_admin_layers.adm1_name': 'Administrative Division 1',
                                  'gaul_admin_layers.adm0_name': 'Country Name',
                                  'study_meta_data.id': 'Dataset ID'},
                         maxtextlength=200,
+                        paginate=100,
                         selectable=select,
                         deletable=False, editable=False, details=False, create=False)
-
+    if grid.elements('th'):
+        grid.elements('th')[0].append(SPAN('Select all', BR(), INPUT(_type='checkbox',
+                                                                     _onclick="jQuery('input:checkbox').not(this).prop('checked', this.checked);"
+                                                                     )))
     # The final bit of untidiness is the location of the buttons.
     # - The export 'menu' (a single button here) is at the bottom of the page.
     #   This button doesn't submit a form, just calls the page again with _export_type
@@ -1002,18 +1001,20 @@ def vecdyn_author_query():
                         field_id=db.publication_info.id,
                         fields=[db.publication_info.title,
                                 db.publication_info.collection_author,
-                                db.publication_info.dataset_citation,
                                 db.publication_info.description,
                                 db.publication_info.data_set_type],
                         headers={'publication_info.title': 'Title',
-                                 'publication_info.collection_author': 'Collection Author',
-                                 'publication_info.dataset_citation': 'DOI',
+                                 'publication_info.collection_author': 'Collector',
                                  'publication_info.description': 'Description',
                                  'publication_info.data_set_type': 'Dataset Type'},
                         maxtextlength=200,
+                        paginate=20,
                         selectable=select,
                         deletable=False, editable=False, details=False, create=False)
-
+    if grid.elements('th'):
+        grid.elements('th')[0].append(SPAN('Select all', BR(), INPUT(_type='checkbox',
+                                                                     _onclick="jQuery('input:checkbox').not(this).prop('checked', this.checked);"
+                                                                     )))
     # The final bit of untidiness is the location of the buttons.
     # - The export 'menu' (a single button here) is at the bottom of the page.
     #   This button doesn't submit a form, just calls the page again with _export_type
