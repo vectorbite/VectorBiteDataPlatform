@@ -789,7 +789,7 @@ def vecdyn_taxon_location_query():
                                  'gaul_admin_layers.adm0_name': 'Country Name',
                                  'study_meta_data.id': 'Dataset ID'},
                         maxtextlength=200,
-                        paginate=100,
+                        paginate=10,
                         selectable=select,
                         deletable=False, editable=False, details=False, create=False)
     if grid.elements('th'):
@@ -1009,13 +1009,13 @@ def vecdyn_author_query():
                                  'publication_info.description': 'Description',
                                  'publication_info.data_set_type': 'Dataset Type'},
                         maxtextlength=200,
-                        paginate=20,
+                        paginate=5,
                         selectable=select,
                         deletable=False, editable=False, details=False, create=False)
-    if grid.elements('th'):
-        grid.elements('th')[0].append(SPAN('Select all', BR(), INPUT(_type='checkbox',
-                                                                     _onclick="jQuery('input:checkbox').not(this).prop('checked', this.checked);"
-                                                                     )))
+    # if grid.elements('th'):
+    #     grid.elements('th')[0].append(SPAN('Selet all', BR(), INPUT(_type='checkbox',
+    #                                                                  _onclick="jQuery('input:checkbox').not(this).prop('checked', this.checked);"
+    #                                                                  )))
     # The final bit of untidiness is the location of the buttons.
     # - The export 'menu' (a single button here) is at the bottom of the page.
     #   This button doesn't submit a form, just calls the page again with _export_type
