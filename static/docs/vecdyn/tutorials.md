@@ -1,14 +1,9 @@
 # Mapping Data to Vecdyn Template in R Tutorial (Rmarkdown)
 
-Your challenge will be to clean-up and process data-sets, mapping them to the vecdyn template. 
-Try to map what you can, you might find that some data-sets provide more information than what is 
-required for the vecdyn database (e.g. the GPDD data has many additional fields we do not need).  
-Work with R notebooks or r studio markdown so you can save all your code and we can go back to it 
-at a later date and re-edit if necessary.
-You'll probably need to use a number of packages and techniques to achieve your goal. 
-You should refer to the 'R for Data Science guide'(https://r4ds.had.co.nz/). 
-You can find the R code which will help you build a vecdyn template under the 
-'Template' section below.
+In this tutorial we show you how to clean, process and map a dataset to the vecdyn template. 
+
+Please refer to the 'R for Data Science guide'(https://r4ds.had.co.nz/) for further information on some of the techniques we use here. 
+
 
 # Mapping To The Vecdyn Template Example
 
@@ -220,24 +215,6 @@ vecdyn_mcm_2012_publication_info  <-data.frame(title=character(),
 
 ```
 
-### Linking Vecdyn Data To Climate Data
-
-Run through the above tutorial to import all the data for the next steps.
-
-```{r}
-
-# install.packages("RNCEP")
-# install.packages("tidyverse")
-# install.packages("readr")
-# install.packages("plyr")
-# install.packages("scales")
-library(RNCEP)
-library(tidyverse)
-library(readr)
-library(plyr)
-library(scales)
-library(lubridate)
-```
 
 # Linking Vecdyn Data and Climate Data
 
@@ -257,8 +234,10 @@ library(scales)
 library(lubridate)
 ```
 
-## RNCEP: Obtain, Organize, and Visualize NCEP Weather Data
+# RNCEP: Obtain, Organize, and Visualize NCEP Weather Data
 This package contains functions that retrieve, organize, and visualize weather data from the NCEP/NCAR Reanalysis (http://www.esrl.noaa.gov/psd/data/gridded/data.ncep.reanalysis.html) and NCEP/DOE Reanalysis II (http://www.esrl.noaa.gov/psd/data/gridded/data.ncep.reanalysis2.html) data-sets. Data are queried via the Internet and may be obtained for a specified spatial and temporal extent or interpolated to a point in space and time. 
+It may not be the most suitable package for your needs, however using provides a good automated solution to allow you link climate data to VecDyn data. 
+
 
 For this package, we need to convert the relevant data to numerical format. 
 
