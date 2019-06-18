@@ -19,10 +19,11 @@ if request.controller == 'vectraits':
                 ('Submit', False, URL('vectraits', 'index')),   # TODO: change to submit link
                 ('Explore', False, URL('vectraits', 'view_vectraits')),
                 ('Validate', False, URL('vectraits', 'validate_vectraits')),
-                # ('Download Template', False, URL('vectraits', 'vectraits_template')), # TODO: Uncomment when live
+                ('Download Template', False, URL('vectraits', 'vectraits_template')),   # TODO: Uncomment when live
             ])
         )
     response.menu.append(('About VecTraits', False, URL('vectraits', 'about')))
+    response.menu.append(('Documentation', False, 'https://vectorbitedataplatform.readthedocs.io/en/latest/vectraits/'))
 
 
 elif request.controller == 'vecdyn':
@@ -35,6 +36,7 @@ elif request.controller == 'vecdyn':
                 ('Submit vecdyn data', False, URL('vecdyn', 'submit_vecdyn_data')),
             ])
         )
+    response.menu.append(('Documentation', False, 'https://vectorbitedataplatform.readthedocs.io/en/latest/vecdyn/'))
 else:
     # Default/all else navbar
     response.menu.extend([
@@ -43,6 +45,7 @@ else:
             ('VecTraits', False, URL('vectraits', 'index')),
         ]),
         (T('About Us'), False, URL('default', 'about_us')),
+        (T('Documentation'), False, 'https://vectorbitedataplatform.readthedocs.io/en/latest/'),
         (T('Contact Us'), False, None, [
             ('Report problem', False, URL('default', 'report_problem')),
             ('General enquiries', False, URL('default', 'contact_us'))]),
