@@ -1,8 +1,8 @@
 ## Submitting data
 
 1. Download the latest templates by right clicking on the following links
-    - [vecdyn data template](https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/documentation/VecDyn/Template_and_Scripts/vecdyn_template.csv) and selecting ‘save.as’.
-    - [vecdyn publication info template](https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/documentation/VecDyn/Template_and_Scripts/vecdyn_publication_information.csv) and selecting ‘save.as’.
+    - [vecdyn data template](https://github.com/vectorbite/VectorBiteDataPlatform/blob/master/static/documentation/VecDyn/Template_and_Scripts/vecdyn_template%20.csv) and selecting ‘save.as’.
+    - [vecdyn publication info template](https://github.com/vectorbite/VectorBiteDataPlatform/blob/master/static/documentation/VecDyn/Template_and_Scripts/vecdyn_publication_information.csv) and selecting ‘save.as’.
 2. You can refer to the 'Field definitions section' to guide you through the data collection and compilation process.
 3. To submit your dataset, upload and submit the dataset via the [upload page](https://www.vectorbyte.org/vecdyn/submit_vecdyn_data) on the VectorByTE web app.
 4. We’ll contact you regarding the outcome of your submission once we have had a look at it.

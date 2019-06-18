@@ -13,28 +13,29 @@ logger.setLevel(logging.DEBUG)
 # ----------------------------------------------------------------------------------------------------------------------
 
 def index():
-    dsets = db(db.publication_info).count()
-    obs =  db(db.time_series_data).count()
-    taxa = db(db.study_meta_data.taxon).select(distinct=db.study_meta_data.taxon, cache=(cache.ram, 3600), cacheable=True)
-    taxa = len(taxa)
-    countries = db(db.study_meta_data.geo_id == db.gaul_admin_layers.id).select(
-        distinct=db.gaul_admin_layers.adm0_name, cache=(cache.ram, 36000), cacheable=True)
-    countries = len(countries)
-    regions = db(db.study_meta_data.geo_id == db.gaul_admin_layers.id).select(
-        distinct=db.gaul_admin_layers.adm1_name, cache=(cache.ram, 36000), cacheable=True)
-    regions = len(regions)
-    counties = db(db.study_meta_data.geo_id == db.gaul_admin_layers.id).select(
-        distinct=db.gaul_admin_layers.adm2_name, cache=(cache.ram, 36000), cacheable=True)
-    counties = len(counties)
-    # dsets = 0
-    # obs = 0
-    # taxa = 0
-    # countries = 0
-    # regions = 0
-    # counties = 0
+    # dsets = db(db.publication_info).count()
+    # obs =  db(db.time_series_data).count()
+    # taxa = db(db.study_meta_data.taxon).select(distinct=db.study_meta_data.taxon, cache=(cache.ram, 3600), cacheable=True)
+    # taxa = len(taxa)
+    # countries = db(db.study_meta_data.geo_id == db.gaul_admin_layers.id).select(
+    #     distinct=db.gaul_admin_layers.adm0_name, cache=(cache.ram, 36000), cacheable=True)
+    # countries = len(countries)
+    # regions = db(db.study_meta_data.geo_id == db.gaul_admin_layers.id).select(
+    #     distinct=db.gaul_admin_layers.adm1_name, cache=(cache.ram, 36000), cacheable=True)
+    # regions = len(regions)
+    # counties = db(db.study_meta_data.geo_id == db.gaul_admin_layers.id).select(
+    #     distinct=db.gaul_admin_layers.adm2_name, cache=(cache.ram, 36000), cacheable=True)
+    # counties = len(counties)
+    dsets = 0
+    obs = 0
+    taxa = 0
+    countries = 0
+    regions = 0
+    counties = 0
+    coords = 0
     # trap_locs = {}
     # trap_locs = db(db.time_series_data).select(db.time_series_data.sample_lat_dd, db.time_series_data.sample_long_dd)
-    coords = []
+    #coords = []
     # for i in db(db.time_series_data).select(db.time_series_data.sample_lat_dd, db.time_series_data.sample_long_dd,
     #                                         distinct=True):
     #     coords.append(i)
@@ -788,7 +789,7 @@ def vecdyn_taxon_location_query():
                                  'gaul_admin_layers.adm0_name': 'Country Name',
                                  'study_meta_data.id': 'Dataset ID'},
                         maxtextlength=200,
-                        paginate=100,
+                        paginate=10,
                         selectable=select,
                         deletable=False, editable=False, details=False, create=False)
     if grid.elements('th'):
@@ -1008,13 +1009,13 @@ def vecdyn_author_query():
                                  'publication_info.description': 'Description',
                                  'publication_info.data_set_type': 'Dataset Type'},
                         maxtextlength=200,
-                        paginate=20,
+                        paginate=5,
                         selectable=select,
                         deletable=False, editable=False, details=False, create=False)
-    if grid.elements('th'):
-        grid.elements('th')[0].append(SPAN('Select all', BR(), INPUT(_type='checkbox',
-                                                                     _onclick="jQuery('input:checkbox').not(this).prop('checked', this.checked);"
-                                                                     )))
+    # if grid.elements('th'):
+    #     grid.elements('th')[0].append(SPAN('Selet all', BR(), INPUT(_type='checkbox',
+    #                                                                  _onclick="jQuery('input:checkbox').not(this).prop('checked', this.checked);"
+    #                                                                  )))
     # The final bit of untidiness is the location of the buttons.
     # - The export 'menu' (a single button here) is at the bottom of the page.
     #   This button doesn't submit a form, just calls the page again with _export_type
