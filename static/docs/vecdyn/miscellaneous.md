@@ -1,12 +1,15 @@
 # Issues, troubleshooting & suggestions
 
 
-Any suggestions or todos with regards to the database (e.g. new columns, schema modifications etc.) can be logged as [Issues on GitHub](https://github.com/vectorbite/VectorBiteDataPlatform/issues).
-Issues allow for discussions among multiple users, file attachments, colour-coded labels etc.
+Any suggestions or todos with regards to the database (e.g. new columns, schema modifications etc.) can be submitted through the [Vectorbyte website](https://www.vectorbyte.org/report_problem).
 
 # Known issues
 
-The FAO’s GUAL data set has been restructured for VecDyn. A new column was created which represents an individual ID for each admin unit. This creates a few minor issues, since some region codes are not unique and therefore, an additional ‘b’ has been added to the end of each ADM\_CODE’ which has been used in VecDyn as a ‘Primary key’. 
+The FAO’s GUAL data-set has been restructured for VecDyn. 
+A new column has been created to construct a primary key (individual ID) for each admin unit. 
+This creates a few minor issues, since some region codes are not unique and therefore, 
+an additional ‘2’ has been added to the end of one of each duplicate 'ADM_CODE’ which is stated in the table below.  
+. 
 
 
 
@@ -30,7 +33,6 @@ TODO
 
 # Contact
 
-Submitting data
 
 # Citing  VecDyn
 

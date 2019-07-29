@@ -1,0 +1,16 @@
+@startuml
+start
+:Run validator on dataset;
+while (Upload passes validation?) is (no)
+  :Check report;
+  :Edit dataset;
+  :Retry validation;
+endwhile (yes)
+if (Do you want to submit?) then (yes)
+    :Click "submit";
+    stop
+else (no)
+    :Click "cancel";
+    stop
+endif
+@enduml

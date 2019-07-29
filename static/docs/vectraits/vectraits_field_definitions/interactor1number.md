@@ -7,7 +7,7 @@ Text
 ## Description
 
 
-The number of Interactor1 individuals present in study
+The number of interactor1 individuals in the study, or in each replicate if replicate number is given.
 ## Example
 *1000*
 

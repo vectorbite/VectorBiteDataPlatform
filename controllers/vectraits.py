@@ -57,12 +57,14 @@ def view_citations():
     # and set up actions to be applied to selected rows - these
     # are powered by action functions defined below
     db2.citation.citationid.readable = False
+    db2.citation.published.readable = False
+    db2.citation.embargorelease.readable = False
 
     grid = SQLFORM.smartgrid(db2.citation,
                              csv=True,
                              deletable=False,
                              create=False,
-                             details=False,
+                             details=True,
                              editable=False,
                              # links=links,
                              paginate=50)

@@ -7,7 +7,9 @@ nav:
     - Release Notes: release_notes.md
     - VecTraits:
         - VecTraits Home: vectraits/index.md
-        - How to Download: vectraits/downloading.md
+        - Downloading Data: vectraits/downloading.md
+        - Data Addition Protocol: vectraits/data_addition_protocol.md
+        - The Validator: vectraits/validator.md
         - Field Definitions: vectraits/field_definition_overview.md
     - VecDyn:
         - VecDyn Home: vecdyn/index.md
@@ -18,4 +20,3 @@ nav:
         - Curation: vecdyn/curation.md
         - Tutorials: vecdyn/tutorials.md
         - Miscellaneous: vecdyn/miscellaneous.md
-
