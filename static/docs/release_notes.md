@@ -1,8 +1,13 @@
 ## Release Notes
-Current version: **0.3.8**
+Current version: **0.3.10**
 
 ---
+### 0.3.10
+- Added documentation on data digitisation and submission procedure
 
+### 0.3.9
+- Temporarily disabled VD home statistics
+- Added documentation links to navbar
 ### 0.3.8
 - Enhanced download pages
 - vecdyn docs updates

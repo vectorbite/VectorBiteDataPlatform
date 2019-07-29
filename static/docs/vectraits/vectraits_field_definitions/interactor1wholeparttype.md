@@ -7,7 +7,7 @@ Text
 ## Description
 
 
-Specify what part or whole of the organism the thermal response curve corresponds to 
+Specify what part or whole of the organism the trait data corresponds to 
 ## Example
 *leg*
 

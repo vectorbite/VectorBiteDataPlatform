@@ -7,7 +7,7 @@ Text
 ## Description
 
 
-Specify the whole or part of the organism the thermal reposne curve corresponds to:
+Specify whether the data corresponds to a part of the organism, or the entire organism.
 ## Example
 *whole*
 
