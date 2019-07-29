@@ -7,8 +7,8 @@ with open("defs.csv", "r") as f:
     freader = csv.reader(f)
     next(freader)
     defsdata = [{"name": x[0],
-                 "description": x[1],
-                 "required": bool(strtobool(x[2])),
+                 "description": x[1].replace("<br>", "\n"),     # Allow for <br> to be used to insert linebreaks.
+                 "required": bool(strtobool(x[2])),             # Convert variants used to symbolise bools (y/n etc.)
                  "example": x[3],
                  "type": x[4],
                  "restrictions": list(filter(None, x[5:]))} for x in freader]
@@ -68,6 +68,8 @@ for definition in defsdata:
 with open("../field_definition_overview.md", "r") as f:
     field_def_overview = f.read()
 
-field_def_overview = field_def_overview[:field_def_overview.find("## Field Definitions")] + "## Field Definitions\nPlease click on any field name to find more details about the field.\n" + summary_str
+print(summary_str)
+
+field_def_overview = field_def_overview[:field_def_overview.find("## Field Definitions")] + "## Field Definitions\nPlease click on any field name to find more details about the field.\n\n" + summary_str
 with open("../field_definition_overview.md", "w+") as f:
     f.write(field_def_overview)

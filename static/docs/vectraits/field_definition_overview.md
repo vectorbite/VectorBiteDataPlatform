@@ -5,7 +5,9 @@ This document is intended to guide you through the process of downloading the Ve
 To download the template for VecTraits, visit [this link](https://www.vectorbyte.org/VectorBiteDataPlatform/vectraits/vectraits_template.html), and click the "Click here to download the latest vectraits template." link at the bottom. This will download the empty csv with the required headers.
 
 ## Field Definitions
-| Field | Type | Required | 
+Please click on any field name to find more details about the field.
+
+| Field | Type | Required |
 | ----: | :--: | :------: |
 | [originalid](../vectraits_field_definitions/originalid) | Text | True |
 | [originaltraitname](../vectraits_field_definitions/originaltraitname) | Text | False |

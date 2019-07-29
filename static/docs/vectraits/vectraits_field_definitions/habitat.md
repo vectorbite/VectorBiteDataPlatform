@@ -7,7 +7,7 @@ Text
 ## Description
 
 
-Habitat type of Interactor
+Habitat type of Interactor (*marine/freshwater/terrestrial*)
 ## Example
 *freshwater*
 
