@@ -1,7 +1,18 @@
 ## Release Notes
-Current version: **0.3.10**
+Current version: **0.3.11**
 
 ---
+### 0.3.11
+- Fixed validator
+    - Now actually fails when essential columns are completely missing
+    - Now correctly handles the following variants of missing data:
+        - `""`
+        - `NA`
+        - `na`
+        - `NaN`
+        - `nan`
+- Updated documentation to more explicitly state that missing data SHOULD be left entirely blank.
+
 ### 0.3.10
 - Added documentation on data digitisation and submission procedure
 

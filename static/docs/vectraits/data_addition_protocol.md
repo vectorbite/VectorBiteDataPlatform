@@ -13,7 +13,7 @@ The overall steps are:
 - Check if they have already been digitized into VecTraits/BioTraits
 - Add them to the Biotraits Mendeley library
 - Digitize
-- Validate your filled-in template on rwww.vectorbyte.org, see the [validator documentation](validator.md) for more detail
+- Validate your filled-in template on www.vectorbyte.org, see the [validator documentation](validator.md) for more detail
 - Re-classify them on the Biotraits Mendeley Library as being digitized
 
 #### Before digitizing data
@@ -42,7 +42,7 @@ firstly "map" it to the template. There are here a few guidelines:
     - `published`
     - `embargorelease`
     - `submittedby`
-    - `citation`
+    - `contributoremail`
 
 <!-- -   Data will ultimately be converted to SI units. In case your data is not in SI units, store it in the `OriginalTraitValue` and
     `OriginalTraitValueUnits`. Then you will be able to
@@ -55,9 +55,19 @@ firstly "map" it to the template. There are here a few guidelines:
 
 - Fill the `submittedby` column with your name (if you have digitized the data) or the name of the appropriate person and put the corresponding e-mail address in the `contributoremail` column.
 
-- Leave empty all fields with no value.
-
 - A biotraits data template containing all field names is available [here](https://www.vectorbyte.org/VectorBiteDataPlatform/vectraits/vectraits_template.html).
+
+#### File format
+The upload procedures only work on CSV files. These can be exported from excel, R, or most other data software.
+
+Do NOT use xls/xlsx files as the validator should always reject these as unreadable.
+
+#### Missing Data
+**All fields with missing values should be left EMPTY**.
+
+Whilst the validator can deal with many common representations of missing data, there are plenty of nonstandard variants which may break the upload either at the validation stage or (more problematically) at the final upload stage.
+
+These nonstandard blank values can also arise if exporting from certain tools or using unusual export mechanisms. Thus it is best to check for inserted `NA` values in your csv using a basic text editor or viewer such as Notepad on Windows, Textedit on Mac, or Gedit/cat/nano on Linux.
 
 
 ### Standardizing original data reference
