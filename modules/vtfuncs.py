@@ -12,6 +12,7 @@ import logging
 from cStringIO import StringIO
 from gluon.validators import *
 from gluon.sqlhtml import ExportClass
+from gluon import current
 import datetime
 from distutils.util import strtobool
 
@@ -33,9 +34,12 @@ def list_to_dict(h, l):
 
         >>> list_to_dict(["test1", "test2"], [1, 2])
         {'test1': 1, 'test2': 2}
+        >>> list_to_dict(["test1", "test2"], ["NA", "nan"])
+        {'test1': '', 'test2': ''}
 
     """
     try:
+        l = ["" if (x in {"", "NA", "na", "NaN", "nan"}) else x for x in l]
         return dict(zip(h, l))
     except TypeError:
         raise TypeError("Both headers and values must be in list format")
@@ -58,6 +62,7 @@ def data_to_dicts(h, d):
 def placeholder(x):
     def ph2(y):
         return [y, None]
+
     return ph2
 
 
@@ -176,7 +181,7 @@ def validate_vectraits_rowdict(rowdict, buf):
         'standardisederrorpos': [IS_FLOAT_IN_RANGE(-1e100, 1e100)],
         'standardisederrorneg': [IS_FLOAT_IN_RANGE(-1e100, 1e100)],
         'standardisederrorunit': [IS_LENGTH(255)],
-        'replicates': [IS_INT_IN_RANGE(1, 2**31)],
+        'replicates': [IS_INT_IN_RANGE(1, 2 ** 31)],
         'habitat': [IS_LENGTH(20)],
         'labfield': [IS_LENGTH(11)],
         'arenavalue': [IS_FLOAT_IN_RANGE(-1e100, 1e100)],
@@ -199,7 +204,7 @@ def validate_vectraits_rowdict(rowdict, buf):
         'totalobstimevaluesi': [IS_FLOAT_IN_RANGE(-1e100, 1e100)],
         'totalobstimeunitsi': [IS_LENGTH(255)],
         'totalobstimenotes': [IS_LENGTH(255)],
-        'resrepvalue': [IS_INT_IN_RANGE(-2**31, 2**31)],
+        'resrepvalue': [IS_INT_IN_RANGE(-2 ** 31, 2 ** 31)],
         'resrepunit': [IS_LENGTH(255)],
         'resrepvaluesi': [IS_FLOAT_IN_RANGE(-1e100, 1e100)],
         'resrepunitsi': [IS_LENGTH(255)],
@@ -207,12 +212,12 @@ def validate_vectraits_rowdict(rowdict, buf):
         'locationtype': [IS_LENGTH(255)],
         'originallocationdate': [IS_LENGTH(255)],
         'locationdate': [IS_DATE(format='%d/%m/%Y', error_message='must be DD/MM/YYYY!')],
-        'locationdateprecision': [IS_NOT_EMPTY(), IS_INT_IN_RANGE(0,6)],
+        'locationdateprecision': [IS_NOT_EMPTY(), IS_INT_IN_RANGE(0, 6)],
         'coordinatetype': [IS_LENGTH(255)],
         'latitude': [IS_FLOAT_IN_RANGE(-1e100, 1e100)],
         'longitude': [IS_FLOAT_IN_RANGE(-1e100, 1e100)],
-        'interactor1': [IS_LENGTH(255)],     #, Custom Validator, at least one filled:],
-        'interactor1common': [IS_LENGTH(255)],     #, Custom Validator, at least one filled:],
+        'interactor1': [IS_LENGTH(255)],  # , Custom Validator, at least one filled:],
+        'interactor1common': [IS_LENGTH(255)],  # , Custom Validator, at least one filled:],
         'interactor1wholepart': [IS_LENGTH(255)],
         'interactor1wholeparttype': [IS_LENGTH(255)],
         'interactor1number': [IS_LENGTH(255)],
@@ -326,30 +331,43 @@ def validate_vectraits_rowdict(rowdict, buf):
         "contributoremail",
     }
 
+    notnull_trackerset = set()
+
     failcounter = 0
     failed_columns = set()
     for column in rowdict.keys():
-        if column not in notnull_cols and rowdict[column] == "":
+        if column not in notnull_cols and rowdict[column] in {"", "NA", "na", "NaN", "nan"}:
             # Don't fail empty strings if they are not required columns
             continue
+        if column in notnull_cols:
+            notnull_trackerset.add(column)
         try:
-            for v in validator_dict[column]:    # Get validator from validator list
-                if v(rowdict[column])[1]:           # If it fails...
-                    failed_columns.add(column)   # Append to failed column set
+            for v in validator_dict[column]:  # Get validator from validator list
+                if v(rowdict[column])[1]:  # If it fails...
+                    failed_columns.add(column)  # Append to failed column set
                     failcounter += 1
                     # Write to log and report
-                    logger.info('Column "{}" failed validator "{}, value:"{}"'.format(column, v.__class__.__name__, rowdict[column]))
-                    buf.write('    Column "{}" failed validator "{}, value:"{}"\n'.format(column, v.__class__.__name__, rowdict[column]))
+                    logger.info('Column "{}" failed validator "{}, value:"{}"'.format(column, v.__class__.__name__,
+                                                                                      rowdict[column]))
+                    buf.write('    Column "{}" failed validator "{}, value:"{}"\n'.format(column, v.__class__.__name__,
+                                                                                          rowdict[column]))
                 else:
                     logger.debug('Column "{}" passed validator "{}"'.format(column, v.__class__.__name__))
 
         except KeyError:
-            failed_columns.add(column)      # If failed column does not exist, add to failed set
+            failed_columns.add(column)  # If failed column does not exist, add to failed set
             failcounter += 1
             # Write to log and report
             logger.info('Invalid column name: "{}"'.format(column))
             buf.write('    Invalid column name: "{}"\n'.format(column))
     # Validate that either interactor1 or interactor1common is filled.
+
+    missing_cols = notnull_cols.difference(notnull_trackerset)
+    if missing_cols:
+        failed_columns = failed_columns | missing_cols
+        failcounter += len(missing_cols)
+        logger.info('Missing essential columns: {}'.format(" ,".join(missing_cols)))
+        buf.write('    Missing essential columns: {}\n'.format(", ".join(missing_cols)))
     return failed_columns, failcounter
 
 
@@ -365,17 +383,17 @@ def validate_vectraits(data, filename='test.csv'):
     """
     # Print setup to log
     start = datetime.datetime.now()
-    logger.info('{}'.format('-'*(38+len(filename))))
+    logger.info('{}'.format('-' * (38 + len(filename))))
     logger.info('  Validation of {} started at {}'.format(filename, start.strftime('%H:%M:%S')))
-    logger.debug('  File length: {} rows'.format(len(data)-1))
+    logger.debug('  File length: {} rows'.format(len(data) - 1))
     logger.info('{}'.format('-' * (38 + len(filename))))
 
     # Print report setup to report buffer
     report = StringIO()
-    report.write('\n{}\n'.format('-'*(17+len(filename))))
+    report.write('\n{}\n'.format('-' * (17 + len(filename))))
     report.write('  VALIDATION REPORT\n\n')
     report.write('    File name: {}\n'.format(filename))
-    report.write('  File length: {} rows\n'.format(len(data)-1))
+    report.write('  File length: {} rows\n'.format(len(data) - 1))
     report.write('      Started: {}\n'.format(start.strftime('%d-%m-%y %H:%M:%S')))
     report.write('{}\n\n'.format('-' * (17 + len(filename))))
 
@@ -395,9 +413,9 @@ def validate_vectraits(data, filename='test.csv'):
 
     if len(output) > 500:
         long_dataset = True
-        trigger_list = [int(len(output)*(x/float(10)))-1 for x in range(0, 11)]
+        trigger_list = [int(len(output) * (x / float(10))) - 1 for x in range(0, 11)]
         trigger_list[0] = 0
-        percentile_list = [x*10 for x in range(0, 11)]
+        percentile_list = [x * 10 for x in range(0, 11)]
         log_triggers = dict(zip(trigger_list, percentile_list))
 
     # Validate rows against validators using validate_vectraits_rows
@@ -406,17 +424,17 @@ def validate_vectraits(data, filename='test.csv'):
             if i in log_triggers.keys():
                 logger.info('Validating row {}/{} ({}%)...'.format(i + 1, len(output), log_triggers[i]))
         else:
-            logger.info('Validating row {}...'.format(i+1))
-        report.write('Validating row {}...\n'.format(i+1))
+            logger.info('Validating row {}...'.format(i + 1))
+        report.write('Validating row {}...\n'.format(i + 1))
         failed_items, errdelta = validate_vectraits_rowdict(item, report)
         if errdelta > 0:
             errcounter += errdelta
             errlinecounter += 1
             for entry in failed_items:
                 try:
-                    failed_dict[entry].append(i+1)
+                    failed_dict[entry].append(i + 1)
                 except KeyError:
-                    failed_dict[entry] = [i+1]
+                    failed_dict[entry] = [i + 1]
 
     # Return Validation dictionary
 
@@ -439,7 +457,7 @@ def validate_vectraits(data, filename='test.csv'):
     report.write('  Time elapsed: {}\n'.format(time_elapsed))
     report.write('{}\n\n'.format('-' * (17 + len(filename))))
     report.write('  COLUMN REPORT  \n\n')
-    logger.info(failed_dict)    # TODO: return this dict in the correct format.
+    logger.info(failed_dict)  # TODO: return this dict in the correct format.
     # TODO: convert this dict to a nice report and put into report buffer.
     for x, y in failed_dict.iteritems():
         if len(y) == 1:
@@ -509,7 +527,7 @@ class ExporterCSVlabel(ExportClass):
             for col in self.rows.colnames:
                 (t, f) = col.split('.')
                 field = self.rows.db[t][f]
-                field_label = field.label   # Use the label name instead of database name
+                field_label = field.label  # Use the label name instead of database name
                 colname = unicode(field_label).encode("utf8")
                 header.append(colname)
             writer.writerow(header)
