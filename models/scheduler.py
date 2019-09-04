@@ -1,5 +1,9 @@
 from gluon.scheduler import Scheduler
+import vtfuncs
 import csv
+import logging
+
+logger = logging.getLogger("web2py.app.vbdp")
 
 
 def vecdyn_importer():
@@ -24,7 +28,6 @@ def vecdyn_importer():
                 # https://thispointer.com/python-how-to-add-append-key-value-pairs-in-dictionary-using-dict-update/
                 record_2 = db.study_meta_data(**study)
                 study_meta_data_id = record_2.id if record_2 else db.study_meta_data.insert(**study)
-
 
                 samples = dict(zip(('sample_start_date', 'sample_start_time',
                                     'sample_end_date', 'sample_end_time', 'sample_value', 'sample_sex',
@@ -52,7 +55,8 @@ def vecdyn_importer():
 
 def vecdyn_bulk_importer():
     # reverse select by date to be set to select by oldest
-    dataset = db(db.data_set_bulk_upload.status == 'pending').select(orderby=db.data_set_bulk_upload.submit_datetime).first()
+    dataset = db(db.data_set_bulk_upload.status == 'pending').select(
+        orderby=db.data_set_bulk_upload.submit_datetime).first()
     if dataset != None:
         try:
             filename, csvfile = db.data_set_bulk_upload.csvfile.retrieve(dataset.csvfile)
@@ -62,9 +66,9 @@ def vecdyn_bulk_importer():
             for row in readCSV:
                 # 'dict(zip' creates a dictionary from three lists i.e. field names and one data row from the csv
                 pubinfo = dict(zip(('title', 'dataset_citation', 'publication_citation',
-                                  'description', 'url', 'contact_name', 'contact_affiliation',
-                                  'email', 'orcid', 'dataset_license', 'project_identifier', 'publication_status'),
-                                 row[:12]))
+                                    'description', 'url', 'contact_name', 'contact_affiliation',
+                                    'email', 'orcid', 'dataset_license', 'project_identifier', 'publication_status'),
+                                   row[:12]))
 
                 # check to see if there is a collection author name in the db.collection_author table, if not insert it
                 # if pubinfo.collection_author != None:
@@ -86,7 +90,6 @@ def vecdyn_bulk_importer():
                 record_2 = db.study_meta_data(**study)
                 study_meta_data_id = record_2.id if record_2 else db.study_meta_data.insert(**study)
 
-
                 samples = dict(zip(('sample_start_date', 'sample_start_time',
                                     'sample_end_date', 'sample_end_time', 'sample_value', 'sample_sex',
                                     'sample_stage', 'sample_location', 'sample_collection_area', 'sample_lat_dd',
@@ -103,7 +106,7 @@ def vecdyn_bulk_importer():
 
             dataset.update_record(status='complete')
             db.commit()
-            #add a send mailto here
+            # add a send mailto here
         except:
             db.rollback()
             dataset.update_record(status='failed')
@@ -115,29 +118,63 @@ def vecdyn_bulk_importer():
 def vecdyn_taxon_standardiser():
     tax_un_stan = db(db.study_meta_data.taxon_id == None).select(db.study_meta_data.taxon_id)
     if tax_un_stan != None:
-        tax_match = db((db.study_meta_data.taxon_id == None) & (db.study_meta_data.taxon == db.gbif_taxon.canonical_name)).\
-        select(db.study_meta_data.id, db.gbif_taxon.taxon_id, db.gbif_taxon.canonical_name, db.gbif_taxon.genus_or_above,
-               db.gbif_taxon.taxonomic_rank, limitby=(0, 200))
+        tax_match = db(
+            (db.study_meta_data.taxon_id == None) & (db.study_meta_data.taxon == db.gbif_taxon.canonical_name)). \
+            select(db.study_meta_data.id, db.gbif_taxon.taxon_id, db.gbif_taxon.canonical_name,
+                   db.gbif_taxon.genus_or_above,
+                   db.gbif_taxon.taxonomic_rank, limitby=(0, 200))
         for row in tax_match:
-                            id = row.study_meta_data.id
-                            taxon_id = row.gbif_taxon.taxon_id
-                            canonical_name = row.gbif_taxon.canonical_name
-                            genus_or_above = row.gbif_taxon.genus_or_above
-                            taxonomic_rank = row.gbif_taxon.taxonomic_rank
-                            db(db.study_meta_data.id == id).update(taxon_id=taxon_id, canonical_name=canonical_name,
-                                                                   genus_or_above=genus_or_above, taxonomic_rank=taxonomic_rank)
+            id = row.study_meta_data.id
+            taxon_id = row.gbif_taxon.taxon_id
+            canonical_name = row.gbif_taxon.canonical_name
+            genus_or_above = row.gbif_taxon.genus_or_above
+            taxonomic_rank = row.gbif_taxon.taxonomic_rank
+            db(db.study_meta_data.id == id).update(taxon_id=taxon_id, canonical_name=canonical_name,
+                                                   genus_or_above=genus_or_above, taxonomic_rank=taxonomic_rank)
 
         db.commit()
     else:
         pass
 
 
+scheduler = Scheduler(db,
+                      tasks=dict(vecdyn_importer=vecdyn_importer,
+                                 vecdyn_bulk_importer=vecdyn_bulk_importer,
+                                 vecdyn_taxon_standardiser=vecdyn_taxon_standardiser
+                                 )
+                      )
 
 
+def vt_eod(oneoff=False):
+    import datetime
 
-scheduler = Scheduler(db, tasks=dict(vecdyn_importer=vecdyn_importer, vecdyn_bulk_importer=vecdyn_bulk_importer,vecdyn_taxon_standardiser=vecdyn_taxon_standardiser))
+    # logger = logging.getLogger("web2py.app.vbdp")
+
+    # Log directly to the web2py log as scheduler seems not to run in the same context as the webapp.
+    import logzero
+    logger = logzero.setup_logger(logfile="web2py.log",
+                                  formatter=logging.Formatter(
+                                      '%(asctime)s - %(levelname)-7s - %(funcName)s - %(message)s'),
+                                  disableStderrLogger=True)
+
+    # Determine next start timestamp
+    nextstarttime = datetime.time(22, 0, 0, 0)
+    nextstartdate = datetime.date.today() + datetime.timedelta(days=1)
+    nextstart = datetime.datetime.combine(nextstartdate, nextstarttime)
+
+    # Run uploader
+    result = False
+    try:
+        result = vtfuncs.eod_upload_run(logger)
+    except Exception:
+        logger.exception("Unhandled exception in vt_eod schedule runner!")
+    finally:
+        # if not oneoff:
+        #     # ALWAYS requeue new scheduler run!
+        #     logger.info("Queueing next run for {}".format(nextstart.strftime("%d/%m/%Y %H:%M:%S")))
+        #     vtscheduler.queue_task(vt_eod, start_time=nextstart, repeats=1)     # Set pvars={"oneoff":True} if oneoff
+        #     db2.commit()
+        return result
 
 
-
-
-
+vtscheduler = Scheduler(db2, tasks=dict(vt_eod=vt_eod))
