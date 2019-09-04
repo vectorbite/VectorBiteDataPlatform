@@ -1,7 +1,15 @@
 ## Release Notes
-Current version: **0.3.11**
+Current version: **0.4.0**
 
 ---
+## 0.4
+### 0.4.0
+- Completed data uploader for VecTraits
+    - The data uploader pulls from validated datasets
+    - Uploads are completed once a day a 2200 local time (GMT/BST)
+---
+
+## 0.3
 ### 0.3.11
 - Fixed validator
     - Now actually fails when essential columns are completely missing
