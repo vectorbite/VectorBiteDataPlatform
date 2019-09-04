@@ -368,5 +368,8 @@ db2.define_table('published_data',
                  Field('notes', type='string', length=2055),
                  migrate=migrate)
 
-# db2.define_table('dataset_upload',
-#                  Field('csvfile', 'upload', requires=IS_UPLOAD_FILENAME(extension='csv')), migrate=migrate)
+db2.define_table('dataset_hash',
+                 Field('hashid', type='id'),
+                 Field('filehash', 'string', length=32),
+                 Field('filename', 'string', length=128),
+                 migrate=migrate)
