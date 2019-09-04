@@ -6,6 +6,7 @@
 # -------------------------------------------------------------------------
 from gluon.contrib.appconfig import AppConfig
 from gluon.tools import Auth
+from gluon import current
 
 # -------------------------------------------------------------------------
 # This scaffolding model makes your app work on Google App Engine too
@@ -26,38 +27,24 @@ if request.global_settings.web2py_version < "2.15.5":
 # -------------------------------------------------------------------------
 configuration = AppConfig(reload=True)
 
-if not request.env.web2py_runtime_gae:
-    # ---------------------------------------------------------------------
-    # if NOT running on Google App Engine use SQLite or other DB
-    # ---------------------------------------------------------------------
-    db = DAL(configuration.get('db.uri'),
-             pool_size=configuration.get('db.pool_size'),
-             migrate_enabled=configuration.get('db.migrate'),
-             lazy_tables=True,
-             #fake_migrate_all=True,
-             check_reserved=['postgres', 'postgres_nonreserved'])
-    
-    db2 = DAL(configuration.get('db2.uri'),
-              pool_size=configuration.get('db2.pool_size'),
-              migrate_enabled=configuration.get('db2.migrate'),
-              lazy_tables=True,
-              # fake_migrate_all=True,        # Allow fake migration to rebuild table metadata
-              check_reserved=['postgres', 'postgres_nonreserved'])
-else:
-    # ---------------------------------------------------------------------
-    # connect to Google BigTable (optional 'google:datastore://namespace')
-    # ---------------------------------------------------------------------
-    db = DAL('google:datastore+ndb')
-    # ---------------------------------------------------------------------
-    # store sessions and tickets there
-    # ---------------------------------------------------------------------
-    session.connect(request, response, db=db)
-    # ---------------------------------------------------------------------
-    # or store session in Memcache, Redis, etc.
-    # from gluon.contrib.memdb import MEMDB
-    # from google.appengine.api.memcache import Client
-    # session.connect(request, response, db = MEMDB(Client()))
-    # ---------------------------------------------------------------------
+
+db = DAL(configuration.get('db.uri'),
+         pool_size=configuration.get('db.pool_size'),
+         migrate_enabled=configuration.get('db.migrate'),
+         lazy_tables=True,
+         # fake_migrate_all=True,
+         check_reserved=['postgres', 'postgres_nonreserved'])
+
+db2 = DAL(configuration.get('db2.uri'),
+          pool_size=configuration.get('db2.pool_size'),
+          migrate_enabled=configuration.get('db2.migrate'),
+          lazy_tables=True,
+          # fake_migrate_all=True,        # Allow fake migration to rebuild table metadata
+          check_reserved=['postgres', 'postgres_nonreserved'])
+
+# Make db2 available for use in vtfuncs
+current.db2 = db2
+
 
 # -------------------------------------------------------------------------
 # by default give a view/generic.extension to all actions from localhost
