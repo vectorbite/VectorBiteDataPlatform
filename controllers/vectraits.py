@@ -201,7 +201,6 @@ def cancel_dataset_upload():
     return True
 
 
-def upload_vectraits():
-    report = ""
-    vtfuncs.upload_vectraits_dataset()
-    return dict(report=report)
+def queue_eod():
+    vtscheduler.queue_task(vt_eod, prevent_drift=True, period=86400, immediate=True, repeats=0)
+    db2.commit()
