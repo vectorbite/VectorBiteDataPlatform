@@ -44,7 +44,9 @@ else:
             ('VecDyn', False, URL('vecdyn', 'index')),
             ('VecTraits', False, URL('vectraits', 'index')),
         ]),
-        (T('About Us'), False, URL('default', 'about_us')),
+        (T('About'), False, None, [
+            ('Meet the team', False, URL('default', 'team')),
+            ('Funding', False, URL('default', 'funding'))]),
         (T('Documentation'), False, 'https://vectorbitedataplatform.readthedocs.io/en/latest/'),
         (T('Contact Us'), False, None, [
             ('Report problem', False, URL('default', 'report_problem')),
@@ -52,15 +54,24 @@ else:
     ])
 
 
-if auth.has_membership('VectorbiteAdmin'):
+if auth.has_membership('VDCurator') or auth.has_membership('VectorbiteAdmin'):
     # Admin navbar
-    response.menu.append((T('Admin'), False, None, [
+    response.menu.append((T('Data management'), False, None, [
         ('Manage VecDyn Datasets', False, URL('vecdyn', 'dataset_registrations')),
-        ('Manage VecTraits Datasets', False, URL('vectraits', 'index')),    # TODO: Change to management interface when created
+        ('Manage VecTraits Datasets', False, URL('vectraits', 'index'))]))    # TODO: Change to management interface when created
+
+
+
+if auth.has_membership('VectorbiteAdmin'):
+    # Admin navbar 2
+    response.menu.append((T('Page updates and tasks'), False, None, [
+        # ('Edit index page', False, URL('default', 'team')),
+        # ('Edit vecdyn main page', False, URL('default', 'team')),
+        # ('Edit vectraits main page', False, URL('default', 'team')),
+        ('Edit web pages', False, URL('default', 'team_page_updater')),
         ('Task Manager', False, URL('default', 'tasks')),
         ('Group Membership', False, URL('default', 'group_membership'))]))
-
-
+        # ('Edit Funding Pages', False, URL('default', 'funding'))]))
 
 # ----------------------------------------------------------------------------------------------------------------------
 # provide shortcuts for development. you can remove everything below in production

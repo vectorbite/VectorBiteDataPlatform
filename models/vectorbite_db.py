@@ -88,4 +88,15 @@ add_option_2 = SelectOrAdd(form_title=T("Add a new something"),
 
 db.task.collection_author.widget = add_option_2.widget
 
+# team table
+
+
+db.define_table('team',
+                Field('name', 'string'),
+                Field('role', 'string'),
+                Field('organisation', 'string'),
+                Field('bio', 'text'),
+                Field('email', requires=IS_EMAIL(), comment='*Email'),
+                Field('photo', 'upload'),
+                Field('active', 'boolean'))
 

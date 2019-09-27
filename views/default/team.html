@@ -1,0 +1,46 @@
+{{extend 'layout.html'}}
+
+
+<div style="background: linear-gradient(240deg, lightgrey, whitesmoke)" class="jumbotron">
+
+  <h2><centre>Meet the VectorByTE team</centre></h2>
+
+    <br>
+
+
+{{for row in query:}}
+
+
+     <p>
+        <img src="{{=URL('download', args=row.photo)}}" style="float:left;width:250px;margin-right:10px;"  />
+          <h4> {{=row.name}}  <button onclick="location.href='mailto:{{=row.email}}'; target='_blank'"> Send email</button> </h4>
+    <b><span style="color:dodgerblue"> {{=row.role}} <span style='font-size:20px;'>&#9679;</span> {{=row.organisation}} <span style='font-size:20px;'>&#9679;</span> </span> </b><br>
+
+         {{=row.bio}}
+    </p>
+    <br>
+    <hr>
+
+
+   {{pass}}
+
+
+      <h2><u>Past team members</u></h2>
+    <br>
+
+
+{{for row in query2:}}
+
+     <h3>{{=row.name}} <button onclick="location.href='mailto:{{=row.email}}'; target='_blank'"> Send email</button> </h3>
+   <p> <b><span style="color:dodgerblue"> {{=row.role}} <span style='font-size:20px;'>&#9679;</span> {{=row.organisation}} </b> </p>
+
+
+      {{pass}}
+
+ <hr>
+</div>
+
+
+
+</body>
+</html>

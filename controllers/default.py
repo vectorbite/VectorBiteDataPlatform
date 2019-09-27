@@ -23,6 +23,30 @@ def about_us():
 me = auth.user_id
 
 
+# Meet the team pages
+def team():
+    db.team.active.readable = False
+    query = db(db.team.active == True).select(orderby=~db.team.id)
+    query2 = db(db.team.active == False).select(orderby=~db.team.id)
+    return locals()
+
+@auth.requires_membership('VectorbiteAdmin')
+def team_page_updater():
+    grid = SQLFORM.grid(db.team,
+                        create=True, details=True, editable=True, csv=False,
+                        deletable=False, maxtextlength=200)
+    return locals()
+
+
+
+# Links to funding organisations
+
+def funding():
+    """
+    Controller for about page
+    """
+    return locals()
+
 # ----------------------------------------------------------------------------------------------------------------------
 # The following functions create the task manager tables in default/tasks
 # ----------------------------------------------------------------------------------------------------------------------
