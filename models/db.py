@@ -106,11 +106,15 @@ db.define_table('country',
 
 '''extra fields for the auth fields, note that the country db table above needs to be  populated first '''
 
+ACCESS_REQUEST = (['VDViewer','VDUploader','VTUploader','VDCurator','VTCurator','ViewAll'])
+
 auth.settings.extra_fields['auth_user']= [
     Field('affiliation'),
     Field('job_title'),
+    Field('access_request', multiple=True, requires=IS_IN_SET(ACCESS_REQUEST), comment='*Select which access rights you require'),
     Field('country', 'reference country')]
 auth.define_tables(username=False, signature=False)
+
 
 
 # -------------------------------------------------------------------------
@@ -126,9 +130,14 @@ mail.settings.ssl = configuration.get('smtp.ssl') or False
 # -------------------------------------------------------------------------
 # configure auth policy
 # -------------------------------------------------------------------------
-auth.settings.registration_requires_verification = False
+auth.settings.registration_requires_verification = True
 auth.settings.registration_requires_approval = False
 auth.settings.reset_password_requires_verification = True
+# Let admin know when users sign up and request permissions
+auth.settings.register_onaccept.append(lambda form:   mail.send(to='matthewjohnwatts@gmail.com', subject='new user',
+             message='new user email is %s'%form.vars.email))
+#two step authentication for admin
+auth.settings.two_factor_authentication_group = "auth2step"
 
 
 #from gluon.tools import Recaptcha2 as Recaptcha

@@ -1,0 +1,62 @@
+ {{extend 'layout.html'}}
+
+         <head>
+<style>
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even){background-color: #f2f2f2}
+
+th {
+  background-color: #4CAF50;
+  color: white;
+}
+</style>
+</head>
+
+          <div style="background: linear-gradient(240deg, lightgrey, beige)" class="jumbotron">
+
+
+
+
+
+
+<table style="width:100%">
+
+  <tr>
+    <th>First Name</th>
+    <th>Surname</th>
+    <th>Affiliation</th>
+       <th>Email</th>
+         <th>Country</th>
+      <th>Edit privileges</th>
+            <th>Current privileges</th>
+
+  </tr>
+ {{for p in privileges:}}
+  <tr>
+    <td>{{=p.first_name}}</td>
+    <td>{{=p.first_name}}</td>
+    <td>{{=p.first_name}}</td>
+       <td>{{=p.first_name}}</td>
+       <td>{{=p.first_name}}</td>
+      <td>{{=A('Edit privileges',_href=URL('default','edit_privileges',vars={'user_id':p.id}),_class="btn btn-primary")}} </td>
+      {{row = db(db.auth_membership.user_id == p.id).select(db.auth_membership.group_id)}}
+      <td>{{=row}}</td>
+{{pass}}
+
+
+  </tr>
+</table>
+
+
+
+
+          </div>
