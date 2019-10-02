@@ -13,23 +13,23 @@ logger.setLevel(logging.DEBUG)
 # ----------------------------------------------------------------------------------------------------------------------
 
 def index():
-    # dsets = db(db.publication_info).count()
-    # obs =  db(db.time_series_data).count()
-    # taxa = db(db.study_meta_data.taxon).select(distinct=db.study_meta_data.taxon, cache=(cache.ram, 3600), cacheable=True)
-    # taxa = len(taxa)
-    # countries = db(db.study_meta_data.geo_id == db.gaul_admin_layers.id).select(
-    #     distinct=db.gaul_admin_layers.adm0_name, cache=(cache.ram, 36000), cacheable=True)
-    # countries = len(countries)
+    dsets = db(db.publication_info).count()
+    obs =  db(db.time_series_data).count()
+    taxa = db(db.study_meta_data.taxon).select(distinct=db.study_meta_data.taxon, cache=(cache.ram, 3600), cacheable=True)
+    taxa = len(taxa)
+    countries = db(db.study_meta_data.geo_id == db.gaul_admin_layers.id).select(
+        distinct=db.gaul_admin_layers.adm0_name, cache=(cache.ram, 36000), cacheable=True)
+    countries = len(countries)
     # regions = db(db.study_meta_data.geo_id == db.gaul_admin_layers.id).select(
     #     distinct=db.gaul_admin_layers.adm1_name, cache=(cache.ram, 36000), cacheable=True)
     # regions = len(regions)
     # counties = db(db.study_meta_data.geo_id == db.gaul_admin_layers.id).select(
     #     distinct=db.gaul_admin_layers.adm2_name, cache=(cache.ram, 36000), cacheable=True)
     # counties = len(counties)
-    dsets = 0
-    obs = 0
-    taxa = 0
-    countries = 0
+    # dsets = 0
+    # obs = 0
+    # taxa = 0
+    # countries = 0
     regions = 0
     counties = 0
     coords = 0
@@ -198,6 +198,7 @@ def add_collection_author():
         # hasn't been submitted yet, just give them the fresh blank form
         return form
 
+# Note data curators will only be able to see data sets they have registered, admin will get to see everything
 @auth.requires(auth.has_membership('VDCurator') or auth.has_membership('VectorbiteAdmin'))
 def dataset_registrations():
     if auth.has_membership('VDCurator'):

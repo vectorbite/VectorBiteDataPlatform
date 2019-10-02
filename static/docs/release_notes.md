@@ -1,8 +1,22 @@
 ## Release Notes
-Current version: **0.4.0**
+Current version: **0.4.1**
 
 ---
 ## 0.4
+
+## 0.4.1
+
+- Meet the team and funding pages, note that
+'Meet the team' new members can be added / removed via a specific page in admin section of app. 
+- Membership user rights can now be assigned via admin page in web interface (not the case for admins, rights need to be grated via web2py admin) 
+- Email sent to admin email address during signup to notify admin that site access is being requested.
+- Added timestamp to sign-up process
+- Sign-up reates new task so admin can keep track of who needs access rights
+- New field added to signup - users request rights on sign up, based on lookup from groups
+- New text on sign up page to explain what users should do   
+- Two step authentication system added for admins
+- User email verification on sign-up
+
 ### 0.4.0
 - Completed data uploader for VecTraits
     - The data uploader pulls from validated datasets

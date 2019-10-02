@@ -67,12 +67,12 @@ if auth.has_membership('VectorbiteAdmin'):
     response.menu.append((T('Page updates and tasks'), False, None, [
         # ('Edit index page', False, URL('default', 'team')),
         # ('Edit vecdyn main page', False, URL('default', 'team')),
-        # ('Edit vectraits main page', False, URL('default', 'team')),
+        ('Manage privileges', False, URL('default', 'privilege_manager')),
         ('Edit web pages', False, URL('default', 'team_page_updater')),
-        ('Task Manager', False, URL('default', 'tasks')),
-        ('Group Membership', False, URL('default', 'group_membership'))]))
+        ('Task Manager', False, URL('default', 'tasks'))]))
         # ('Edit Funding Pages', False, URL('default', 'funding'))]))
-
+# ,
+#         ('Group Membership', False, URL('default', 'group_membership'))
 # ----------------------------------------------------------------------------------------------------------------------
 # provide shortcuts for development. you can remove everything below in production
 # ----------------------------------------------------------------------------------------------------------------------
