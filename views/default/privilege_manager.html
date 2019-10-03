@@ -35,7 +35,7 @@ th {
     <th>Surname</th>
     <th>Affiliation</th>
        <th>Email</th>
-         <th>Country</th>
+       <th>Requested privileges</th>
       <th>Edit privileges</th>
             <th>Current privileges</th>
 
@@ -43,10 +43,10 @@ th {
  {{for p in privileges:}}
   <tr>
     <td>{{=p.first_name}}</td>
-    <td>{{=p.first_name}}</td>
-    <td>{{=p.first_name}}</td>
-       <td>{{=p.first_name}}</td>
-       <td>{{=p.first_name}}</td>
+    <td>{{=p.last_name}}</td>
+    <td>{{=p.affiliation}}</td>
+       <td>{{=p.email}}</td>
+      <td>{{=p.access_request}}</td>
       <td>{{=A('Edit privileges',_href=URL('default','edit_privileges',vars={'user_id':p.id}),_class="btn btn-primary")}} </td>
       {{row = db(db.auth_membership.user_id == p.id).select(db.auth_membership.group_id)}}
       <td>{{=row}}</td>

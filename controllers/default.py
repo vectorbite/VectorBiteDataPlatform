@@ -40,7 +40,9 @@ def team_page_updater():
 # Grant users privileges, found in admin section
 @auth.requires_membership('VectorbiteAdmin')
 def privilege_manager():
-    privileges = db(db.auth_user).select()
+    # arrange by id and groups == None
+    # TODO need to fix query in view to render result without table headings
+    privileges = db(db.auth_user).select(orderby=~db.auth_user.id)
     return locals()
 
 

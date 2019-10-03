@@ -106,15 +106,16 @@ db.define_table('country',
 
 '''extra fields for the auth fields, note that the country db table above needs to be  populated first '''
 
-ACCESS_REQUEST = (['VDViewer','VDUploader','VTUploader','VDCurator','VTCurator','ViewAll'])
 
+## TODO run multiselect https://github.com/mdipierro/web2py-plugins
 auth.settings.extra_fields['auth_user']= [
     Field('affiliation'),
     Field('job_title'),
-    Field('access_request', multiple=True, requires=IS_IN_SET(ACCESS_REQUEST), comment='*Select which access rights you require'),
+    Field('access_request', 'list:string', required=True, comment = 'Please select your reason/s for requesting access to the database '),
     Field('country', 'reference country')]
 auth.define_tables(username=False, signature=False)
 
+db.auth_user.access_request.requires = IS_IN_SET(('VecTraits - download data','VecTraits - submit data','VecDyn - download data','VecDyn - submit data'),  multiple=True)
 
 
 # -------------------------------------------------------------------------
@@ -133,9 +134,18 @@ mail.settings.ssl = configuration.get('smtp.ssl') or False
 auth.settings.registration_requires_verification = True
 auth.settings.registration_requires_approval = False
 auth.settings.reset_password_requires_verification = True
-# Let admin know when users sign up and request permissions
-auth.settings.register_onaccept.append(lambda form:   mail.send(to='matthewjohnwatts@gmail.com', subject='new user',
+auth.settings.create_user_groups = None
+# Let admin know when users sign up and request permissions, this should also create a new task, from the task you one can access the access request and grant access
+# TODO this should eventually work when user confirms email rather than submits
+auth.settings.register_onaccept.append(lambda form: mail.send(to='vectorbite.db.curators@gmail.com', subject='new database access request',
              message='new user email is %s'%form.vars.email))
+# TODO Every time a new user signs up this should create a new task, also need to create a page for users to request new rights
+#auth.settings.register_onaccept.append(lambda form: db.task.insert(title=form.vars.email, description=form.vars.email, contact_name=form.vars.email))
+
+
+
+
+
 #two step authentication for admin
 auth.settings.two_factor_authentication_group = "auth2step"
 
