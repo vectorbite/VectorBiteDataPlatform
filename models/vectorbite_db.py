@@ -6,6 +6,11 @@ from gluon.tools import prettydate
 
 week = datetime.timedelta(days=7)
 
+
+
+
+
+
 ''' Text updates for index page not currently implemented, however, we can use a database table + SQLform to control updates rather the 
 editing html directly from a view'''
 db.define_table('index_page_updates',

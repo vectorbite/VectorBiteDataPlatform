@@ -1,37 +1,103 @@
 {{extend 'layout.html'}}
+        <!DOCTYPE html>
 
+<style>
+html {
+  box-sizing: border-box;
+}
 
-<div style="background: linear-gradient(240deg, lightgrey, whitesmoke)" class="jumbotron">
+*, *:before, *:after {
+  box-sizing: inherit;
+}
 
-  <h2><centre>Meet the VectorByTE team</centre></h2>
+.column {
+  float: left;
+  width: 33.3%;
+  margin-bottom: 16px;
+  padding: 0 8px;
+}
 
-    <br>
+@media screen and (max-width: 650px) {
+  .column {
+    width: 100%;
+    display: block;
+  }
+}
 
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
 
-{{for row in query:}}
+.container {
+  padding: 0 16px;
+}
 
+.container::after, .row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
 
-     <p>
-        <img src="{{=URL('download', args=row.photo)}}" style="float:left;width:250px;margin-right:10px;"  />
-          <h4> {{=row.name}}  <button onclick="location.href='mailto:{{=row.email}}'; target='_blank'"> Send email</button> </h4>
-    <b><span style="color:dodgerblue"> {{=row.role}} <span style='font-size:20px;'>&#9679;</span> {{=row.organisation}} <span style='font-size:20px;'>&#9679;</span> </span> </b><br>
+.title {
+  color: grey;
+}
 
-         {{=row.bio}}
-    </p>
-    <br>
-    <hr>
+.button {
+  border: none;
+  outline: 0;
+  display: inline-block;
+  padding: 8px;
+  color: white;
+  background-color: #000;
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+}
 
+.button:hover {
+  background-color: #555;
+}
+</style>
+</head>
 
+           <div style="background: linear-gradient(240deg, lightgrey, beige)" class="jumbotron">
+
+<h2>Meet The Team</h2>
+
+<br>
+
+<div class="row">
+    {{for row in query:}}
+
+  <div class="column">
+    <div class="card">
+
+      <div class="container">
+          <br>
+          <img src="{{=URL('download', args=row.photo)}}" style="float:left;width:50%;margin-right:10px">
+
+          <h4> {{=row.name}}  </h4>
+          <p><button type="button" class="btn btn-primary" onclick="location.href='mailto:{{=row.email}}'; target='_blank'"> Send email</button> </p>
+
+    <b><span style="color:dodgerblue"> {{=row.role}} <span style='font-size:20px;'>&#9679;</span> {{=row.organisation}} </b>
+
+          <p>{{=row.bio}}</p>
+
+      </div>
+    </div>
+  </div>
    {{pass}}
 
+</div>
 
+<br>
+               <hr>
       <h2><u>Past team members</u></h2>
     <br>
 
-
 {{for row in query2:}}
 
-     <h3>{{=row.name}} <button onclick="location.href='mailto:{{=row.email}}'; target='_blank'"> Send email</button> </h3>
+     <h3>{{=row.name}} <button type="button" class="btn btn-primary" onclick="location.href='mailto:{{=row.email}}'; target='_blank'"> Send email</button> </h3>
    <p> <b><span style="color:dodgerblue"> {{=row.role}} <span style='font-size:20px;'>&#9679;</span> {{=row.organisation}} </b> </p>
 
 
@@ -39,8 +105,4 @@
 
  <hr>
 </div>
-
-
-
-</body>
-</html>
+        </div>

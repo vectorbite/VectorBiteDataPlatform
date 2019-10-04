@@ -16,6 +16,7 @@ from gluon import current
 if request.global_settings.web2py_version < "2.15.5":
     raise HTTP(500, "Requires web2py 2.15.5 or newer")
 
+import datetime
 # -------------------------------------------------------------------------
 # if SSL/HTTPS is properly configured and you want all HTTP requests to
 # be redirected to HTTPS, uncomment the line below:
@@ -107,6 +108,7 @@ db.define_table('country',
 '''extra fields for the auth fields, note that the country db table above needs to be  populated first '''
 
 
+
 ## TODO run multiselect https://github.com/mdipierro/web2py-plugins
 auth.settings.extra_fields['auth_user']= [
     Field('affiliation'),
@@ -115,7 +117,12 @@ auth.settings.extra_fields['auth_user']= [
     Field('country', 'reference country')]
 auth.define_tables(username=False, signature=False)
 
+#Field('current_rights', 'list:reference auth_membership', multiple=True),
+#db.auth_user.current_rights.requires = IS_IN_DB(db, 'auth_membership.user_id')
+
+
 db.auth_user.access_request.requires = IS_IN_SET(('VecTraits - download data','VecTraits - submit data','VecDyn - download data','VecDyn - submit data'),  multiple=True)
+
 
 
 # -------------------------------------------------------------------------

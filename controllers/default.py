@@ -43,6 +43,7 @@ def privilege_manager():
     # arrange by id and groups == None
     # TODO need to fix query in view to render result without table headings
     privileges = db(db.auth_user).select(orderby=~db.auth_user.id)
+
     return locals()
 
 

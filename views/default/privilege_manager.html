@@ -1,46 +1,70 @@
  {{extend 'layout.html'}}
 
-         <head>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-table {
+* {
+  box-sizing: border-box;
+}
+
+#myInput {
+  background-image: url('/css/searchicon.png');
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  width: 100%;
+  font-size: 16px;
+  padding: 12px 20px 12px 40px;
+  border: 1px solid #ddd;
+  margin-bottom: 12px;
+}
+
+#myTable {
   border-collapse: collapse;
   width: 100%;
+  border: 1px solid #ddd;
+  font-size: 18px;
 }
 
-th, td {
+#myTable th, #myTable td {
   text-align: left;
-  padding: 8px;
+  padding: 12px;
 }
 
-tr:nth-child(even){background-color: #f2f2f2}
+#myTable tr {
+  border-bottom: 1px solid #ddd;
+}
 
-th {
-  background-color: #4CAF50;
-  color: white;
+#myTable tr:nth-child(even) {
+  background-color: #f2f2f2
+}
+
+#myTable tr:nth-child(odd) {
+  background-color: #f2f2f2
+}
+
+#myTable tr.header, #myTable tr:hover {
+  background-color: #f1f1f1;
 }
 </style>
 </head>
+<body>
+<div style="background: linear-gradient(240deg, lightgrey, beige)" class="jumbotron">
+<h2>Privilege manager</h2>
 
-          <div style="background: linear-gradient(240deg, lightgrey, beige)" class="jumbotron">
+<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for user by email address" title="Type in a email address">
 
+<table id="myTable">
 
-
-
-
-
-<table style="width:100%">
-
-  <tr>
-    <th>First Name</th>
+  <tr class="header">
+   <th>Name</th>
     <th>Surname</th>
     <th>Affiliation</th>
        <th>Email</th>
        <th>Requested privileges</th>
       <th>Edit privileges</th>
             <th>Current privileges</th>
-
   </tr>
- {{for p in privileges:}}
+        {{for p in privileges:}}
   <tr>
     <td>{{=p.first_name}}</td>
     <td>{{=p.last_name}}</td>
@@ -52,11 +76,29 @@ th {
       <td>{{=row}}</td>
 {{pass}}
 
-
-  </tr>
 </table>
 
+      </div>
+<script>
+function myFunction() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[3];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+}
+</script>
 
-
-
-          </div>
+</body>
+</html>
