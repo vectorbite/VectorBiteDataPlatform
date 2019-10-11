@@ -64,7 +64,7 @@ if auth.has_membership('VDCurator') or auth.has_membership('VectorbiteAdmin'):
 
 if auth.has_membership('VectorbiteAdmin'):
     # Admin navbar 2
-    response.menu.append((T('Page updates and tasks'), False, None, [
+    response.menu.append((T('Admin'), False, None, [
         # ('Edit index page', False, URL('default', 'team')),
         # ('Edit vecdyn main page', False, URL('default', 'team')),
         ('Manage privileges', False, URL('default', 'privilege_manager')),

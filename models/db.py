@@ -86,6 +86,7 @@ response.form_label_separator = ''
 auth = Auth(db, host_names=configuration.get('host.names'))
 
 
+
 '''this table is referenced in the user registration'''
 db.define_table('country',
                 Field('Country_or_Area', 'string', comment='UN Standard country or area codes for statistical'),
@@ -93,12 +94,6 @@ db.define_table('country',
                 Field('ISO_alpha3_code', 'string'),
                 format='%(Country_or_Area)s')
 
-'''if db(db.country.id>0).count() == 0:
-    db.country.truncate()'''
-
-####not sure why this isn't working i'll test it again
-'''if db(db.country.id>0).count() == 0:
-    db.country.import_from_csv_file(open('static/additional_files/', 'UNcountries.csv'), 'r')'''
 
 #db.person.import_from_csv_file(open('test.csv', 'r'))
 # -------------------------------------------------------------------------
@@ -108,21 +103,15 @@ db.define_table('country',
 '''extra fields for the auth fields, note that the country db table above needs to be  populated first '''
 
 
-
-## TODO run multiselect https://github.com/mdipierro/web2py-plugins
 auth.settings.extra_fields['auth_user']= [
     Field('affiliation'),
     Field('job_title'),
-    Field('access_request', 'list:string', required=True, comment = 'Please select your reason/s for requesting access to the database '),
-    Field('country', 'reference country')]
+    Field('access_request', 'list:string',  multiple=True, widget=SQLFORM.widgets.checkboxes.widget),
+    Field('country', 'reference country', required=True)]
 auth.define_tables(username=False, signature=False)
-
-#Field('current_rights', 'list:reference auth_membership', multiple=True),
-#db.auth_user.current_rights.requires = IS_IN_DB(db, 'auth_membership.user_id')
 
 
 db.auth_user.access_request.requires = IS_IN_SET(('VecTraits - download data','VecTraits - submit data','VecDyn - download data','VecDyn - submit data'),  multiple=True)
-
 
 
 # -------------------------------------------------------------------------
@@ -149,19 +138,13 @@ auth.settings.register_onaccept.append(lambda form: mail.send(to='vectorbite.db.
 # TODO Every time a new user signs up this should create a new task, also need to create a page for users to request new rights
 #auth.settings.register_onaccept.append(lambda form: db.task.insert(title=form.vars.email, description=form.vars.email, contact_name=form.vars.email))
 
-
-
+#### TODO Users and request new rights by updatign their profiles, should send a message to admina and set a task
+auth.settings.profile_onaccept.append(lambda form:   mail.send(to='vectorbite.db.curators@gmail.com', subject='user has updated profile',
+             message='new user email is %s'%form.vars.email))
 
 
 #two step authentication for admin
 auth.settings.two_factor_authentication_group = "auth2step"
-
-
-#from gluon.tools import Recaptcha2 as Recaptcha
-#auth.settings.captcha = Recaptcha(request,
-#    'PUBLIC_KEY', 'PRIVATE_KEY')
-
-
 
 
 # -------------------------------------------------------------------------  
@@ -246,5 +229,6 @@ class SelectOrAdd(object):
         wrapper = DIV(_id=my_select_id + "_adder_wrapper")
         wrapper.components.extend([select_widget, form_loader_div, activator_button, jq_script])
         return wrapper
+
 
 

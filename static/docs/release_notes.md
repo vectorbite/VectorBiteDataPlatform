@@ -2,24 +2,24 @@
 Current version: **0.4.1**
 
 ---
-## 0.4
+## 0.4.2
+
+    - TODO New text on sign up page to explain what users should do   
+    - TODO Sign-up creates new task so admin can keep track of who needs access rights
 
 ## 0.4.1
 
-- Meet the team and funding pages
-    - TODO bootstrap formatting   
+- Meet the team page, funding pages and admin form to control team pages. 
     - New members can be added / removed via a specific page in admin section of app. 
 - Membership user rights admin 
     - Can now be assigned via admin page in web interface (not the case for admins, rights need to be granted via web2py admin) 
-- VecDyn curators can only edit data sets they uploaded, they cannot access other data sets in db  
+- VecDyn curators can only edit data sets they uploaded and cannot access other data sets in db.  
 - Changes to signup
-    - Email sent to admin email after signup to notify admin
+    - Email sent to admin email after signup to notify admin that a new user has requested access to database.
     - Users must confirm email address on sign up
-    - TODO Sign-up creates new task so admin can keep track of who needs access rights
     - New field added to signup - users request rights on sign up, based on lookup from groups
-    - TODO New text on sign up page to explain what users should do   
 - Two step authentication system added for admins
-
+- Change to menu - data management and admin section now separated. 
 
 ### 0.4.0
 - Completed data uploader for VecTraits
