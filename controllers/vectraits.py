@@ -19,7 +19,7 @@ def about():
     """
     return locals()
 
-
+@auth.requires(auth.has_membership('VTCurator') or auth.has_membership('VectorbiteAdmin')  or auth.has_membership('ViewAll')   or auth.has_membership('VTViewer') or auth.has_membership('VTUploader'))
 def vectraits_template():
     """
     Controller to allow VecTraits template download
@@ -27,7 +27,7 @@ def vectraits_template():
     return locals()
 
 
-@auth.requires_login()
+@auth.requires(auth.has_membership('VTCurator') or auth.has_membership('VectorbiteAdmin')  or auth.has_membership('ViewAll')   or auth.has_membership('VTViewer') or auth.has_membership('VTUploader'))
 def view_vectraits():
     # A simple demonstration of an interface to explore the published vectraits dataset.
 
@@ -51,7 +51,7 @@ def view_vectraits():
 
     return dict(form=grid)
 
-
+@auth.requires(auth.has_membership('VTCurator') or auth.has_membership('VectorbiteAdmin')  or auth.has_membership('ViewAll')   or auth.has_membership('VTViewer') or auth.has_membership('VTUploader'))
 def view_citations():
     # create the SQLFORM grid to show the existing assignments
     # and set up actions to be applied to selected rows - these
@@ -71,7 +71,7 @@ def view_citations():
 
     return dict(form=grid)
 
-
+@auth.requires(auth.has_membership('VTCurator') or auth.has_membership('VectorbiteAdmin')  or auth.has_membership('ViewAll')   or auth.has_membership('VTViewer') or auth.has_membership('VTUploader'))
 def validate_vectraits():
     report = ""
     failed = False
@@ -150,7 +150,7 @@ def validation_successful():
         redirect(URL('vectraits', 'index'))
 
 
-@auth.requires_login()
+@auth.requires(auth.has_membership('VTCurator') or auth.has_membership('VectorbiteAdmin')  or auth.has_membership('VTUploader'))
 def submit_dataset_for_upload():
     import os
     import shutil

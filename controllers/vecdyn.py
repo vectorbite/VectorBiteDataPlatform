@@ -741,7 +741,7 @@ week = datetime.timedelta(days=7)
 
 # VecDyn query
 # @auth.requires_login()
-@auth.requires(auth.has_membership('VDCurator') or auth.has_membership('VectorbiteAdmin'))
+@auth.requires(auth.has_membership('VDCurator') or auth.has_membership('VectorbiteAdmin') or auth.has_membership('ViewAll') or auth.has_membership('VDViewer'))
 def vecdyn_taxon_location_query():
     """
     Controller to serve a searchable grid view of the vector dynamics
@@ -978,7 +978,7 @@ week = datetime.timedelta(days=7)
 
 # VecDyn query
 # @auth.requires_login()
-@auth.requires(auth.has_membership('VDCurator') or auth.has_membership('VectorbiteAdmin'))
+@auth.requires(auth.has_membership('VDCurator') or auth.has_membership('VectorbiteAdmin') or auth.has_membership('ViewAll') or auth.has_membership('VDViewer'))
 def vecdyn_author_query():
     """
     Controller to serve a searchable grid view of the vector dynamics

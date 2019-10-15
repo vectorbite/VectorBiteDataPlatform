@@ -29,22 +29,24 @@ import datetime
 configuration = AppConfig(reload=True)
 
 
+
 db = DAL(configuration.get('db.uri'),
          pool_size=configuration.get('db.pool_size'),
          migrate_enabled=configuration.get('db.migrate'),
          lazy_tables=True,
-         # fake_migrate_all=True,
+         #fake_migrate_all=True,
          check_reserved=['postgres', 'postgres_nonreserved'])
 
 db2 = DAL(configuration.get('db2.uri'),
           pool_size=configuration.get('db2.pool_size'),
           migrate_enabled=configuration.get('db2.migrate'),
           lazy_tables=True,
-          # fake_migrate_all=True,        # Allow fake migration to rebuild table metadata
+          #fake_migrate_all=True,        # Allow fake migration to rebuild table metadata
           check_reserved=['postgres', 'postgres_nonreserved'])
 
 # Make db2 available for use in vtfuncs
 current.db2 = db2
+
 
 
 # -------------------------------------------------------------------------
@@ -114,6 +116,8 @@ auth.define_tables(username=False, signature=False)
 db.auth_user.access_request.requires = IS_IN_SET(('VecTraits - download data','VecTraits - submit data','VecDyn - download data','VecDyn - submit data'),  multiple=True)
 
 
+
+
 # -------------------------------------------------------------------------
 # configure email
 # -------------------------------------------------------------------------
@@ -142,6 +146,8 @@ auth.settings.register_onaccept.append(lambda form: mail.send(to='vectorbite.db.
 auth.settings.profile_onaccept.append(lambda form:   mail.send(to='vectorbite.db.curators@gmail.com', subject='user has updated profile',
              message='new user email is %s'%form.vars.email))
 
+# Auth message for email verification
+auth.messages.email_sent= 'A verification email has been sent, please click on the link to verify your email address'
 
 #two step authentication for admin
 auth.settings.two_factor_authentication_group = "auth2step"
