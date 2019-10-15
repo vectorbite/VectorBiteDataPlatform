@@ -55,8 +55,7 @@ def edit_privileges():
     db.auth_membership.user_id.writable = False
     # TODO need to add a query to filter out default user groups, add something like this to the query below & (db.auth_membership.group_id == db.auth_group.id) & (db.auth_group.role.startswith!=('user'))
     privileges = (db.auth_membership.user_id == user_id)
-    #db.auth_membership.group_id.requires = requires = IS_IN_SET({'8':'VDCurator'}, zero=None)
-    #db.auth_membership.group_id.requires = IS_INT_IN_RANGE(0, 4)
+    db.auth_membership.group_id.requires = requires = IS_IN_SET({'34':'VDViewer', '35':'VTViewer', '36':'VDUploader', '37':'VTUploader', '38':'VDCurator', '39':'VTCurator', '40':'ViewAll'}, zero=None)
     grid = SQLFORM.grid(privileges,
                         create=True, details=False, editable=True, csv=False,
                         deletable=True, maxtextlength=200)
