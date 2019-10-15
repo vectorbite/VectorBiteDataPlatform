@@ -23,6 +23,56 @@ def about_us():
 me = auth.user_id
 
 
+# Meet the team pages, can be edited in admin section using team page updater
+def team():
+    db.team.active.readable = False
+    query = db(db.team.active == True).select(orderby=~db.team.id)
+    query2 = db(db.team.active == False).select(orderby=~db.team.id)
+    return locals()
+
+@auth.requires_membership('VectorbiteAdmin')
+def team_page_updater():
+    grid = SQLFORM.grid(db.team,
+                        create=True, details=True, editable=True, csv=False,
+                        deletable=False, maxtextlength=200)
+    return locals()
+
+# Grant users privileges, found in admin section
+@auth.requires_membership('VectorbiteAdmin')
+def privilege_manager():
+    # arrange by id and groups == None
+    # TODO need to fix query in view to render result without table headings
+    privileges = db(db.auth_user).select(orderby=~db.auth_user.id)
+
+    return locals()
+
+
+# Admin & auth 2 step rights can only be granted through the web2py app admin
+@auth.requires_membership('VectorbiteAdmin')
+def edit_privileges():
+    user_id = request.get_vars.user_id
+    db.auth_membership.user_id.default = user_id
+    db.auth_membership.user_id.writable = False
+    # TODO need to add a query to filter out default user groups, add something like this to the query below & (db.auth_membership.group_id == db.auth_group.id) & (db.auth_group.role.startswith!=('user'))
+    privileges = (db.auth_membership.user_id == user_id)
+    #db.auth_membership.group_id.requires = requires = IS_IN_SET({'8':'VDCurator'}, zero=None)
+    #db.auth_membership.group_id.requires = IS_INT_IN_RANGE(0, 4)
+    grid = SQLFORM.grid(privileges,
+                        create=True, details=False, editable=True, csv=False,
+                        deletable=True, maxtextlength=200)
+    return locals()
+
+
+# Links to funding organisations
+
+def funding():
+    """
+    Controller for about page
+    """
+    return locals()
+
+
+
 # ----------------------------------------------------------------------------------------------------------------------
 # The following functions create the task manager tables in default/tasks
 # ----------------------------------------------------------------------------------------------------------------------

@@ -1,5 +1,7 @@
 {{extend 'layout.html'}}
 
+
+
 <div class="container">
 
     <div style="background:linear-gradient(240deg, lightgrey, beige)" !important" class="jumbotron">
@@ -19,6 +21,7 @@
             pass
         pass
         =form
+
         }}
         </div>
     </div>
@@ -27,6 +30,8 @@
 
 
 {{block page_js}}
+
+
 <script>
     jQuery("#web2py_user_form input:visible:enabled:first").focus();
 {{if request.args(0)=='register':}}

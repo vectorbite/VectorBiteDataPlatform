@@ -13,23 +13,23 @@ logger.setLevel(logging.DEBUG)
 # ----------------------------------------------------------------------------------------------------------------------
 
 def index():
-    # dsets = db(db.publication_info).count()
-    # obs =  db(db.time_series_data).count()
-    # taxa = db(db.study_meta_data.taxon).select(distinct=db.study_meta_data.taxon, cache=(cache.ram, 3600), cacheable=True)
-    # taxa = len(taxa)
-    # countries = db(db.study_meta_data.geo_id == db.gaul_admin_layers.id).select(
-    #     distinct=db.gaul_admin_layers.adm0_name, cache=(cache.ram, 36000), cacheable=True)
-    # countries = len(countries)
+    dsets = db(db.publication_info).count()
+    obs =  db(db.time_series_data).count()
+    taxa = db(db.study_meta_data.taxon).select(distinct=db.study_meta_data.taxon, cache=(cache.ram, 3600), cacheable=True)
+    taxa = len(taxa)
+    countries = db(db.study_meta_data.geo_id == db.gaul_admin_layers.id).select(
+        distinct=db.gaul_admin_layers.adm0_name, cache=(cache.ram, 36000), cacheable=True)
+    countries = len(countries)
     # regions = db(db.study_meta_data.geo_id == db.gaul_admin_layers.id).select(
     #     distinct=db.gaul_admin_layers.adm1_name, cache=(cache.ram, 36000), cacheable=True)
     # regions = len(regions)
     # counties = db(db.study_meta_data.geo_id == db.gaul_admin_layers.id).select(
     #     distinct=db.gaul_admin_layers.adm2_name, cache=(cache.ram, 36000), cacheable=True)
     # counties = len(counties)
-    dsets = 0
-    obs = 0
-    taxa = 0
-    countries = 0
+    # dsets = 0
+    # obs = 0
+    # taxa = 0
+    # countries = 0
     regions = 0
     counties = 0
     coords = 0
@@ -62,7 +62,7 @@ def queue_task_3():
 
 
 # The following function imports a vecdyn csv
-@auth.requires_membership('VectorbiteAdmin')
+@auth.requires(auth.has_membership('VDCurator') or auth.has_membership('VectorbiteAdmin'))
 def vecdyn_csv_uploader():
     publication_info_id = request.get_vars.publication_info_id
     db.data_set_upload.publication_info_id.default = publication_info_id
@@ -80,7 +80,7 @@ def vecdyn_csv_uploader():
 
 
 # The following function imports a vecdyn csv
-@auth.requires_membership('VectorbiteAdmin')
+@auth.requires(auth.has_membership('VDCurator') or auth.has_membership('VectorbiteAdmin'))
 def vecdyn_csv_bulk_uploader():
     db.data_set_bulk_upload.status.default = 'pending'
     db.data_set_bulk_upload.readable = False
@@ -93,7 +93,7 @@ def vecdyn_csv_bulk_uploader():
     return locals()
 
 
-@auth.requires_membership('VectorbiteAdmin')
+@auth.requires(auth.has_membership('VDCurator') or auth.has_membership('VectorbiteAdmin'))
 def submit_vecdyn_data():
     """function set up to Submit vecdyn  data through the website"""
     db.task.task_type.default = 'vecdyn data submission'
@@ -133,7 +133,7 @@ def submit_vecdyn_data():
     return locals()
 
 
-@auth.requires_membership('VectorbiteAdmin')
+@auth.requires(auth.has_membership('VDCurator') or auth.has_membership('VectorbiteAdmin'))
 def dataset_registration():
     task_id = request.get_vars.task_id
     if task_id is not None:
@@ -198,37 +198,65 @@ def add_collection_author():
         # hasn't been submitted yet, just give them the fresh blank form
         return form
 
-
-@auth.requires_membership('VectorbiteAdmin')
+# Note data curators will only be able to see data sets they have registered, admin will get to see everything
+@auth.requires(auth.has_membership('VDCurator') or auth.has_membership('VectorbiteAdmin'))
 def dataset_registrations():
-    # query = db.publication_info.created_by == me
-    [setattr(f, 'readable', False)
-        for f in db.publication_info
-        if f.name not in ('db.publication_info.data_rights,'
-                          'db.publication_info.dataset_citation,'
-                          'db.publication_info.title,'
-                          'db.publication_info.collection_author,'
-                          'db.publication_info.created_by')]
-    # db.publication_info.data_rights.represent = lambda data_rights, row: A(data_rights, _href=URL('edit_data_rights', args=row.id))
-    links = [lambda row: A('Enter Dataset Control Panel', _href=URL("vecdyn", "view_data", vars={'publication_info_id': row.id}), _class="btn btn-primary")]
-    form = SQLFORM.grid(db.publication_info, links=links, searchable=True, advanced_search=False, deletable=False,
-                        editable=False, details=False, create=False, csv=False, maxtextlength=200,
-                        fields=[
-                            db.publication_info.title,
-                            db.publication_info.collection_author,
-                            db.publication_info.dataset_citation,
-                            db.publication_info.data_rights],
-                        # buttons_placement='left',
-                        # links_placement='left'
-                        )
-    if db(db.publication_info.id).count() == 0:
-        response.flash = 'You have not yet registered any data sets'
+    if auth.has_membership('VDCurator'):
+        query = db.publication_info.created_by == me
+        [setattr(f, 'readable', False)
+            for f in db.publication_info
+            if f.name not in ('db.publication_info.data_rights,'
+                              'db.publication_info.dataset_citation,'
+                              'db.publication_info.title,'
+                              'db.publication_info.collection_author,'
+                              'db.publication_info.created_by')]
+        # db.publication_info.data_rights.represent = lambda data_rights, row: A(data_rights, _href=URL('edit_data_rights', args=row.id))
+        links = [lambda row: A('Enter Dataset Control Panel', _href=URL("vecdyn", "view_data", vars={'publication_info_id': row.id}), _class="btn btn-primary")]
+        form = SQLFORM.grid(query, links=links, searchable=True, advanced_search=False, deletable=False,
+                            editable=False, details=False, create=False, csv=False, maxtextlength=200,
+                            fields=[
+                                db.publication_info.title,
+                                db.publication_info.collection_author,
+                                db.publication_info.dataset_citation,
+                                db.publication_info.data_rights],
+                            # buttons_placement='left',
+                            # links_placement='left'
+                            )
+        if db(db.publication_info.id).count() == 0:
+            response.flash = 'You have not yet registered any data sets'
+        else:
+            response.flash = 'data set registrations'
     else:
-        response.flash = 'data set registrations'
+        # query = db.publication_info.created_by == me
+        [setattr(f, 'readable', False)
+         for f in db.publication_info
+         if f.name not in ('db.publication_info.data_rights,'
+                           'db.publication_info.dataset_citation,'
+                           'db.publication_info.title,'
+                           'db.publication_info.collection_author,'
+                           'db.publication_info.created_by')]
+        # db.publication_info.data_rights.represent = lambda data_rights, row: A(data_rights, _href=URL('edit_data_rights', args=row.id))
+        links = [lambda row: A('Enter Dataset Control Panel',
+                               _href=URL("vecdyn", "view_data", vars={'publication_info_id': row.id}),
+                               _class="btn btn-primary")]
+        form = SQLFORM.grid(db.publication_info, links=links, searchable=True, advanced_search=False, deletable=False,
+                            editable=False, details=False, create=False, csv=False, maxtextlength=200,
+                            fields=[
+                                db.publication_info.title,
+                                db.publication_info.collection_author,
+                                db.publication_info.dataset_citation,
+                                db.publication_info.data_rights],
+                            # buttons_placement='left',
+                            # links_placement='left'
+                            )
+        if db(db.publication_info.id).count() == 0:
+            response.flash = 'You have not yet registered any data sets'
+        else:
+            response.flash = 'data set registrations'
     return locals()
 
 
-@auth.requires_membership('VectorbiteAdmin')
+@auth.requires(auth.has_membership('VDCurator') or auth.has_membership('VectorbiteAdmin'))
 def edit_dataset_general_info():
     db.publication_info.data_rights.writable = False
     db.publication_info.data_rights.readable = False
@@ -251,7 +279,7 @@ def edit_dataset_general_info():
     return locals()
 
 
-@auth.requires_membership('VectorbiteAdmin')
+@auth.requires(auth.has_membership('VDCurator') or auth.has_membership('VectorbiteAdmin'))
 def edit_data_rights():
     publication_info_id = request.get_vars.publication_info_id
     # db.data_rights.publication_info_id.writable = False
@@ -288,7 +316,7 @@ def edit_data_rights():
 
 
 
-@auth.requires_membership('VectorbiteAdmin')
+@auth.requires(auth.has_membership('VDCurator') or auth.has_membership('VectorbiteAdmin'))
 def view_data():
     # Query for publication info pages, found at the top of the view data pages
     publication_info_id = request.get_vars.publication_info_id
@@ -352,7 +380,7 @@ def view_data():
     return dict(form=form,  coords=coords, regions=regions,unstan_tax=unstan_tax,unstan_geo=unstan_geo,taxon_entries=taxon_entries,publication_info_query=publication_info_query,publication_info_id=publication_info_id, observations=observations)
 
 
-@auth.requires_membership('VectorbiteAdmin')
+@auth.requires(auth.has_membership('VDCurator') or auth.has_membership('VectorbiteAdmin'))
 def view_unstandardised_data():
         # User message code
 
@@ -425,7 +453,7 @@ def view_unstandardised_data():
         return locals()
 
 
-@auth.requires_membership('VectorbiteAdmin')
+@auth.requires(auth.has_membership('VDCurator') or auth.has_membership('VectorbiteAdmin'))
 def edit_meta_data():
     publication_info_id = request.get_vars.publication_info_id
     study_meta_data_id = request.get_vars.study_meta_data_id
@@ -451,7 +479,7 @@ def edit_meta_data():
 
 
 # Write a function if name is in db do something, if not standardise data
-@auth.requires_membership('VectorbiteAdmin')
+@auth.requires(auth.has_membership('VDCurator') or auth.has_membership('VectorbiteAdmin'))
 def standardise_taxon():
     response.flash = 'You have uploaded taxonomic data that is not recognised in our database, ' \
                      'you need to standardise this manually.' \
@@ -477,7 +505,7 @@ def standardise_taxon():
 
 
 # Write a function if name is in db do something, if not standardise data
-@auth.requires_membership('VectorbiteAdmin')
+@auth.requires(auth.has_membership('VDCurator') or auth.has_membership('VectorbiteAdmin'))
 def re_standardise_taxon():
     # Page variable used in redirection to various standardization pages
     page = 're_standardise_taxon'
@@ -487,7 +515,7 @@ def re_standardise_taxon():
     return locals()
 
 
-@auth.requires_membership('VectorbiteAdmin')
+@auth.requires(auth.has_membership('VDCurator') or auth.has_membership('VectorbiteAdmin'))
 def taxon_select():
     # Page variable used in redirection to various standardization pages
     page = request.get_vars.page
@@ -521,7 +549,7 @@ def taxon_select():
     return locals()
 
 
-@auth.requires_membership('VectorbiteAdmin')
+@auth.requires(auth.has_membership('VDCurator') or auth.has_membership('VectorbiteAdmin'))
 def taxon_confirm():
     # Page variable used in redirection to various standardization pages
     page = request.get_vars.page
@@ -549,7 +577,7 @@ def taxon_confirm():
     return locals()
 
 
-@auth.requires_membership('VectorbiteAdmin')
+@auth.requires(auth.has_membership('VDCurator') or auth.has_membership('VectorbiteAdmin'))
 # Searches through all the entries for a taxon  and adds the tax standardized taxon name to each row
 def taxon_insert():
     # Page variable used in redirection to various standardization pages
@@ -579,7 +607,7 @@ def taxon_insert():
     return locals()
 
 
-@auth.requires_membership('VectorbiteAdmin')
+@auth.requires(auth.has_membership('VDCurator') or auth.has_membership('VectorbiteAdmin'))
 def standardise_geo_data():
     # Page variable used in redirection to various standardization pages
     page = 'standardise_geo_data'
@@ -599,7 +627,7 @@ def standardise_geo_data():
     return locals()
 
 
-@auth.requires_membership('VectorbiteAdmin')
+@auth.requires(auth.has_membership('VDCurator') or auth.has_membership('VectorbiteAdmin'))
 def re_standardise_geo_data():
     # Page variable used in redirection to various standardization pages
     page = 're_standardise_geo_data'
@@ -609,7 +637,7 @@ def re_standardise_geo_data():
     return locals()
 
 
-@auth.requires_membership('VectorbiteAdmin')
+@auth.requires(auth.has_membership('VDCurator') or auth.has_membership('VectorbiteAdmin'))
 def location_select():
     # Page variable used in redirection to various standardization pages
     page = request.get_vars.page
@@ -643,7 +671,7 @@ def location_select():
     return locals()
 
 
-@auth.requires_membership('VectorbiteAdmin')
+@auth.requires(auth.has_membership('VDCurator') or auth.has_membership('VectorbiteAdmin'))
 def geo_confirm():
     publication_info_id = request.get_vars.publication_info_id
     study_meta_data_id = request.get_vars.study_meta_data_id
@@ -665,7 +693,7 @@ def geo_confirm():
     return locals()
 
 
-@auth.requires_membership('VectorbiteAdmin')
+@auth.requires(auth.has_membership('VDCurator') or auth.has_membership('VectorbiteAdmin'))
 def geo_st_insert():
     publication_info_id = request.get_vars.publication_info_id
     study_meta_data_id = request.get_vars.study_meta_data_id
@@ -689,7 +717,7 @@ def geo_st_insert():
     return locals()
 
 
-@auth.requires_membership('VectorbiteAdmin')
+@auth.requires(auth.has_membership('VDCurator') or auth.has_membership('VectorbiteAdmin'))
 def view_time_series_data():
     publication_info_id = request.get_vars.publication_info_id
     study_meta_data_id = request.get_vars.study_meta_data_id
@@ -713,7 +741,7 @@ week = datetime.timedelta(days=7)
 
 # VecDyn query
 # @auth.requires_login()
-@auth.requires_membership('VectorbiteAdmin')
+@auth.requires(auth.has_membership('VDCurator') or auth.has_membership('VectorbiteAdmin') or auth.has_membership('ViewAll') or auth.has_membership('VDViewer'))
 def vecdyn_taxon_location_query():
     """
     Controller to serve a searchable grid view of the vector dynamics
@@ -950,7 +978,7 @@ week = datetime.timedelta(days=7)
 
 # VecDyn query
 # @auth.requires_login()
-@auth.requires_membership('VectorbiteAdmin')
+@auth.requires(auth.has_membership('VDCurator') or auth.has_membership('VectorbiteAdmin') or auth.has_membership('ViewAll') or auth.has_membership('VDViewer'))
 def vecdyn_author_query():
     """
     Controller to serve a searchable grid view of the vector dynamics

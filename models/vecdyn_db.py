@@ -66,10 +66,8 @@ db.define_table('publication_info',
                 Field('data_rights', requires=IS_IN_SET(DATARIGHTS), default=DATARIGHTS[2]),
                 Field('embargo_release_date', type ='date', requires=IS_EMPTY_OR(IS_DATE()), comment = 'If dataset is under embargo for a period of time please add its release date'),
                 Field('data_set_type', requires=IS_IN_SET(DATATYPE), default=DATATYPE[0]),
-                Field('collection_author',db.collection_author, requires=IS_EMPTY_OR(IS_IN_DB(db, 'collection_author.id', 'collection_author.name')))
-                )
-                #auth.signature) # drop auth sig from thsi table
-                #format='%(id)s')
+                Field('collection_author',db.collection_author, requires=IS_EMPTY_OR(IS_IN_DB(db, 'collection_author.id', 'collection_author.name'))),
+                auth.signature) # drop auth sig from thsi table
 
 
 
@@ -134,6 +132,15 @@ db.define_table('time_series_data',
                 Field('sample_name', type = 'string', comment ='A human readable sample name'),
                 Field('study_meta_data_id', 'reference study_meta_data'),
                 Field('publication_info_id', 'reference publication_info'))
+
+
+db.define_table('vecdyn_downloads',
+                Field('study_meta_data_id', type='integer'),
+                Field('user_id', type='integer'),
+                Field('status', requires=IS_IN_SET(STATUS),
+                      default=STATUS[0]),
+                Field('date_ordered', type='datetime', default=request.now),
+                )
 
 
 
