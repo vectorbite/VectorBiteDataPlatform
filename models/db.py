@@ -44,6 +44,7 @@ db2 = DAL(configuration.get('db2.uri'),
           #fake_migrate_all=True,        # Allow fake migration to rebuild table metadata
           check_reserved=['postgres', 'postgres_nonreserved'])
 
+current.db = db
 # Make db2 available for use in vtfuncs
 current.db2 = db2
 

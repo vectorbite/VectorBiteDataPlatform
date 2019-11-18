@@ -11,7 +11,6 @@ Docstr: This file contains many generic VecTraits functions with which to perfor
 import logging
 from cStringIO import StringIO
 from gluon.validators import *
-from gluon.sqlhtml import ExportClass
 from gluon import current
 import datetime
 from distutils.util import strtobool
