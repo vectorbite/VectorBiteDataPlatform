@@ -148,7 +148,9 @@ auth.settings.profile_onaccept.append(lambda form:   mail.send(to='vectorbite.db
              message='new user email is %s'%form.vars.email))
 
 # Auth message for email verification
-auth.messages.email_sent= 'A verification email has been sent, please click on the link to verify your email address'
+auth.messages.email_sent = 'A verification email has been sent, please click on the link to verify your email address. /' \
+                           'Once you have completed this step, the VectorByte Database Admin Team will grant /' \
+                           'you access to the database, this may take a little time so please be patient!'
 
 #two step authentication for admin
 auth.settings.two_factor_authentication_group = "auth2step"

@@ -47,10 +47,16 @@ def privilege_manager():
     return locals()
 
 
+
 # Admin & auth 2 step rights can only be granted through the web2py app admin
 @auth.requires_membership('VectorbiteAdmin')
 def edit_privileges():
     user_id = request.get_vars.user_id
+    user = db(db.auth_user.id == user_id).select().first()
+    send_access_email = send_email(to=user.email,
+                                   subject="Vectorbyte database access rights",
+                                   sender="VectorByte Admin",
+                                   message="Your access rights have been modified")
     db.auth_membership.user_id.default = user_id
     db.auth_membership.user_id.writable = False
     # TODO need to add a query to filter out default user groups, add something like this to the query below & (db.auth_membership.group_id == db.auth_group.id) & (db.auth_group.role.startswith!=('user'))
@@ -58,7 +64,7 @@ def edit_privileges():
     db.auth_membership.group_id.requires = requires = IS_IN_SET({'34':'VDViewer', '35':'VTViewer', '36':'VDUploader', '37':'VTUploader', '38':'VDCurator', '39':'VTCurator', '40':'ViewAll'}, zero=None)
     grid = SQLFORM.grid(privileges,
                         create=True, details=False, editable=True, csv=False,
-                        deletable=True, maxtextlength=200)
+                        deletable=True, onvalidation=send_access_email, maxtextlength=200)
     return locals()
 
 
