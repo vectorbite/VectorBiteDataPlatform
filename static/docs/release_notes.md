@@ -1,11 +1,14 @@
 ## Release Notes
-Current version: **0.4.2**
+Current version: **0.4.3**
 
 ---
 ## 0.4.3
 
-    - TODO New text on sign up page to explain what users should do
-    - TODO Sign-up creates new task so admin can keep track of who needs access rights
+- Improved instructions for sign-up and requesting admin rights.
+- Email sent to users when admin modify privileges.
+- Fixed: email to admin when user re-submits profile
+- Timestamps added to user accounts during profile set up / modification
+- User privilege table now sorted by datetime profile was last modified 
 
 ## 0.4.2
 

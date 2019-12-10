@@ -106,12 +106,12 @@ db.define_table('country',
 '''extra fields for the auth fields, note that the country db table above needs to be  populated first '''
 
 
-auth.settings.extra_fields['auth_user']= [
+auth.settings.extra_fields['auth_user'] = [
     Field('affiliation'),
     Field('job_title'),
     Field('access_request', 'list:string',  multiple=True, widget=SQLFORM.widgets.checkboxes.widget),
     Field('country', 'reference country', required=True)]
-auth.define_tables(username=False, signature=False)
+auth.define_tables(username=False, signature=True)
 
 
 db.auth_user.access_request.requires = IS_IN_SET(('VecTraits - download data','VecTraits - submit data','VecDyn - download data','VecDyn - submit data'),  multiple=True)
@@ -137,18 +137,30 @@ auth.settings.registration_requires_approval = False
 auth.settings.reset_password_requires_verification = True
 auth.settings.create_user_groups = None
 # Let admin know when users sign up and request permissions, this should also create a new task, from the task you one can access the access request and grant access
+
 # TODO this should eventually work when user confirms email rather than submits
 auth.settings.register_onaccept.append(lambda form: mail.send(to='vectorbite.db.curators@gmail.com', subject='new database access request',
              message='new user email is %s'%form.vars.email))
-# TODO Every time a new user signs up this should create a new task, also need to create a page for users to request new rights
-#auth.settings.register_onaccept.append(lambda form: db.task.insert(title=form.vars.email, description=form.vars.email, contact_name=form.vars.email))
+
 
 #### TODO Users and request new rights by updatign their profiles, should send a message to admina and set a task
-auth.settings.profile_onaccept.append(lambda form:   mail.send(to='vectorbite.db.curators@gmail.com', subject='user has updated profile',
-             message='new user email is %s'%form.vars.email))
+auth.settings.profile_onaccept.append(lambda form: mail.send(to='vectorbite.db.curators@gmail.com', subject='user has updated profile',
+             message='new user email is %s'%auth.user.email))
+
+#auth.settings.verify_email_onaccept.append(lambda form: mail.send(to='auth.user.email', subject='Email verified!',
+ #            message='Your email address has been verified, you will recieve another email once your requested access rights have been granted'))
+
+
 
 # Auth message for email verification
-auth.messages.email_sent= 'A verification email has been sent, please click on the link to verify your email address'
+auth.messages.email_sent = 'A verification email has been sent, please click on the link to verify your email address. ' \
+                           'Once this step is completed the VectorByte Database Admin Team will grant ' \
+                           'you access to the database, this may take a little time so please be patient!' \
+                           'If you cannot find the verification email in your main inbox check your junk folder.'
+
+auth.messages.profile_updated = 'Profile updated! If you have requested new database access rights you will recieve an email once new rights have been granted'
+
+auth.messages.email_verified = 'Your email address has been verified, you will recieve another email once your requested access rights have been granted.'
 
 #two step authentication for admin
 auth.settings.two_factor_authentication_group = "auth2step"

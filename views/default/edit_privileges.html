@@ -4,12 +4,11 @@
          <div style="background: linear-gradient(240deg, lightgrey, beige)" class="jumbotron">
        <h2>
 
-                 <h2> <center>Add new team members and edit existing entries</center></h2>
-
+                 <h2> <center>Edit / add privileges for: {{=user.first_name}} {{=user.last_name}} </center></h2>
 <br>
-           <br>
-
-      </h2>
-    {{=BEAUTIFY(grid)}}
+    {{=BEAUTIFY(form)}}
+<br>
+             <h4>Current rights</h4>
+             {{=BEAUTIFY(grid)}}
     </div>
 
