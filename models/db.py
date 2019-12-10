@@ -158,6 +158,8 @@ auth.messages.email_sent = 'A verification email has been sent, please click on 
                            'you access to the database, this may take a little time so please be patient!' \
                            'If you cannot find the verification email in your main inbox check your junk folder.'
 
+auth.messages.profile_updated = 'Profile updated! If you have requested new database access rights you will recieve an email once new rights have been granted'
+
 auth.messages.email_verified = 'Your email address has been verified, you will recieve another email once your requested access rights have been granted.'
 
 #two step authentication for admin
