@@ -80,13 +80,43 @@
 1. In Keeppass2, locate the appconfig.ini file Web2py > VectorbiteApplication configuration > advanced – file attachments.
 2. Open the file and save to the private folder in the ‘VectorBiteDataPlatform’ application folder e.g. '/home/user/PycharmProjects/vectorbite/web2py/applications/VectorBiteDataPlatform/private/' 
 
+### Connect to Amazon EC2 file directory using FileZilla and SFTP
+
+You need to set up your connection so you can upload and download files to the AWS server  (database backup files are stored here).
+
+Open up Filezilla and KeePass2
+
+In Keeppass2, locate the appconfig.ini file Web2py > VectorbiteApplication configuration > advanced – file attachments.
+
+Open the file and save to the private folder in the ‘VectorBiteDataPlatform’ application folder e.g. '/home/user/PycharmProjects/vectorbite/web2py/applications/VectorBiteDataPlatform/private/' 
+
+In Filezilla, go to Edit (Preferences) > Settings > Connection > SFTP, Click "Add key file”
+
+Browse to the location of your .pem file and select it.
+
+A message box will appear asking your permission to convert the file into ppk format. Click Yes, then give the file a name and store it somewhere.
+
+If the new file is shown in the list of Keyfiles, then continue to the next step. If not, then click "Add keyfile..." and select the converted file.
+
+File > Site Manager Add a new site with the following parameters:
+
+Host: Your public dns name of ec2 instance, or the public ip address of the server
+
+Protocol: SFTP
+
+Logon Type: Normal
+
+User: From the docs: "For Amazon Linux, the default user name is ec2-user. For RHEL5, the user name is often root but might be ec2-user. For Ubuntu, the user name is ubuntu. For SUSE Linux, the user name is root. For Debian, the user name is admin. Otherwise, check with your AMI provider."
+
+Press Connect Button - If saving of passwords has been disabled, you will be prompted that the logon type will be changed to 'Ask for password'. Say 'OK' and when connecting, at the password prompt push 'OK' without entering a password to proceed past the dialog.
+
+Note: FileZilla automatically figures out which key to use. You do not need to specify the key after importing it as described above.
+
 ### Download postgres database dump file to load databases 
 
 Next we need to download the database back up files (known as dump files) so we can load the database onto your local machine. 
 
 Open up 
-
-
 
 ### Load/restore postgres database
 
