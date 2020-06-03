@@ -100,5 +100,6 @@ db.define_table('team',
                 Field('bio', 'text'),
                 Field('email', requires=IS_EMAIL(), comment='*Email'),
                 Field('photo', 'upload'),
-                Field('active', 'boolean'))
+                Field('active', 'boolean'),
+                Field('page_position', 'integer')) # page position of profile
 
