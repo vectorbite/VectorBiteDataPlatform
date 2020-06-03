@@ -25,7 +25,7 @@ me = auth.user_id
 # Meet the team pages, can be edited in admin section using team page updater
 def team():
     db.team.active.readable = False
-    query = db(db.team.active == True).select(orderby=~db.team.name)
+    query = db(db.team.active == True).select(orderby=db.team.page_position|db.team.name)
     query2 = db(db.team.active == False).select(orderby=~db.team.id)
     return locals()
 
