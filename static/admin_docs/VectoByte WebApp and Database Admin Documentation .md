@@ -250,7 +250,7 @@ To create a backup of the entire database use the following example:
 - Create the backup
 
   ```
-  /usr/bin/pg_dump --dbname=vectorbitedb --format=c --file=fulldump_[enter-current-date-here].pgdump --username=vbadmin --host=127.0.0.1 --port=5432
+  /usr/bin/pg_dump  --dbname=vectorbitedb --schema=vecdyn --format=c  --username=vecdyn  --file=vecdyn_290420.pgdump --host=127.0.0.1 --port=5432
   ```
 
 - Confirm the file has been created in the installation folder
@@ -542,3 +542,22 @@ Quit from the `psql` terminal using the command `\q`. If the database already ex
 Edit that using `vi` to fill in the details for the DB and SMTP.
 
 1. **Cross your fingers**. The URL http://%3CPublic DNS>/safe_web/default/index should now open the web application.  There will be a delay as on the initial deployment, the application has  to run the file `model/zzz_fixtures.py`, which is responsible for loading all the legacy data.
+
+## Updating Live Web-app from GitHub Master
+
+```
+cd /home/www-data/web2py/applications/VectorBiteDataPlatform/
+ll
+git status
+sudo git stash
+git pull
+sudo service apache2 reload
+
+```
+
+GitHub / Gitkraken
+
+
+
+
+

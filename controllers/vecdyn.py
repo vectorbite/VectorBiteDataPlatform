@@ -42,9 +42,11 @@ def index():
     # coords = len(coords)
     return dict(dsets=dsets,obs=obs,taxa=taxa,countries=countries,regions=regions,counties=counties,coords=coords)
 
-
-
 def about():
+    # rows = db(db.index_page_updates).select(orderby=~db.index_page_updates.created_on)
+    return locals()
+
+def citing_vecdyn_data():
     # rows = db(db.index_page_updates).select(orderby=~db.index_page_updates.created_on)
     return locals()
 

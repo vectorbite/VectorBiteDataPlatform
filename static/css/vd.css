@@ -17,6 +17,11 @@ h1 {
     color: var(--vd_offblack);
 }
 
+h2 {
+    color: var(--vd_offblack);
+}
+
+
 p.outset {
     border-style: groove;
 }

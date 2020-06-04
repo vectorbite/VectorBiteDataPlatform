@@ -34,6 +34,7 @@ elif request.controller == 'vecdyn':
             (T('Database'), False, None, [
                 ('Explore vecdyn datasets', False, URL('vecdyn', 'vecdyn_taxon_location_query')),  # TODO: move to vecdyn controller
                 ('Submit vecdyn data', False, URL('vecdyn', 'submit_vecdyn_data')),
+                ('Citing Vecdyn data', False, URL('vecdyn', 'citing_vecdyn_data')),
             ])
         )
     response.menu.append(('Documentation', False, 'https://vectorbitedataplatform.readthedocs.io/en/latest/vecdyn/'))
