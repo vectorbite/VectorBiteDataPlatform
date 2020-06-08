@@ -1,7 +1,14 @@
 ## Release Notes
-Current version: **0.4.3**
+Current version: **0.4.5**
 
 ---
+## 0.4.5
+- updates to user-admin messaging system & task manager
+
+## 0.4.4
+- Citing vecdyn page updates
+- Changes to team pages
+
 ## 0.4.3
 
 - Improved instructions for sign-up and requesting admin rights.

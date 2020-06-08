@@ -289,14 +289,16 @@ def submit_vectrait_data():
     db.task.assigned_to.readable = False
     db.task.deadline.writable = False
     db.task.deadline.readable = False
+    db.task.email.writable = False
+    db.task.email.readable = False
     db.task.file.requires = IS_UPLOAD_FILENAME(extension='csv')
     form = SQLFORM(db.task, labels={'task_type': 'Data set category'}).process()
     if form.accepted:
         session.flash = 'Thanks, your data set has been submitted for review, we will get back to you soon!'
-        # send_email(to=db.auth_user(form.vars.assigned_to).email,
-        #           sender=auth.user.email,
-        #           subject="New data set submitted: %s" % form.vars.title,
-        #           message=form.vars.description)
+        send_email(to='vectorbite.db.curators@gmail.com',
+                   sender=auth.user.email,# we should eventually change this to form email
+                   subject="A new vectraits dataset has been submitted: %s" % form.vars.title,
+                   message=form.vars.description)
         redirect(URL('index'))
     # else:
     #    response.flash = 'please fill out the form in full and attach a csv file'
@@ -366,6 +368,8 @@ def contact_us():
     db.task.file.readable = False
     db.task.orcid.writable = False
     db.task.orcid.readable = False
+    db.task.email.writable = False
+    db.task.email.readable = False
     db.task.embargo_release_date.writable = False
     db.task.embargo_release_date.readable = False
     db.task.data_rights.writable = False
@@ -374,10 +378,10 @@ def contact_us():
     if form.accepted:
         session.flash = 'Thanks for your comment, we will get back to you soon!'
         logger.info("Enquiry submitted: task ID {} - {}".format(form.vars["id"], form.vars["title"]))
-        # send_email(to=db.auth_user(form.vars.assigned_to).email,
-        #           sender=auth.user.email,
-        #           subject="New data set submitted: %s" % form.vars.title,
-        #           message=form.vars.description)
+        send_email(to='vectorbite.db.curators@gmail.com',
+                   sender=auth.user.email,  # we should eventually change this to form email
+                   subject="A user has submitted a new message: %s" % form.vars.title,
+                   message=form.vars.description)
         redirect(URL('index'))
     else:
         session.flash = 'please complete the form'
@@ -412,6 +416,8 @@ def report_problem():
     db.task.file.readable = False
     db.task.orcid.writable = False
     db.task.orcid.readable = False
+    db.task.email.writable = False
+    db.task.email.readable = False
     db.task.embargo_release_date.writable = False
     db.task.embargo_release_date.readable = False
     db.task.data_rights.writable = False
@@ -421,6 +427,10 @@ def report_problem():
     # Here it is not critical to notify sysadmin through the log when there are form submission errors
     # However it is always good to log times when the db is written to when possible
     if form.accepted:
+        send_email(to='vectorbite.db.curators@gmail.com',
+                   sender=auth.user.email,# we should eventually change this to form email
+                   subject="A user has reported a problem: %s" % form.vars.title,
+                   message=form.vars.description)
         session.flash = 'Thanks for your comment, we will get back to you soon!'
         logger.info("Problem submitted: task ID {} - {}".format(form.vars["id"], form.vars["title"]))
         redirect(URL('index'))

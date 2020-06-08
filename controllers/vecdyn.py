@@ -107,6 +107,8 @@ def submit_vecdyn_data():
     db.task.assigned_to.readable = False
     db.task.deadline.writable = False
     db.task.deadline.readable = False
+    db.task.email.writable = False
+    db.task.email.readable = False
     db.task.file.requires = IS_UPLOAD_FILENAME(extension='csv')
     add_option_2 = SelectOrAdd(form_title="Add new collection author",
                                controller="default",
@@ -119,6 +121,11 @@ def submit_vecdyn_data():
     # Here we would like to know if the DB is written to, and also whether people are having problems with the form
     # (Hence logging on errors)
     if form.accepted:
+        send_email(to='vectorbite.db.curators@gmail.com',
+                   sender=auth.user.email,# we should eventually change this to form email
+                   subject="A user has submitted a new VecDyn dataset: %s" % form.vars.title,
+                   message=form.vars.description)
+        session.flash = 'Thanks for submitting a vecdyn dataset we will get back to you soon!'
         logger.info("VD dataset submitted: task ID {} - {}".format(form.vars["id"], form.vars["title"]))
         redirect(URL('index'))
     elif form.errors:

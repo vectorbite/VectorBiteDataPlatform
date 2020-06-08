@@ -33,15 +33,19 @@ configuration = AppConfig(reload=True)
 db = DAL(configuration.get('db.uri'),
          pool_size=configuration.get('db.pool_size'),
          migrate_enabled=configuration.get('db.migrate'),
-         lazy_tables=True,
+         #lazy_tables=False,
          #fake_migrate_all=True,
+         #fake_migrate = False,
+         #migrate_enabled = False,
+         #fake_migrate_all = False,
          check_reserved=['postgres', 'postgres_nonreserved'])
+
 
 db2 = DAL(configuration.get('db2.uri'),
           pool_size=configuration.get('db2.pool_size'),
           migrate_enabled=configuration.get('db2.migrate'),
           lazy_tables=True,
-          #fake_migrate_all=True,        # Allow fake migration to rebuild table metadata
+          fake_migrate_all=True,        # Allow fake migration to rebuild table metadata
           check_reserved=['postgres', 'postgres_nonreserved'])
 
 current.db = db
@@ -105,7 +109,6 @@ db.define_table('country',
 
 '''extra fields for the auth fields, note that the country db table above needs to be  populated first '''
 
-
 auth.settings.extra_fields['auth_user'] = [
     Field('affiliation'),
     Field('job_title'),
@@ -113,11 +116,7 @@ auth.settings.extra_fields['auth_user'] = [
     Field('country', 'reference country', required=True)]
 auth.define_tables(username=False, signature=True)
 
-
 db.auth_user.access_request.requires = IS_IN_SET(('VecTraits - download data','VecTraits - submit data','VecDyn - download data','VecDyn - submit data'),  multiple=True)
-
-
-
 
 # -------------------------------------------------------------------------
 # configure email
@@ -163,7 +162,7 @@ auth.messages.profile_updated = 'Profile updated! If you have requested new data
 auth.messages.email_verified = 'Your email address has been verified, you will recieve another email once your requested access rights have been granted.'
 
 #two step authentication for admin
-auth.settings.two_factor_authentication_group = "auth2step"
+#auth.settings.two_factor_authentication_group = "auth2step"
 
 
 # -------------------------------------------------------------------------  
