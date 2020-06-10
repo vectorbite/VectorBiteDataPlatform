@@ -1,6 +1,6 @@
 # VectorByTE WebApp and Database Admin Documentation 
 
-## Getting started: installing software on your Ubuntu Installation and setting up VectorBite Data Platform web-app and database locally (ordinal) 
+## Getting started: installing software on your Ubuntu installation and setting up VectorBite Data Platform web-app and database locally (ordinal) 
 
 ### Install the following software:
 
@@ -12,11 +12,11 @@
 - Gitkraken (Git GUI Client for managing version control system)
 - Filezilla (FTP client for uploading / downloading files to and from server)
 
-### Special installation instructions
+#### Special installation instructions
 
-You will need to install the most up to date version of filezilla to ensure it works smoothly with AWS. At the time of writing the current release is FileZilla 3.46.3. You will need to adapt this tutorial accordingly for later releases.  
+You will need to install the latest version of Filezilla to ensure it works smoothly with AWS. At the time of writing the current release is FileZilla 3.46.3. You will need to adapt this tutorial accordingly for later releases.  
 
-#### Build and install latest version of Filezilla from source:
+##### Build and install latest version of Filezilla from source:
 
 Install the prerequisites for installing from source:
 
@@ -60,9 +60,10 @@ sudo ldconfig
 
 You may also find you need to install missing packages before the "make" command will execute,  this is will because you need to install additional packages. You will be informed of which packages are missing after running the "./configure" command. 
 
-### Accounts
+### Create Accounts
 
-Create a GitHub account
+- Create a GitHub account
+
 
 ### Pycharm:  Create Web2Py project
 
@@ -83,7 +84,7 @@ Create a GitHub account
 15. Click Create.
 16. PyCharm creates an application and produces specific directory structure, which you can explore in the Project tool window. If there are unsatisfied requirements, PyCharm suggests to resolve or ignore them.
 
-### Install python plugins via pycharm 
+### Install python plugins via PyCharm
 
 To manage Python packages for the project interpreter, select the Project Interpreter page in the project Settings/Preferences or select Interpreter Settings in the Python Interpreter widget.
 
@@ -93,24 +94,22 @@ To manage Python packages for the project interpreter, select the Project Interp
 | mkdocs            | 1.0.4   |
 | psycopg2-binary   | 2.7.    |
 
-### Open Passwords & certificates in KeepSafe2
-
-***TODO: Write a section on syncing Keepsafe database file with AWS and how to access the file***
+### Open passwords & certificates in KeepSafe2
 
 1. Open KeepSafe
 2. Go to file > open and select the ‘**Vectorbyte_KP_Database.kdbx**’ file
 3. Log in with provided password
 4. Don’t close the app! you’ll need access entries in the next steps
 
-### Grant your personal Github account admin rights from the so you can access/edit the VectorBiteDataPlatform
+### Grant your personal GitHub account admin rights to access/edit the VectorBiteDataPlatform
 
 1. Log in to https://github.com/ using the details found in Keepsafe  ‘GitHub’ > ‘Vectorbite GitHub account’ 
-2. In github, go to vectorbite/VectorBiteDataPlatform/settings/access.
+2. In GitHub, go to vectorbite/VectorBiteDataPlatform/settings/access.
 3. Click on ‘Invite teams or People’.
 4. Add your personal GitHub user name and set to admin.
-5. You may need to accept a notification in your own Git-hub account. Log back in to your account and check if you have any notifications pending. If so accept the invitation.   
+5. You may need to accept a notification in your Git-hub account. Log back in to your account and check if you have any notifications pending. If so accept the invitation.   
 
-### Download Vectorbite webapp and initialise git in GitKracken
+### Download Vectorbite web-app and initialise git in GitKracken
 
 1. Open Gitkraken and go to -  file > Clone Repo
 
@@ -126,31 +125,36 @@ To manage Python packages for the project interpreter, select the Project Interp
 
 5. Hit ‘Clone this repo’!
 
-### Copy config files to application folder
+### Copy 'appconfig.ini' and 'VectorBite.pem files to application folder
+
+#### Copy 'appconfig.ini' file.
 
 1. In Keepass2, locate the appconfig.ini file in **Web2py > VectorbiteApplication configuration > advanced – file attachments.**
 
-2. Open the file and save to the private folder located in the ‘VectorBiteDataPlatform’ application folder e.g. 
+2. Open the file and save it to the 'private' folder located in the ‘VectorBiteDataPlatform’ application folder: 
 
    ```
    /home/user/PycharmProjects/vectorbite/web2py/applications/VectorBiteDataPlatform/private/
    ```
 
-### Get database dump (back-up) files: Connect to Amazon EC2 file directory using FileZilla and SFTP
-
-You need to set up your connection so you can upload and download files to the AWS server  (database backup files are stored here).
+Copy 'VectorBite.pem' file.
 
 1. Open up Filezilla and KeePass2
 
-2. In Keepass2, locate the  "VectorBite.pem" file in  AWS > "AWS logon,  Public DNS + PEM" >  advanced > file attachments
+2. In Keepass2, locate the  "VectorBite.pem" file in  AWS > "AWS logon,  Public DNS + PEM" >  advanced > file attachments.
 
-3. Open the file and save to the private folder in the ‘VectorBiteDataPlatform’ application folder e.g. 
+3. Open the file and save to the 'private' folder in the ‘VectorBiteDataPlatform’ application folder:
 
    ```
    '/home/user/PycharmProjects/vectorbite/web2py/applications/VectorBiteDataPlatform/private/' 
    ```
 
-4. In Filezilla, go to Edit (Preferences) > Settings > Connection > SFTP, Click "Add key file”
+
+### Get database dump (back-up) files: Connect to Amazon EC2 file directory using FileZilla and SFTP
+
+You need to set up your connection so you can upload and download files to the AWS server  (database backup files are stored here).
+
+1. In Filezilla, go to Edit (Preferences) > Settings > Connection > SFTP, Click "Add key file”
 
 5. Browse to the location of the "VectorBite.pem" file you just saved and select it.
 
@@ -185,8 +189,8 @@ Next we need to download the database back up files (known as dump files) so we 
 1. Open Filezilla
 2. Connect to the AWS server using log-on details outlined in the previous step
 3. Navigate  to /home/ubuntu/vdbp_installation on the remote site. 
-4. Download the latest version entitled "fulldump.pgdump". 
-5. Search for the latest version of the database  by clicking on last modified. Note that some of the filename  [?] endings will end with slightly different words or letters but will always contain  "fulldump" at the beginning of the file name. 
+4. Download the latest versions entitled "vecdyn.pgdump" & "vectraits.pgdump" 
+5. Search for the latest versions of the database  dumps by clicking on last modified. 
 
 ### Load/restore Postgres database
 
