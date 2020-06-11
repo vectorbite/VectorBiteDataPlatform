@@ -1,5 +1,52 @@
 # VectorByTE WebApp and Database Admin Documentation 
 
+
+
+# Database Rationale
+
+This document exists in part to provide a guide to the PostgreSQL db layout, and as an explanation for why various decisions have been made.
+
+## Schemas
+
+The database is split into a multitude of schemas, each with their own content and purpose.
+
+| Schema    | Purpose        |
+| --------- | -------------- |
+| vectraits | VecTraits data |
+| vecdyn    | VecDyn data    |
+
+### User Permissions
+
+**THIS IS A TODO**
+
+Each user in the database should have differential access to different schemas. Geo and tax should be accessible by all other users, whilst vectraits and vecdyn should be accessible only to the appropriate users, so we keep data segregated. vbdp should probably just be independent of the others.
+
+## VecTraits Rationale
+
+Vectraits is split into a number of tables to prevent serious data duplication.
+
+### Table hierarchy
+
+```
+.vectraits
+└── maintable
+    ├── experimentalconditions
+    ├── taxonomy
+    ├── studylocation
+    ├── sourceinfo
+    │   ├── citation
+    │   └── contributor
+    └── traitdescription
+```
+
+The main-table stores each trait observation along with associated metadata. Any metadata duplicated often (such as publication information) is stored in a separate table, and referenced by id.
+
+### The published_data view
+
+This database view (different from a view in Web2Py) provides easy access to a certain subset of the data, namely any data which is both published and has an embargo release date in the past. Whilst on the backend this is just a query preappended to any query run against the database via the view, to Web2Py this view is presented as a separate table.
+
+This layout has the advantage of restricting access to banned data at a very low level, reducing the likelihood for information leaks as Web2Py literally doesn't know about some of the data via this dbview.
+
 ## Getting started: installing software on your Ubuntu installation and setting up VectorBite Data Platform web-app and database locally (ordinal) 
 
 ### Install the following software:
@@ -152,11 +199,11 @@ Copy 'VectorBite.pem' file.
 
 ### Get database dump (back-up) files: Connect to Amazon EC2 file directory using FileZilla and SFTP
 
-You need to set up your connection so you can upload and download files to the AWS server  (database backup files are stored here).
+You need to set up your connection so you can upload and download files to and from the AWS server  (database backup files are stored here).
 
 1. In Filezilla, go to Edit (Preferences) > Settings > Connection > SFTP, Click "Add key file”
 
-5. Browse to the location of the "VectorBite.pem" file you just saved and select it.
+5. Browse to the location of the "VectorBite.pem" in the ‘VectorBiteDataPlatform/private’ application folder and select it.
 
 6. A message box will appear asking your permission to convert the file into ppk format. Click Yes, then give the file a name and store it somewhere.
 
@@ -227,7 +274,7 @@ Open the Keepass2 and adapt the code found in "*AWS SSH connection details > Not
 Example code:
 
 ```
-sudo ssh -i '/home/matt/web2py/applications/yourapp/yourpem.pem'  ubuntu@ec2-198-51-100-1.compute-1.amazonaws.com 
+sudo ssh -i '/home/user/web2py/applications/yourapp/yourpem.pem'  ubuntu@ec2-198-51-100-1.compute-1.amazonaws.com 
 ```
 
 Enter the code in the Ubuntu terminal, if connection has been successful you will receive the following welcome message in the terminal. 
@@ -254,7 +301,7 @@ To create a backup of the entire database use the following example:
 - Create the backup
 
   ```
-  /usr/bin/pg_dump  --dbname=vectorbitedb --schema=vecdyn --format=c  --username=vecdyn  --file=vecdyn_290420.pgdump --host=127.0.0.1 --port=5432
+  /usr/bin/pg_dump  --dbname=vectorbitedb --schema=vecdyn --format=c  --username=vecdyn  --file=vecdyn_ENTER-DATE-HERE.pgdump --host=127.0.0.1 --port=5432
   ```
 
 - Confirm the file has been created in the installation folder
@@ -263,31 +310,114 @@ To create a backup of the entire database use the following example:
   zip -9 fulldump_120220.zip fulldump_120220.pgdump 
   ```
 
-- You can download all archived files from ec2 to using FileZilla.
+- You can download all archived files from ec2 using FileZilla or via SSL
 
-### Update local copy of Postgres database
+### Updating Live Web-app from GitHub Master
 
-Required applications: pgAdmin & KeePass2*
+```
+cd /home/www-data/web2py/applications/VectorBiteDataPlatform/
+ll
+git status
+sudo git stash
+git pull
+sudo service apache2 reload
 
-If they are not already created, you need to create the following group roles
+```
 
-1. ​	In the left hand pane, go to: ***Servers > PostgreSQL 9.6 > Login/Group Roles***
-2. ​	Right click ***> Login/Group Role***
-3. ​	General > Name enter username found in ***PostgreSQL 9.6 / pgAdmin 4 > vecdyn login / group role***
-4. ​	Definition > Password found in ***PostgreSQL 9.6 / pgAdmin 4 > vecdyn login / group role***
-5. ​	Privileges > set all icons to yes
-6. ​	Membership > Roles **> add  *"admin" & "postgres"***
-7. ​	Hit save
-8. ​	Repeat the same step and create a ***"vectraits" login / group role.*** 
+### Release Procedure
 
-Restore Databases (either vecdyn or vectraits)
+*On Local*
 
-1. ​	In the left hand pane, go to: ***Servers > PostgreSQL 9.6 > Databases***
-2. ​	Right click and ***create > Database***
-3. ​	Under the *general >* Database Field write "**vectorbitedb**" and hit save. 
-4. ​	Right click on the "**vectorbitedb**" and select Restore.
-5. ​	Under file name select the "**vecdyn.dump**" or "**vectraits.dump**" file (you may need to change the format to All Files)
-6. ​	Hit **Restore**
+- Finish features
+- Start release branch
+- Add and commit release notes
+- Finish release branch
+- `git push`
+
+*On LIVE*
+
+- `git status`
+- Check and resolve any diffs
+- `git reset --hard HEAD` (or `git stash`)
+- `git pull`
+- Make any changes out of repo (e.g. in /private or ~/web2py)
+- Modify version number in appconfig.ini
+- Restart server if needed
+
+ *Finally*
+
+ - Move appropriate cards in Trello to Done
+ - Resolve any Bitbucket/github issues and tag with release merge commit
+
+## Logging details and notebook
+
+There are four levels of logging in python: `DEBUG`, `INFO`, `WARNING` and `ERROR`. Below is an example of how to use each level in python, along with a brief style guide for their usage in the QMEE CDT webapp.
+
+### `DEBUG`
+
+`logger.debug("Something minor")`
+
+The `DEBUG` level is the lowest log level. It is used to provide detailed information about the application state and data flow for the purposes of debugging and bug recreation. This should be used for any direct logging of arguments and form data (formatted or otherwise), but be aware that in normal execution conditions, this will not show up in the logs.
+
+### `INFO`
+
+`logger.info("Something of interest")`
+
+The `INFO` level is used for information which the system administrator probably should know about. This should be normal app behaviour, including normal responses to user error. Most logging is done at either this level or at `DEBUG`. Note that the convention presently implemented is that any action which includes a write to the DB should be logged with an `INFO` level log, e.g. submission of proposals or new PIs.
+
+Sometimes it may be nice to put a notification of incorrect user input at the `INFO` level, followed by more detailed information at the `DEBUG` level, e.g.:
+
+```python
+logger.info("Form errors: {}".format(len(form.errors)))
+logger.debug("in the following fields: {}".format(form.errors.keys()))
+```
+
+Which would write the following to the log:
+
+```
+22-10-18 18:12:16 - INFO    - add_proposal - Form errors: 16
+22-10-18 18:12:16 - DEBUG   - add_proposal - in the following fields: ['training', 'proj_realworld', 'project_description', 'nerc_relevance', 'project_title', 'proj_quant', 'training_loc', 'proj_innov', 'quant_superv', 'case_partner', 'expertise', 'PI2_name', 'multidisciplinarity', 'PI_name', 'proj_evoeco_theory', 'proj_transform']
+```
+
+### `WARNING`
+
+`logger.warning("Something went a bit wrong")`
+
+The `WARNING` level is designed for execution states outside of the usual. When a form has returned something outside of the usual, or if a database seems to be lacking an auxiliary table, this should be a `WARNING`. Anything tagged as `WARNING` should be recoverable from for the application.
+
+### `ERROR`
+
+`logger.error("Something is seriously broken!")`
+
+The `ERROR` level is reserved for potentially system-breaking errors. If a form fails to return anything, or a database is impossible to reach, we should be seeing `ERROR` messages in the logs!
+
+#### `EXCEPTION`
+
+`logger.exception("An unhandled exception occurred:")`
+
+The `EXCEPTION` level is a subclass of the `ERROR` level with a bit of extra magic. When executed in the context of a caught exception, this will return not only the message provided, but also the stack trace generated by the exception. This can be used in the following context to catch and log all exceptions before raising them up to the next level:
+
+```python
+try:
+    foo()
+except Exception:
+    logger.exception("An unhandled exception occurred")
+    raise
+```
+
+## Updating Live Web-app from GitHub Master
+
+```
+cd /home/www-data/web2py/applications/VectorBiteDataPlatform/
+ll
+git status
+sudo git stash
+git pull
+sudo service apache2 reload
+
+```
+
+
 
 ## VectorBiTE deployment on AWS
 
@@ -408,10 +538,6 @@ The above command will list the disk you attached to your instance.
 sudo file -s /dev/xvdf
 ```
 
-https://devopscube.com/mount-ebs-volume-ec2-instance/
-
-
-
 All  files  accessible  in a Unix system are arranged in one big tree, the file hierarchy,
 rooted at /.  These files can be spread out  over  several  devices.   The  mount  command
 serves  to  attach  the filesystem found on some device to the big file tree.  Conversely,
@@ -430,8 +556,6 @@ and  owner  and  mode  of  dir  become  invisible,  and as long as this filesyst
 mounted, the pathname dir refers to the root of the filesystem on device.
 
 The volume now exists as a device (/dev/xvdf) on the instance, but doesn't have a file system and isn't mounted. So:
-
-
 
 ```
 sudo mkfs -t ext4 /dev/xvdf
@@ -473,13 +597,73 @@ sudo -u postgres psql
 
 At this point, we should have a webserver running web2py with the  default applications. However at the moment, it is only accessible via  the Public DNS of the VM instance. If you copy that from the EC2 console into the browser, you should see the welcome to web2py application.
 
-If you try going to https://%3Cpublic dns>, you'll get warnings about the certificate not being trusted.  We need a proper certificate from a trusted authority to enable HTTPS  but before we do that, we'll get the web application up and running
+If you try going to https://%3Cpublic dns>, you'll get warnings about the certificate not being trusted.  We need a proper certificate from a trusted authority to enable HTTPS  but before we do that, we'll get the web application up and running.
 
-### Section progress report #1
+# Database deployment procedure
 
-At this point, we should have a webserver running web2py with the  default applications. However at the moment, it is only accessible via  the Public DNS of the VM instance. If you copy that from the EC2 console into the browser, you should see the welcome to web2py application.
+This document describes the release procedure for the VBDP postgres database
 
-If you try going to https://%3Cpublic dns>, you'll get warnings about the certificate not being trusted.  We need a proper certificate from a trusted authority to enable HTTPS  but before we do that, we'll get the web application up and running
+## 0. Kill the previous database if required
+
+Firstly you may wish to kill the previous database. To do this you will probably need to stop the apache server using `sudo service apache2 stop` on the server (ssh in as usual).
+
+Next run `sudo su postgres` to switch to the postgres ubuntu user and run `psql` to connect to the main server as the superuser.
+
+Now run `DROP DATABASE vectorbitedb;` to kill the db, and run the following to drop all users.
+
+``` sql
+DROP ROLE IF EXISTS geo;
+DROP ROLE IF EXISTS tax;
+DROP ROLE IF EXISTS vbdp;
+DROP ROLE IF EXISTS vectraits;
+DROP ROLE IF EXISTS vecdyn;
+DROP ROLE IF EXISTS vbadmin;
+```
+
+This should leave you in a position to run the setup scripts as usual.
+
+---
+
+## 1. Create the DB, superuser, schemas & users
+
+A lot of this has now been scripted, so simply put you just need to connect to the main aws server as postgres and run the `create_vbdp_db_pt1.sh` script (location tbc).
+
+This will set up the db structure ready for data import
+
+## 2. Data import
+
+Importing data for the first time will seem to generate a few errors, as the pgdump file contains sql to try to drop the tables of the schema if they exist. As they do not exist, it'll throw some errors though this should be nothing to worry about.
+
+To import the data, use the following command **from the main ubuntu user**:
+
+`/usr/bin/pg_restore --dbname=vectorbitedb --schema=<SCHEMA> --clean --username=<USER> --host=127.0.0.1 --port=5432 /path/to/dump.pgdump`
+
+So if I was importing `vectraits_270219.pgdump` from the pgdumps folder on LIVE into the `vectraits` schema, I would use the following command:
+
+`/usr/bin/pg_restore --dbname=vectorbitedb --schema=vectraits --clean --username=vectraits --host=127.0.0.1 --port=5432 /home/ubuntu/pgdumps/vectraits_270219.pgdump`
+
+This pgdump file should also create any constraints and views applied to the original db it was taken from. Thus once this is complete we just need to get VBDP to pick up the data.
+
+## 3. Fake migration
+
+In order to get Web2Py to work out that the data has change, we need to force a fake migration. Firstly restart apache2 if necessary using `sudo service apache2 start`.
+
+Next navigate to the `/home/www-data/web2py/applications/VectorBiteDataPlatform/models` directory and open the `db.py` file. Find the line that defines the connection to the relevant schema e.g.
+
+``` python
+db = DAL(configuration.get('db.uri'),
+             pool_size=configuration.get('db.pool_size'),
+             migrate_enabled=configuration.get('db.migrate'),
+             lazy_tables=True,
+             # fake_migrate_all=True,        # Allow fake migration to rebuild table metadata
+             check_reserved=['sqlite'])
+```
+
+Uncomment the `fake_migrate_all` line and then try to open a view which depends on the db you just restored.
+
+If that all works correctly, uncomment the `fake_migrate_all` line and you should be done.
+
+In future this last step will be spun out to the appconfig.ini file, so no changes to the code will be required. 
 
 ## Deploying the web application
 
@@ -516,36 +700,7 @@ cd /home/www-data/web2py/applications
 sudo -u www-data git clone https://github.com/vectorbite/VectorBiteDataPlatform.git
 ```
 
-Before the application can work, we need to setup the database backend and edit the `appconfig.ini` file for the application to point to this database and to the correct SMTP server to send mail.
-
-1. **Create the DB**. Currently we are using a PostgreSQL  DB running on an AWS Relational Database Server (RDS)
-
-   **Step 1: Login as the Postgres User**
-
-   **Step 2: Enter the PostgreSQL Environment**
-
-   **Step 3: Creating the PostgreSQL Database**
-
-   **Verify Creation of PostgreSQL Database**
-
-   ```
-   sudo -u postgres psql
-   CREATE DATABASE vectorbitedb;
-   ```
-
-   https://stackoverflow.com/questions/1523446/is-it-possible-to-get-a-history-of-queries-made-in-postgres
-
-   https://www.postgresqltutorial.com/psql-commands/
-
-Quit from the `psql` terminal using the command `\q`. If the database already exists then *think very hard about what you're doing* and look at the section below on resetting the database during development:
-
-1. **Edit the appconfig**. We now need to point the application to the database backend.
-
-   cd /home/www-data/web2py/applications/safe_web/private/ sudo cp appconfig_template.ini appconfig.ini sudo vi appconfig.ini
-
-Edit that using `vi` to fill in the details for the DB and SMTP.
-
-1. **Cross your fingers**. The URL http://%3CPublic DNS>/safe_web/default/index should now open the web application.  There will be a delay as on the initial deployment, the application has  to run the file `model/zzz_fixtures.py`, which is responsible for loading all the legacy data.
+Before the application can work, we need to setup the database backend and edit the `appconfig.ini` file for the application to point to this database and to the correct SMTP server to send mail, this file can be found in the KeepPass2 database. 
 
 ## Updating Live Web-app from GitHub Master
 
@@ -559,7 +714,11 @@ sudo service apache2 reload
 
 ```
 
-GitHub / Gitkraken
+
+
+
+
+
 
 
 

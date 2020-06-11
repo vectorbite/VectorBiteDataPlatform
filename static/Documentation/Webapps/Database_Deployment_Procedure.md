@@ -58,3 +58,4 @@ Uncomment the `fake_migrate_all` line and then try to open a view which depends 
 If that all works correctly, uncomment the `fake_migrate_all` line and you should be done.
 
 In future this last step will be spun out to the appconfig.ini file, so no changes to the code will be required. 
+
