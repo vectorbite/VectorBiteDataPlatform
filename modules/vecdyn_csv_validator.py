@@ -1011,6 +1011,22 @@ def datetime_string(format):
         datetime.strptime(v, format)
     return checker
 
+def time_string(format):
+    """
+    Return a value check function which raises a ValueError if the supplied
+    value cannot be converted to a datetime using the supplied format string.
+
+    See also `datetime.strptime`.
+
+    """
+    def checker(v):
+        if v is "":
+            v = v + "00:00:00"
+            datetime.time(v)
+        else:
+            datetime.time(v, format)
+    return checker
+
 
 def datetime_range_inclusive(min, max, format):
     """
@@ -1045,20 +1061,28 @@ def datetime_range_exclusive(min, max, format):
             raise ValueError(v)
     return checker
 
-
-def not_required_datatype(type):
+def datatype_not_required(type):
     """
     Return a value check function which raises a ValueError if the supplied
     value when cast as `type` is less than `min` or greater than `max`.
 
     """
-
     def checker(v):
         if v is "":
             v = v + "1"
             type(v)
         else:
             type(v)
+    return checker
+
+def string_required():
+    """
+    Return a value check function which raises a ValueError if string is empty
+    """
+    def checker(v):
+        v = type(v)
+        if len(v) <1:
+            raise ValueError(v)
     return checker
 
 def write_problems(problems, file, summarize=False, limit=0):
@@ -1113,3 +1137,4 @@ Found %s%s problem%s in total.
     for code in sorted(counts.viewkeys()):
         w(':%s: %s\n' % (code, counts[code]))
     return total
+
