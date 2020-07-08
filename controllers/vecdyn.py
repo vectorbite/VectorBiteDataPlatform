@@ -2,6 +2,9 @@
 
 me = auth.user_id
 import logging
+import csv
+from vecdyn_csv_validator import *
+import cStringIO
 
 logger = logging.getLogger("web2py.app.vbdp")
 logger.setLevel(logging.DEBUG)
@@ -94,6 +97,17 @@ def vecdyn_csv_bulk_uploader():
         response.flash = 'Data uploaded'
     return locals()
 
+#Field names for uploader / validator
+
+vecdyn_field_names = ('taxon', 'location_description', 'study_collection_area', 'geo_datum',
+                      'gps_obfuscation_info', 'species_id_method', 'study_design', 'sampling_strategy',
+                      'sampling_method', 'sampling_protocol', 'measurement_unit', 'value_transform',
+                      'sample_start_date', 'sample_start_time',
+                      'sample_end_date', 'sample_end_time', 'sample_value', 'sample_sex',
+                      'sample_stage', 'sample_location', 'sample_collection_area', 'sample_lat_dd',
+                      'sample_long_dd', 'sample_environment', 'additional_location_info',
+                      'additional_sample_info', 'sample_name')
+
 
 @auth.requires(auth.has_membership('VDCurator') or auth.has_membership('VectorbiteAdmin'))
 def submit_vecdyn_data():
@@ -116,6 +130,7 @@ def submit_vecdyn_data():
                                button_text="Add New")
     # assign widget to field
     db.task.collection_author.widget = add_option.widget
+    # we need to set a limt on this
     form = SQLFORM(db.task, labels={'task_type': 'Data set category'}).process()
 
     # Here we would like to know if the DB is written to, and also whether people are having problems with the form
@@ -125,9 +140,139 @@ def submit_vecdyn_data():
                    sender=auth.user.email,# we should eventually change this to form email
                    subject="A user has submitted a new VecDyn dataset: %s" % form.vars.title,
                    message=form.vars.description)
-        session.flash = 'Thanks for submitting a vecdyn dataset we will get back to you soon!'
         logger.info("VD dataset submitted: task ID {} - {}".format(form.vars["id"], form.vars["title"]))
-        redirect(URL('index'))
+        # session.flash = 'Validating, please wait'
+        filename, csvfile = db.task.file.retrieve(form.vars.file)
+        csvfile = csv.reader(csvfile)
+        # Get all rows of csv from csv_reader object as list of tuples
+        csvfile = list(map(tuple, csvfile))
+        # a simple validator to be tested
+        validator = CSVValidator(vecdyn_field_names)
+
+        # basic header and record length checks
+        validator.add_header_check('dataset_check', 'bad header')
+
+        validator.add_value_check('taxon', datatype_required(str),
+                                  'taxon error', 'entry must be =< 250 characters a string')
+        validator.add_value_check('location_description', datatype_required(str),
+                                  'location_description error', 'entry must be =< 250 characters a string')
+        validator.add_value_check('study_collection_area', datatype_not_required(str),
+                                  'study_collection_area', 'entry must be =< 250 characters a string')
+        validator.add_value_check('geo_datum', datatype_not_required(str),
+                                  'geo_datum error', 'entry must be =< 250 characters a string')
+        validator.add_value_check('gps_obfuscation_info', datatype_not_required(str),
+                                  'gps_obfuscation_info error', 'entry must be =< 250 characters a string')
+        validator.add_value_check('species_id_method', datatype_not_required(str),
+                                  'species_id_method error', 'entry must be =< 250 characters a string')
+        validator.add_value_check('study_design', datatype_not_required(str),
+                                  'study_design error', 'entry must be =< 250 characters a string')
+        validator.add_value_check('sampling_strategy', datatype_not_required(str),
+                                  'sampling_strategy error', 'entry must be =< 250 characters a string')
+        validator.add_value_check('sampling_method', datatype_not_required(str),
+                                  'sampling_method error', 'entry must be =< 250 characters a string')
+        validator.add_value_check('sampling_protocol', datatype_not_required(str),
+                                  'sampling_protocol error', 'entry must be =< 250 characters a string')
+        validator.add_value_check('sampling_method', datatype_not_required(str),
+                                  'sampling_method error', 'entry must be =< 250 characters a string')
+        validator.add_value_check('measurement_unit', datatype_not_required(str),
+                                  'measurement_unit error', 'entry must be =< 250 characters a string')
+        validator.add_value_check('sample_start_date', datetime_string('%Y-%m-%d'),
+                                  'sample_start_date error', 'entry must be in date format: %Y-%m-%d')
+        validator.add_value_check('sample_start_time', time_string_not_required('%H:%M:%S'),
+                                  'ample_start_time error', 'entry must be in time format: %H:%M:%S')
+        validator.add_value_check('sample_end_date', datetime_string_not_required('%Y-%m-%d'),
+                                  'sample_end_date error', 'entry must be in date format: %Y-%m-%d')
+        validator.add_value_check('sample_end_time', datetime_string_not_required('%H:%M:%S'),
+                                  'sample_end_time error', 'entry must bein time format: %H:%M:%S')
+        validator.add_value_check('sample_value', float_or_int_required(),
+                                  'sample_value error', 'entry must be =< 250 characters numeric')
+        validator.add_value_check('sample_sex', datatype_not_required(str),
+                                  'sample_sex error', 'entry must be =< 250 characters a string')
+        validator.add_value_check('sample_stage', datatype_not_required(str),
+                                  'sample_stage error', 'entry must be =< 250 characters a string')
+        validator.add_value_check('sample_location', datatype_not_required(str),
+                                  'sample_location error', 'entry must be =< 250 characters a string')
+        validator.add_value_check('sample_collection_area', datatype_not_required(str),
+                                  'sample_collection_area error', 'entry must be =< 250 characters a string')
+        validator.add_value_check('sample_lat_dd', float,
+                                  'sample_lat_dd error', 'sample_long_dd must be a float or not empty')
+        validator.add_value_check('sample_long_dd', float,
+                                  'sample_long_dd error', 'sample_long_dd must be a float or not empty')
+        validator.add_value_check('sample_environment', datatype_not_required(str),
+                                  'sample_environment error', 'entry must be =< 250 characters a string')
+        validator.add_value_check('additional_location_info', datatype_not_required(str),
+                                  'additional_location_info error', 'entry must be =< 250 characters a string')
+        validator.add_value_check('additional_sample_info', datatype_not_required(str),
+                                  'additional_sample_info error', 'entry must be =< 250 characters a string')
+        validator.add_value_check('sample_name', datatype_not_required(str),
+                                  'sample_name error', 'entry must be =< 250 characters a string')
+
+        summarize = False
+        limit = 0
+        # some test data
+        problems = validator.ivalidate(csvfile)
+
+        """
+            Write problems as restructured text to a file (or stdout/stderr).
+            """
+        file = cStringIO.StringIO()
+        w = file.write  # convenience variable
+        w("""
+            ========================
+            Vecdyn Validation Report
+            ========================
+            Satus = "Failed"
+            =================================================================
+            Please fix the problems below before resubmitting the dataset.
+            =================================================================
+            """)
+        counts = dict()  # store problem counts per problem code
+        total = 0
+        for i, p in enumerate(problems):
+            if limit and i >= limit:
+                break  # bail out
+            if total == 0 and not summarize:
+                w("""
+            Problems
+            ========
+            """)
+            total += 1
+            code = p['code']
+            if code in counts:
+                counts[code] += 1
+            else:
+                counts[code] = 1
+            if not summarize:
+                ptitle = '\n%s - %s\n' % (p['code'], p['message'])
+                w(ptitle)
+                underline = ''
+                for i in range(len(ptitle.strip())):
+                    underline += '-'
+                underline += '\n'
+                w(underline)
+                for k in sorted(p.viewkeys() - set(['code', 'message', 'context'])):
+                    w(':%s: %s\n' % (k, p[k]))
+                if 'context' in p:
+                    c = p['context']
+                    for k in sorted(c.viewkeys()):
+                        w(':%s: %s\n' % (k, c[k]))
+
+        w("""
+            Summary
+            =======
+            Found %s%s problem%s in total.
+            """ % ('at least ' if limit else '', total, 's' if total != 1 else ''))
+        for code in sorted(counts.viewkeys()):
+            w(':%s: %s\n' % (code, counts[code]))
+        if total == 0:
+            session.flash = 'Thanks for submitting a vecdyn dataset we will get back to you soon!'
+            redirect(URL('index'))
+        else:
+            file.seek(0)  # <---
+            response.headers['Content-Type'] = '.txt'
+            response.flash = "failed"
+            # delete dataset
+            return file.getvalue()
     elif form.errors:
         logger.debug("VD data submission errors: {}".format(len(form.errors)))
         logger.debug("in the following fields: {}".format(form.errors.keys()))
@@ -1046,13 +1191,13 @@ def vecdyn_author_query():
                                  'publication_info.description': 'Description',
                                  'publication_info.data_set_type': 'Dataset Type'},
                         maxtextlength=200,
-                        paginate=5,
+                        paginate=10,
                         selectable=select,
                         deletable=False, editable=False, details=False, create=False)
-    # if grid.elements('th'):
-    #     grid.elements('th')[0].append(SPAN('Selet all', BR(), INPUT(_type='checkbox',
-    #                                                                  _onclick="jQuery('input:checkbox').not(this).prop('checked', this.checked);"
-    #                                                                  )))
+    if grid.elements('th'):
+        grid.elements('th')[0].append(SPAN('Select all', BR(), INPUT(_type='checkbox',
+                                                                     _onclick="jQuery('input:checkbox').not(this).prop('checked', this.checked);"
+                                                                     )))
     # The final bit of untidiness is the location of the buttons.
     # - The export 'menu' (a single button here) is at the bottom of the page.
     #   This button doesn't submit a form, just calls the page again with _export_type

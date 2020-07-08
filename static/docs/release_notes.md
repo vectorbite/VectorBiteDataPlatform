@@ -1,7 +1,10 @@
 ## Release Notes
-Current version: **0.4.5**
+Current version: **0.4.6**
 
 ---
+## 0.4.6
+- vecdyn online [user] and offline [admin] validators incorporated into new app
+
 ## 0.4.5
 - updates to user-admin messaging system & task manager
 
