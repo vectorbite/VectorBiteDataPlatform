@@ -141,6 +141,12 @@ To manage Python packages for the project interpreter, select the Project Interp
 | mkdocs            | 1.0.4   |
 | psycopg2-binary   | 2.7.    |
 
+### Web2py Scheduler
+
+PycharmProjects/vectorbite/web2py$ python web2py.py -K VectorBiteDataPlatform
+
+
+
 ### Open passwords & certificates in KeepSafe2
 
 1. Open KeepSafe
@@ -228,6 +234,10 @@ You need to set up your connection so you can upload and download files to and f
 9. Press Connect Button - If saving of passwords has been disabled, you will be prompted that the logon type will be changed to 'Ask for password'. Say 'OK' and when connecting, at the password prompt push 'OK' without entering a password to proceed past the dialog.
 
 Note: FileZilla automatically figures out which key to use. You do not need to specify the key after importing it as described above.
+
+## Get dump SSl
+
+
 
 ### Download Postgres database dump file to load / restore databases 
 
