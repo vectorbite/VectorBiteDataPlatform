@@ -1,96 +1,207 @@
-# Mapping Data to Vecdyn Template in R Tutorial (Rmarkdown)
+---
+title: "Mapping existing data to Vecdyn Template in R markdown"
+author: Matthew Watts
+date: July 2020
+output:
+  html_document:
+    keep_md: true
+---
 
-In this tutorial we show you how to clean, process and map a dataset to the vecdyn template. 
+
+
+
+In this tutorial we will map an existing vector population data set to the VecDyn format. 
 
 Please refer to the 'R for Data Science guide'(https://r4ds.had.co.nz/) for further information on some of the techniques we use here. 
 
-
-# Mapping To The Vecdyn Template Example
-
 Load the following packages (and install if required)
 
-```{r}
-# install.packages("tidyverse")
-# install.packages("readr")
-# install.packages("plyr")
-# install.packages("scales")
+
+```r
 library(tidyverse)
+```
+
+```
+## -- Attaching packages ------------------------------------------------------------------------------------------ tidyverse 1.3.0 --
+```
+
+```
+## v ggplot2 3.3.0     v purrr   0.3.4
+## v tibble  3.0.1     v dplyr   0.8.5
+## v tidyr   1.0.3     v stringr 1.4.0
+## v readr   1.3.1     v forcats 0.5.0
+```
+
+```
+## -- Conflicts --------------------------------------------------------------------------------------------- tidyverse_conflicts() --
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()
+```
+
+```r
 library(readr)
-library(plyr)
-library(scales)
 library(lubridate)
-
 ```
 
-Load up the VecDyn template / data-frame and name it.
+```
+## 
+## Attaching package: 'lubridate'
+```
 
-```{r}
-vecdyn_mcm_2012  <- data.frame(title = character(),
-                             taxon = character(),
-                             location_description = character(),
-                             study_collection_area = character(),
-                             geo_datum = character(),
-                             gps_obfuscation_info = character(),
-                             species_id_method = character(),
-                             study_design = character(),
-                             sampling_strategy = character(),
-                             sampling_method = character(),
-                             sampling_protocol = character(),
-                             measurement_unit = character(),
-                             value_transform = character(),
-                             sample_start_date = character(),
-                             sample_start_time = character(),
-                             sample_end_date =  character(),
-                             sample_end_time = character(),
-                             sample_value = numeric(),
-                             sample_sex = character(),
-                             sample_stage = character(),
-                             sample_location = character(),
-                             sample_collection_area = character(),
-                             sample_lat_dd = character(),
-                             sample_long_dd = character(),
-                             sample_environment = character(),
-                             additional_location_info = character(),
-                             additional_sample_info = character(),
-                             sample_name = character(),
-                             stringsAsFactors=FALSE)
+```
+## The following objects are masked from 'package:dplyr':
+## 
+##     intersect, setdiff, union
+```
+
+```
+## The following objects are masked from 'package:base':
+## 
+##     date, intersect, setdiff, union
+```
+
+```r
+library(plyr)
+```
+
+```
+## ------------------------------------------------------------------------------
+```
+
+```
+## You have loaded plyr after dplyr - this is likely to cause problems.
+## If you need functions from both plyr and dplyr, please load plyr first, then dplyr:
+## library(plyr); library(dplyr)
+```
+
+```
+## ------------------------------------------------------------------------------
+```
+
+```
+## 
+## Attaching package: 'plyr'
+```
+
+```
+## The following objects are masked from 'package:dplyr':
+## 
+##     arrange, count, desc, failwith, id, mutate, rename, summarise,
+##     summarize
+```
+
+```
+## The following object is masked from 'package:purrr':
+## 
+##     compact
+```
+
+You will need to create and fill out two templates. One containing all the publication information and one which will store the data. We'll start with the data template. 
+
+
+Create the VecDyn data template / data-frame and name it.
+
+
+
+```r
+vecdyn_mcm_2012  <- data.frame(
+                      taxon = character(),
+                      location_description = character(),
+                      study_collection_area = character(),
+                      geo_datum = character(),
+                      gps_obfuscation_info = character(),
+                      species_id_method = character(),
+                      study_design = character(),
+                      sampling_strategy = character(),
+                      sampling_method = character(),
+                      sampling_protocol = character(),
+                      measurement_unit = character(),
+                      value_transform = character(),
+                      sample_start_date = character(),
+                      sample_start_time = character(),
+                      sample_end_date =  character(),
+                      sample_end_time = character(),
+                      sample_value = numeric(),
+                      sample_sex = character(),
+                      sample_stage = character(),
+                      sample_location = character(),
+                      sample_collection_area = character(),
+                      sample_lat_dd = character(),
+                      sample_long_dd = character(),
+                      sample_environment = character(),
+                      additional_location_info = character(),
+                      additional_sample_info = character(),
+                      sample_name = character(),
+                      stringsAsFactors=FALSE)
+
 #write.csv(VecDyn_template, file = "VecDyn_template.csv", row.names = FALSE)
-
 ```
 
-Import the Manatee County Mosquito Data Set (2012). When importing data-sets, make sure you set '=FALSE' to ensure R doesnt apply any unwanted formatting to the data-frame.
+In this example, we will use a Manatee County Mosquito collection data-set. When importing data-sets, make sure you set 'stringsAsFactors=FALSE' to ensure R does not automatically convert strings to factors.
 
-```{r}
-Manatee_County_Mosquito_2012_download <- read.csv(url("https://zenodo.org/record/1217702/files/VectorBase-2012-Manatee_County_Mosquito_Control_District_Florida_USA.csv?download=1"), stringsAsFactors=FALSE)
 
-Manatee_County_Mosquito_2012 <- Manatee_County_Mosquito_2012_download
+```r
+Manatee_County_Mosquito_2012 <- read.csv(url("https://zenodo.org/record/1217702/files/VectorBase-2012-Manatee_County_Mosquito_Control_District_Florida_USA.csv?download=1"), stringsAsFactors=FALSE)
 ```
 
-Check the data-frame to see if everything went to plan.
+Inspect the data-frame.
 
-In this data-set, trap_id, gps_lat, gps_long & location all vary together, in this data-set this represents trap location.  Location_ADM2, location_ADM1, location_country represent the general study location.
 
-```{r}
+```r
 head(Manatee_County_Mosquito_2012)
 ```
 
-One way to map the Manatee_County_Mosquito_2012 data-set to a vecdyn template is to extract values from the original data-frame and add them to the relevant fields in the vecdyn data frame.
+```
+##                 collection_ID               sample_ID collection_date_start
+## 1 MCMCD_2012_collection_00001 MCMCD_2012_sample_00001            2012-03-21
+## 2 MCMCD_2012_collection_00001 MCMCD_2012_sample_00002            2012-03-21
+## 3 MCMCD_2012_collection_00003 MCMCD_2012_sample_00003            2012-03-21
+## 4 MCMCD_2012_collection_00005 MCMCD_2012_sample_00004            2012-03-21
+## 5 MCMCD_2012_collection_00007 MCMCD_2012_sample_00005            2012-03-21
+## 6 MCMCD_2012_collection_00007 MCMCD_2012_sample_00006            2012-03-21
+##   collection_date_end            trap_id  GPS_lat   GPS_lon        location
+## 1          2012-03-22 2012-03-21_B4HS_G1 27.51632 -82.53773 Highland Shores
+## 2          2012-03-22 2012-03-21_B4HS_G1 27.51632 -82.53773 Highland Shores
+## 3          2012-03-22 2012-03-21_B4J_G1J 27.55402 -82.54548           Carrs
+## 4          2012-03-22   2012-03-21_D1_C3 27.48887 -82.59214      Manatee HS
+## 5          2012-03-22   2012-03-21_D3_D8 27.43945 -82.54893         Mullins
+## 6          2012-03-22   2012-03-21_D3_D8 27.43945 -82.54893         Mullins
+##    location_ADM2 location_ADM1         location_country trap_type attractant
+## 1 Manatee County       Florida United States of America CDC_LIGHT  LIGHT,CO2
+## 2 Manatee County       Florida United States of America CDC_LIGHT  LIGHT,CO2
+## 3 Manatee County       Florida United States of America CDC_LIGHT  LIGHT,CO2
+## 4 Manatee County       Florida United States of America CDC_LIGHT  LIGHT,CO2
+## 5 Manatee County       Florida United States of America CDC_LIGHT  LIGHT,CO2
+## 6 Manatee County       Florida United States of America CDC_LIGHT  LIGHT,CO2
+##   trap_number trap_duration                   species identification_method
+## 1           1             1          Culex salinarius        SPECIES_MORPHO
+## 2           1             1           Culex coronator        SPECIES_MORPHO
+## 3           1             1         Culex nigripalpus        SPECIES_MORPHO
+## 4           1             1                     BLANK        SPECIES_MORPHO
+## 5           1             1         Culex nigripalpus        SPECIES_MORPHO
+## 6           1             1 Anopheles quadrimaculatus        SPECIES_MORPHO
+##   developmental_stage    sex sample_count
+## 1               adult female            2
+## 2               adult female            3
+## 3               adult female            3
+## 4               adult female            0
+## 5               adult female            1
+## 6               adult female            2
+```
 
-Firstly though, some of the general geo-information about the study location is presented in 3 fields, we need to get this into 1 field.  We can use a tidyr package called unite these 3 fields into one.
+All geo-names should be presented in one field. The Manatee_County data set's study location is characterized using 3 fields, we need to combine this information into one field.  We can use a tidyr function called "unite" to do this. 
 
-```{r}
+
+```r
 Manatee_County_Mosquito_2012 <-
   Manatee_County_Mosquito_2012 %>%
   tidyr::unite("location_description", c("location_ADM2","location_ADM1", "location_country"), sep = ",")
-
 ```
 
-We can drop (not include) some of the fields that we do not require from the manatee county data set i.e. collection_ID (recreated in vecdyn db), sample_ID (recreated in vecdyn db), trap_number (no useful info) & trap_duration (specified by collection start and end dates)
+Extract all the data from the Manatee_County_Mosquito_2012 to individual vectors. Each new vector name represents a name in the VecDyn template
 
-Below, we extract values from Manatee_County_Mosquito_2012 data-frame
 
-```{r}
-
+```r
 taxon <- Manatee_County_Mosquito_2012$species
 
 sample_value <- Manatee_County_Mosquito_2012$sample_count
@@ -118,85 +229,79 @@ sampling_protocol <- Manatee_County_Mosquito_2012$trap_type
 species_id_method <- Manatee_County_Mosquito_2012$identification_method
 
 sample_name <-  Manatee_County_Mosquito_2012$trap_id
-
-
 ```
 
-Next we bind all the extracted values together creating a data-frame, we then bind the newly created data-frame with the vecdyn_mcm_2012 template we created at the beginning.
+Bind the extracted values together creating and create a new data-frame.  We then bind the new data-frame with the vecdyn_mcm_2012 template.
 
-```{r}
 
+```r
 a <- cbind(taxon, sample_value, sample_sex, sample_stage, sample_start_date, sample_end_date, sample_lat_dd, sample_long_dd, sample_location, location_description, sampling_method, sampling_protocol, species_id_method, sample_name)
 
 a <- data.frame(a, stringsAsFactors=FALSE)
 
 vecdyn_mcm_2012 <- rbind.fill(vecdyn_mcm_2012, a)
-
 ```
 
-At this stage you can check to see if the number of observations in the newly created vecdyn_mcm_2012 data-frame match the number of observations in the original manatee county data frame.
+You should check to see if the number of observations in the newly created vecdyn_mcm_2012 data frame match the number of observations in the original manatee county data frame.
 
-We can now start formatting the data-set so we can produce a time series graph. Convert dates to the Y-m-d format, in the case of this data set the dates are already in the correct format. We also convert the sample_value field to numeric.
+All VecDyn dates need to be formatted as Y-m-d, in this example the dates are already in the correct format. 
 
-```{r}
+
+```r
 vecdyn_mcm_2012 <-
   vecdyn_mcm_2012 %>%
   dplyr::mutate(sample_end_date = as.Date(as.character(sample_end_date, format = "%Y/%m/%d"))) %>%
   dplyr::mutate(sample_start_date = as.Date(as.character(sample_start_date, format = "%Y/%m/%d"))) %>%
+  # We also convert the sample_value field to numeric so we can create a time series in the next step
   dplyr::mutate(sample_value = as.numeric(sample_value))
-
-
 ```
 
-Give the data set a title
-
-```{r}
-
-vecdyn_mcm_2012 <-
-  vecdyn_mcm_2012 %>%
-  dplyr::mutate(title = 'Manatee_County_Monitoring_2012')
+We can test our new data frame set against the original data frame to see if they produce the same results.
 
 
-```
-
-Test the data set by producing a time series plot in from our newly created vecdyn data-set and compare it using ggplot. Note that this particular data set contains lots of sampling stations within manatee_county.
-
-```{r}
+```r
 vecdyn_mcm_2012  %>%
-  dplyr::filter(taxon == "Aedes aegypti")  %>%
   dplyr::select(sample_value, sample_end_date) %>%
   dplyr::group_by(sample_end_date) %>%
-  dplyr::summarise(sample_value = sum(sample_value)) %>%
   ggplot(aes(sample_end_date, sample_value)) + geom_line() +
-  scale_x_date(labels = date_format("%b/%y"))
-
+  scale_x_date(date_breaks = "1 month", date_minor_breaks = "1 week",
+             date_labels = "%B")
 ```
 
-```{r}
+![](vecdyn-tutorial-mapping-data_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
 
+
+```r
 Manatee_County_Mosquito_2012  %>%
-  dplyr::filter(species == "Aedes aegypti")  %>%
   dplyr::select(sample_count, collection_date_end) %>%
-  dplyr::group_by(collection_date_end) %>%
-  dplyr::summarise(sample_count = sum(sample_count)) %>%
   plyr::mutate(collection_date_end = as.Date(as.character(collection_date_end, format = "%Y/%m/%d"))) %>%
   dplyr::mutate(sample_count = as.numeric(sample_count)) %>%
   ggplot(aes(collection_date_end, sample_count)) + geom_line() +
-  scale_x_date(labels = date_format("%b/%y"))
-
+  scale_x_date(date_breaks = "1 month", date_minor_breaks = "1 week",
+             date_labels = "%B")
 ```
+
+![](vecdyn-tutorial-mapping-data_files/figure-html/unnamed-chunk-10-1.png)<!-- -->
 
 Finally write the data set to CSV, set all missing value to blank ""
 
-```{r}
+
+```r
 write_csv(vecdyn_mcm_2012, "vecdyn_mcm_2012.csv", na = "")
 ```
 
-You can also fill out the be extracting data from the appropriate zenodo page.
+Next complete the publication information, this can be submitted as a CV or using the online web form when you submit the main data-set. The publication information for our example data-set here is found here https://zenodo.org/record/1217702#.Xvs89ygza70. Note that this information should only be recorded as one line (or row) for each field. 
 
-```{r}
-vecdyn_mcm_2012_publication_info  <-data.frame(title=character(),
-                 collection_author=character(),
+
+```r
+rm(list=setdiff(ls(), c("vecdyn_mcm_2012")))
+```
+
+
+
+```r
+vecdyn_publication_info_mcm_2012  <- data.frame(title=character(), # name of collection title
+                 collection_author=character(), 
                  dataset_doi=character(),
                  publication_doi = character(),
                  description = character(),
@@ -206,117 +311,47 @@ vecdyn_mcm_2012_publication_info  <-data.frame(title=character(),
                  email=character(),
                  orcid=character(),
                  dataset_license=character(),
-                 data_rights=character(),
-                 embargo_release_date=character(),
-                 data_set_type=character(),
                  stringsAsFactors=FALSE)
+```
 
-#write.csv(vecdyn_mcm_2012_publication_info, file = "vecdyn_mcm_2012_publication_info.csv", row.names = FALSE)
+Next fill the appropriate fields
 
+
+```r
+title <- "Manatee County Mosquito Control District entomological monitoring 2012"
+collection_author <- "Joe Bloggs"
+dataset_doi <- "10.5281/zenodo.1217702"
+description <- "Mosquito surveillance from the Manatee County Mosquito Control District Vector Surveillance program to survey mosquito population"
+url <- "https://zenodo.org/record/1217702#.XwbwICgzZPZ"
+contact_name <- "Joe Bloggs"
+contact_affiliation <- "Manatee County Mosquito Control District"
+email <- "Joe Bloggs@joebloggs.com"
+dataset_license=character <- "open"
+```
+
+Bind them to the main publication info data frame
+
+
+```r
+a <- cbind(title, collection_author, dataset_doi, description, url, contact_name, contact_affiliation, email, dataset_license)
+a <- data.frame(a, stringsAsFactors=FALSE)
+vecdyn_publication_info_mcm_2012 <- rbind.fill(vecdyn_publication_info_mcm_2012, a)
+
+# clear environment
+
+rm(list=setdiff(ls(), c("vecdyn_mcm_2012", "vecdyn_publication_info_mcm_2012")))
+```
+
+Write as a CSV
+
+
+```r
+write.csv(vecdyn_publication_info_mcm_2012, file = "vecdyn_publication_info_mcm_2012.csv", row.names = FALSE)
 ```
 
 
-# Linking Vecdyn Data and Climate Data
-
-Run through the above tutorial to import all the data for the next steps. 
-
-```{r}
-# install.packages("RNCEP")
-# install.packages("tidyverse")
-# install.packages("readr")
-# install.packages("plyr")
-# install.packages("scales")
-library(RNCEP)
-library(tidyverse)
-library(readr)
-library(plyr)
-library(scales)
-library(lubridate)
-```
-
-# RNCEP: Obtain, Organize, and Visualize NCEP Weather Data
-This package contains functions that retrieve, organize, and visualize weather data from the NCEP/NCAR Reanalysis (http://www.esrl.noaa.gov/psd/data/gridded/data.ncep.reanalysis.html) and NCEP/DOE Reanalysis II (http://www.esrl.noaa.gov/psd/data/gridded/data.ncep.reanalysis2.html) data-sets. Data are queried via the Internet and may be obtained for a specified spatial and temporal extent or interpolated to a point in space and time. 
-It may not be the most suitable package for your needs, however using provides a good automated solution to allow you link climate data to VecDyn data. 
 
 
-For this package, we need to convert the relevant data to numerical format. 
 
-```{r}
-vecdyn_mcm_2012$sample_value = as.numeric(vecdyn_mcm_2012$sample_value)
-vecdyn_mcm_2012$sample_lat_dd = as.numeric(vecdyn_mcm_2012$sample_lat_dd)
-vecdyn_mcm_2012$sample_long_dd = as.numeric(vecdyn_mcm_2012$sample_long_dd)
-# take a sub sample just for the purpose of this tutorial i.e. quicker processing speed
-vecdyn_mcm_2012 <- dplyr::filter(vecdyn_mcm_2012, sample_location == "Mullins")
-```
 
-Unfortunately the RNCEP doesnt allow us (as far as i know) to extract daily averages based on dates and point locations alone, we can only extract values at particular date-times to try to give us a representative indication of the temperature / rainfall that day. Therefore, we need to create sampling points spread throughout the day to get daily averages. 
 
-With this data-set, a sample start and end date is provided. Lets extract values beginning from the start date and ending at the end date over a 24 hour period. It would best best to extract hourly data points, however, for the sake of this tutorial we will extract climate data at 6 hour intervals. 
-
-Create a time variable, starting at 00.01 everyday, then every 6 hours. 
-
-```{r}
-vecdyn_mcm_2012_00  <- 
-  vecdyn_mcm_2012 %>%
-  dplyr::select(sample_start_date, sample_lat_dd, sample_long_dd) %>%
-  dplyr::distinct() %>%
-  dplyr::mutate(sample_start_time = "00:00:01") %>%
-  dplyr::mutate(sample_start_datetime = sample_start_date) %>%
-  tidyr::unite("sample_start_datetime", c("sample_start_date","sample_start_time"), sep = " ", remove = FALSE) %>%
-  dplyr::mutate(sample_start_datetime  = as.POSIXct(sample_start_datetime , format = "%Y-%m-%d%H:%M:%S"))
-vecdyn_mcm_2012_06  <- 
-  vecdyn_mcm_2012 %>%
-  dplyr::select(sample_start_date, sample_lat_dd, sample_long_dd) %>%
-  dplyr::distinct() %>%
-  dplyr::mutate(sample_start_time = "06:00:01") %>%
-  dplyr::mutate(sample_start_datetime = sample_start_date) %>%
-  tidyr::unite("sample_start_datetime", c("sample_start_date","sample_start_time"), sep = " ", remove = FALSE) %>%
-  dplyr::mutate(sample_start_datetime  = as.POSIXct(sample_start_datetime , format = "%Y-%m-%d%H:%M:%S"))
-vecdyn_mcm_2012_12  <- 
-  vecdyn_mcm_2012 %>%
-  dplyr::select(sample_start_date, sample_lat_dd, sample_long_dd) %>%
-  dplyr::distinct() %>%
-  dplyr::mutate(sample_start_time = "12:00:01") %>%
-  dplyr::mutate(sample_start_datetime = sample_start_date) %>%
-  tidyr::unite("sample_start_datetime", c("sample_start_date","sample_start_time"), sep = " ", remove = FALSE) %>%
-  dplyr::mutate(sample_start_datetime  = as.POSIXct(sample_start_datetime , format = "%Y-%m-%d%H:%M:%S"))
-vecdyn_mcm_2012_18  <- 
-  vecdyn_mcm_2012 %>%
-  dplyr::select(sample_start_date, sample_lat_dd, sample_long_dd) %>%
-  dplyr::distinct() %>%
-  dplyr::mutate(sample_start_time = "18:00:01") %>%
-  dplyr::mutate(sample_start_datetime = sample_start_date) %>%
-  tidyr::unite("sample_start_datetime", c("sample_start_date","sample_start_time"), sep = " ", remove = FALSE) %>%
-  dplyr::mutate(sample_start_datetime  = as.POSIXct(sample_start_datetime , format = "%Y-%m-%d%H:%M:%S"))
-vecdyn_mcm_2012_all <- rbind(vecdyn_mcm_2012_00,vecdyn_mcm_2012_06,vecdyn_mcm_2012_12,vecdyn_mcm_2012_18)
-vecdyn_mcm_2012_all <- data.frame(vecdyn_mcm_2012_all)
-```
-
-In this example,  we use the date-time and location data obtained from the trap locations (gps coordinates)
-
-```{r}
-## Now collect cloud cover, temperature, and wind
-## information for each point in the subset ##
-vecdyn_mcm_2012_all$temp <- NCEP.interp(variable='air.sig995', level='surface', lat=vecdyn_mcm_2012_all$sample_lat_dd, lon=vecdyn_mcm_2012_all$sample_long_dd, dt=vecdyn_mcm_2012_all$sample_start_datetime, reanalysis2=FALSE, keep.unpacking.info=TRUE)
-```
-
-We now have temperature data for each trap site at a particular date-time. Note that we filtered sample_location == "Mullins" so we only extract values for a limited number of the trap locations.
-
-Next lets take an average of the 6 hourly daily climate data creating a daily average
-
-```{r}
-vecdyn_mcm_2012_av_daily_temp <-
-vecdyn_mcm_2012_all %>% 
-  dplyr::group_by(sample_lat_dd, sample_long_dd, sample_start_date) %>%
-  dplyr::summarise(avg_temp = mean(temp))
-```
-
-And now lets create a query that merges the temp data we just gathered back into the main data set.
-
-```{r}
-vecdyn_mcm_2012_with_temps <- 
-  dplyr::inner_join(vecdyn_mcm_2012, vecdyn_mcm_2012_av_daily_temp, by = c("sample_lat_dd" = "sample_lat_dd","sample_long_dd" = "sample_long_dd", "sample_start_date"="sample_start_date"))
-```
-
-https://cran.r-project.org/web/packages/RNCEP/RNCEP.pdf
-You can also repeat the steps for the relative humidity (‘rhum.sig995’ Relative Humidity), which can be used as a proxy for rainfall. 

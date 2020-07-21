@@ -34,13 +34,13 @@ db.define_table('data_set_upload',
                 Field('csvfile','upload', requires = IS_UPLOAD_FILENAME(extension='csv')),
                 auth.signature)
 
-
 db.define_table('data_set_bulk_upload',
                 Field('status', requires=IS_IN_SET(STATUS),
                       default=STATUS[0]),
                 Field('submit_datetime', type='datetime', default=request.now),
                 Field('csvfile','upload', requires = IS_UPLOAD_FILENAME(extension='csv')),
                 auth.signature)
+
 
 # db.define_table('data_set_upload',
 #                 Field('csvfile','upload',uploadfield=False, requires = IS_UPLOAD_FILENAME(extension='csv')))

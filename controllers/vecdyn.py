@@ -3,8 +3,8 @@
 me = auth.user_id
 import logging
 import csv
-from vecdyn_csv_validator import *
-import cStringIO
+from applications.VectorBiteDataPlatform.modules.vecdyn_validator_script import *
+from io import StringIO
 
 logger = logging.getLogger("web2py.app.vbdp")
 logger.setLevel(logging.DEBUG)
@@ -215,7 +215,7 @@ def submit_vecdyn_data():
         """
             Write problems as restructured text to a file (or stdout/stderr).
             """
-        file = cStringIO.StringIO()
+        file = StringIO.StringIO()
         w = file.write  # convenience variable
         w("""
             ========================
@@ -887,7 +887,6 @@ def view_time_series_data():
 
 import datetime
 
-from gluon.tools import prettydate
 # from datetime import datetime
 
 week = datetime.timedelta(days=7)
@@ -1124,7 +1123,6 @@ def vec_dyn_download_1():
 
 import datetime
 
-from gluon.tools import prettydate
 # from datetime import datetime
 
 week = datetime.timedelta(days=7)
