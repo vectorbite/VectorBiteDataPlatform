@@ -149,36 +149,36 @@ scheduler = Scheduler(db,
                       )
 
 
-# def vt_eod(oneoff=False):
-#     import datetime
-#
-#     # logger = logging.getLogger("web2py.app.vbdp")
-#
-#     # Log directly to the web2py log as scheduler seems not to run in the same context as the webapp.
-#     import logzero
-#     logger = logzero.setup_logger(logfile="web2py.log",
-#                                   formatter=logging.Formatter(
-#                                       '%(asctime)s - %(levelname)-7s - %(funcName)s - %(message)s'),
-#                                   disableStderrLogger=True)
-#
-#     # Determine next start timestamp
-#     nextstarttime = datetime.time(22, 0, 0, 0)
-#     nextstartdate = datetime.date.today() + datetime.timedelta(days=1)
-#     nextstart = datetime.datetime.combine(nextstartdate, nextstarttime)
-#
-#     # Run uploader
-#     result = False
-#     try:
-#         result = vtfuncs.eod_upload_run(logger)
-#     except Exception:
-#         logger.exception("Unhandled exception in vt_eod schedule runner!")
-#     finally:
-#         # if not oneoff:
-#         #     # ALWAYS requeue new scheduler run!
-#         #     logger.info("Queueing next run for {}".format(nextstart.strftime("%d/%m/%Y %H:%M:%S")))
-#         #     vtscheduler.queue_task(vt_eod, start_time=nextstart, repeats=1)     # Set pvars={"oneoff":True} if oneoff
-#         #     db2.commit()
-#         return result
-#
-#
-# vtscheduler = Scheduler(db2, tasks=dict(vt_eod=vt_eod))
+def vt_eod(oneoff=False):
+    import datetime
+
+    # logger = logging.getLogger("web2py.app.vbdp")
+
+    # Log directly to the web2py log as scheduler seems not to run in the same context as the webapp.
+    import logzero
+    logger = logzero.setup_logger(logfile="web2py.log",
+                                  formatter=logging.Formatter(
+                                      '%(asctime)s - %(levelname)-7s - %(funcName)s - %(message)s'),
+                                  disableStderrLogger=True)
+
+    # Determine next start timestamp
+    nextstarttime = datetime.time(22, 0, 0, 0)
+    nextstartdate = datetime.date.today() + datetime.timedelta(days=1)
+    nextstart = datetime.datetime.combine(nextstartdate, nextstarttime)
+
+    # Run uploader
+    result = False
+    try:
+        result = vtfuncs.eod_upload_run(logger)
+    except Exception:
+        logger.exception("Unhandled exception in vt_eod schedule runner!")
+    finally:
+        # if not oneoff:
+        #     # ALWAYS requeue new scheduler run!
+        #     logger.info("Queueing next run for {}".format(nextstart.strftime("%d/%m/%Y %H:%M:%S")))
+        #     vtscheduler.queue_task(vt_eod, start_time=nextstart, repeats=1)     # Set pvars={"oneoff":True} if oneoff
+        #     db2.commit()
+        return result
+
+
+vtscheduler = Scheduler(db2, tasks=dict(vt_eod=vt_eod))

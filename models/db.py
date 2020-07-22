@@ -32,9 +32,10 @@ configuration = AppConfig(reload=True)
 
 db = DAL(configuration.get('db.uri'),
          pool_size=configuration.get('db.pool_size'),
-         #migrate_enabled=configuration.get('db.migrate'),
-         lazy_tables=False,
+         migrate_enabled=configuration.get('db.migrate'),
+         lazy_tables=True,
          #fake_migrate_all=True,
+         #migrate=True,
          check_reserved=['postgres', 'postgres_nonreserved'])
 
 

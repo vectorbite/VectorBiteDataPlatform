@@ -4,7 +4,7 @@ me = auth.user_id
 import logging
 import csv
 from applications.VectorBiteDataPlatform.modules.vecdyn_validator_script import *
-from io import StringIO
+from cStringIO import StringIO
 
 logger = logging.getLogger("web2py.app.vbdp")
 logger.setLevel(logging.DEBUG)
