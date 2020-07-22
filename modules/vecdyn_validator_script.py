@@ -1040,6 +1040,20 @@ def datatype_required(type):
         type(v)
     return checker
 
+def text_required(type):
+    """
+    Return a value check function which raises a ValueError if the supplied
+    value when cast as `type` is less than `min` or greater than `max`.
+
+    """
+    def checker(v):
+        if len(v) <= 32768:
+            pass
+        else:
+            raise ValueError(v)
+        type(v)
+    return checker
+
 def write_problems(problems, file, summarize=False, limit=0):
     """
     Write problems as restructured text to a file (or stdout/stderr).
@@ -1075,11 +1089,11 @@ Problems
                 underline += '-'
             underline += '\n'
             w(underline)
-            for k in sorted(p.viewkeys() - set(['code', 'message', 'context'])):
+            for k in sorted(p.keys() - set(['code', 'message', 'context'])):
                 w(':%s: %s\n' % (k, p[k]))
             if 'context' in p:
                 c = p['context']
-                for k in sorted(c.viewkeys()):
+                for k in sorted(c.keys()):
                     w(':%s: %s\n' % (k, c[k]))
 
     w("""
@@ -1089,7 +1103,7 @@ Summary
 Found %s%s problem%s in total.
 
 """ % ('at least ' if limit else '', total, 's' if total != 1 else ''))
-    for code in sorted(counts.viewkeys()):
+    for code in sorted(counts.keys()):
         w(':%s: %s\n' % (code, counts[code]))
     return total
 

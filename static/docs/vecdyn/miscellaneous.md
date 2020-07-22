@@ -13,8 +13,8 @@ an additional ‘2’ has been added to the end of one of each duplicate 'ADM_CO
 
 
 
-| ADM_CODE   | ADM2_NAME                         | ADM1_NAME | ADM0_NAME                   |  Change   | 
-| ---------- | --------------------------------- | --------- | --------------------------- | --------- | 
+| ADM_CODE   | ADM2_NAME                         | ADM1_NAME | ADM0_NAME                   |  Change   |
+| ---------- | --------------------------------- | --------- | --------------------------- | --------- |
 | 48472      | Administrative unit not available | Rukwa     | United Republic of Tanzania |           |
 | 484722 | Administrative unit not available | Mwanza    | United Republic of Tanzania     | 2 added to end of ADM_CODE          |
 | 22917      | Ifelodun                          | Kwara     | Nigeria                     |           |
@@ -27,17 +27,3 @@ an additional ‘2’ has been added to the end of one of each duplicate 'ADM_CO
 | 154262 | Milagro                           | Guayas    | Ecuador                         | 2 added to end of ADM_CODE          |
 
 
-# Credits
-
-TODO
-
-# Contact
-
-
-# Citing  VecDyn
-
-TODO
-
-# References
-
-TODO

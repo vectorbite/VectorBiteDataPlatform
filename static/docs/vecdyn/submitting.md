@@ -4,13 +4,22 @@
     - [vecdyn data template](https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/documentation/VecDyn/Template_and_Scripts/vecdyn_template%20.csv) and selecting ‘save.as’.
     - [vecdyn publication info template](https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/documentation/VecDyn/Template_and_Scripts/vecdyn_publication_information.csv) and selecting ‘save.as’.
     - [R markdown script for generating Vecdyn dataframes](https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/documentation/VecDyn/Template_and_Scripts/R%20VecDyn%20template%20Markdown%20Script.Rmd) and selecting ‘save.as’.
+    
 2. You can refer to the [field definitions section](https://vectorbitedataplatform.readthedocs.io/en/latest/vecdyn/field_definitions/) to guide you through the data collection and compilation process.
+
 3. To submit your dataset, upload and submit the dataset via the [upload page](https://www.vectorbyte.org/vecdyn/submit_vecdyn_data) on the VectorByTE web app.
-4. We’ll contact you regarding the outcome of your submission once we have had a look at it.
 
-https://raw.githubusercontent.com/user/repository/branch/filename
+4. In order to submit a dataset to VectorByte it must first pass through the validator to check that it is canonical (as defined by the entries in the [field definitions section](https://vectorbitedataplatform.readthedocs.io/en/latest/vecdyn/field_definitions/) ). See validator section below for more information (especially if your dataset fails validation). The validator should run relatively quickly, but validation time is dependent on the size of the dataset. Thus if you have uploaded a dataset of a few thousand rows, it may be worth taking a few minutes to go and get a coffee whilst the validation runs.
 
-## General information about the VecDyn template
+5. Once the dataset has passed validation, you can click "submit" to submit it to the VectorByte team for upload. Once you have done this, you have no direct access to the data any more. However, if you do make a mistake, do just email the team and they should be able to identify and delete the offending dataset before upload.
+
+    **Important**: Please make a note of the **date** and **time** that you uploaded the dataset which you want discarded. This will make it a lot easier for the team to identify which dataset is yours.
+
+6. We’ll contact you one your dataset has been added to the database.
+
+
+
+## General submission guidelines. 
 
 VecDyn data is stored in two separate files, one dedicated for storing publication information,  one dedicated for storing time-series data and meta-data (data describing how the data was collected).  Data-sets come in many forms, you may receive a data-set which contains all relevant data in one file or one that is split into several files or sources i.e. publication information from a web page and time series data from a file.
 
@@ -47,8 +56,7 @@ write.csv(publication_information_template, file = "vecdyn_publication_informati
 
 
 ```{r}
-vecdyn_template  <- data.frame(title = character(),
-                             taxon = character(),
+vecdyn_template  <- data.frame(taxon = character(),
                              location_description = character(),
                              study_collection_area = character(),
                              geo_datum = character(),
@@ -79,3 +87,27 @@ vecdyn_template  <- data.frame(title = character(),
 write.csv(vecdyn_template , file = "vecdyn_template .csv", row.names = FALSE)
 
 ```
+
+## Validator
+
+Vecdyn has a validation tool built in to allow a digitiser to quickly check whether their candidate dataset for upload is in the correct format. In order to submit a dataset to VectorByte it must first pass through the validator to check that it is canonical (as defined by the entries in the [field definitions](field_definitions.md) section.)
+
+The validator has a simple workflow as follows:
+
+![workflow](/home/matt/PycharmProjects/vectorbite/web2py/applications/VectorBiteDataPlatform/static/docs/vectraits/images/validator_uml.png)
+
+
+
+### Validation report 
+
+If the validation fails, you will be returned a report in-line within the validator page:
+
+Here is an example report from a test dataset which failed.
+
+```
+------------------------------------
+  VALIDATION REPORT
+
+
+```
+

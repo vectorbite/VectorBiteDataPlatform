@@ -1,8 +1,6 @@
 import sys
 import csv
-from vecdyn_csv_validator import *
-from csv import reader
-
+from applications.VectorBiteDataPlatform.modules.vecdyn_validator_script import *
 
 vecdyn_bulk_field_names = ('title', 'dataset_citation', 'publication_citation','description', 'url', 'contact_name', 'contact_affiliation',
                            'email',  'orcid', 'dataset_license', 'project_identifier', 'publication_status',
@@ -14,7 +12,7 @@ vecdyn_bulk_field_names = ('title', 'dataset_citation', 'publication_citation','
                            'sample_long_dd', 'sample_environment', 'additional_location_info', 'additional_sample_info', 'sample_name')
 
 # paste file locaton below
-with open('/home/matt/Desktop/MosquitoSurveillanceSouthernNevada2016.csv', 'r') as csvfile:
+with open('/home/matt/Desktop/datasets/dataset:VBP0000182.csv', 'r') as csvfile:
     # pass the file object to reader() to get the reader object
 
     csvfile = csv.reader(csvfile, delimiter=',')
@@ -25,14 +23,13 @@ with open('/home/matt/Desktop/MosquitoSurveillanceSouthernNevada2016.csv', 'r') 
     # basic header and record length checks
     validator.add_header_check('dataset_check', 'bad header')
 
-
     validator.add_value_check('title', datatype_required(str),
                               'title error', 'entry must be =< 250 characters and a string')
     validator.add_value_check('dataset_citation', datatype_not_required(str),
                               'dataset_citation error', 'entry must be =< 250 characters and a string')
     validator.add_value_check('publication_citation', datatype_not_required(str),
                               'publication_citation error', 'entry must be =< 250 characters and a string')
-    validator.add_value_check('description', datatype_required(str),
+    validator.add_value_check('description', text_required(str),
                               'description error', 'entry must be =< 250 characters and a string')
     validator.add_value_check('url', datatype_not_required(str),
                               'url error', 'entry must be =< 250 characters and a string')

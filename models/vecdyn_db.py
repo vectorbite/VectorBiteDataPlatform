@@ -34,13 +34,13 @@ db.define_table('data_set_upload',
                 Field('csvfile','upload', requires = IS_UPLOAD_FILENAME(extension='csv')),
                 auth.signature)
 
-
 db.define_table('data_set_bulk_upload',
                 Field('status', requires=IS_IN_SET(STATUS),
                       default=STATUS[0]),
                 Field('submit_datetime', type='datetime', default=request.now),
                 Field('csvfile','upload', requires = IS_UPLOAD_FILENAME(extension='csv')),
                 auth.signature)
+
 
 # db.define_table('data_set_upload',
 #                 Field('csvfile','upload',uploadfield=False, requires = IS_UPLOAD_FILENAME(extension='csv')))
@@ -89,16 +89,16 @@ db.publication_info.data_rights.represent = show_data_rights
 
 db.define_table('study_meta_data',
                 Field('taxon'), #1
-                Field('location_description', type = 'string', required=True,  comment='Study location description'),
+                Field('location_description', type = 'text', required=True,  comment='Study location description'),
                 Field('study_collection_area', type = 'string', comment='The spatial extent (area or volume) of the sample'), #3
                 Field('geo_datum', type='string', comment='Indicate Geodetic datum e.g. wgs 84'),
                 Field('gps_obfuscation_info', type='string', comment='Indicate Geodetic datum e.g. wgs 84'),#4
                 Field('species_id_method', type = 'string', comment='Species Identification Method'), #5
                 Field('study_design', type = 'string', comment='Study design methodology'), #6
                 Field('sampling_strategy', type = 'string', comment='Indicate the strategy used to select the sample'), #7
-                Field('sampling_method', type = 'string', required=True, comment='Sampling apparatus (e.g.  trap type, observation method)'), #8
+                Field('sampling_method', type = 'string', comment='Sampling apparatus (e.g.  trap type, observation method)'), #8
                 Field('sampling_protocol', type = 'string', comment='How entities were sampled'), #9
-                Field('measurement_unit', type = 'string', required=True, comment='Unit of measurement'), #10
+                Field('measurement_unit', type = 'string', comment='Unit of measurement'), #10
                 Field('value_transform', type = 'string', comment='Note if the original values have been transformed'), #11
                 Field('taxon_id', default=None),
                 Field('canonical_name', type='string'),
@@ -115,11 +115,11 @@ db.define_table('study_meta_data',
 
 
 db.define_table('time_series_data',
-                Field('sample_start_date', type = 'date', requires=IS_EMPTY_OR(IS_DATE()), comment='date of sample was set, leave blank if not applicable to the study'),
-                Field('sample_start_time', type = 'time', requires=IS_EMPTY_OR(IS_TIME()), comment='time of sample was set, leave blank if not applicable to the study'),
-                Field('sample_end_date', type = 'date', requires=IS_DATE(), comment='Date of sample collection'),
-                Field('sample_end_time', type = 'time', requires=IS_EMPTY_OR(IS_TIME()), comment='time of sample collection'),
-                Field('sample_value'),#type = 'integer', comment='The numerical amount or result from the sample collection'),
+                Field('sample_start_date', requires=IS_EMPTY_OR(IS_DATE()), comment='date of sample was set, leave blank if not applicable to the study'),
+                Field('sample_start_time', requires=IS_EMPTY_OR(IS_TIME()), comment='time of sample was set, leave blank if not applicable to the study'),
+                Field('sample_end_date', requires=IS_DATE(), comment='Date of sample collection'),
+                Field('sample_end_time', requires=IS_EMPTY_OR(IS_TIME()), comment='time of sample collection'),
+                Field('sample_value', type = 'string', required=True,  comment='The numerical amount or result from the sample collection'),
                 Field('sample_sex', type = 'string', comment='sex of sample if applicable'),
                 Field('sample_stage', type = 'string', comment='life stage of sample if applicable'),
                 Field('sample_location', type = 'string', comment='Additional sample information'),

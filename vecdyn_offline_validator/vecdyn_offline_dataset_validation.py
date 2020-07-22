@@ -1,7 +1,6 @@
 import sys
 import csv
-from vecdyn_csv_validator import *
-from csv import reader
+from applications.VectorBiteDataPlatform.modules.vecdyn_validator_script import *
 
 vecdyn_field_names = ('taxon', 'location_description', 'study_collection_area', 'geo_datum',
                       'gps_obfuscation_info', 'species_id_method', 'study_design', 'sampling_strategy',

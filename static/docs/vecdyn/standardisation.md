@@ -34,6 +34,4 @@ The original [GBIF Backbone Taxonomy](https://www.gbif.org/en/dataset/d7dddbf4-2
 | ------------------------------  | centroid_latitude       | latitude of centroid representing centre of administrative unit |
 | ------------------------------  | centroid_longitude      | longitude centroid taking representing centre of administrative unit |
 
-<!--![](images/gual-world-map.png)
 
-![](images/gaul-us-mex-map.png) -->

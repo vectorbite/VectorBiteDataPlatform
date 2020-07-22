@@ -33,7 +33,7 @@ like ecological belt transects or line transects.
 
 ## Spatial referencing
 
-In order to facilitate mapping and geo-spatial analysis, spatial referencing has been set up to track general information about a study site e.g. country, region, municipality and also specific information about a sample site, where Global Positioning System (GPS) information can be inputted for each collection site. The following figures demonstrate the spatial information that can be captured per study. Such data will allow the user to make assessments about sampling effort and decide whether data it is representative of a region or can use it to overlay against environmental and demographic covariates.
+In order to facilitate mapping and geo-spatial analysis, spatial referencing has been set up to track general information about a study site e.g. country, region, municipality and also specific information about a sample site, where Global Positioning System (GPS) information can be inputted for each collection site. The following figures demonstrate the spatial information that can be captured per study. For example, such data will allow the user to make assessments about sampling effort and decide whether data it is representative of a region or can use it to overlay against environmental and demographic covariates.
 
 ![](images/sample-site-1.png)
 
