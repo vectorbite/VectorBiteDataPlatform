@@ -29,7 +29,6 @@ Meta-data entered into this table should be entered into the VectorBiTE web app 
 
 | Field Name            | Required Y/N | Data format | Details                                                      | Additional Notes                                             |        Db table         |
 | --------------------- | ------------ | ----------- | ------------------------------------------------------------ | ------------------------------------------------------------ | :---------------------: |
-| title                 | Yes          | String      | Short title identifying the data set                         | E.g. “Mosquito Surveillance in Iowa”                         | Publication Information |
 | taxon                 | Yes          | String      | Classification of sample collected                           |                                                              |     Study Metadata      |
 | location_description  | Yes          | String      | Description of study location                                | In order of smallest geographic subdivision e.g.  district, town, county, state, Country |     Study Metadata      |
 | study_collection_area | No           | String      | The spatial extent (area or volume) of the study.            | Information supplied here should represent the total study area. A study area could contain multiple sample sites. |     Study Metadata      |
