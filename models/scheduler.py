@@ -14,8 +14,8 @@ def vecdyn_importer():
         try:
             publication_info_id = dataset.publication_info_id
             filename, csvfile = db.data_set_upload.csvfile.retrieve(dataset.csvfile)
-            readCSV = csv.reader(codecs.iterdecode(csvfile, 'utf-8'))
-            next(readCSV)
+            readCSV = csv.reader(csvfile, delimiter=',')
+            next(readCSV, None)
             # if any changes are mad to main collection template, these changes need to be reflected in the following slices
             for row in readCSV:
                 # 'dict(zip' creates a dictionary from three lists i.e. field names and one data row from the csv
@@ -61,7 +61,7 @@ def vecdyn_bulk_importer():
     if dataset != None:
         try:
             filename, csvfile = db.data_set_bulk_upload.csvfile.retrieve(dataset.csvfile)
-            readCSV = csv.reader(codecs.iterdecode(csvfile, 'utf-8'))
+            readCSV = csv.reader(csvfile, delimiter=',')
             next(readCSV, None)
             # if any changes are madẹ to main collection template, these changes need to be reflected in the following slices
             for row in readCSV:
