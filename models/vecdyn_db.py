@@ -69,7 +69,7 @@ db.define_table('publication_info',
                 Field('collection_author',db.collection_author, requires=IS_EMPTY_OR(IS_IN_DB(db, 'collection_author.id', 'collection_author.name'))),
                 auth.signature) # drop auth sig from thsi table
 
-
+#db.publication_info.drop()
 
 '''the following code updates the DATARIGHTS status,  once the  embargo date is reached it sets the dataset to open'''
 today = datetime.date.today()
@@ -83,9 +83,6 @@ def show_data_rights(data_rights,row=None):
 
 db.publication_info.data_rights.represent = show_data_rights
 
-'''use the following code to reset the db, un comment and refresh, should only be commented out when not in use'''
-# if db(db.publication_info.id>0).count() == 0:
-#    db.publication_info.truncate()
 
 db.define_table('study_meta_data',
                 Field('taxon'), #1
@@ -106,12 +103,6 @@ db.define_table('study_meta_data',
                 Field('taxonomic_rank', type='string'),
                 Field('geo_id', default=None),
                 Field('publication_info_id', 'reference publication_info')) #14
-
-
-# if db(db.study_meta_data.id>0).count() == 0:
-#     db.study_meta_data.truncate()
-# else:
-#     pass
 
 
 db.define_table('time_series_data',
@@ -142,12 +133,6 @@ db.define_table('vecdyn_downloads',
                 Field('date_ordered', type='datetime', default=request.now),
                 )
 
-
-
-# if db(db.time_series_data.id>0).count() == 0:
-#     db.time_series_data.truncate()
-# else:
-#     pass
 
 
 '''this adds the select or add widget to the'''

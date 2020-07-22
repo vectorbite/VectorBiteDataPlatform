@@ -12,7 +12,7 @@ vecdyn_bulk_field_names = ('title', 'dataset_citation', 'publication_citation','
                            'sample_long_dd', 'sample_environment', 'additional_location_info', 'additional_sample_info', 'sample_name')
 
 # paste file locaton below
-with open('/home/matt/Desktop/datasets/dataset:VBP0000182.csv', 'r') as csvfile:
+with open('/home/matt/Desktop/data/vecdyn_vectorbase_daily_bulk_upload_dataset_1.csv', 'r') as csvfile:
     # pass the file object to reader() to get the reader object
 
     csvfile = csv.reader(csvfile, delimiter=',')
