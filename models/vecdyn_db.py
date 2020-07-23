@@ -124,6 +124,10 @@ db.define_table('time_series_data',
                 Field('study_meta_data_id', 'reference study_meta_data'),
                 Field('publication_info_id', 'reference publication_info'))
 
+'''remove all db entries and restart keys'''
+#db.publication_info.truncate('cascade')
+#db.study_meta_data.truncate('cascade')
+#db.time_series_data.truncate('cascade')
 
 db.define_table('vecdyn_downloads',
                 Field('study_meta_data_id', type='integer'),
@@ -132,7 +136,6 @@ db.define_table('vecdyn_downloads',
                       default=STATUS[0]),
                 Field('date_ordered', type='datetime', default=request.now),
                 )
-
 
 
 '''this adds the select or add widget to the'''

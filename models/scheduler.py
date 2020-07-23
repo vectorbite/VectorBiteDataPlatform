@@ -107,10 +107,9 @@ def vecdyn_bulk_importer():
 
                 db.time_series_data.insert(**samples)
 
-                dataset.update_record(status='complete')
-                db.commit()
-                # add a send mailto here
-                # should add a script the delete files after a few days
+            dataset.update_record(status='complete')
+            db.commit()
+            # add a send mailto here
         except:
             db.rollback()
             dataset.update_record(status='failed')
