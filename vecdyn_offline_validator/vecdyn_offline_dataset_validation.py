@@ -24,7 +24,7 @@ with open('vecdyn_mcm_2012.csv', 'r') as csvfile:
 
     validator.add_value_check('taxon', datatype_required(str),
                               'taxon error', 'entry must be =< 250 characters and a string')
-    validator.add_value_check('location_description', datatype_required(str),
+    validator.add_value_check('location_description', text_required(str),
                               'location_description error', 'entry must be =< 250 characters and a string')
     validator.add_value_check('study_collection_area', datatype_not_required(str),
                               'study_collection_area', 'entry must be =< 250 characters and a string')
@@ -48,7 +48,7 @@ with open('vecdyn_mcm_2012.csv', 'r') as csvfile:
                               'measurement_unit', 'entry must be =< 250 characters and a string')
     validator.add_value_check('sample_start_date', datetime_string('%Y-%m-%d'),
                               'value_transform', 'entry must be =< 250 characters and in date format: %Y-%m-%d')
-    validator.add_value_check('sample_start_time', time_string_not_required('%H:%M:%S'),
+    validator.add_value_check('sample_start_time', datetime_string_not_required('%H:%M:%S'),
                               'sampling_method', 'entry must be =< 250 characters and in time format: %H:%M:%S')
     validator.add_value_check('sample_end_date', datetime_string_not_required('%Y-%m-%d'),
                               'value_transform', 'entry must be =< 250 characters and in date format: %Y-%m-%d')

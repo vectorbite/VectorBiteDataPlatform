@@ -66,6 +66,11 @@ def queue_task_3():
         scheduler.queue_task('vecdyn_taxon_standardiser', prevent_drift=False, repeats=0, period=4)
 
 
+# updates all vecdyn data base tables
+def queue_task_4():
+        scheduler.queue_task('vecdyn_open_all', prevent_drift=False, repeats=0, period=4)
+
+
 # The following function imports a vecdyn csv
 @auth.requires(auth.has_membership('VDCurator') or auth.has_membership('VectorbiteAdmin'))
 def vecdyn_csv_uploader():
@@ -696,7 +701,7 @@ def taxon_select():
                                            'taxonomic_rank': row.taxonomic_rank,
                                            'study_meta_data_id': study_meta_data_id}))]
     db.gbif_taxon.taxon_id.readable = False
-    grid = SQLFORM.grid(db.gbif_taxon,links=links, searchable=True, advanced_search=False, deletable=False, editable=False, details=False,  create=False, csv=False, maxtextlength=50)
+    grid = SQLFORM.grid(db.gbif_taxon,links=links, searchable=True, advanced_search=True, deletable=False, editable=False, details=False,  create=False, csv=False, maxtextlength=50)
     search_input = grid.element('#w2p_keywords')
     if search_input:
         search_input['_value'] = taxon
@@ -744,7 +749,7 @@ def taxon_insert():
     meta_edit = request.get_vars.meta_edit
     genus_or_above = request.get_vars.genus_or_above
     taxonomic_rank = request.get_vars.taxonomic_rank
-    for row in db(db.study_meta_data.publication_info_id == publication_info_id).iterselect():
+    for row in db(db.study_meta_data).iterselect():
         if taxon == row.taxon:
             row.update_record(taxon_id=taxon_id)
             row.update_record(canonical_name=canonical_name)
@@ -855,7 +860,7 @@ def geo_st_insert():
     # Page variable used in redirection to various standardization pages
     page = request.get_vars.page
     location_description = request.get_vars.location_description
-    rows = db(db.study_meta_data.publication_info_id == publication_info_id).select()
+    rows = db(db.study_meta_data).select()
     for row in rows:
         if location_description == row.location_description:
             row.update_record(geo_id=geo_id)
@@ -977,6 +982,12 @@ def vecdyn_taxon_location_query():
         grid.elements('th')[0].append(SPAN('Select all', BR(), INPUT(_type='checkbox',
                                                                      _onclick="jQuery('input:checkbox').not(this).prop('checked', this.checked);"
                                                                      )))
+
+
+    # https://stackoverflow.com/questions/30474614/multiple-select-limit-number-of-selection
+
+    # https: // stackoverflow.com / questions / 4135210 / html - multiselect - limit?noredirect = 1 & lq = 1
+
     # The final bit of untidiness is the location of the buttons.
     # - The export 'menu' (a single button here) is at the bottom of the page.
     #   This button doesn't submit a form, just calls the page again with _export_type

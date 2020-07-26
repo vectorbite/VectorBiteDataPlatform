@@ -12,7 +12,7 @@ vecdyn_bulk_field_names = ('title', 'dataset_citation', 'publication_citation','
                            'sample_long_dd', 'sample_environment', 'additional_location_info', 'additional_sample_info', 'sample_name')
 
 # paste file locaton below
-with open('/home/matt/Desktop/data/vecdyn_vectorbase_daily_bulk_upload_dataset_1.csv', 'r') as csvfile:
+with open('/home/matt/Desktop/data/vecdyn_vectorbase_range_a_bulk_upload_dataset_9.csv' , 'r') as csvfile:
     # pass the file object to reader() to get the reader object
 
     csvfile = csv.reader(csvfile, delimiter=',')
@@ -33,7 +33,7 @@ with open('/home/matt/Desktop/data/vecdyn_vectorbase_daily_bulk_upload_dataset_1
                               'description error', 'entry must be =< 250 characters and a string')
     validator.add_value_check('url', datatype_not_required(str),
                               'url error', 'entry must be =< 250 characters and a string')
-    validator.add_value_check('contact_name', datatype_required(str),
+    validator.add_value_check('contact_name', text_not_required(str),
                               'contact_name error', 'entry must be =< 250 characters and a string')
     validator.add_value_check('contact_affiliation', datatype_not_required(str),
                               'contact_affiliation error', 'entry must be =< 250 characters and a string')
@@ -73,7 +73,7 @@ with open('/home/matt/Desktop/data/vecdyn_vectorbase_daily_bulk_upload_dataset_1
                               'measurement_unit error', 'entry must be =< 250 characters and a string')
     validator.add_value_check('sample_start_date', datetime_string_not_required('%Y-%m-%d'),
                               'sample_start_date error', 'entry must be =< 250 characters and in date format: %Y-%m-%d')
-    validator.add_value_check('sample_start_time', time_string_not_required('%H:%M:%S'),
+    validator.add_value_check('sample_start_time', datetime_string_not_required('%H:%M:%S'),
                               'sample_start_time error', 'entry must be =< 250 characters and in time format: %H:%M:%S')
     validator.add_value_check('sample_end_date', datetime_string('%Y-%m-%d'),
                               'sample_end_date error', 'entry must be =< 250 characters and in date format: %Y-%m-%d')

@@ -6,6 +6,7 @@ import codecs
 
 logger = logging.getLogger("web2py.app.vbdp")
 
+# Imports a standard user submitted dataset
 
 def vecdyn_importer():
     # reverse select by date to be set to select by oldest
@@ -54,6 +55,7 @@ def vecdyn_importer():
             csvfile.close()
 
 
+# imports a bulk admin dataset - multiple datasets
 def vecdyn_bulk_importer():
     # reverse select by date to be set to select by oldest
     dataset = db(db.data_set_bulk_upload.status == 'pending').select(
@@ -101,9 +103,9 @@ def vecdyn_bulk_importer():
 
                 samples.update(pub_meta_ids)
 
-                #record_3 = db.time_series_data(**samples)
+                # record_3 = db.time_series_data(**samples)
 
-                #time_series_data_id = record_3.id if record_3 else
+                # time_series_data_id = record_3.id if record_3 else
 
                 db.time_series_data.insert(**samples)
 
@@ -118,7 +120,7 @@ def vecdyn_bulk_importer():
             csvfile.close()
 
 
-
+# Standardizes vecdyn taxononic data based on exact string matches
 def vecdyn_taxon_standardiser():
     tax_un_stan = db(db.study_meta_data.taxon_id == None).select(db.study_meta_data.taxon_id)
     if tax_un_stan != None:
@@ -141,10 +143,25 @@ def vecdyn_taxon_standardiser():
         pass
 
 
+# Open all datasets - use if reinstalling open data from scratch
+
+def vecdyn_open_all():
+    rightstype1 = 'CC BY'
+    rightstype2 = 'CC BY-NC'
+    data_rights = 'open'
+    for row in db(db.publication_info).iterselect():
+        row.update_record(data_rights=data_rights)
+
+
+
+
+
 scheduler = Scheduler(db,
                       tasks=dict(vecdyn_importer=vecdyn_importer,
                                  vecdyn_bulk_importer=vecdyn_bulk_importer,
-                                 vecdyn_taxon_standardiser=vecdyn_taxon_standardiser
+                                 vecdyn_taxon_standardiser=vecdyn_taxon_standardiser,
+                                 vecdyn_open_all=vecdyn_open_all
+
                                  )
                       )
 

@@ -94,11 +94,7 @@ Vecdyn has a validation tool built in to allow a digitiser to quickly check whet
 
 The validator has a simple workflow as follows:
 
-![workflow](/home/matt/PycharmProjects/vectorbite/web2py/applications/VectorBiteDataPlatform/static/docs/vectraits/images/validator_uml.png)
-
-
-
-### Validation report 
+## ![vecdyn_validator](/home/matt/NewWeb2py/web2py/applications/VectorBiteDataPlatform/static/docs/vecdyn/images/vecdyn_validator.png)Validation report 
 
 If the validation fails, you will be returned a report in-line within the validator page:
 

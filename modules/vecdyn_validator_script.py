@@ -1,8 +1,5 @@
-
 import re
 from datetime import datetime
-import time
-
 
 
 UNEXPECTED_EXCEPTION = 0
@@ -52,7 +49,6 @@ class CSVValidator(object):
     """
     Instances of this class can be configured to run a variety of different
     types of validation check on a CSV-like data source.
-
     """
 
 
@@ -60,7 +56,6 @@ class CSVValidator(object):
         """
         Instantiate a `CSVValidator`, supplying expected `field_names` as a
         sequence of strings.
-
         """
 
         self._field_names = tuple(field_names)
@@ -80,15 +75,11 @@ class CSVValidator(object):
         """
         Add a header check, i.e., check whether the header record is consistent
         with the expected field names.
-
         Arguments
         ---------
-
         `code` - problem code to report if the header record is not valid,
         defaults to `HEADER_CHECK_FAILED`
-
         `message` - problem message to report if a value is not valid
-
         """
 
         t = code, message
@@ -102,18 +93,13 @@ class CSVValidator(object):
         """
         Add a record length check, i.e., check whether the length of a record is
         consistent with the number of expected fields.
-
         Arguments
         ---------
-
         `code` - problem code to report if a record is not valid, defaults to
         `RECORD_LENGTH_CHECK_FAILED`
-
         `message` - problem message to report if a record is not valid
-
         `modulus` - apply the check to every nth record, defaults to 1 (check
         every record)
-
         """
 
         t = code, message, modulus
@@ -126,24 +112,17 @@ class CSVValidator(object):
                         modulus=1):
         """
         Add a value check function for the specified field.
-
         Arguments
         ---------
-
         `field_name` - the name of the field to attach the value check function
         to
-
         `value_check` - a function that accepts a single argument (a value) and
         raises a `ValueError` if the value is not valid
-
         `code` - problem code to report if a value is not valid, defaults to
         `VALUE_CHECK_FAILED`
-
         `message` - problem message to report if a value is not valid
-
         `modulus` - apply the check to every nth record, defaults to 1 (check
         every record)
-
         """
 
         # guard conditions
@@ -160,28 +139,20 @@ class CSVValidator(object):
                         modulus=1):
         """
         Add a value predicate function for the specified field.
-
         N.B., everything you can do with value predicates can also be done with
         value check functions, whether you use one or the other is a matter of
         style.
-
         Arguments
         ---------
-
         `field_name` - the name of the field to attach the value predicate
         function to
-
         `value_predicate` - a function that accepts a single argument (a value)
         and returns False if the value is not valid
-
         `code` - problem code to report if a value is not valid, defaults to
         `VALUE_PREDICATE_FALSE`
-
         `message` - problem message to report if a value is not valid
-
         `modulus` - apply the check to every nth record, defaults to 1 (check
         every record)
-
         """
 
         assert field_name in self._field_names, 'unexpected field name: %s' % field_name
@@ -194,17 +165,13 @@ class CSVValidator(object):
     def add_record_check(self, record_check, modulus=1):
         """
         Add a record check function.
-
         Arguments
         ---------
-
         `record_check` - a function that accepts a single argument (a record as
         a dictionary of values indexed by field name) and raises a
         `RecordError` if the record is not valid
-
         `modulus` - apply the check to every nth record, defaults to 1 (check
         every record)
-
         """
 
         assert callable(record_check), 'record check must be a callable function'
@@ -219,26 +186,19 @@ class CSVValidator(object):
                         modulus=1):
         """
         Add a record predicate function.
-
         N.B., everything you can do with record predicates can also be done with
         record check functions, whether you use one or the other is a matter of
         style.
-
         Arguments
         ---------
-
         `record_predicate` - a function that accepts a single argument (a record
         as a dictionary of values indexed by field name) and returns False if
         the value is not valid
-
         `code` - problem code to report if a record is not valid, defaults to
         `RECORD_PREDICATE_FALSE`
-
         `message` - problem message to report if a record is not valid
-
         `modulus` - apply the check to every nth record, defaults to 1 (check
         every record)
-
         """
 
         assert callable(record_predicate), 'record predicate must be a callable function'
@@ -252,19 +212,14 @@ class CSVValidator(object):
                         message=MESSAGES[UNIQUE_CHECK_FAILED]):
         """
         Add a unique check on a single column or combination of columns.
-
         Arguments
         ---------
-
         `key` - a single field name (string) specifying a field in which all
         values are expected to be unique, or a sequence of field names (tuple
         or list of strings) specifying a compound key
-
         `code` - problem code to report if a record is not valid, defaults to
         `UNIQUE_CHECK_FAILED`
-
         `message` - problem message to report if a record is not valid
-
         """
 
         if isinstance(key, basestring):
@@ -281,7 +236,6 @@ class CSVValidator(object):
         Add a `skip` function which accepts a single argument (a record as a
         sequence of values) and returns True if all checks on the record should
         be skipped.
-
         """
 
         assert callable(skip), 'skip must be a callable function'
@@ -297,32 +251,23 @@ class CSVValidator(object):
                  report_unexpected_exceptions=True):
         """
         Validate `data` and return a list of validation problems found.
-
         Arguments
         ---------
-
         `data` - any source of row-oriented data, e.g., as provided by a
         `csv.reader`, or a list of lists of strings, or ...
-
         `expect_header_row` - does the data contain a header row (i.e., the
         first record is a list of field names)? Defaults to True.
-
         `ignore_lines` - ignore n lines (rows) at the beginning of the data
-
         `summarize` - only report problem codes, no other details
-
         `limit` - report at most n problems
-
         `context` - a dictionary of any additional information to be added to
         any problems found - useful if problems are being aggregated from
         multiple validators
-
         `report_unexpected_exceptions` - value check function, value predicates,
         record check functions, record predicates, and other user-supplied
         validation functions may raise unexpected exceptions. If this argument
         is true, any unexpected exceptions will be reported as validation
         problems; if False, unexpected exceptions will be handled silently.
-
         """
 
         problems = list()
@@ -343,33 +288,24 @@ class CSVValidator(object):
                  report_unexpected_exceptions=True):
         """
         Validate `data` and return a iterator over problems found.
-
         Use this function rather than validate() if you expect a large number
         of problems.
-
         Arguments
         ---------
-
         `data` - any source of row-oriented data, e.g., as provided by a
         `csv.reader`, or a list of lists of strings, or ...
-
         `expect_header_row` - does the data contain a header row (i.e., the
         first record is a list of field names)? Defaults to True.
-
         `ignore_lines` - ignore n lines (rows) at the beginning of the data
-
         `summarize` - only report problem codes, no other details
-
         `context` - a dictionary of any additional information to be added to
         any problems found - useful if problems are being aggregated from
         multiple validators
-
         `report_unexpected_exceptions` - value check function, value predicates,
         record check functions, record predicates, and other user-supplied
         validation functions may raise unexpected exceptions. If this argument
         is true, any unexpected exceptions will be reported as validation
         problems; if False, unexpected exceptions will be handled silently.
-
         """
 
         unique_sets = self._init_unique_sets() # used for unique checks
@@ -841,13 +777,10 @@ def enumeration(*args):
     """
     Return a value check function which raises a value error if the value is not
     in a pre-defined enumeration of values.
-
     If you pass in a list, tuple or set as the single argument, it is assumed
     that the list/tuple/set defines the membership of the enumeration.
-
     If you pass in more than on argument, it is assumed the arguments themselves
     define the enumeration.
-
     """
 
     assert len(args) > 0, 'at least one argument is required'
@@ -960,20 +893,6 @@ def datetime_string_not_required(format):
             datetime.strptime(v, format)
     return checker
 
-def time_string_not_required(format):
-    """
-    Return a value check function which raises a ValueError if the supplied
-    value cannot be converted to a datetime using the supplied format string.
-
-    See also `datetime.strptime`.
-
-    """
-    def checker(v):
-        if v == '':
-            pass
-        else:
-            time.strptime(v, format)
-    return checker
 
 # https://docs.python.org/3/library/datetime.html#strftime-strptime-behavior
 def datetime_range_inclusive(min, max, format):
@@ -1054,10 +973,26 @@ def text_required(type):
         type(v)
     return checker
 
+def text_not_required(type):
+    """
+    Return a value check function which raises a ValueError if the supplied
+    value when cast as `type` is less than `min` or greater than `max`.
+
+    """
+    def checker(v):
+        if len(v) <= 32768:
+            pass
+        else:
+            raise ValueError(v)
+        if v is "":
+            pass
+        else:
+            type(v)
+    return checker
+
 def write_problems(problems, file, summarize=False, limit=0):
     """
     Write problems as restructured text to a file (or stdout/stderr).
-
     """
     w = file.write # convenience variable
     w("""
@@ -1089,21 +1024,22 @@ Problems
                 underline += '-'
             underline += '\n'
             w(underline)
-            for k in sorted(p.keys() - set(['code', 'message', 'context'])):
+            for k in sorted(p.viewkeys() - set(['code', 'message', 'context'])):
                 w(':%s: %s\n' % (k, p[k]))
             if 'context' in p:
                 c = p['context']
-                for k in sorted(c.keys()):
+                for k in sorted(c.viewkeys()):
                     w(':%s: %s\n' % (k, c[k]))
 
     w("""
 Summary
 =======
-
 Found %s%s problem%s in total.
-
 """ % ('at least ' if limit else '', total, 's' if total != 1 else ''))
-    for code in sorted(counts.keys()):
+    for code in sorted(counts.viewkeys()):
         w(':%s: %s\n' % (code, counts[code]))
     return total
+
+
+
 
