@@ -4,7 +4,7 @@ me = auth.user_id
 import logging
 import csv
 from applications.VectorBiteDataPlatform.modules.vecdyn_validator_script import *
-from cStringIO import StringIO
+import cStringIO
 
 logger = logging.getLogger("web2py.app.vbdp")
 logger.setLevel(logging.DEBUG)
@@ -150,7 +150,7 @@ def submit_vecdyn_data():
         filename, csvfile = db.task.file.retrieve(form.vars.file)
         csvfile = csv.reader(csvfile)
         # Get all rows of csv from csv_reader object as list of tuples
-        csvfile = list(map(tuple, csvfile))
+        #csvfile = list(map(tuple, csvfile))
         # a simple validator to be tested
         validator = CSVValidator(vecdyn_field_names)
 
@@ -158,59 +158,59 @@ def submit_vecdyn_data():
         validator.add_header_check('dataset_check', 'bad header')
 
         validator.add_value_check('taxon', datatype_required(str),
-                                  'taxon error', 'entry must be =< 250 characters a string')
+                                  'taxon error', 'Must not be empty & =< 250 characters')
         validator.add_value_check('location_description', datatype_required(str),
-                                  'location_description error', 'entry must be =< 250 characters a string')
+                                  'location_description error', 'Must not be empty and =< 250 characters')
         validator.add_value_check('study_collection_area', datatype_not_required(str),
-                                  'study_collection_area', 'entry must be =< 250 characters a string')
+                                  'study_collection_area error', 'entry must be string and =< 250 characters')
         validator.add_value_check('geo_datum', datatype_not_required(str),
-                                  'geo_datum error', 'entry must be =< 250 characters a string')
+                                  'geo_datum error', 'entry must be string and =< 250 characters')
         validator.add_value_check('gps_obfuscation_info', datatype_not_required(str),
-                                  'gps_obfuscation_info error', 'entry must be =< 250 characters a string')
+                                  'gps_obfuscation_info', 'entry must be string and =< 250 characters')
         validator.add_value_check('species_id_method', datatype_not_required(str),
-                                  'species_id_method error', 'entry must be =< 250 characters a string')
+                                  'species_id_method error', 'entry must be string and =< 250 characters')
         validator.add_value_check('study_design', datatype_not_required(str),
-                                  'study_design error', 'entry must be =< 250 characters a string')
+                                  'study_design', 'entry must be string and =< 250 characters')
         validator.add_value_check('sampling_strategy', datatype_not_required(str),
-                                  'sampling_strategy error', 'entry must be =< 250 characters a string')
+                                  'sampling_strategy error', 'entry must be string and =< 250 characters')
         validator.add_value_check('sampling_method', datatype_not_required(str),
-                                  'sampling_method error', 'entry must be =< 250 characters a string')
+                                  'sampling_method error', 'entry must be string and =< 250 characters')
         validator.add_value_check('sampling_protocol', datatype_not_required(str),
-                                  'sampling_protocol error', 'entry must be =< 250 characters a string')
+                                  'sampling_protocol error', 'entry must be string and =< 250 characters')
         validator.add_value_check('sampling_method', datatype_not_required(str),
-                                  'sampling_method error', 'entry must be =< 250 characters a string')
+                                  'sampling_method error', 'entry must be string and =< 250 characters')
         validator.add_value_check('measurement_unit', datatype_not_required(str),
-                                  'measurement_unit error', 'entry must be =< 250 characters a string')
-        validator.add_value_check('sample_start_date', datetime_string('%Y-%m-%d'),
+                                  'measurement_unit error', 'entry must be string and =< 250 characters')
+        validator.add_value_check('sample_start_date', datetime_string_not_required('%Y-%m-%d'),
                                   'sample_start_date error', 'entry must be in date format: %Y-%m-%d')
-        validator.add_value_check('sample_start_time', time_string_not_required('%H:%M:%S'),
-                                  'ample_start_time error', 'entry must be in time format: %H:%M:%S')
-        validator.add_value_check('sample_end_date', datetime_string_not_required('%Y-%m-%d'),
+        validator.add_value_check('sample_start_time', datetime_string_not_required('%H:%M:%S'),
+                                  'sample_start_time error', 'entry must be in time format: %H:%M:%S')
+        validator.add_value_check('sample_end_date', datetime_string('%Y-%m-%d'),
                                   'sample_end_date error', 'entry must be in date format: %Y-%m-%d')
         validator.add_value_check('sample_end_time', datetime_string_not_required('%H:%M:%S'),
-                                  'sample_end_time error', 'entry must bein time format: %H:%M:%S')
+                                  'sample_end_time error', 'entry must be in time format: %H:%M:%S')
         validator.add_value_check('sample_value', float_or_int_required(),
-                                  'sample_value error', 'entry must be =< 250 characters numeric')
+                                  'sample_value error', 'entry must be numeric')
         validator.add_value_check('sample_sex', datatype_not_required(str),
-                                  'sample_sex error', 'entry must be =< 250 characters a string')
+                                  'sample_sex error', 'entry must be string and =< 250 characters')
         validator.add_value_check('sample_stage', datatype_not_required(str),
-                                  'sample_stage error', 'entry must be =< 250 characters a string')
+                                  'sample_stage error', 'entry must be string and =< 250 characters')
         validator.add_value_check('sample_location', datatype_not_required(str),
-                                  'sample_location error', 'entry must be =< 250 characters a string')
+                                  'sample_location error', 'entry must be string and =< 250 characters')
         validator.add_value_check('sample_collection_area', datatype_not_required(str),
-                                  'sample_collection_area error', 'entry must be =< 250 characters a string')
+                                  'sample_collection_area error', 'entry must be string and =< 250 characters')
         validator.add_value_check('sample_lat_dd', float,
                                   'sample_lat_dd error', 'sample_long_dd must be a float or not empty')
         validator.add_value_check('sample_long_dd', float,
                                   'sample_long_dd error', 'sample_long_dd must be a float or not empty')
         validator.add_value_check('sample_environment', datatype_not_required(str),
-                                  'sample_environment error', 'entry must be =< 250 characters a string')
+                                  'sample_environment error', 'entry must be string and =< 250 characters')
         validator.add_value_check('additional_location_info', datatype_not_required(str),
-                                  'additional_location_info error', 'entry must be =< 250 characters a string')
+                                  'additional_location_info error', 'entry must be string and =< 250 charactersg')
         validator.add_value_check('additional_sample_info', datatype_not_required(str),
-                                  'additional_sample_info error', 'entry must be =< 250 characters a string')
+                                  'additional_sample_info error', 'entry must be string and =< 250 characters')
         validator.add_value_check('sample_name', datatype_not_required(str),
-                                  'sample_name error', 'entry must be =< 250 characters a string')
+                                  'sample_name error', 'entry must be string and =< 250 characters')
 
         summarize = False
         limit = 0
@@ -220,7 +220,7 @@ def submit_vecdyn_data():
         """
             Write problems as restructured text to a file (or stdout/stderr).
             """
-        file = StringIO.StringIO()
+        file = cStringIO.StringIO()
         w = file.write  # convenience variable
         w("""
             ========================
@@ -978,15 +978,13 @@ def vecdyn_taxon_location_query():
                         paginate=10,
                         selectable=select,
                         deletable=False, editable=False, details=False, create=False)
-    if grid.elements('th'):
-        grid.elements('th')[0].append(SPAN('Select all', BR(), INPUT(_type='checkbox',
-                                                                     _onclick="jQuery('input:checkbox').not(this).prop('checked', this.checked);"
-                                                                     )))
+    # if grid.elements('th'):
+    #     grid.elements('th')[0].append(SPAN('Select all', BR(), INPUT(_type='checkbox',
+    #                                                                  _onclick="jQuery('input:checkbox').not(this).prop('checked', this.checked);"
+    #                                                                  )))
 
 
     # https://stackoverflow.com/questions/30474614/multiple-select-limit-number-of-selection
-
-    # https: // stackoverflow.com / questions / 4135210 / html - multiselect - limit?noredirect = 1 & lq = 1
 
     # The final bit of untidiness is the location of the buttons.
     # - The export 'menu' (a single button here) is at the bottom of the page.
@@ -1203,10 +1201,10 @@ def vecdyn_author_query():
                         paginate=10,
                         selectable=select,
                         deletable=False, editable=False, details=False, create=False)
-    if grid.elements('th'):
-        grid.elements('th')[0].append(SPAN('Select all', BR(), INPUT(_type='checkbox',
-                                                                     _onclick="jQuery('input:checkbox').not(this).prop('checked', this.checked);"
-                                                                     )))
+    # if grid.elements('th'):
+    #     grid.elements('th')[0].append(SPAN('Select all', BR(), INPUT(_type='checkbox',
+    #                                                                  _onclick="jQuery('input:checkbox').not(this).prop('checked', this.checked);"
+    #                                                                  )))
     # The final bit of untidiness is the location of the buttons.
     # - The export 'menu' (a single button here) is at the bottom of the page.
     #   This button doesn't submit a form, just calls the page again with _export_type

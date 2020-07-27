@@ -71,6 +71,13 @@
                 $("#exp_sel").click();
             });
          });
+
+         $('input[type=checkbox]').change(function(e){
+   if ($('input[type=checkbox]:checked').length > 1) {
+        $(this).prop('checked', false)
+        alert("only 1 selection allowed");
+   }
+})
      </script>
 
 <br>

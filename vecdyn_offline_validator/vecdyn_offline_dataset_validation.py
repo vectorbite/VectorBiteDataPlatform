@@ -16,66 +16,66 @@ with open('vecdyn_mcm_2012.csv', 'r') as csvfile:
 
     csvfile = csv.reader(csvfile)
     # Get all rows of csv from csv_reader object as list of tuples
-    csvfile = list(map(tuple, csvfile))
+    #csvfile = list(map(tuple, csvfile))
     # a simple validator to be tested
     validator = CSVValidator(vecdyn_field_names)
     # basic header and record length checks
     validator.add_header_check('dataset_check', 'bad header')
 
     validator.add_value_check('taxon', datatype_required(str),
-                              'taxon error', 'entry must be =< 250 characters and a string')
-    validator.add_value_check('location_description', text_required(str),
-                              'location_description error', 'entry must be =< 250 characters and a string')
+                              'taxon error', 'entry must not be empty and =< 250 characters')
+    validator.add_value_check('location_description', datatype_required(str),
+                              'location_description error', 'entry must not be empty  and =< 250 characters')
     validator.add_value_check('study_collection_area', datatype_not_required(str),
-                              'study_collection_area', 'entry must be =< 250 characters and a string')
+                              'study_collection_area error', 'entry must be string and =< 250 characters')
     validator.add_value_check('geo_datum', datatype_not_required(str),
-                              'geo_datum error', 'entry must be =< 250 characters and a string')
+                              'geo_datum error', 'entry must be string and =< 250 characters')
     validator.add_value_check('gps_obfuscation_info', datatype_not_required(str),
-                              'gps_obfuscation_info', 'entry must be =< 250 characters and a string')
+                              'gps_obfuscation_info', 'entry must be string and =< 250 characters')
     validator.add_value_check('species_id_method', datatype_not_required(str),
-                              'species_id_method', 'entry must be =< 250 characters and a string')
+                              'species_id_method error', 'entry must be string and =< 250 characters')
     validator.add_value_check('study_design', datatype_not_required(str),
-                              'study_design', 'entry must be =< 250 characters and a string')
+                              'study_design', 'entry must be string and =< 250 characters')
     validator.add_value_check('sampling_strategy', datatype_not_required(str),
-                              'sampling_strategy', 'entry must be =< 250 characters and a string')
+                              'sampling_strategy error', 'entry must be string and =< 250 characters')
     validator.add_value_check('sampling_method', datatype_not_required(str),
-                              'sampling_method', 'entry must be =< 250 characters and a string')
+                              'sampling_method error', 'entry must be string and =< 250 characters')
     validator.add_value_check('sampling_protocol', datatype_not_required(str),
-                              'sampling_protocol', 'entry must be =< 250 characters and a string')
+                              'sampling_protocol error', 'entry must be string and =< 250 characters')
     validator.add_value_check('sampling_method', datatype_not_required(str),
-                              'sampling_method', 'entry must be =< 250 characters and a string')
+                              'sampling_method error', 'entry must be string and =< 250 characters')
     validator.add_value_check('measurement_unit', datatype_not_required(str),
-                              'measurement_unit', 'entry must be =< 250 characters and a string')
-    validator.add_value_check('sample_start_date', datetime_string('%Y-%m-%d'),
-                              'value_transform', 'entry must be =< 250 characters and in date format: %Y-%m-%d')
+                              'measurement_unit error', 'entry must be string and =< 250 characters')
+    validator.add_value_check('sample_start_date', datetime_string_not_required('%Y-%m-%d'),
+                              'sample_start_date error', 'entry must be in date format: %Y-%m-%d')
     validator.add_value_check('sample_start_time', datetime_string_not_required('%H:%M:%S'),
-                              'sampling_method', 'entry must be =< 250 characters and in time format: %H:%M:%S')
-    validator.add_value_check('sample_end_date', datetime_string_not_required('%Y-%m-%d'),
-                              'value_transform', 'entry must be =< 250 characters and in date format: %Y-%m-%d')
+                              'sample_start_time error', 'entry must be in time format: %H:%M:%S')
+    validator.add_value_check('sample_end_date', datetime_string('%Y-%m-%d'),
+                              'sample_end_date error', 'entry must be in date format: %Y-%m-%d')
     validator.add_value_check('sample_end_time', datetime_string_not_required('%H:%M:%S'),
-                              'sampling_method', 'entry must be =< 250 characters and a string')
+                              'sample_end_time error', 'entry must be in time format: %H:%M:%S')
     validator.add_value_check('sample_value', float_or_int_required(),
-                              'sample_value error', 'entry must be =< 250 characters and numeric')
+                              'sample_value error', 'entry must be numeric')
     validator.add_value_check('sample_sex', datatype_not_required(str),
-                              'sample_sex error', 'entry must be =< 250 characters and a string')
+                              'sample_sex error', 'entry must be string and =< 250 characters')
     validator.add_value_check('sample_stage', datatype_not_required(str),
-                              'sample_stage error', 'entry must be =< 250 characters and a string')
+                              'sample_stage error', 'entry must be string and =< 250 characters')
     validator.add_value_check('sample_location', datatype_not_required(str),
-                              'sample_location error', 'entry must be =< 250 characters and a string')
+                              'sample_location error', 'entry must be string and =< 250 characters')
     validator.add_value_check('sample_collection_area', datatype_not_required(str),
-                              'sample_collection_area', 'entry must be =< 250 characters and a string')
+                              'sample_collection_area error', 'entry must be string and =< 250 characters')
     validator.add_value_check('sample_lat_dd', float,
                               'sample_lat_dd error', 'sample_long_dd must be a float or not empty')
     validator.add_value_check('sample_long_dd', float,
-                              'sample_long_dd', 'sample_long_dd must be a float or not empty')
+                              'sample_long_dd error', 'sample_long_dd must be a float or not empty')
     validator.add_value_check('sample_environment', datatype_not_required(str),
-                              'sample_environment', 'entry must be =< 250 characters and a string')
+                              'sample_environment error', 'entry must be string and =< 250 characters')
     validator.add_value_check('additional_location_info', datatype_not_required(str),
-                              'additional_location_info', 'entry must be =< 250 characters and a string')
+                              'additional_location_info error', 'entry must be string and =< 250 charactersg')
     validator.add_value_check('additional_sample_info', datatype_not_required(str),
-                              'additional_sample_info', 'entry must be =< 250 characters and a string')
+                              'additional_sample_info error', 'entry must be string and =< 250 characters')
     validator.add_value_check('sample_name', datatype_not_required(str),
-                              'sample_name', 'entry must be =< 250 characters and a string')
+                              'sample_name error', 'entry must be string and =< 250 characters')
 
     # run the validator on the test data
     problems = validator.ivalidate(csvfile)

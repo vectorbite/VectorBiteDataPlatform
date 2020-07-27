@@ -952,7 +952,7 @@ def datatype_required(type):
 
     """
     def checker(v):
-        if len(v) <= 250:
+        if (len(v) >= 1) & (len(v) <= 250):
             pass
         else:
             raise ValueError(v)
@@ -966,7 +966,7 @@ def text_required(type):
 
     """
     def checker(v):
-        if len(v) <= 32768:
+        if (len(v) >= 1) & (len(v) <= 32768):
             pass
         else:
             raise ValueError(v)

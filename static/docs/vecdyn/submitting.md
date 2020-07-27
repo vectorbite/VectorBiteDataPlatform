@@ -1,10 +1,17 @@
 ## Submitting data
 
+Data should be submitted in the following CSV format:
+
+- All entries are double quoted  (" ")
+- Missing values are set to empty 
+- File encoding is "UTF-8"
+
 1. Download the latest templates by right clicking on the following links
+
     - [vecdyn data template](https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/documentation/VecDyn/Template_and_Scripts/vecdyn_template%20.csv) and selecting ‘save.as’.
     - [vecdyn publication info template](https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/documentation/VecDyn/Template_and_Scripts/vecdyn_publication_information.csv) and selecting ‘save.as’.
     - [R markdown script for generating Vecdyn dataframes](https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/documentation/VecDyn/Template_and_Scripts/R%20VecDyn%20template%20Markdown%20Script.Rmd) and selecting ‘save.as’.
-    
+
 2. You can refer to the [field definitions section](https://vectorbitedataplatform.readthedocs.io/en/latest/vecdyn/field_definitions/) to guide you through the data collection and compilation process.
 
 3. To submit your dataset, upload and submit the dataset via the [upload page](https://www.vectorbyte.org/vecdyn/submit_vecdyn_data) on the VectorByTE web app.
@@ -94,15 +101,61 @@ Vecdyn has a validation tool built in to allow a digitiser to quickly check whet
 
 The validator has a simple workflow as follows:
 
-## ![vecdyn_validator](/home/matt/NewWeb2py/web2py/applications/VectorBiteDataPlatform/static/docs/vecdyn/images/vecdyn_validator.png)Validation report 
+## ![vecdyn_validator](/home/matt/NewWeb2py/web2py/applications/VectorBiteDataPlatform/static/docs/vecdyn/images/vecdyn_validator_big.png)Validation report 
 
 If the validation fails, you will be returned a report in-line within the validator page:
 
-Here is an example report from a test dataset which failed.
+Here is an example report from a test dataset which failed, the CSV is not formatted correctly, and there are data type errors.
 
 ```
-------------------------------------
-  VALIDATION REPORT
+            ========================
+            Vecdyn Validation Report
+            ========================
+            Satus = "Failed"
+            =================================================================
+            Please fix the problems below before resubmitting the dataset.
+            =================================================================
+            
+            Problems
+            ========
+            
+dataset_check - bad header
+--------------------------
+:missing: set([])
+:record: ('taxon', 'location_description', 'study_collection_area', 'geo_datum', 'gps_obfuscation_info', 'species_id_method', 'study_design', 'sampling_strategy', 'sampling_method', 'sampling_protocol', 'measurement_unit', 'value_transform', 'sample_start_date', 'sample_start_time', 'sample_end_date', 'sample_end_time', 'sample_value', 'sample_sex', 'sample_stage', 'sample_location', 'sample_collection_area', 'sample_lat_dd', 'sample_long_dd', 'sample_environment', 'additional_location_info', 'additional_sample_info', 'sample_name', '', '', '')
+:row: 1
+:unexpected: set([''])
+
+sample_end_date error - entry must be in date format: %Y-%m-%d
+--------------------------------------------------------------
+:column: 15
+:field: sample_end_date
+:record: ('Coquillettidia perturbans', 'Manatee County,Florida,United States of America', '', '', '', 'SPECIES_MORPHO', '', '', 'LIGHT,CO2', 'CDC_LIGHT', '', '', '2012-03-21', '', '2012-03-2jjkjkjk2', '', '1', 'female', 'adult', 'Tallevast', '', '27.4266', '-82.52471', '', '', '', '2012-03-21_D3T_F1T')
+:row: 14
+:value: 2012-03-2jjkjkjk2
+
+sample_end_date error - entry must be in date format: %Y-%m-%d
+--------------------------------------------------------------
+:column: 15
+:field: sample_end_date
+:record: ('Coquillettidia perturbans', 'Manatee County,Florida,United States of America', '', '', '', 'SPECIES_MORPHO', '', '', 'LIGHT,CO2', 'CDC_LIGHT', '', '', '2012-05-07', '', 'kjhkhkhjkh', '', '2', 'female', 'adult', 'Braden River Park', '', '27.44893', '-82.498664', '', '', '', '2012-05-07_D2BP2_F2BP')
+:row: 134
+:value: kjhkhkhjkh
+
+sample_value error - entry must be numeric
+------------------------------------------
+:column: 17
+:field: sample_value
+:record: ('Anopheles crucians', 'Manatee County,Florida,United States of America', '', '', '', 'SPECIES_MORPHO', '', '', 'LIGHT,CO2', 'CDC_LIGHT', '', '', '2012-05-22', '', '2012-05-23', '', '51jnjkh', 'female', 'adult', 'Port', '', '27.640483', '-82.552667', '', '', '', '2012-05-22_B1P_G2P')
+:row: 228
+:value: 51jnjkh
+
+            Summary
+            =======
+            Found 4 problems in total.
+            :dataset_check: 1
+:sample_end_date error: 2
+:sample_value error: 1
 
 
 ```
