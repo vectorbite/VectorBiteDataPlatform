@@ -41,7 +41,7 @@ def team_page_updater():
 def privilege_manager():
     # arrange by id and groups == None
     # TODO need to fix query in view to render result without table headings
-    privileges = db(db.auth_user).select(orderby=~db.auth_user.modified_on)
+    privileges = db(db.auth_user).select(orderby=db.auth_user.created_on|db.auth_user.modified_on)
     return locals()
 
 # Admin & auth 2 step rights can only be granted through the web2py app admin

@@ -127,7 +127,7 @@ def vecdyn_taxon_standardiser():
             (db.study_meta_data.taxon_id == None) & (db.study_meta_data.taxon == db.gbif_taxon.canonical_name)). \
             select(db.study_meta_data.id, db.gbif_taxon.taxon_id, db.gbif_taxon.canonical_name,
                    db.gbif_taxon.genus_or_above,
-                   db.gbif_taxon.taxonomic_rank, limitby=(0, 200))
+                   db.gbif_taxon.taxonomic_rank, orderby='<random>', limitby=(0, 2000))
         for row in tax_match:
             id = row.study_meta_data.id
             taxon_id = row.gbif_taxon.taxon_id
@@ -149,7 +149,9 @@ def vecdyn_open_all():
     rightstype2 = 'CC BY-NC'
     data_rights = 'open'
     for row in db(db.publication_info).iterselect():
-        row.update_record(data_rights=data_rights)
+        #row.update_record(data_rights=data_rights)
+        db(db.publication_info.id == row.id).update(data_rights=data_rights)
+    db.commit()
 
 
 

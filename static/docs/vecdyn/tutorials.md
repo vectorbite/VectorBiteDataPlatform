@@ -25,8 +25,6 @@ library(lubridate)
 library(plyr)
 ```
 
-You will need to create and fill out two templates. One containing all the publication information and one which will store the data. We'll start with the data template. 
-
 Create the VecDyn data template / data-frame and name it.
 
 
@@ -179,7 +177,7 @@ Finally write the data set to CSV, set all missing value to blank ""
 
 ```{r}
 
-write_csv(vecdyn_mcm_2012, "vecdyn_mcm_2012.csv", na = "")
+write.csv(vecdyn_mcm_2012, "vecdyn_mcm_2012.csv", row.names = FALSE, quote=TRUE, na = "", fileEncoding = "UTF-8")
 
 ```
 
@@ -189,27 +187,7 @@ Next complete the publication information, this can be submitted as a CV or usin
 rm(list=setdiff(ls(), c("vecdyn_mcm_2012")))
 ```
 
-
-```{r}
-
-vecdyn_publication_info_mcm_2012  <- data.frame(title=character(), # name of collection title
-                 collection_author=character(), 
-                 dataset_doi=character(),
-                 publication_doi = character(),
-                 description = character(),
-                 url = character(),
-                 contact_name=character(),
-                 contact_affiliation=character(),
-                 email=character(),
-                 orcid=character(),
-                 dataset_license=character(),
-                 stringsAsFactors=FALSE)
-
-
-
-```
-
-Next fill the appropriate fields
+You will also need to provide publication information for the data-set on the VecDyn data submissions page (example below) . 
 
 ```{r}
 
@@ -226,25 +204,6 @@ dataset_license=character <- "open"
 
 ```
 
-Bind them to the main publication info data frame
-
-```{r}
-
-a <- cbind(title, collection_author, dataset_doi, description, url, contact_name, contact_affiliation, email, dataset_license)
-a <- data.frame(a, stringsAsFactors=FALSE)
-vecdyn_publication_info_mcm_2012 <- rbind.fill(vecdyn_publication_info_mcm_2012, a)
-
-# clear environment
-
-rm(list=setdiff(ls(), c("vecdyn_mcm_2012", "vecdyn_publication_info_mcm_2012")))
-
-```
-
-Write as a CSV
-
-```{r}
-write.csv(vecdyn_publication_info_mcm_2012, file = "vecdyn_publication_info_mcm_2012.csv", row.names = FALSE)
-```
 
 
 # Extracting observational climate data to spatial-temporal sample points [trap locations]

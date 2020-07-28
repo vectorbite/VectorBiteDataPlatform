@@ -75,7 +75,7 @@
          });
 
          $('input[type=checkbox]').change(function(e){
-   if ($('input[type=checkbox]:checked').length > 1) {
+   if ($('input[type=checkbox]:checked').length > 5) {
         $(this).prop('checked', false)
         alert("only 5 selection allowed");
    }

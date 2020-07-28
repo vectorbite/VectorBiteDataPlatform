@@ -5,6 +5,7 @@ import logging
 import csv
 from applications.VectorBiteDataPlatform.modules.vecdyn_validator_script import *
 import cStringIO
+import uuid
 
 logger = logging.getLogger("web2py.app.vbdp")
 logger.setLevel(logging.DEBUG)
@@ -116,6 +117,7 @@ vecdyn_field_names = ('taxon', 'location_description', 'study_collection_area', 
 
 @auth.requires(auth.has_membership('VDCurator') or auth.has_membership('VectorbiteAdmin'))
 def submit_vecdyn_data():
+
     """function set up to Submit vecdyn  data through the website"""
     db.task.task_type.default = 'vecdyn data submission'
     db.task.task_type.readable = False
@@ -325,6 +327,15 @@ def dataset_registration():
     form = SQLFORM(db.publication_info)
     if form.process().accepted:
         session.flash = 'Thank you, your data set has been registered, now upload a data set'
+        id = form.vars.id
+        # if no project-id is provided with submission create one!
+        if form.vars.project_identifier is None:
+            project_identifier = uuid.uuid1()
+            project_identifier = str(project_identifier)
+            vecdyn = "VECDYN"
+            project_identifier = vecdyn + project_identifier
+            row = db(db.publication_info.id == id).select().first()
+            row.update_record(project_identifier=project_identifier)
         redirect(URL('dataset_registrations'))
         # you need jQuery for the widget to work; include here or just put it in your master layout.html
     response.files.append(URL('static', 'jquery-ui-1.12.1/jquery-ui.js'))
@@ -357,7 +368,7 @@ def add_collection_author():
         # hasn't been submitted yet, just give them the fresh blank form
         return form
 
-# Note data curators will only be able to see data sets they have registered, admin will get to see everything
+# Note data curators will only be able to see data sets they have registered, admin will get to see and edit everything
 @auth.requires(auth.has_membership('VDCurator') or auth.has_membership('VectorbiteAdmin'))
 def dataset_registrations():
     if auth.has_membership('VDCurator'):
@@ -366,15 +377,17 @@ def dataset_registrations():
             for f in db.publication_info
             if f.name not in ('db.publication_info.data_rights,'
                               'db.publication_info.dataset_citation,'
+                              'db.publication_info.project_identifier,'
                               'db.publication_info.title,'
                               'db.publication_info.collection_author,'
                               'db.publication_info.created_by')]
         # db.publication_info.data_rights.represent = lambda data_rights, row: A(data_rights, _href=URL('edit_data_rights', args=row.id))
         links = [lambda row: A('Enter Dataset Control Panel', _href=URL("vecdyn", "view_data", vars={'publication_info_id': row.id}), _class="btn btn-primary")]
-        form = SQLFORM.grid(query, links=links, searchable=True, advanced_search=False, deletable=False,
-                            editable=False, details=False, create=False, csv=False, maxtextlength=200,
+        form = SQLFORM.grid(query, orderby=~db.publication_info.id, links=links, searchable=True, advanced_search=False, deletable=False,
+                            editable=False, details=False, create=False, csv=True, maxtextlength=200,
                             fields=[
                                 db.publication_info.title,
+                                db.publication_info.project_identifier,
                                 db.publication_info.collection_author,
                                 db.publication_info.dataset_citation,
                                 db.publication_info.data_rights],
@@ -391,6 +404,7 @@ def dataset_registrations():
          for f in db.publication_info
          if f.name not in ('db.publication_info.data_rights,'
                            'db.publication_info.dataset_citation,'
+                           'db.publication_info.project_identifier,'
                            'db.publication_info.title,'
                            'db.publication_info.collection_author,'
                            'db.publication_info.created_by')]
@@ -398,10 +412,11 @@ def dataset_registrations():
         links = [lambda row: A('Enter Dataset Control Panel',
                                _href=URL("vecdyn", "view_data", vars={'publication_info_id': row.id}),
                                _class="btn btn-primary")]
-        form = SQLFORM.grid(db.publication_info, links=links, searchable=True, advanced_search=False, deletable=False,
-                            editable=False, details=False, create=False, csv=False, maxtextlength=200,
+        form = SQLFORM.grid(db.publication_info, orderby=~db.publication_info.id, links=links, searchable=True, advanced_search=False, deletable=False,
+                            editable=False, details=False, create=False, csv=True, maxtextlength=200,
                             fields=[
                                 db.publication_info.title,
+                                db.publication_info.project_identifier,
                                 db.publication_info.collection_author,
                                 db.publication_info.dataset_citation,
                                 db.publication_info.data_rights],
@@ -481,13 +496,15 @@ def view_data():
     publication_info_id = request.get_vars.publication_info_id
     publication_info_query = db(db.publication_info.id == publication_info_id).select().first()
 
-    observations = db(db.time_series_data.publication_info_id == publication_info_id).count()
-
-    taxon_entries = db(db.study_meta_data.publication_info_id == publication_info_id).count(
-        distinct=db.study_meta_data.taxon)
-    regions = db(db.study_meta_data.publication_info_id == publication_info_id).count(
-        distinct=db.study_meta_data.location_description)
-
+    # observations = db(db.time_series_data.publication_info_id == publication_info_id).count()
+    #
+    # taxon_entries = db(db.study_meta_data.publication_info_id == publication_info_id).count(
+    #     distinct=db.study_meta_data.taxon)
+    # regions = db(db.study_meta_data.publication_info_id == publication_info_id).count(
+    #     distinct=db.study_meta_data.location_description)
+    observations = []
+    taxon_entries = []
+    regions = []
     unstan_tax = db((db.study_meta_data.publication_info_id == publication_info_id) & (db.study_meta_data.taxon_id == None)).count(distinct=db.study_meta_data.taxon)
 
     unstan_geo = db((db.study_meta_data.publication_info_id == publication_info_id) & (db.study_meta_data.geo_id == None)).count(distinct=db.study_meta_data.location_description)
@@ -851,6 +868,8 @@ def geo_confirm():
                            'publication_info_id': publication_info_id}))
     return locals()
 
+'need to add collector info to this so standardization only occurs within a collectors naming conventions in order' \
+'to avoid standardizing entries with the same names'
 
 @auth.requires(auth.has_membership('VDCurator') or auth.has_membership('VectorbiteAdmin'))
 def geo_st_insert():

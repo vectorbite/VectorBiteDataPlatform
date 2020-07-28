@@ -1,7 +1,7 @@
 
 ## Publication Information Template
 
-Meta-data entered into this table should be entered into the VectorBiTE web app via the data submission forms.
+Data entered into this table should be entered into the VecDyn CSV template. 
 
 | Field Name            | Required Y/N | Data format | Details                                                      | Additional Notes                                             |        Db table         |
 | --------------------- | ------------ | ----------- | ------------------------------------------------------------ | ------------------------------------------------------------ | :---------------------: |
@@ -23,8 +23,9 @@ Meta-data entered into this table should be entered into the VectorBiTE web app 
 
 
 
-
 ## Main Data Collection Template
+
+Data 
 
 
 | Field Name            | Required Y/N | Data format | Details                                                      | Additional Notes                                             |        Db table         |
