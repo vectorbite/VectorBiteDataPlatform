@@ -839,7 +839,7 @@ def location_select():
                         {'gaul_admin_layers.adm0_name': 'Country Name',
                         'gaul_admin_layers.adm1_name': 'Administrative Division 1',
                         'gaul_admin_layers.adm2_name': 'Administrative Division 2'},
-                        links=links, searchable=True, advanced_search=False,
+                        links=links, searchable=True, advanced_search=True,
                         deletable=False, editable=False, details=False, create=False, csv=False)
     search_input = grid.element('#w2p_keywords')
     if search_input:
