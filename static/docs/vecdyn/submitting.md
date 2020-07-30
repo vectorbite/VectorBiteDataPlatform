@@ -2,7 +2,7 @@
 
 1. Download the latest templates by right clicking on the following links
 
-    - [vecdyn data template](https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/documentation/VecDyn/Template_and_Scripts/vecdyn_template%20.csv) and selecting ‘save.as’.
+    - [vecdyn data template](https://raw.githubusercontent.com/vectorbite/VectorBiteDataPlatform/master/static/additional_files/Template_and_Scripts/vecdyn_template .csv' ) and selecting ‘save.as’.
     
 2. You can refer to the [field definitions section](https://vectorbitedataplatform.readthedocs.io/en/latest/vecdyn/field_definitions/) to guide you through the data collection and compilation process.
 
@@ -78,7 +78,7 @@ The validator has a simple workflow as follows:
 
 If the validation fails, you will be returned a report in-line within the validator page:
 
-Here is an example report from a test data-set which failed, the CSV is not formatted correctly, and there are data type errors.
+Here is an example report from a test data-set which failed, the CSV is not formatted correctly and there are data type errors.
 
 ```
             ========================
