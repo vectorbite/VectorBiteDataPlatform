@@ -12,7 +12,7 @@ def index():
     return locals()
 
 
-def about_us():
+def about():
     """
     Controller for about page
     """
