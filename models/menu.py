@@ -47,7 +47,7 @@ else:
         ]),
         (T('About'), False, None, [
             ('Meet the team', False, URL('default', 'team')),
-            ('Funding', False, URL('default', 'funding'))]),
+            ('About', False, URL('default', 'about'))]),
         (T('Documentation'), False, 'https://vectorbitedataplatform.readthedocs.io/en/latest/'),
         (T('Contact Us'), False, None, [
             ('Report problem', False, URL('default', 'report_problem')),

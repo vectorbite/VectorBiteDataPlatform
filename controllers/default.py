@@ -69,7 +69,7 @@ def edit_privileges():
 
 # Links to funding organisations
 
-def funding():
+def about():
     """
     Controller for about page
     """

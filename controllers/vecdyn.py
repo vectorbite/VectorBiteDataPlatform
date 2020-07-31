@@ -847,6 +847,7 @@ def location_select():
     return locals()
 
 
+
 @auth.requires(auth.has_membership('VDCurator') or auth.has_membership('VectorbiteAdmin'))
 def geo_confirm():
     publication_info_id = request.get_vars.publication_info_id
