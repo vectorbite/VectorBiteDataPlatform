@@ -45,13 +45,13 @@ else:
             ('VecDyn', False, URL('vecdyn', 'index')),
             ('VecTraits', False, URL('vectraits', 'index')),
         ]),
-        (T('About'), False, None, [
-            ('Meet the team', False, URL('default', 'team')),
-            ('About', False, URL('default', 'about'))]),
         (T('Documentation'), False, 'https://vectorbitedataplatform.readthedocs.io/en/latest/'),
         (T('Contact Us'), False, None, [
             ('Report problem', False, URL('default', 'report_problem')),
             ('General enquiries', False, URL('default', 'contact_us'))]),
+        (T('Vectorbyte1'), False, None, [
+            ('Meet the team', False, URL('default', 'team')),
+            ('About', False, URL('default', 'about'))]),
     ])
 
 
