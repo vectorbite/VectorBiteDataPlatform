@@ -1,0 +1,42 @@
+{{extend 'layout.html'}}
+
+<div style="background:light grey !important" class="jumbotron">
+   <h1>
+
+       <h2>
+           Ecological Informatics Data Platform
+       </h2>
+<p>
+    The VectorByTE Eco-informatics Data Platform was originally created by the Vector Behaviour in
+                Transmission Ecology Research Coordination Network (VectorBiTE RCN).
+<br>
+                VectorBiTE RCN seeks to build a collaborative network of researchers working on VBDs and to provide them with
+                tools to better understand and explore how variation in vector behaviour and life history drive
+                transmission dynamics. To help the network achieve this, we have been busy developing the VectorByTE
+                Data Platform web application, which consists of two databases, VecDyn and VecTraits, and a range of
+                features which will help users explore, download and submit data-sets.
+                The VecDyn database specialises in capturing population and presence/absence data for a range of plant and animal disease vectors.
+                The VecTraits database focuses on capturing trait (including behaviour and life history) variation data.
+                <br>
+                For further information about the research network please visit our main website <a href="https://vectorbite.org/" target="_blank">VectorBiTE RCN</a>. This site provides
+                instructions on how to become a member of the research network and also provides info on our events and developments regarding work by members of the network.
+
+                <br>
+
+    VectorByTE's Ecological Informatics Data Platform was funded by The National Institutes of Health (NIH), the U.S. National Library of Medicine, the Biotechnology and Biological Sciences Research Council and UK Research and Innovation.
+</p>
+       <br>
+
+
+       <br>
+       <div class="center">
+            <img src="{{=URL('static/images','NIH.png')}}" style="width:25%;height:25%;">
+            <br>
+            <img src="{{=URL('static/images','BBSRC.png')}}" style="width: 50%">
+            <br>
+            <img src='{{=URL('static/images','VB_logo_black.svg')}}'/>
+        </div>
+
+    </h1>
+</div>
+
